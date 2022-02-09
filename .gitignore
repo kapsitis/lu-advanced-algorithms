@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+
+*.mp4
+
+# Sphinx stuff
+*.pdf
+_build
+_static
+_templates

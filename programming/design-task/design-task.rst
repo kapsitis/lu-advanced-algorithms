@@ -180,7 +180,7 @@ kontroldarbu!
 
 
 
-Ievaddati
+Input Data
 ^^^^^^^^^^^
 
 On the first line of the input file there are two integers separated by a single space: 
@@ -249,9 +249,36 @@ Variant 7: The First Non-Substring in Shortlex Order
 
 
 
-Variant 8: 
+Variant 8: Numeric Pyramid
+-----------------------------------------------
+
+We build a numeric pyramid - first choose
+three integers :math:`n`, :math:`a`, and :math:`b` 
+(they may be equal or different; positive, negative or zero). 
+Number :math:`n` stands at the top of the pyramid (Line 0). 
+Under it there are two numbers :math:`n+a` and
+:math:`n+b` (Line 1). 
+
+After that the pyramid is being built in the following way: 
+For every number on the current line :math:`s_i` 
+create two children: :math:`s_i+a` and :math:`s_i+b`. 
+There are :math:`2^i` numbers on Line :math:`i` 
+(where :math:`i = 0,\ldots,2^i - 1`). 
+
+After creating the children on Line :math:`i+1`, leave the
+nodes 
 
 
+
+Tālāk procesu turpina veidojot otro rindu.
+Vispirms katram pirmās rindas skaitlim 𝑡 𝑗 zem tā pa
+kreisi uzraksta skaitli 𝑡 𝑗 + 𝑏 un pa labi - skaitli 𝑡 𝑗 + 𝑐.
+Pēc tam, neiesaistot pirmo un pēdējo no rindā
+uzrakstītajiem skaitļiem, skaitļus rindā secīgi sadala
+pa pāriem un katrā pārī skaitļus samaina vietām - t.i.,
+otro skaitli samaina ar trešo, ceturto - ar piekto, utt.
+Pēc tam tāpat veido nākamās rindas. Skaitļu tornis, kuram n=5, a=-2, b=1 parādīts 23. zīmējumā.
+Uzrakstiet programmu, kas nosaka, kāds skaitlis atrodas noteiktā torņa vietā!
 
 
 

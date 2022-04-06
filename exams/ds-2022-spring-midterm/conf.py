@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'week01b-notes'
+project = 'ds-2022-spring-midterm'
 copyright = '2022, LU'
 author = 'LU'
 
@@ -65,4 +65,3 @@ latex_elements = {
 #]
 
 latex_additional_files = ["mystyle.sty"]
-

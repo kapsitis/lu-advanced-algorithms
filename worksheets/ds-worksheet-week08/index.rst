@@ -1,16 +1,16 @@
-.. week01b-notes documentation master file, created by
-   sphinx-quickstart on Wed Feb  9 19:02:50 2022.
+.. ds-worksheet-week08 documentation master file, created by
+   sphinx-quickstart on Wed Mar 23 18:46:29 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to week01b-notes's documentation!
-=========================================
+Welcome to ds-worksheet-week08's documentation!
+===============================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   week01b-notes
+   ds-worksheet-week08
 
 
 .. Indices and tables

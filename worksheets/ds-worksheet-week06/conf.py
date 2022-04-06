@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'week01b-notes'
+project = 'ds-worksheet-week06'
 copyright = '2022, LU'
 author = 'LU'
 
@@ -51,6 +51,7 @@ html_theme = 'alabaster'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+
 latex_elements = {
   'extraclassoptions': 'openany,oneside',
   'maketitle': '',  # No Title Page
@@ -65,4 +66,3 @@ latex_elements = {
 #]
 
 latex_additional_files = ["mystyle.sty"]
-

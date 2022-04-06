@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'week01b-notes'
-copyright = '2022, LU'
-author = 'LU'
+project = 'DS-Fall2021 Walk-Throughs'
+copyright = '2021, RBS'
+author = 'RBS'
 
 
 # -- General configuration ---------------------------------------------------
@@ -65,4 +65,3 @@ latex_elements = {
 #]
 
 latex_additional_files = ["mystyle.sty"]
-

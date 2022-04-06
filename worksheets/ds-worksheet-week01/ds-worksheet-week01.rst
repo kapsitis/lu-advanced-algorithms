@@ -1,57 +1,8 @@
 Worksheet 1, 2022-02-09
 =========================
 
+See `Week01B: Lecture Notes` for the definitions of Big-O, Big-Omega, Big-Theta.
 
-
-**Definition:** 
-  Let :math:`g \colon \mathbb{N} \rightarrow \mathbb{R}_{0+}` be a function from natural numbers (non-negative integers)
-  to non-negative real numbers. 
-  Then :math:`O(g)` is the set of all functions :math:`f \colon \mathbb{N} \rightarrow \mathbb{R}`
-  such that there exist real constants :math:`c>0` and :math:`n_0 \in \mathbb{N}` satisfying
-  :math:`{\displaystyle \forall n \in \mathbb{N}\ \big( n \geq n_0 \rightarrow | f(n) | \leq c \cdot g(n) \big).}`
-    
-**Definition:**
-  Let :math:`g \colon \mathbb{N} \rightarrow \mathbb{R}_{0+}` be a function. 
-  Then :math:`\Omega(g)` is the set of all functions :math:`f \colon \mathbb{N} \rightarrow \mathbb{R}` 
-  such that there exist real constants :math:`c>0` and :math:`n_0 \in \mathbb{N}` satisfying 
-  :math:`{\displaystyle  \forall n \in \mathbb{N}\ \big( n \geq n_0 \rightarrow | f(n) | \geq c \cdot g(n) \big).}`
-    
-**Definition:** 
-  Define :math:`\Theta(g)` to be the intersection of :math:`O(g)` and :math:`\Omega(g)`. 
-  
-  Formally, let :math:`g \colon \mathbb{N} \rightarrow \mathbb{R}_{0+}` be a function.
-  Then :math:`\Theta(g)` is the set of all functions :math:`f: \mathbb{N} \to \mathbb{R}` 
-  such that there exist real constants :math:`c_1, c_2 > 0` and :math:`n_0 \in \mathbb{N}` satisfying 
-
-  .. math::
-  
-    \forall n \in \mathbb{N}\ \big( n \geq n_0 \rightarrow   c_1 \cdot g(n) \leq  | f(n) | \leq c_2 \cdot g(n) \big).
-
-
-In spoken language we often use descriptive concepts:
-
-* If :math:`f \in O(g)`, then :math:`g(n)` is called *asymptotic upper bound* of :math:`f(n)`. 
-* If :math:`f \in \Omega(g)`, then :math:`g(n)` is called *asymptotic lower bound* of :math:`f(n)`.
-* If :math:`f \in \Theta(g)`, then :math:`g(n)` is called *asymptotic growth order* of :math:`f(n)`.
-
-**Definition:**
-  The *time complexity* of an algorithm is described by a function :math:`f(n)`, 
-  if for **any** input of length :math:`n` bytes, the time spent running the algorithm is bound
-  from above by :math:`f(n)`. 
-
-
-Changing the base of a logarithm: :math:`{\displaystyle \forall a,b,m > 1 \left( \log_a b = \frac{ \log_m b }{ \log_m a } \right)}`
-
-
-
-Binomial coefficients: :math:`{\displaystyle \binom{n}{k} = \frac{n!}{(n-k)!k!}}`.
-Stirling's formula: :math:`{\displaystyle n! \sim \sqrt{2 \pi n}\left(\frac{n}{e}\right)^n}`.
-
-**Definition:**
-  Two functions :math:`f,g \colon \mathbb{N} \to \mathbb{R}` are *asymptotically equivalent* (write :math:`f(n) \sim g(n)`) iff
-  :math:`{\displaystyle  \lim\limits_{n \rightarrow \infty} \frac{f(n)}{g(n)} = 1. }`
-
----------
 
 **Question 1 (Warm up):**
 

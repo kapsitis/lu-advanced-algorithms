@@ -1,0 +1,89 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm,tikz}
+\usetikzlibrary{calc,arrows.meta}
+\usepackage[margin=20mm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{1cm}
+
+
+
+\begin{document}
+
+%\twocolumn
+
+\thispagestyle{empty}
+
+\begin{center}
+{\Large Handout Week07: Quicksort Task}\\
+%{\Large Published on 2020-11-08,}\\
+%{\em 12 minutes} 
+\end{center}
+
+\noindent
+
+
+\vspace{10pt}
+{\bf Quicksort Pseudocode}. 
+
+\[
+\begin{array}{rl}
+ & \text{\textsc{Quicksort}}(A[\ell\;\ldots\;r]):\\
+1 & \text{\textbf{if\ }} l<r:\\
+2 & \hspace{.5cm} i = \ell \;\;\;\;\;\;\;\;\; \textcolor{teal}{\text{\em ($i$ increases from the left and searches elements $\geq$ than pivot)}}\\
+3 & \hspace{.5cm} j = r+1	\;\; \textcolor{teal}{\text{\em ($j$ decreases from the right and searches elements $\leq$ than pivot.)}}\\	
+4 & \hspace{.5cm} v = A[\ell] \;\;\;\; \textcolor{teal}{\text{\em ($v$ is the pivot.)}}\\
+5 & \hspace{.5cm} \text{\textbf{while\ }} i<j:\\
+6 & \hspace{1.0cm} i = i+1\\
+7 & \hspace{1.0cm} \text{\textbf{while\ }} i<r \text{\textbf{\ and\ }} A[i]<v:\\
+8 & \hspace{1.5cm} i = i+1\\
+9 & \hspace{1.0cm} j = j-1\\
+10 & \hspace{1.0cm} \text{\textbf{while\ }} j>\ell \text{\textbf{\ and\ }} A[j]>v:\\
+11 & \hspace{1.5cm} j = j-1\\
+12 & \hspace{1.0cm} A[i] \leftrightarrow A[j] \;\; \textcolor{teal}{\text{\em (Undo the extra swap at the end)}}\\
+13 & \hspace{0.5cm} A[i] \leftrightarrow A[j] \;\; \textcolor{teal}{\text{\em (Undo the extra swap at the end)}}\\
+14 & \hspace{0.5cm} A[j] \leftrightarrow A[\ell] \;\; \textcolor{teal}{\text{\em (Move pivot to its proper place)}}\\
+15 & \hspace{0.5cm} \text{\textsc{Quicksort}}(A[\ell\;\ldots\;j-1])\\
+16 & \hspace{0.5cm} \text{\textsc{Quicksort}}(A[j+1\;\ldots\;r])\\
+\end{array}
+\]
+
+
+\vspace{20pt}
+{\bf Question 1.} 
+You are given an array:
+
+\vspace{5pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
+$a+10$ & $\;\;c\;\;$ & $a+20$ & $\;\;a\;\;$ & $c+5$ & $\;\;b\;\;$ & $b+20$ & $a+15$ & $b+1$ & $b+15$ & $\;2\cdot c\;$ & $b+2$ \\ \hline
+\end{tabular}
+
+\vspace{5pt}
+Here $a,b,c$ are the last three digits of your Student ID.\\
+The pseudocode (same as in the sample) is used to sort it. Pivot is the leftmost element.
+
+\vspace{5pt}
+{\bf (A)} Run the initial call of $\text{\textsc{QuickSort}}(A[0..11])$.
+Draw the state of the array every time you swap two 
+elements. 
+
+\vspace{5pt}
+{\bf (B)}
+Draw the content of the array immediately {\bf before} the second recursive 
+call of $\text{\textsc{QuickSort}}()$.
+(The original call $\text{\textsc{QuickSort}}(A[0..11])$ is assumed to be the
+$0^{\text{th}}$ call of this function). 
+
+
+
+
+
+
+
+\end{document}
+
+
+

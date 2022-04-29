@@ -48,17 +48,17 @@ if [%2] == [] (
         %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O% -t Internal
         python replace.py
 	    cd _build\latex
-	    xelatex ds-2022-spring-midterm
-        ren ds-2022-spring-midterm.pdf ds-2022-spring-midterm-solutions.pdf
-        xcopy ds-2022-spring-midterm-solutions.pdf ..\.. /Y
+	    xelatex ds-worksheet-kmp-string-search
+        ren ds-worksheet-kmp-string-search.pdf ds-worksheet-kmp-string-search-solutions.pdf
+        xcopy ds-worksheet-kmp-string-search-solutions.pdf ..\.. /Y
 		cd ..\..
     ) else (
         echo.Building questions
 		%SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 	    cd _build\latex
-        REM ren ds-2022-spring-midterm.pdf ds-2022-spring-midterm-questions.pdf
-        REM xcopy ds-2022-spring-midterm-questions.pdf ..\.. /Y
-        xcopy ds-2022-spring-midterm.pdf ..\.. /Y
+        REM ren ds-worksheet-kmp-string-search.pdf ds-worksheet-kmp-string-search-questions.pdf
+        REM xcopy ds-worksheet-kmp-string-search-questions.pdf ..\.. /Y
+        xcopy ds-worksheet-kmp-string-search.pdf ..\.. /Y
 		cd ..\..		
 	)
 )

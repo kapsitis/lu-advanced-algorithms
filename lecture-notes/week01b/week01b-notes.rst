@@ -358,6 +358,29 @@ and :math:`f \in O(g)`, but :math:`g \not\in O(f)`
   
 
 
+Master Theorem
+^^^^^^^^^^^^^^^^
+
+Let :math:`f(n)` be an increasing theorem that satisfies the recurrence relation: 
+
+.. math:: 
+
+  f(n) = a \cdot f \left( \frac{n}{b} \right) + cn^d
+  
+Here we assume that :math:`n = b^k`, where :math:`k` is a positive integer, :math:`a \geq 1`, 
+:math:`b>1` is an integer, :math:`c,d` are real numbers (where :math:`c>0` and :math:`d \geq 0`). 
+Then the asymptotic growth for :math:`f(n)` can be found like this: 
+
+.. math:: 
+
+  f(n)\ \mbox{is in}\ \left\{ \begin{array}{ll}
+  O(n^d), & \mbox{if $a < b^d$,}\\
+  O(n^d \log n), & \mbox{if $a = b^d$,}\\
+  O(n^{\log_b a}), & \mbox{if $a > b^d$.}\\
+  \end{array} \right.
+  
+  
+  
 
 
 

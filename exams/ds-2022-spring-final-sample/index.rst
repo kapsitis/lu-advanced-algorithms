@@ -10,7 +10,7 @@ Welcome to week01a-notes's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   ds-2022-spring-final
+   ds-2022-spring-final-sample
 
 
 .. Indices and tables

@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'ds-2022-spring-final'
+project = 'ds-2022-spring-final-sample'
 copyright = '2022, LU'
 author = 'LU'
 

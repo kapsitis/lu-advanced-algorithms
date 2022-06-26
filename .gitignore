@@ -45,3 +45,4 @@ _static
 _templates
 
 !exams/*/*.pdf
+!worksheets/*/*.pdf

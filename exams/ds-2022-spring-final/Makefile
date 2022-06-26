@@ -10,7 +10,6 @@ BUILDDIR      = _build
 
 
 latexpdf2:
-	echo "HEHE"
 	@$(SPHINXBUILD) -M "latexpdf" "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) -t Internal
 	python replace.py
 	cd _build/latex

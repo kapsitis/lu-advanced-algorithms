@@ -14,6 +14,17 @@ help:
 
 .PHONY: help Makefile
 
+solutions:
+	@$(SPHINXBUILD) -M latexpdf "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) -t Internal
+	python replace.py
+	cd _build/latex && pdflatex ds-worksheet-hashtables
+	mv _build/latex/ds-worksheet-hashtables.pdf ds-worksheet-hashtables-solutions.pdf
+
+questions:
+	@$(SPHINXBUILD) -M latexpdf "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	cd _build/latex && pdflatex ds-worksheet-hashtables
+	mv _build/latex/ds-worksheet-hashtables.pdf .
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile

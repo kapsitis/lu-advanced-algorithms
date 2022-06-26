@@ -1,4 +1,4 @@
-Worksheet Week 04: Stacks and Queues
+Worksheet, Week 04: Stacks and Queues
 =======================================
 
 **Question 1.1.1 (Stack Implementation as Array):**
@@ -7,7 +7,7 @@ Worksheet Week 04: Stacks and Queues
   Stack contains integer numbers; initially the array has
   the following content.
 
-  .. image:: figs-worksheet-week04/stack-structure.png
+  .. image:: figs-stacks-and-queues/stack-structure.png
      :width: 2.2in
 
   Stack has the physical representation with :math:`\mathtt{length}=2`
@@ -49,7 +49,7 @@ Worksheet Week 04: Stacks and Queues
   (the current number of elements in the queue). Current state is shown in the figure:
 
 
-  .. image:: figs-worksheet-week04/queue-structure.png
+  .. image:: figs-stacks-and-queues/queue-structure.png
      :width: 2.3in
 
 
@@ -105,7 +105,7 @@ Worksheet Week 04: Stacks and Queues
 
   And the content of the array is the following:
 
-  .. image:: figs-worksheet-week04/midterm-queue-structure.png
+  .. image:: figs-stacks-and-queues/midterm-queue-structure.png
      :width: 2in
 
 

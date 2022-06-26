@@ -1,7 +1,5 @@
-Week07: Graph Traversals
+Worksheet, Week08: Graph Traversals
 ====================================
-
-
 
 Strongly Connected Components
 --------------------------------
@@ -31,7 +29,7 @@ having :math:`3` strongly connected components. Next to that graph is the
 *transposed graph* :math:`G^T`
 where all the edges are reversed.
 
-.. image:: figs-worksheet-week08/strongly-connected-transposed.png
+.. image:: figs-graph-traversals/strongly-connected-transposed.png
    :width: 3in
 
 
@@ -72,7 +70,7 @@ of :math:`u.f` (the finishing times when running :math:`\text{\sc DFS}(G)`).
 
 
 
-.. image:: figs-worksheet-week08/strongly-connected-dfs.png
+.. image:: figs-graph-traversals/strongly-connected-dfs.png
    :width: 3in
 
 
@@ -110,7 +108,7 @@ Problem
 
 We start with the graph shown in Figure below.
 
-.. image:: figs-worksheet-week08/problem-graph.png
+.. image:: figs-graph-traversals/problem-graph.png
    :width: 3in
 
 

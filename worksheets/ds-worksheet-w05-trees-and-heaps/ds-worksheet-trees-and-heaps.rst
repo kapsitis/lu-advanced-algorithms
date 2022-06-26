@@ -1,5 +1,5 @@
-Handout Week05: Trees and Heaps
-=================================
+Worksheet Week 05: Trees and Heaps
+======================================
 
 
 Trees
@@ -20,7 +20,7 @@ Trees
   For example, the binary tree shown in this picture:
 
 
-  .. image:: figs-worksheet-week05/example-binary-tree.png
+  .. image:: figs-trees-and-heaps/example-binary-tree.png
      :width: 2in
 
   It is represented by the following array:
@@ -141,7 +141,7 @@ Heaps
 **Question 1.3.4 (Removing from Maximum Heap):**
   Here is an array for a Max-Heap:
 
-  .. image:: figs-worksheet-week05/heap-problem.png
+  .. image:: figs-trees-and-heaps/heap-problem.png
      :width: 3in
 
   The image shows array used to store Maximum Heap

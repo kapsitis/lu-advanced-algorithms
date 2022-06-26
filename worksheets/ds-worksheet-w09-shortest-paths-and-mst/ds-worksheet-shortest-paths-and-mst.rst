@@ -1,4 +1,4 @@
-Handout Week 08, Shortest Paths and MSTs
+Worksheet, Week 09: Shortest Paths and MSTs
 ===========================================
 
 
@@ -21,7 +21,7 @@ Problem
 
 We start with the graph shown in Figure below:
 
-.. figure:: figs-worksheet-week08/dijkstra-graph.png
+.. figure:: figs-shortest-paths-and-mst/dijkstra-graph.png
    :width: 1.5in
    :alt: Graph diagram
 
@@ -84,7 +84,7 @@ vertices is given by the following pseudocode:
 **Question 2:**
   Consider the graph in Figure:
 
-  .. figure:: figs-worksheet-week08/bellman-ford-graph.png
+  .. figure:: figs-shortest-paths-and-mst/bellman-ford-graph.png
      :width: 1.5in
      :alt: Graph diagram
 
@@ -140,7 +140,7 @@ vertices is given by the following pseudocode:
   In this task the input graph is shown in the figure below.
 
 
-  .. figure:: figs-worksheet-week08/bellman-ford-graph2.png
+  .. figure:: figs-shortest-paths-and-mst/bellman-ford-graph2.png
      :width: 2.5in
      :alt: Directed Graph
 
@@ -193,7 +193,7 @@ Problem
 **Question 4 (Prim's algorithm):**
   Prim's algorithm for the graph shown in Figure:
 
-  .. figure:: figs-worksheet-week08/problem-graph.png
+  .. figure:: figs-shortest-paths-and-mst/problem-graph.png
      :width: 3in
      :alt: Graph diagram
 
@@ -266,7 +266,7 @@ Problem
     to draw the edges without much intersection).
     But you can use any other layout as well.
 
-    .. image:: figs-worksheet-week08/mst-vertices.png
+    .. image:: figs-shortest-paths-and-mst/mst-vertices.png
        :width: 3in
 
 

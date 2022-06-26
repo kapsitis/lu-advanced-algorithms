@@ -1,5 +1,5 @@
-Handout Week1: Asymptotic Bounds
-===================================
+Worksheet Week 01: Asymptotic Bounds
+======================================
 
 Introduction
 --------------
@@ -117,7 +117,7 @@ The initial call is :math:`\text{\sc BinarySearch}(D,\ell, r,w)`, where :math:`\
 After that the binary search may call itself recursively on shorter intervals.
 
 
-.. image:: figs-worksheet-week01/binary-search.png
+.. image:: figs-asymptotic-bounds/binary-search.png
    :width: 4in
 
 | :math:`\text{\sc BinarySearch}(D,\ell, r, w)`
@@ -151,7 +151,7 @@ Finding a Peak in a Numeric Sequence
 
 **Brute Force Algorithm:**
 
-.. image:: figs-worksheet-week01/brute-force-peak.png
+.. image:: figs-asymptotic-bounds/brute-force-peak.png
    :width: 4in
 
 
@@ -161,7 +161,7 @@ Finding a Peak in a Numeric Sequence
   In particular, if the sequence is constant (all members are equal), then any member there is a peak.
 
 
-.. image:: figs-worksheet-week01/peak-finding.png
+.. image:: figs-asymptotic-bounds/peak-finding.png
    :width: 5in
 
 
@@ -353,7 +353,7 @@ complexities can be combined to find the time complexity of the overall algorith
   If you wish, this function can also be defined for all real numbers :math:`x \in \mathbb{R}`:
   :math:`{\displaystyle f(x) = x^2 + \frac{1}{2} \left(1 + cos(\pi x) \right)\left( x^3 - x^2 \right)}`.
 
-  .. image:: figs-worksheet-week01/cosine-function.png
+  .. image:: figs-asymptotic-bounds/cosine-function.png
    :width: 3in
 
 .. note::
@@ -403,7 +403,7 @@ is fine.
 **Hint for Example3:**
   Let us use the formal definition of Big-O notation, and show that its negation is true.
 
-.. image:: figs-worksheet-week01/exponent-example.png
+.. image:: figs-asymptotic-bounds/exponent-example.png
    :width: 4in
 
 We see that picking sufficiently large :math:`n` makes the inequality from the
@@ -434,7 +434,7 @@ always larger; so one can pick :math:`n_0 = 0` and :math:`c = 1`.
 **Solution:**
   The function that is not constant, but still in :math:`O(1)` is shown in the image below.
 
-  .. image:: figs-worksheet-week01/example4-function.png
+  .. image:: figs-asymptotic-bounds/example4-function.png
      :width: 2.5in
 
 
@@ -453,7 +453,7 @@ always larger; so one can pick :math:`n_0 = 0` and :math:`c = 1`.
 
 
 
-.. image:: figs-worksheet-week01/function-graphs.png
+.. image:: figs-asymptotic-bounds/function-graphs.png
    :width: 6in
 
 

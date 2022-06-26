@@ -1,4 +1,4 @@
-Worksheet Week06: Search Trees
+Worksheet, Week 06: Search Trees
 =================================
 
 
@@ -28,7 +28,7 @@ Trees and Binary Trees
   Consider an example general tree on Figure :ref:`general-tree-no-color`.
 
   .. _general-tree-no-color:
-  .. figure:: figs-worksheet-week06/general-tree-no-color.png
+  .. figure:: figs-search-trees/general-tree-no-color.png
      :width: 2in
 
      Multiway Tree
@@ -42,7 +42,7 @@ Trees and Binary Trees
 
 
   .. _colored-binary-tree1-reordered:
-  .. figure:: figs-worksheet-week06/colored-binary-tree1-reordered.png
+  .. figure:: figs-search-trees/colored-binary-tree1-reordered.png
      :width: 2in
 
      Tree with Horizontal Edges
@@ -56,7 +56,7 @@ Trees and Binary Trees
 
 
   .. _colored-binary-tree1:
-  .. figure:: figs-worksheet-week06/colored-binary-tree1.png
+  .. figure:: figs-search-trees/colored-binary-tree1.png
      :width: 1.5in
 
      Encoded Binary Tree
@@ -78,7 +78,7 @@ Trees and Binary Trees
 
 
   .. _binary-tree-problem:
-  .. figure:: figs-worksheet-week06/binary-tree-problem.png
+  .. figure:: figs-search-trees/binary-tree-problem.png
      :width: 1.5in
 
      Binary tree for Question 6.1.1
@@ -114,7 +114,7 @@ Trees and Binary Trees
     What is the depth of the node with number :math:`N` (defined above) in the new tree :math:`G`?
 
 
-  .. figure:: figs-worksheet-week06/heptagonal-nodes.png
+  .. figure:: figs-search-trees/heptagonal-nodes.png
      :width: 3in
      :alt: Binary tree
 
@@ -144,7 +144,7 @@ BST Trees
 **Question 6.2.2 (Search Random Keys in BST):**
   Consider the binary tree shown below.
 
-  .. image:: figs-worksheet-week06/bst-search.png
+  .. image:: figs-search-trees/bst-search.png
      :width: 2in
 
   Every key in this tree is being searched with the same probability.
@@ -182,7 +182,7 @@ of each letter).
   Consider the following Prefix Tree to encode letters in alphabet
   :math:`\mathcal{A} = \{ S, I, E, N, T, A \}`.
 
-  .. image:: figs-worksheet-week06/prefix-tree.png
+  .. image:: figs-search-trees/prefix-tree.png
      :width: 2in
 
   Every letter is encoded as a sequence of 0s and 1s (the path from the root to the respective letter).
@@ -286,7 +286,7 @@ Inserting and Deleting from an AVL Tree
   After :math:`k` nodes were inserted (without any re-balancing actions) the tree :math:`T'` now looks as
   in the image below.
 
-  .. image:: figs-worksheet-week06/tree-for-rotations.png
+  .. image:: figs-search-trees/tree-for-rotations.png
      :width: 3in
 
 
@@ -335,7 +335,7 @@ Inserting and Deleting from an AVL Tree
 **Question 6.6.1 (Insert Nodes in a Red-Black Tree):**
 
   .. _red-black-tree:
-  .. figure:: figs-worksheet-week06/red-black-tree.png
+  .. figure:: figs-search-trees/red-black-tree.png
      :width: 5in
 
      Sample Red-Black Tree

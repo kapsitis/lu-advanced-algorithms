@@ -1,4 +1,4 @@
-Worksheet Week 07: Sorting
+Worksheet, Week 07: Sorting
 =============================
 
 QuickSort
@@ -75,7 +75,7 @@ markings). Just try to keep the lists of numbers aligned.
 **(A)**
   Swaps during the :math:`0^{\text{th}}` call:
 
-  .. image:: assignment09-quicksort/arrays-part1.png
+  .. image:: figs-sorting/arrays-part1.png
      :width: 4in
 
 
@@ -87,7 +87,7 @@ markings). Just try to keep the lists of numbers aligned.
 
   Swaps during the first recursive call.
 
-  .. image:: assignment09-quicksort/arrays-part2.png
+  .. image:: figs-sorting/arrays-part2.png
      :width: 4in
 
 
@@ -97,7 +97,7 @@ markings). Just try to keep the lists of numbers aligned.
 
   Swaps during the second recursive call:
 
-  .. image:: assignment09-quicksort/arrays-part3.png
+  .. image:: figs-sorting/arrays-part3.png
      :width: 4in
 
 
@@ -123,7 +123,7 @@ Problems
     Draw the state of the array every time you swap two elements.
 
   **(B)**
-    Draw the content of the array immediately {\bf before} the second recursive
+    Draw the content of the array immediately *before* the second recursive
     call of :math:`\text{\textsc{QuickSort}}()`.
     (The original call :math:`\text{\textsc{QuickSort}}(A[0..11])` is assumed to be the
     :math:`0^{\text{th}}` call of this function).

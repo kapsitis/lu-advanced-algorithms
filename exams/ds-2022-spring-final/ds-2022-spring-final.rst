@@ -138,12 +138,13 @@ time and location of this exam.
     given node -- visit them in an alphabetical order.)
 
     Label each vertex with two numbers ``d/f``, where ``d`` is the discovery time, but ``f`` is the finishing
-    time during the DFS traversal. (Both ``d`` and ``f`` are integers from the interval :math:`[1;2 \cdot 12] = [1;24]`.)
+    time during the DFS traversal. (Both ``d`` and ``f`` are integers from the interval :math:`[1;24]`.)
 
 
   **(B)**
     As requested by the Kosaraju algorithm, transpose the directed graphs matrix (i.e. flip all the arrows),
-    and run the DFS again. (This time the ordering of the nodes is different: In Kosaraju algorithm they are determined by the
+    and run the DFS again. 
+    (This time the ordering of the nodes is different: In Kosaraju algorithm they are determined by the
     ``d/f`` numbers found in the previous step. Use this ordering every time when you run out of traversable
     nodes or need to visit the children nodes.)
 
@@ -155,6 +156,47 @@ time and location of this exam.
     Estimate the time complexity of this algorithm -- find the smallest (slowest growing)
     :math:`g(n)` such that the runtime of the algorithm :math:`T(n)` is in
     :math:`O(g(n))`.
+
+
+.. only:: Internal
+
+  **Answer:**
+
+  **(A)**
+    We run DFS algorithm on the original graph, visit all vertices in alphabetic order, 
+    and mark each vertex with two numbers (time moment when DFS enters the node -- discovery time, 
+    time moment when DFS exits the node -- finishing time). Both numbers are written in green.
+    
+    .. image:: figs-ds-2022-spring-final/strongly-connected-dfs1.png
+       :width: 1.6in
+
+
+  **(B)**
+    Now we flip all the edges in the original graph (now marked dark red). 
+    Also preserve the finishing times of the DFS done in the previous step (A) -- shown in green. 
+    Now we visit all vertices by decreasing finishing time (starting from the vertex "A" marked "24", 
+    we immediately run into a dead end, next go to the vertex "E" marked "23" and so on). 
+    Now show the discovery/finishing times in this next DFS traversal in blue.
+
+    .. image:: figs-ds-2022-spring-final/strongly-connected-dfs2.png
+       :width: 2in
+
+
+
+  **(C)**
+    The answer depends on how the graph is represented and what is meant by the parameter :math:`n`. 
+    Let :math:`n` denote the number of vertices in a graph; and let :math:`m` 
+    denote the number of its edges. 
+    Kosaraju's algorithm means running DFS algorithm twice; it costs :math:`O(n+m)` (and in-between the graph 
+    is transposed by reversing all its edges; it costs :math:`O(m)`). 
+    The total time is :math:`O(n+m)`. 
+    
+    If the graph is represented as an :math:`n \times n` matrix, then 
+    the DFS algorithm needs to scan all the rows (or all the columns for the transposed graph); 
+    it costs :math:`O(n^n)`. 
+  
+  
+  :math:`\square`
 
 
 
@@ -191,6 +233,24 @@ time and location of this exam.
     (Your hash value for :math:`h(P_2)` should coincide with the value obtained in (A).)
 
 
+.. only:: Internal
+
+  **Answer:**
+
+  **(A)**
+    ababacab
+
+  **(B)**
+    DEF
+
+  **(C)**
+    GHI
+
+
+  :math:`\square`
+
+
+
 **Question 4:**
 
   **(A)**
@@ -220,13 +280,68 @@ time and location of this exam.
   **Answer:**
 
   **(A)**
-    ababacab
+    Here is the prefix function for the pattern :math:`P = \mathtt{ababacab}`:
+    
+    ==============  ====  ====  ====  ====  ====  ====  ====  ====
+    :math:`j`        1     2     3     4     5     6     7     8
+    :math:`\pi(j)`   0     0     1     2     3     0     1     2
+    ==============  ====  ====  ====  ====  ====  ====  ====  ====
+    
+    To verify that it is correct, find the overlaps of all prefixes 
+    of :math:`\mathtt{ababacab}` with themselves. The examples below
+    show how the prefixes can be aligned with shifted copies with themselves.
+    
+    .. code-block:: text
+    
+      aba       abab      ababa     ababac          ababaca         ababacab
+        aba       abab      ababa         ababac          ababaca         ababacab
+      pi(3)=1   pi(4)=2   pi(5)=3   p(6)=0          p(7)=1          p(8)=2
+      
 
   **(B)**
-    DEF
+    The KMP algorithm execution is shown in the image below. 
+    All the colored letters are those, which are actually compared to the pattern string
+    (shown at the very top). The letters that match are shown blue, letters that do not
+    match are shown red, if the matching reaches the end of the pattern (i.e. the entire
+    pattern is found), it is shown in green. 
+    
+    The only full match of the pattern with the text happens when :math:`i=10`
+    and :math:`k = 7`. From here we can compute the offset of the pattern 
+    which is :math:`i - k = 10 - 7 = 3`. It is the only output of this algorithm. 
+    After that we try to shift the pattern to the right, but it cannot
+    cause full match anymore since part of the pattern is outside the searchable
+    text. 
+    
+    .. image:: figs-ds-2022-spring-final/kmp-execution.png
+       :width: 4in
+
 
   **(C)**
-    GHI
+    The KMP string search compares :math:`16` letters (all the bold ones
+    in the above example). 
+    
+    If we use naive string search algorithm instead, 
+    it would need :math:`4 + 1 + 2 + 8 + 1 + 4 + 1 + 2 + 1 + 5 = 29` letter comparisons.
+    See the diagram below -- every time we find a mismatch, the pattern is
+    shifted ahead by one unit only. 
+    
+    
+    .. code-block:: text
+    
+      abaababacababa
+      --------------
+      abab
+       a
+        ab
+         ababacab
+          a
+           abab
+            a
+             ab
+              a
+               ababa
+               
+      
 
 
   :math:`\square`
@@ -295,7 +410,7 @@ time and location of this exam.
     Note that there are no collisions at all. The hash table looks like this:
 
     ================  ==============
-    T[n]              Entry
+    :math:`T[n]`      **Entry**
     ----------------  --------------
     T[0]              ``Denmark``
     T[1]              ``Bulgaria``
@@ -332,7 +447,7 @@ time and location of this exam.
       [15, 4, 2, 8, 1, 14]
 
     ================  ==============
-    T[n]              Entry
+    :math:`T[n]`      **Entry**
     ----------------  --------------
     T[0]              ``Denmark``
     T[1]              ``Bulgaria``

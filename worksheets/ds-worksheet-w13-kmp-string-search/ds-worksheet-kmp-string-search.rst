@@ -432,17 +432,17 @@ Pseudocode for the Prefix Function
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 | :math:`\text{\sc ComputePrefixFunction}(P)`
-| :math:`m` ``:=`` :math:`len(P)`
-| Initialize the table :math:`\pi(1)\ldots{}\pi(m)`
-| :math:`\pi(1)=0`
-| :math:`k=0`
-| **for** :math:`q=2` **to** :math:`m`
-|     **while** :math:`k>0` **and** :math:`P[k]\neq{}P[q-1]`
-|         :math:`k` ``:=`` :math:`\pi(k)`
-|     **if** :math:`P[k]` ``==`` :math:`P[q-1]`
-|         :math:`k` ``:=`` :math:`k+1`
-|     :math:`\pi(q)=k`
-| **return** :math:`\pi`
+|     :math:`m` ``:=`` :math:`len(P)`
+|     Initialize the table :math:`\pi(1)\ldots{}\pi(m)`
+|     :math:`\pi(1)=0`
+|     :math:`k=0`
+|     **for** :math:`q=2` **to** :math:`m`
+|         **while** :math:`k>0` **and** :math:`P[k]\neq{}P[q-1]`
+|             :math:`k` ``:=`` :math:`\pi(k)`
+|         **if** :math:`P[k]` ``==`` :math:`P[q-1]`
+|             :math:`k` ``:=`` :math:`k+1`
+|         :math:`\pi(q)=k`
+|     **return** :math:`\pi`
 
 
 **Example:** Find the prefix function for aa pattern :math:`P = \mathtt{ababaca}`.

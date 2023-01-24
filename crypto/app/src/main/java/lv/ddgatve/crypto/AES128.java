@@ -1,12 +1,26 @@
 package lv.ddgatve.crypto;
 
 import java.security.GeneralSecurityException;
+import java.security.Security;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+/** 
+ * Reference AES document: 
+ * https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.197.pdf
+ */
+
 public class AES128 {
+
+    static {
+        // In fact, should add provider to java.security. 
+        // This line seems useless
+        Security.addProvider(new BouncyCastleProvider());
+    }
 
     public static byte[] ecbEncrypt(SecretKey key, byte[] data)
             throws GeneralSecurityException {

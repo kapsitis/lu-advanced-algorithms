@@ -1,12 +1,21 @@
-from Crypto.Cipher import AES
-
 import binascii
 
 import os
 
+from Crypto.Cipher import AES
 
-def some():
-    return 3
+
+# This class contains external library implementations of AES
+
+def aes128_encrypt_block(block_int, key_int):
+    block_bytes = block_int.to_bytes(16, 'big', signed = False)
+    key_bytes = key_int.to_bytes(16, 'big', signed = False)
+    zero = 0
+    iv_bytes = zero.to_bytes(16, 'big', signed = False)
+    encryptor = AES.new(key_bytes, AES.MODE_ECB)
+    ciphertext = encryptor.encrypt(block_bytes)
+    return ciphertext
+
 
 def main():
     key = binascii.unhexlify('1F61ECB5ED5D6BAF8D7A7068B28DCC8E')

@@ -49,17 +49,27 @@ def main():
     #    roundKey = keyScheduler.getRoundKey(i)
     #    print("Key for round {} is {}".format(i, binascii.hexlify(roundKey)))
 
+    mixColMatrix = State(b'\x02\x01\x01\x03\x03\x02\x01\x01\x01\x03\x02\x01\x01\x01\x03\x02')
+
     state = State(block_bytes)
     roundKey = keyScheduler.getRoundKey(0)
     state.addRoundKey(roundKey)
-    print('s1.start bytes are {}'.format(state))
 
-    state.SubBytes()
-    print('s1.s_box bytes are {}'.format(state))
+    for round in range(1,11):
+        print('round[{}].start {}'.format(round, state))
+        state.SubBytes()
+        print('round[{}].s_box {}'.format(round, state))
+        state.ShiftRows()
+        print('round[{}].s_row {}'.format(round, state))
+        if round < 10:
+            state.MixColumns(mixColMatrix)
+            print('round[{}].m_col {}'.format(round, state))
+        roundKey = keyScheduler.getRoundKey(round)
+        print('round[{}].k_sch {}'.format(round, binascii.hexlify(roundKey)))
+        state.addRoundKey(roundKey)    
+        print()
 
-
-    
-    
+    print('round[10].output {}'.format(state))
 
     print("******************* CALL CRYPTO API ************************")
     

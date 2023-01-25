@@ -85,15 +85,3 @@ class GfByte:
         # print("self = {}, bb = {}, sbox = {}".format(self, bb, result))
         return result
 
-# if __name__ == '__main__':
-# #    a = GfByte(0xb8)
-# #    cc = a.s_box()
-#     a = GfByte(0xb8)
-#     cc = a.inv_sbox()
-#     expected = GfByte(0x9a)
-#     print("a = {}, cc = {}, expected = {}".format(a, cc, expected))
-
-#     for i in range(10):
-#         ii = GfByte(i)
-#         jj = ii.inverse()
-#         print("ii = {}, jj = {}".format(ii, jj))

@@ -5,7 +5,7 @@ KEY: 000102030405060708090a0b0c0d0e0f
 CIPHER (ENCRYPT):
 round[ 0].input 00112233445566778899aabbccddeeff
 round[ 0].k_sch 000102030405060708090a0b0c0d0e0f
-                                
+
 round[ 1].start 00102030405060708090a0b0c0d0e0f0
 round[ 1].s_box 63cab7040953d051cd60e0e7ba70e18c
 round[ 1].s_row 6353e08c0960e104cd70b751bacad0e7
@@ -66,4 +66,3 @@ round[10].s_row 7ad5fda789ef4e272bca100b3d9ff59f
 round[10].k_sch 13111d7fe3944a17f307a78b4d2b30c5
 
 round[10].output 69c4e0d86a7b0430d8cdb78070b4c55a
-

@@ -85,3 +85,10 @@ class GfByte:
         # print("self = {}, bb = {}, sbox = {}".format(self, bb, result))
         return result
 
+    def get_double(self):
+        if self.b < 0x80:
+            x = 2*self.b
+        else: 
+            x = 2*self.b ^ 0x011b
+        return GfByte(x)
+

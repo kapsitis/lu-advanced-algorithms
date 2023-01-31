@@ -45,9 +45,6 @@ def main():
 
     #keyScheduler = KeySchWord(key_bytes)
     keyScheduler = KeyScheduler([key_bytes[0:4], key_bytes[4:8], key_bytes[8:12], key_bytes[12:16]], numBits)
-    #for i in range(11):
-    #    roundKey = keyScheduler.getRoundKey(i)
-    #    print("Key for round {} is {}".format(i, binascii.hexlify(roundKey)))
 
     mixColMatrix = State(b'\x02\x01\x01\x03\x03\x02\x01\x01\x01\x03\x02\x01\x01\x01\x03\x02')
 

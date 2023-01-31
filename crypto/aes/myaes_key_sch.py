@@ -11,6 +11,7 @@ class KeySchWord:
         else: 
             self.bList = bList
 
+    # Output a hex string representation of the key - convert all 4 bytes. 
     def __str__(self):
         hex = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
         result = []
@@ -31,7 +32,7 @@ class KeySchWord:
         assert isinstance(other, int) or isinstance(other, GfByte)
         if isinstance(other, int):
             other = GfByte(other)
-        return KeySchWord([other*self.x, other*self.y, other*self.z])
+        return KeySchWord([other*self.bList[i] for i in range(4)])
 
 
     def RotWord(self):
@@ -41,23 +42,36 @@ class KeySchWord:
         return KeySchWord([self.bList[0].sbox(), self.bList[1].sbox(), self.bList[2].sbox(), self.bList[3].sbox()])
 
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            result = True
+            for i in range(4):
+                result = result and (self.bList[i].b == other.bList[i].b)
+            return result
+        else:
+            return False
+
+    def __hash__(self):
+        result = 0
+        for i in range(4):
+            result = result ^ self.bList[i].__hash__()
+        return result
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+
 
 class KeyScheduler: 
 
     # Initialize with a list of N byte sequences, 4 bytes each. 
     def __init__(self, listOfBytes, numBits):
         self.numBits = numBits
-        # print('in keyScheduler init type list = {}'.format(type(listOfBytes[0])))
-        # print('in keyScheduler init value is = {}'.format(listOfBytes[0]))
-        # print('in keyScheduler length = {}'.format(len(listOfBytes[0])))
+
+        # TODO: Rewrite this as self.WList =  [KeySchWord([uu[0], uu[1], uu[2], uu[3]]) for uu in listOfBytes]
         self.WList =  []
         for uu in listOfBytes:
-            # print('in keyScheduler type of uu[i] = {}'.format(type(uu[0])))
-            # self.WList =  [KeySchWord([uu[0], uu[1], uu[2], uu[3]]) for uu in listOfBytes]
             self.WList.append(KeySchWord([uu[0], uu[1], uu[2], uu[3]]))
-
-        #self.rc = [b'\x01', b'\x02', b'\x04', b'\x08', b'\x10', b'\x20', b'\x40', b'\x80', b'\x1B', b'\x36']
-        #self.rcon = [KeySchWord([some_rc, b'\x00', b'\x00', b'\x00']) for some_rc in self.rc]
         self.rc = [0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36]
         self.rcon = [KeySchWord([x, 0x00, 0x00, 0x00]) for x in self.rc]
 

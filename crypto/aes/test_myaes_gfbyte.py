@@ -51,3 +51,25 @@ def test_invsbox2():
         x = GfByte(args[i])
         y = x.inv_sbox()
         assert y == GfByte(vals[i])
+
+# Checking round constants: https://en.wikipedia.org/wiki/AES_key_schedule#Round_constants
+def test_round_constants():
+    # TODO - Replace this by the constants self.rc in KeyScheduler class
+    expected_constants = [0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36]
+    for i in range(1, len(expected_constants)-1):
+        rc_prev = GfByte(expected_constants[i])
+        rc_next = GfByte(expected_constants[i+1])
+        TWO = GfByte(0x02)
+        ZERO = GfByte(0x00)
+        assert TWO*rc_prev == rc_next
+        # Note that in GF(256) we have A + A = 0 (not A + A = 2*A)
+        assert rc_prev + rc_prev == ZERO
+
+def test_get_double():
+    TWO = GfByte(0x02)
+    for i in range(256):
+        gfi = GfByte(i)
+        gfi_double1 = TWO*gfi
+        gfi_double2 = gfi.get_double()
+        assert gfi_double1 == gfi_double2
+

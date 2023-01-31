@@ -5,8 +5,7 @@ import os
 from Crypto.Cipher import AES
 
 
-# This class contains external library implementations of AES
-
+# This class uses an external library implementations of AES (to check consistency with AesUtility)
 def aes128_encrypt_block(block_int, key_int):
     block_bytes = block_int.to_bytes(16, 'big', signed = False)
     key_bytes = key_int.to_bytes(16, 'big', signed = False)

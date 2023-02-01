@@ -1,5 +1,7 @@
 from myaes_gfbyte import *
 
+from myaes_state import *
+
 class KeySchWord: 
     # Initialize with a list of 4 bytes
     def __init__(self, bList):
@@ -119,5 +121,13 @@ class KeyScheduler:
         round_key_int = int(round_key_hex, 16)
         return round_key_int.to_bytes(16, 'big', signed = False)
 
+    def getInverseRoundKey(self, round):
+        if round == 0 or round == 10: 
+            return self.getRoundKey(10 - round)
+        else:
+            rk = self.getRoundKey(10 - round)
+            rk_state = State(rk)
+            rk_state.MixColumns(State(State.INV_MIXCOLUMNS_BYTES))
+            return rk_state.getBytes()
 
     

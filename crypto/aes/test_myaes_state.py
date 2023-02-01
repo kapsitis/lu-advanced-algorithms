@@ -5,6 +5,23 @@ from myaes_key_sch import *
 
 import binascii
 
+
+def test_mix_columns_matrices():
+    m1 = "02010103030201010103020101010302"
+    m2 = "0e090d0b0b0e090d0d0b0e09090d0b0e"
+    m1_int = int(m1, 16)
+    m1_bytes = m1_int.to_bytes(16, 'big', signed=False)
+    m2_int = int(m2, 16)
+    m2_bytes = m2_int.to_bytes(16, 'big', signed=False)
+
+    state_m1 = State(m1_bytes)
+    state_m2 = State(m2_bytes)
+    assert binascii.hexlify(state_m1.getBytes()).decode('utf-8') == "02010103030201010103020101010302"
+
+    state_m1.MixColumns(state_m2)
+    assert binascii.hexlify(state_m1.getBytes()).decode('utf-8') == "01000000000100000000010000000001"
+
+
 def test_aes128_encrypt_round0():
     input_hex = "00112233445566778899aabbccddeeff"
     round_hex = "000102030405060708090a0b0c0d0e0f"
@@ -109,4 +126,41 @@ def test_aes128_encrypt_round10():
     assert binascii.hexlify(roundKey).decode('utf-8') == expected10['k_sch']
     state.addRoundKey(roundKey)
     assert binascii.hexlify(state.getBytes()).decode('utf-8') == expected_output
+
+
+
+def test_modified_decryption_keys():
+    m2 = "0e090d0b0b0e090d0d0b0e09090d0b0e"
+    m2_int = int(m2, 16)
+    m2_bytes = m2_int.to_bytes(16, 'big', signed=False)
+    invMatrix = State(m2_bytes)
+
+    print("Before InvMixColumns matrix is applied")    
+    roundkey09_hex = "549932d1f08557681093ed9cbe2c974e"
+    roundkey09_int = int(roundkey09_hex, 16)
+    roundkey09_bytes = roundkey09_int.to_bytes(16, 'big', signed=False)
+    s1 = State(roundkey09_bytes)
+    print("s1 = {}".format(s1))    
+
+    print("After InvMixColumns matrix is applied")
+    s1.MixColumns(invMatrix)
+    print("s1 = {}".format(s1)) 
+    print("Done")
+
+
+
+def test_mix_columns_matrices():
+    m1 = "02010103030201010103020101010302"
+    m2 = "0e090d0b0b0e090d0d0b0e09090d0b0e"
+    m1_int = int(m1, 16)
+    m1_bytes = m1_int.to_bytes(16, 'big', signed=False)
+    m2_int = int(m2, 16)
+    m2_bytes = m2_int.to_bytes(16, 'big', signed=False)
+
+    state_m1 = State(m1_bytes)
+    state_m2 = State(m2_bytes)
+    assert binascii.hexlify(state_m1.getBytes()).decode('utf-8') == "02010103030201010103020101010302"
+
+    state_m1.MixColumns(state_m2)
+    assert binascii.hexlify(state_m1.getBytes()).decode('utf-8') == "01000000000100000000010000000001"
 

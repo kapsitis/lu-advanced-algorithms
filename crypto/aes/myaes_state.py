@@ -2,7 +2,12 @@ from myaes_gfbyte import *
 
 import copy
 
-class State: 
+class State:
+
+    MIXCOLUMNS_INT = int("02010103030201010103020101010302", 16)
+    MIXCOLUMNS_BYTES = b'\x02\x01\x01\x03\x03\x02\x01\x01\x01\x03\x02\x01\x01\x01\x03\x02'
+    INV_MIXCOLUMNS_INT = int("0e090d0b0b0e090d0d0b0e09090d0b0e", 16)
+    INV_MIXCOLUMNS_BYTES = b'\x0e\t\r\x0b\x0b\x0e\t\r\r\x0b\x0e\t\t\r\x0b\x0e'
 
     # Initialize with 'bytes' object containing exactly 16 bytes
     def __init__(self, theBytes):
@@ -27,7 +32,7 @@ class State:
 
 
     def __str__(self):
-        hex = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+        hex = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
         result = []
         for col in range(4):
             for row in range(4):
@@ -57,6 +62,11 @@ class State:
             for row in range(4):
                 self.matrix[col][row] = self.matrix[col][row].sbox()
 
+    def InvSubBytes(self):
+        for col in range(4):
+            for row in range(4):
+                self.matrix[col][row] = self.matrix[col][row].inv_sbox()
+
     def ShiftRows(self): 
         temp = []
         for col in range(4): 
@@ -64,7 +74,16 @@ class State:
         for col in range(4): 
             for row in range(4):
                 self.matrix[col][row] = temp[(col+row)%4][row]
-    
+
+    def InvShiftRows(self): 
+        temp = []
+        for col in range(4): 
+            temp.append(copy.copy(self.matrix[col]))
+        for col in range(4): 
+            for row in range(4):
+                self.matrix[col][row] = temp[(col-row)%4][row]
+
+
     def MixColumns(self, mixColMatrix): 
         temp = []
         for col in range(4): 

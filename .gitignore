@@ -1,6 +1,11 @@
-# OS X stuff
+# OS X stuff, IDE and virtual environments
 .DS_Store
 .idea
+.conda
+.gradle
+crypto/app/bin
+crypto/app/build 
+__pycache__
 
 # Prerequisites
 *.d
@@ -46,3 +51,4 @@ _templates
 
 !exams/*/*.pdf
 !worksheets/*/*.pdf
+crypto/rsa/

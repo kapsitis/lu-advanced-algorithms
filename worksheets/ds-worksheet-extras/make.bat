@@ -36,7 +36,9 @@ IF "%language%" == "de" (
 )
 
 
-
+REM ./make latexpdf solutions
+REM ./make latexpdf questions
+REM ./make latexpdf
 if [%2] == [] (
     %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 ) else (
@@ -45,20 +47,19 @@ if [%2] == [] (
         %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O% -t Internal
         python replace.py
 	    cd _build\latex
-	    xelatex ds-worksheet-asymptotic-bounds
-        ren ds-worksheet-asymptotic-bounds.pdf ds-worksheet-asymptotic-bounds-solutions.pdf
-        xcopy ds-worksheet-asymptotic-bounds-solutions.pdf ..\.. /Y
+	    xelatex ds-worksheet-extras
+        ren ds-worksheet-extras.pdf ds-worksheet-extras-solutions.pdf
+        xcopy ds-worksheet-extras-solutions.pdf ..\.. /Y
 		cd ..\..
     ) else (
         echo.Building questions
 		%SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 	    cd _build\latex        
-        xcopy ds-worksheet-asymptotic-bounds.pdf ..\.. /Y
+        xcopy ds-worksheet-extras.pdf ..\.. /Y
 		cd ..\..		
 	)
 )
 goto end 
-
 
 :help
 %SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%

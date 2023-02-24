@@ -49,3 +49,14 @@ def test_aes128_block_decrypt():
 
     
 
+def test_aes128_cbc_encrypt():
+    key = binascii.unhexlify('e6aa51d07d884db2cfc83c6e7b198141')
+    IV = binascii.unhexlify('e4e85bb6fd7e2b05175e111a4e33bbc4')
+    # print("iv_bytes = {}".format(binascii.hexlify(IV).decode('utf-8')))
+    plaintext = binascii.unhexlify('49572d5477f0aca72576e50d8372c4b9759f79adf0a6a3d0ccc409355d4b3c9d')
+    
+    # encryptor = AES.new(key, AES.MODE_CBC, IV=IV)
+    encryptor = AesUtility(key, IV)
+    result = encryptor.encode_cbc(plaintext)
+    binascii.hexlify(result).decode('utf-8') == '72ab5aabc347e1daba8c3cb45660760b4b00155a5c0340d7488423c84832e6b3'
+

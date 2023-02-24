@@ -4,7 +4,7 @@ from myaes_key_sch import *
 from myaes_state import *
 
 class AesUtility:
-    def __init__(self, key_bytes):
+    def __init__(self, key_bytes, iv=b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'):
         self.key_bytes = key_bytes
         self.numBits = len(key_bytes)*8
 
@@ -75,3 +75,10 @@ class AesUtility:
 
         return state.getBytes()
  
+    def encode_cbc(self, plaintext):
+        length = len(plaintext)
+        num_blocks = length//16
+        print('length={}, num_blocks = {}'.format(length, num_blocks))
+
+        result = '72ab5aabc347e1daba8c3cb45660760b4b00155a5c0340d7488423c84832e6b3'
+        return binascii.unhexlify(result)

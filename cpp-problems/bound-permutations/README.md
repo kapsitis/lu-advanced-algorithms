@@ -54,7 +54,7 @@ In this case $A[i] + B'[i] = \{ 11,11,11,14,11 \}$.
 The second two arrays $A = \{ 12, 14, 12, 7 \}$ and $B = \{ 10, 11, 9, 20 \}$
 are not in the relation for threshold $t = 23$. 
 There are three numbers in $A$: $(12,12,7)$ that would need to be added with numbers at least
-$11$ to add up to :math:`23`. On the other hand, there are just two 
+$11$ to add up to $23$. On the other hand, there are just two 
 numbers $\geq 11$ in $B$.
 	
 **Note:** Algorithmic tasks of this kind are widely known. 

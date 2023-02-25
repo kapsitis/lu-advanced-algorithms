@@ -24,8 +24,8 @@ void eraseChars(char* arg);
 
 **Constraints:** 
 
-* Number of non-empty lines up to :math:`1000`.
-* Length of lines in the file up to :math:`1000`.
+* Number of non-empty lines up to $1000$.
+* Length of lines in the file up to $1000$.
 	
 **Sample Input:**
 

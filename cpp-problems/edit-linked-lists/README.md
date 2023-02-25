@@ -1,6 +1,6 @@
 # Editing Linked Lists
 
-There is a list of :math:`n` integer numbers :math:`a_i`, $i=0,\ldots,n-1$ 
+There is a list of $n$ integer numbers $a_i$, $i=0,\ldots,n-1$ 
 implemented as a linked list of ``Node`` objects. 
 ``Node`` has the following type: 
   

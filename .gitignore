@@ -6,6 +6,7 @@
 crypto/app/bin
 crypto/app/build 
 __pycache__
+**/.vscode
 
 # Prerequisites
 *.d

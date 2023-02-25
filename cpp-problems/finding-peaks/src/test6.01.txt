@@ -1,0 +1,11 @@
+10
+Chen 4
+Huang 2
+Li 6
+Liu 7
+Wang 0
+Wu 9
+Yang 6
+Zhang 5
+Zhou 4
+Zhao 7

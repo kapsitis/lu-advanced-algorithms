@@ -1,5 +1,4 @@
-General Guidelines for the C++ Problems
-==========================================
+# General Guidelines for the C++ Problems
 
 1. Create a single C++ file matching the exercise name `matrix-max.cpp` etc. 
 2. Use arrays, pointers and variables of basic types. 

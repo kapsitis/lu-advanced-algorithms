@@ -26,33 +26,33 @@ and also the number of times it called function ``compare`` on two pairs.
 
 
 
-.. code-block:: cpp
+``` cpp
+#include <iostream>
+#include <string> 
 
-  #include <iostream>
-  #include <string> 
+struct StrInt { string s; int a; };
 
-  struct StrInt { string s; int a; };
+static int numOfCompareCalls = 0;
 
-  static int numOfCompareCalls = 0;
+// This function should return 0, if both structs are equal
+// It should return a negative number, if the struct "A" is less than "B"
+// It should return a positive number, if "A" is more than "B"
+int compare(StrInt A, StrInt B) {
+  numOfCompareCalls++; // increment the counter of calls
+  // ...
+  // Your implementation of the comparison itself
+  // ... 
+}
 
-  // This function should return 0, if both structs are equal
-  // It should return a negative number, if the struct "A" is less than "B"
-  // It should return a positive number, if "A" is more than "B"
-  int compare(StrInt A, StrInt B) {
-    numOfCompareCalls++; // increment the counter of calls
-    // ...
-    // Your implementation of the comparison itself
-    // ... 
-  }
-
-  // Your implementation of main()
-  int main() {
-    // Read number N from the standard input
-    // Read N pairs from the standard input
-    // Your efficient implementation of the peak function
-    // ... 
-    // On the last line output the number of calls 	
-  }	
+// Your implementation of main()
+int main() {
+  // Read number N from the standard input
+  // Read N pairs from the standard input
+  // Your efficient implementation of the peak function
+  // ... 
+  // On the last line output the number of calls 	
+}
+```	
 
 
 **Guidelines for your Implementation:**
@@ -81,29 +81,29 @@ and also the number of times it called function ``compare`` on two pairs.
 	
 **Sample Input:**
   
-  .. code-block:: text
-
-    10
-    Chen 4
-    Huang 2
-    Li 6
-    Liu 7
-    Wang 0
-    Wu 9
-    Yang 6
-    Zhang 5
-    Zhou 4
-    Zhao 7
+``` text
+10
+Chen 4
+Huang 2
+Li 6
+Liu 7
+Wang 0
+Wu 9
+Yang 6
+Zhang 5
+Zhou 4
+Zhao 7
 
 **Sample Output:**
   
-  .. code-block:: text
-    
-    PeakLocation 8	
-    PeakValue (Zhou,4)
-    Comparisons 7
-	  
+``` text
+PeakLocation 8	
+PeakValue (Zhou,4)
+Comparisons 7
+```	  
+
 **Explanation:**
+
   In the given array of 10 elements there is only one peak (element that is next to last). 
   We output its location (its index in the zero-based array), the string-integer pair itself in parentheses, 
   and also the number of comparisons used. (Your number of comparisons may differ, but 

@@ -1,0 +1,9 @@
+[14, 13, 12, 11]
+[21, 13, 12, 24]
+[13, 12, 24]
+[12, 24, 13]
+[24, 13, 12]
+InvalidArgument: Number not inserted
+[]
+OutOfRange: List is empty
+[]

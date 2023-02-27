@@ -1,0 +1,23 @@
+0
+pushFront 11
+pushFront 12
+pushFront 13
+pushFront 14
+toString
+assignAt 0 21
+assignAt 3 24
+toString
+popFront
+toString
+moveNext
+toString
+movePrev
+movePrev
+toString
+pushFront 1000000001
+popFront
+popFront
+popFront
+toString
+popFront
+toString

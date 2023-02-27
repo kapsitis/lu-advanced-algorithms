@@ -26,4 +26,5 @@ int main()
     int i, j;
     int maxValue = findMax(arr, i, j);
     cout << maxValue << " " << i << " " << j << endl;
+    return 0;
 }

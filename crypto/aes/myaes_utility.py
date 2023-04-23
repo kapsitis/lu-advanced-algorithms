@@ -23,18 +23,12 @@ class AesUtility:
         state.addRoundKey(roundKey)
 
         for round in range(1,11):
-            # print('round[{}].start {}'.format(round, state))
             state.SubBytes()
-            # print('round[{}].s_box {}'.format(round, state))
             state.ShiftRows()
-            # print('round[{}].s_row {}'.format(round, state))
             if round < 10:
                 state.MixColumns(mixColMatrix)
-                # print('round[{}].m_col {}'.format(round, state))
             roundKey = keyScheduler.getRoundKey(round)
-            # print('round[{}].k_sch {}'.format(round, binascii.hexlify(roundKey)))
             state.addRoundKey(roundKey)    
-            # print()
 
         return state.getBytes()
 

@@ -1,17 +1,33 @@
-#include <iostream>
 #include <vector>
-#include <string>
+#include <iostream>
 
 using namespace std;
 
-int main()
+class Pair
 {
-    vector<string> msg {"Hello", "C++", "World", "from", "VS Code", "and the C++ extension!"};
+public:
+    int nX, nY;
 
-    for (const string& word : msg)
+private:
+};
+
+int main(int argc, char **argv)
+{
+
+    vector<Pair> myVector;
+    for (int i = 0; i < 10; i++)
     {
-        cout << word << " ";
+        int x, y;
+        cin >> x >> y;
+        Pair p;
+        p.nX = x;
+        p.nY = y;
+        myVector.push_back(p);
     }
-    cout << endl;
-}
 
+    for (auto it = myVector.begin(); it != myVector.end(); ++it)
+    {
+        cout << "(" << (*it).nX << "," << (*it).nY << ")" << endl;
+    }
+    return 0;
+}

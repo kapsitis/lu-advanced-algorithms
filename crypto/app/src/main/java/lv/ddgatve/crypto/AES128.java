@@ -49,9 +49,14 @@ public class AES128 {
         System.out.println("JAVA_HOME = " + javaHome);
 
 
-        String sBlockHex = "00112233445566778899aabbccddeeff";
-        String sKeyHex = "000102030405060708090a0b0c0d0e0f";
-        String sOutputHex = "69c4e0d86a7b0430d8cdb78070b4c55a";
+        // This is from AES standard
+        // String sBlockHex = "00112233445566778899aabbccddeeff";
+        // String sKeyHex = "000102030405060708090a0b0c0d0e0f";
+        // String sOutputHex = "69c4e0d86a7b0430d8cdb78070b4c55a";
+
+        String sBlockHex = "48656c6c6f20776f726c642120202020";
+        String sKeyHex = "def4be2036b28d9cc8e4388452635414";
+        String sOutputHex = "e80027fcb3f4107706845341cc1d371c";
 
         byte[] keyBytes = Utils.x2a(sKeyHex);
         SecretKey secretKey = defineKey(keyBytes);

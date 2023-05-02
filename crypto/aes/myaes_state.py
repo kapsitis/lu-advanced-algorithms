@@ -45,6 +45,15 @@ class State:
         return self.__str__()
 
 
+    def pretty_print(self):
+        lines = []
+        for row in range(4):
+            line = []
+            for col in range(4):
+                line.append('{}'.format(self.matrix[col][row]))
+            lines.append(' '.join(line))
+        return '\n'.join(lines)
+
     def getBytes(self):
         result_hex = self.__str__()
         result_int = int(result_hex, 16)

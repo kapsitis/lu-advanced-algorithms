@@ -2,11 +2,16 @@
 
 from myaes_key_sch import *
 from myaes_state import *
+import logging
 
 class AesUtility:
     def __init__(self, key_bytes, iv=b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'):
         self.key_bytes = key_bytes
         self.numBits = len(key_bytes)*8
+        # print('***************************** __myaes_utility.__init__(..) ******************************')
+        logging.basicConfig(filename='my_aes.log',
+                            format='%(message)s',
+                            encoding='utf-8', level=logging.DEBUG)
 
 
     def encode_block(self, block_bytes):
@@ -23,13 +28,29 @@ class AesUtility:
         state.addRoundKey(roundKey)
 
         for round in range(1,11):
+            # logging.warning('Round sth {}'.format(round))
+            logging.info('round[{}].istart {}'.format(round, state))
             state.SubBytes()
+            logging.info('round[{}].is_box {}'.format(round, state))
             state.ShiftRows()
+            logging.info('round[{}].is_row {}'.format(round, state))
             if round < 10:
+                if round == 9:
+                    print('DFA normal state[9] = {}'.format(state))
+                    print(state.pretty_print())
+                    # Inject fault
+                    # state.matrix[0][0] = state.matrix[0][0] + GfByte(0x01)
+                    print('DFA faulty state[9] = {}'.format(state))
+                    print(state.pretty_print())
                 state.MixColumns(mixColMatrix)
+                logging.info('round[{}].im_col {}'.format(round, state))
             roundKey = keyScheduler.getRoundKey(round)
-            state.addRoundKey(roundKey)    
+            logging.info('round[{}].ik_sch {}'.format(round, binascii.hexlify(roundKey)))
+            state.addRoundKey(roundKey)
+            logging.info('')
 
+        print('Returning ciphertext: ')
+        print(state.pretty_print())
         return state.getBytes()
 
 

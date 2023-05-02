@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MathJax Example</title>
+  <script src="mathjax/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: false
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'math'
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>
+    Here is an example of an inline math formula: <span class="math">\(K_{10}\)</span>.
+  </p>
+  <p>
+    And here is a display math formula:
+    <span class="math">\\[E = mc^2\\]</span>
+  </p>
+</body>
+</html>
+

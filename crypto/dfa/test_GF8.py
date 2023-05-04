@@ -65,6 +65,20 @@ def test_round_constants():
         # Note that in GF(256) we have A + A = 0 (not A + A = 2*A)
         assert rc_prev + rc_prev == ZERO
 
+
+def test_inv_fast():
+    A = GF8(0x02)
+    A_inv = A.inv()
+    print(A_inv.value)  # prints "141"
+
+    # Verify that A * A_inv = 1
+    assert A * A_inv == GF8(1)
+
+
+def test_hashtable():
+    feasible_y = [{GF8(0x01): [[GF8(0x02), GF8(0x0a)], [GF8(0x02), GF8(0x0c)]]}]
+    assert feasible_y[0][GF8(0x01)][1][1] == GF8(0x0c)
+
 # def test_get_double():
 #     TWO = GF8(0x02)
 #     for i in range(256):
@@ -73,3 +87,25 @@ def test_round_constants():
 #         gfi_double2 = gfi.get_double()
 #         assert gfi_double1 == gfi_double2
 
+def test_Y0_one():
+    A = GF8(0x64)
+    B = GF8(0xFB)
+    C = GF8(0x24)
+    D = GF8(0x2C)
+    K9_0 = GF8(0x8a)
+    X = A + GF8(0x01)
+
+    TWO = GF8(0x02)
+    THREE = GF8(0x03)
+
+    Y0 = TWO*A + THREE*B + C + D + K9_0
+    Z = A + X
+    O0 = GF8(0xE8)
+    O0_1 = GF8(0xFA)
+
+    print("Z = {}".format(Z))
+    print("Y0 = {}".format(Y0))
+    SUM1 = O0 + O0_1
+    print('O0 + O0_1 = {}'.format(SUM1))
+    SUM2 = Y0.sbox() + (TWO*Z + Y0).sbox()
+    print('S(Y0) + S(2Z + Y0) = {}'.format(SUM2))

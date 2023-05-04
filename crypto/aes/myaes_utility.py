@@ -24,8 +24,11 @@ class AesUtility:
         mixColMatrix = State(b'\x02\x01\x01\x03\x03\x02\x01\x01\x01\x03\x02\x01\x01\x01\x03\x02')
 
         state = State(block_bytes)
+        logging.info('round[{}].input {}'.format(0, state))
         roundKey = keyScheduler.getRoundKey(0)
+        logging.info('round[{}].ik_sch {}'.format(0, binascii.hexlify(roundKey)))
         state.addRoundKey(roundKey)
+        logging.info('')
 
         for round in range(1,11):
             # logging.warning('Round sth {}'.format(round))

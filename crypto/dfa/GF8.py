@@ -65,6 +65,7 @@ class GF8:
 
         return GF8(result)
 
+    # Such method could work only for GF(p) for prime "p"...
     # This method uses the Extended Euclidean Algorithm to find the inverse.
     # It first checks if the element has an inverse (i.e., is not zero).
     # The `extended_gcd` function computes the coefficients for the linear combination
@@ -111,8 +112,6 @@ class GF8:
         return GF8(INV[row][col])
 
 
-
-
     def leftRotate(self, d):
         return GF8(((self.value << d) | (self.value >> (8 - d))) & 0xFF)
 
@@ -132,12 +131,4 @@ class GF8:
         THREE = GF8(0x03)
         return [[TWO, THREE, ONE, ONE], [THREE, ONE, ONE, TWO], [ONE, ONE, TWO, THREE], [ONE, TWO, THREE, ONE]]
 
-    # def get_double(self):
-    #     if self.value < 0x80:
-    #         x = 2*self.value
-    #     else:
-    #         x = 2*self.value ^ 0x011b
-    #     return GF8(x)
 
-    # def get_double(self):
-    #     return GF8(2)*self

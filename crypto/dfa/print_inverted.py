@@ -20,11 +20,15 @@ def main():
         print('[', end='')
         for j in range(16):
             num = 16*i + j
-            numGF = GF8(num).inv()
+            numGF = invert(GF8(num))
+            #numGF = GF8(num).inv()
             st = '{}'.format(numGF)
             line.append(st)
-            print(st, end=", ")
-        print("]")
+            if j < 15:
+                print(st, end=", ")
+            else:
+                print(st, end="")
+        print("], ")
     print("]")
 
 if __name__ == '__main__':

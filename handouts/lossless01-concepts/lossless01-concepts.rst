@@ -14,17 +14,9 @@
 
 
 
-Vienu no vienkāršākajiem saspiešanas algoritmiem sk.
-`Run length encodings <https://commons.wikimedia.org/wiki/File:Run-lengthEncoding1.png>`_. 
 
 
-.. TODO 2020: 
-.. * Add definition of average code length - a little expression
-.. * Remind of the independent variables; finish example with information content in two dice-rolls. 
-
-
-Algoritmu dalījums 
--------------------
+**Algoritmu dalījums:** 
 
 Ievadkursā **DatZ3168** "Datu struktūras un algoritmi" aplūkotas vispārīgas metodes
 efektīvu algoritmu veidošanā un klasiskas datu struktūras (steki, rindas).
@@ -83,41 +75,21 @@ nedeterministiskie, paralēlie).
 Kursa mērķi
 ------------
 
-* Algoritmu un to sarežģītības teorētiska izpēte 
-  (tsk. laika/telpas sarežģītība, NP-pilnas problēmas).
-* IT risinājumi ar advancētiem algoritmiem
-  (tsk. uzlabojumi "ikdienišķos" produktos un pakalpojumos).
+* Iepazīšanās ar algoritmu priekšmetapgabaliem (saspiešanas, 
+  kļūdu korekcijas, optimizācijas, stringu meklēšanas problēmām)
+  un radniecīgiem telekomunikāciju un 
+  datu meklēšanas jautājumiem.  
+* Algoritmu un to sarežģītības teorētiska izpēte, pseidokods un 
+  algoritmu darbināšana "uz papīra". 
 * Praktiska eksperimentēšana un prototipu veidošana.
+* Matemātiski jēdzieni saistībā ar šiem algoritmiem, 
+  produktu un standartu salīdzināšana. Jupyter Notebook piemēri. 
 
-**Līdzekļi:** 
-  Jēdzienu definīcijas. Algoritmu paveidi pseidokoda līmenī 
-  (RSA algoritmu grāmatas stils). Matemātiski apgalvojumi.
-  Produktu un standartu salīdzināšana. Jupyter Notebook 
-  (var arī C++ utml.). 
-
- 
-
-Par ko ir kurss "Lietišķie algoritmi"
-----------------------------------------
-
-* Noderīgums īstajā pasaulē.
-* Informācijas teorija, datu pārraide, tīklošanās.
-* Priekšmetapgabalu saspēle (dualitāte, 
-  NP-pilni uzdevumi, lineārā algebra, u.c.).
-
-**Kas neietilpst kursā:**
+Kursā neietilpst dažas citas jomas, par ko mēdz būt atsevišķi algoritmu kursi. 
 
 * Datu struktūru klasika (saraksti, koki, kārtošana, hešings, utml.).
-* Kriptogrāfija.
-* Skaitļojamā ģeometrija. 
-* Skaitliskās metodes. 
+* Kriptogrāfija, kaitliskās metodes, ģeometrija utml. priekšmetapgabali. 
 * Advancēti skaitļošanas modeļi (paralēlie, kvantu algoritmi).
-
-
-
-
-
-
 
 
 
@@ -204,22 +176,21 @@ Par *alfabētu* (*alphabet*) saucam galīgu kopu ar simboliem.
 
 
 **Bezzudumu saspiešana:**  
-Atspiestais ziņojums
-precīzi sakrīt ar sākotnējo.  
-Iecienīts teksta dokumentiem, izpildāmam kodam.
+  Atspiestais ziņojums
+  precīzi sakrīt ar sākotnējo.  
+  Iecienīts teksta dokumentiem, izpildāmam kodam.
+
+**Piemērs:** 
+  Vienkāršs bezzudumu saspiešanas algoritms:
+  `Run length encodings <https://commons.wikimedia.org/wiki/File:Run-lengthEncoding1.png>`_.
+  Tas var būt ļoti efektīvs tad, ja tas pats burts atkārtojas daudzas reizes. 
+  Tad `n` identisku burtu vietā nosūta vienu burtu un vienu skaitli garumā 
+  `\log_2 n`. Tipiskā tekstā vienādi burti atkārtojas reti un šāds 
+  kodējums var padarīt nosūtāmo tekstu garāku.  
 
 **Zudumradošā saspiešana:**   
-Atspiestais ziņojums tikai aptuveni vienāds
-ar sākotnējo.  
-Attēlu, skaņas, video glabāšana un pārraide.
-
-
-
-
-Universālas saspiešanas neiespējamība
---------------------------------------
-
-**Injektīvi attēlojumi:**
+  Atspiestais ziņojums tikai aptuveni vienāds ar sākotnējo.  
+  Piemēri ir attēlu, skaņas, video glabāšana un pārraide.
 
 **Definīcija:** 
   Funkciju :math:`f\,:\;X \rightarrow Y` 
@@ -232,73 +203,70 @@ Universālas saspiešanas neiespējamība
 
 Bezzudumu saspiešanas funkcijai 
 jābūt injektīvai, tajā nedrīkst
-būt "kolīzijas" (vērtību "saskriešanās"). 
+būt "kolīzijas" (vērtību "saskriešanās"), jo citādi nevar atkodēt jeb atspiest. 
 
 
+**Apgalvojums:** 
+  Neeksistē tāds algoritms, kas **katru** :math:`n` bitu virkni
+  bezzudumu saspiešanā pārveido par īsāku virkni -- t.i. 
+  tādu :math:`k` bitu virkni, kur :math:`k < n`.
 
-**Universāli saspiest nevar**
 
-Neeksistē tāds algoritms, kas **katru** :math:`n` bitu virkni
-bezzudumu saspiešanā pārveido 
-par :math:`k` bitu virkni, kur :math:`k < n`.
-
-*Pamatojums:* 
+**Pierādījums:** 
   Ar skaitīšanu. Bitam ir :math:`2` vērtības (:math:`0` vai :math:`1`). 
 
-* :math:`m` bitu virknei ir :math:`2^m` vērtības,
-* :math:`k` bitu virknei ir :math:`2^k` vērtības. 
+  * :math:`m` bitu virknei ir :math:`2^m` vērtības,
+  * :math:`k` bitu virknei ir :math:`2^k` vērtības. 
 
-No *Dirihlē principa* (*Pigeonhole principle*) 
-seko, ka injektīva funkcija no kopas ar :math:`2^m` elementiem
-uz :math:`2^k` elementiem (ja :math:`k < m`) neeksistē.
-
-
-
-Informācijas saturs
----------------------
+  No *Dirihlē principa* (*Pigeonhole principle*) 
+  seko, ka injektīva funkcija no kopas ar :math:`2^m` elementiem
+  uz :math:`2^k` elementiem (ja :math:`k < m`) neeksistē. 
+  :math:`\blacksquare`
 
 
-**Logaritmu īpašības:**
+
+Informācijas saturs un entropija
+-----------------------------------
+
+Atceramies logaritmu īpašības:
 
 * Logaritms no reizinājuma
 * Logaritms no dalījuma
 * Logaritma bāzes maiņas formula
 
-**Šenona informācijas saturs:**
+**Definīcija:**
+  Par ziņojuma :math:`s \in S` *Klods Šenons* (*Claude Shannon (1916-2001)*) 
+  *informācijas saturu* (*information content*) sauc lielumu: 
 
-Ziņojumam :math:`s \in S` *Klods Šenons* (*Claude Shannon (1916-2001)*) 
-definēja *informācijas saturu*
-(*information content*):
+  .. math::
 
-.. math::
-
-  h(s) = \log_2 \frac{1}{p(s)} = -\log_2 p(s).
+    h(s) = \log_2 \frac{1}{p(s)} = -\log_2 p(s).
 
 
 Ja ziņojuma varbūtība tiecas uz :math:`0`, tad :math:`h(s)` 
-tiecas uz :math:`\infty`, 
-bet svarīgi, ka informācijas satura un varbūtības reizinājums tiecas uz :math:`0`:
+tiecas uz :math:`\infty`, bet svarīgi, ka informācijas satura un 
+varbūtības reizinājums tiecas uz :math:`0`:
 
 .. math:: 
 
   \lim\limits_{x \rightarrow 0} (-\log_2\,x) \cdot x = 0.
 
 
-**Divi informācijas satura piemēri** 
+**1. piemērs:** 
+  Godīgai monētai ir divi stāvokļi: :math:`S=\{ \mathtt{heads}, \mathtt{tails} \}`, 
+  to varbūtības ir :math:`p=\frac{1}{2}`. Informācijas saturs katram no tiem: 
 
-Godīgai monētai ir divi stāvokļi: :math:`S=\{ \mathtt{heads}, \mathtt{tails} \}`, 
-to varbūtības ir :math:`p=\frac{1}{2}`. Informācijas saturs: 
-
-.. math:: 
+  .. math:: 
   
-  h(\mathtt{heads}) = h(\mathtt{tails}) = - \log_2 (1/2) = 1.
+    h(\mathtt{heads}) = h(\mathtt{tails}) = - \log_2 (1/2) = 1.
 
-Metamajam kauliņam ir seši stāvokļi, katram no tiem varbūtība
-ir :math:`1/6`. Informācijas saturs:
+**2. piemērs:** 
+  Metamajam kauliņam ir seši stāvokļi, katram no tiem varbūtība
+  ir :math:`1/6`. Informācijas saturs katram no tiem:
 
-.. math::
+  .. math::
 
-  h(s_i) = - \log_2 (1/6) \approx 2.585.
+    h(s_i) = - \log_2 (1/6) \approx 2.585.
 
 
 
@@ -315,12 +283,6 @@ Tad varbūtība saņemt tos vienu aiz otra ir
 Logaritms ir funkcija, kas reizinājumu pārtaisa par summu.
 
 
-
-Entropija
-----------
-
-**Entropija diskrētā sistēmā:**
-
 **Definīcija:** 
   Ja (diskrētam) *gadījuma lielumam*
   (*random variable*) ir zināma iespējamo stāvokļu kopa :math:`S` un 
@@ -334,9 +296,8 @@ Entropija
   kur :math:`p(s)` ir stāvoklim :math:`s` atbilstošā varbūtība.
 
 
-**Bitu virknītes entropija:** 
-
-*Piemērs:* 
+**3. piemērs:**
+  Aplūkosim entropiju bitu virknītei garumā :math:`L`.  
   Ja ir :math:`n = 2^L` ziņojumi ar vienādām varbūtībām :math:`1/n`, 
   tad katru no tiem var iekodēt ar :math:`\log_2 n = L` bitiem. 
 
@@ -346,36 +307,31 @@ Entropija
   nepieciešamajiem baitiem. 
 
 
-**Negodīga monēta** 
+**4. piemērs:**
+  Apskatīsim negodīgu monētu:  
 
-.. figure:: figs/info-content.png
-   :width: 3in
+  * Ja varbūtības diviem monētas mešanas iznākumiem ir 
+    attiecīgi :math:`0.9` un :math:`0.1`, tad pirmajam iznākumam informācijas
+    saturs ir :math:`0.152`, bet otrajam :math:`3.32`. 
+  * Informācijas saturu un entropiju
+    izsaka "bitos" (datoru arhitektūrā arī ir
+    biti, bet tie ir reāli biti, kamēr entropijā izsaka 
+    "perfekti saspiestas" informācijas bitus).
+
+
+    .. figure:: figs/info-content.png
+       :width: 3in
+
+
+    .. figure:: figs/entropy-graph.png
+       :width: 3in
    
-   Informācijas saturs.
+    Informācijas saturs un entropija. 
 
-
-
-* Ja varbūtības diviem monētas mešanas iznākumiem ir 
-  attiecīgi :math:`0.9` un :math:`0.1`, tad pirmajam iznākumam informācijas
-  saturs ir :math:`0.152`, bet otrajam :math:`3.32`. 
-* Informācijas saturu un entropiju
-  izsaka "bitos" (datoru arhitektūrā arī ir
-  biti, bet tie ir reāli biti, kamēr entropijā izsaka 
-  "perfekti saspiestas" informācijas bitus).
-
-
-**Entropija 2 iznākumiem**
-
-
-.. figure:: figs/entropy-graph.png
-   :width: 3in
-   
-   Entropijas grafiks
-
-* Vislielākā entropija jeb nenoteiktība ir tad, ja 
-  2 iznākumu gadījumlielums ir ar divām vienādām varbūtībām. 
-* Ja veic Bernulli eksperimentu sēriju - met godīgu monētu, 
-  tad katrā eksperimentā rodas informācijas saturs - tieši :math:`1` bits.
+  * Vislielākā entropija jeb nenoteiktība ir tad, ja 
+    2 iznākumu gadījumlielums ir ar divām vienādām varbūtībām. 
+  * Ja veic Bernulli eksperimentu sēriju - met godīgu monētu, 
+    tad katrā eksperimentā rodas informācijas saturs - tieši :math:`1` bits.
 
 
 **Info saturs secīgiem ziņojumiem**
@@ -386,7 +342,36 @@ Entropija
 
 
 
-**Entropijas saistība ar saspiešanu:** 
+Optimāli kodējumi
+-------------------
+
+
+**Vidējais kodējuma garums**
+
+Pieņemsim, ka ir zināms varbūtību sadalījums ziņojumu telpā :math:`S`:   
+Katram :math:`s \in S` ir piekārtota 
+varbūtība :math:`p(s)` un :math:`p(s_1)+\ldots+p(s_n)=1`.
+
+**Definīcija:** 
+  Par kodējuma :math:`C = \{(s_1,w_1),\ldots,(s_n,w_n)\}` 
+  *vidējo garumu* (*average length*) sauksim summu:
+
+  .. math::
+
+      \ell_a(C) = \sum\limits_{(s,w) \in C} p(s)\ell(w),
+   
+  kur :math:`\ell(w)` apzīmē kodavārda :math:`w` garumu bitos. 
+
+
+**Definīcija:** 
+  Teiksim, ka :math:`C` ir *optimāls kodējums*, 
+  ja tas ir viennozīmīgi atkodējams un tā :math:`\ell_a(C)` ir minimāls. 
+  Citiem vārdiem, ja 
+  dotajam ziņojumu varbūtību sadalījumam neeksistē cits kodējums, 
+  kam vidējais garums ir vēl mazāks.
+
+
+
 
 **Teorēma:** 
   Katrai ziņojumu kopai :math:`S` ar zināmu varbūtību sadalījumu 
@@ -396,80 +381,38 @@ Entropija
 
     \ell_a(C) \leq H(S) + 1.
 
-  *Pierādījumu sk.  nākamajā sadaļā.*
 
 
+**Pierādījums:** 
+  Katram ievades ziņojumam/simbolam :math:`s \in S` izvēlamies 
+
+  .. math::
+    \ell(s) = \left\lceil \log_2 \frac{1}{p(s)} \right\rceil. 
+
+  Tādā gadījumā:
+
+  .. math::
+    \sum\limits_{s \in S} 2^{-\ell(s)} = \sum\limits_{s \in S} 2^{-\left\lceil \log_2 \frac{1}{p(s)} \right\rceil} \leq \sum\limits_{s \in S} 2^{- \log_2 \frac{1}{p(s)}} = \sum\limits_{s \in S} p(s) = 1.
 
 
+  Pēc Krafta-Makmilana teorēmas (pretējā virziena) varam 
+  atrast tādu prefiksu kodu :math:`C'`, kam ir tieši šādi kodavārdu garumi. 
+  Vidējā garuma :math:`\ell_{avg}(C')` novērtējums:
 
-
-
-
-Piemērs: Monētu svēršana un entropija
----------------------------------------
-
-
-**Uzdevums:** 
-  Dotas :math:`12` monētas, no kurām visām ir vienādas masas, 
-  izņemot vienu, kura ir vai nu vieglāka, vai nu smagāka nekā citas.   
-  Ar kādu mazāko svēršanu skaitu var noskaidrot, vai tā ir vieglāka
-  vai smagāka kā arī atrast šo smonētu?
-
-
-
-
-
-**Uzdevuma sarežģītības analīze: Jautājumi** 
-
-* Cik svēršanas būtu nepieciešamas, ja jau zinām atbildi un mums tā 
-  jāpierāda, piemēram, tiesas ekspertīzē?  
-  *Nedeterministiskie algoritmi* (*non-deterministic algorithms*). 
-* Cik svēršanas nepieciešamas deterministiskam algoritmam? 
-  Pamatojums ar variantu saskaitīšanu un Dirihlē principu?
-
-
-**TODO:** 
-  Attēls ar dalīšanos trīs virzienos. 
-
-
-**Pirmais solis** 
-
-Cik pret cik svērt vispirms? Rēķinām entropiju (vidējo 
-sagaidāmo Šenona informācijas saturu no 1.svēršanas):
-
-==========  =============================================================  ====================  
-Svēršana    Rezultātu varbūtība                                            Entropija (biti)
-==========  =============================================================  ====================
-6 pret 6    :math:`p(\text{L},\text{Eq},\text{R})=(1/2,0,1/2)`             :math:`1`
-5 pret 5    :math:`p(\text{L},\text{Eq},\text{R})=(5/12,1/6,5/12)`         :math:`1.483356`
-4 pret 4    :math:`p(\text{L},\text{Eq},\text{R})=(1/3,1/3,1/3)`           :math:`1.584963`
-3 pret 3    :math:`p(\text{L},\text{Eq},\text{R})=(1/4,1/2,1/4)`           :math:`1.5`
-2 pret 2    :math:`p(\text{L},\text{Eq},\text{R})=(1/6,2/3,1/6)`           :math:`1.251629`
-1 pret 1    :math:`p(\text{L},\text{Eq},\text{R})=(1/12,5/6,1/12)`         :math:`0.816689`
-==========  =============================================================  ====================
-
-
-
-
-**Par entropiju divās situācijās**
-
-
-**Situācija Nr.1** 
-  Ja jāsaspiež dati, to var vislabāk izdarīt tad, 
-  ja informācijas saturs ieejas ziņojumu virknē ir **minimāls** (to varbūtības ir 
-  ļoti dažādas, tie ir savstarpēji atkarīgi, veido prognozējamas virknītes - 
-  ko īpaši izmanto Lempela-Ziva un Berouza-Vīlera algoritmi).
-
-
-**Situācija Nr.2** 
-  Ja kaut kas jāmeklē ar mazāko iespējamo svēršanu skaitu, 
-  tad vislabāk **maksimizēt** informācijas saturu, ko ceram saņemt 1 svēršanā. 
-  Vislabāk, ja svēršanas eksperimentu iznākumi 
-  ir ar līdzīgām varbūtībām. Sviras svariem ideāli:
-  
   .. math::
 
-    \left( \frac{1}{3},\frac{1}{3},\frac{1}{3} \right). 
+      \ell_{avg}(C') = \sum\limits_{s \in S} p(s) \cdot \left\lceil \log_2 \frac{1}{p(s)} \right\rceil \leq \sum\limits_{s \in S} p(s)\left( 1 + \log_2 \frac{1}{p(s)} \right) = 1 + H(S).
+
+  Optimālajam prefiksu kodam :math:`C` jābūt vismaz tikpat labam kā nupat piedāvātais :math:`C'`. 
+  Tādēļ arī tam būs novērtējums:
+
+  .. math::
+
+    \ell_{avg}(C) \leq \ell_{avg}(C') \leq 1 + H(S).
+
+
+
+
 
 
 
@@ -526,7 +469,7 @@ tad :math:`\mathtt{1011}` var saprast trīs dažādos veidos:
 **Prefiksu kodējuma jēdziens**
 
 .. figure:: figs/prefix-tree.png
-   :width: 4in
+   :width: 3in
 
    Prefiksu koks
 
@@ -544,67 +487,11 @@ prefikss.
 
 
 **Atkodēšanas piemēri**
+  Izmantojot augstākminēto prefiksu koku:
 
-* Atkodēt virkni :math:`\mathtt{11100110100}`,
-* Atkodēt virkni :math:`\mathtt{0001100101111}`.
-
-.. figure:: figs/prefix-tree.png
-   :width: 4in
-   
-
-
-
-**Vidējais kodējuma garums**
-
-Pieņemsim, ka ir zināms varbūtību sadalījums ziņojumu telpā :math:`S`:   
-Katram :math:`s \in S` ir piekārtota 
-varbūtība :math:`p(s)` un :math:`p(s_1)+\ldots+p(s_n)=1`.
-
-**Definīcija:** 
-  Par kodējuma :math:`C = \{(s_1,w_1),\ldots,(s_n,w_n)\}` 
-  *vidējo garumu* (*average length*) sauksim summu:
-
-  .. math::
-
-      \ell_a(C) = \sum\limits_{(s,w) \in C} p(s)\ell(w),
-   
-  kur :math:`\ell(w)` apzīmē kodavārda :math:`w` garumu bitos. 
-
-
-
-
-**Optimāls prefiksu kodējums**
-
-**Definīcija:** 
-  Teiksim, ka prefiksu kods :math:`C` ir *optimāls*
-  prefiksu kods, ja tā :math:`\ell_a(C)` ir minimāls. Citiem vārdiem, ja 
-  dotajam ziņojumu varbūtību sadalījumam neeksistē cits prefiksu 
-  kods, kam vidējais garums ir vēl zemāks.
-
-
-
-**Morzes kods**
-
-* Morzes kods izmanto mainīga garuma kodēšanas principus (biežākiem 
-  simboliem atbilst īsāki kodavārdi). 
-* Attiecībā uz svītriņām un punktiņiem tas **nav** prefiksu kods. 
-  Atkodēšanas viennozīmību nodrošina atšķirīga garuma pauzes.
-
-.. figure:: figs/morse-sample.png
-   :width: 7in
-
-Sk. `Morse structure and timing 
-<http://www.nu-ware.com/NuCode%20Help/index.html?morse_code_structure_and_timing_.htm>`_
-
-
-**Ne-prefiksu kods**
-
-.. figure:: figs/morse-decoder-chart.png
-   :width: 7in
-
-Note: See Dave Nathanson, KG6ZJO, Copyleft 2010.
-
-
+  * Atkodēt virkni :math:`\mathtt{11100110100}`,
+  * Atkodēt virkni :math:`\mathtt{0001100101111}`.
+ 
 
 
 
@@ -627,28 +514,28 @@ Kodējuma vidējais garums
 
 
 **Intuīcija par Šenona apgalvojumu**
-
-Sūtot ziņojumu :math:`x` no 
-alfabēta :math:`S`, *informācijas saturs* (*information content*) 
-:math:`h(x)` ir ieteicamais bitu skaits.
-
-**Intuīcija:** 
+  Sūtot ziņojumu :math:`x` no 
+  alfabēta :math:`S`, *informācijas saturs* (*information content*) 
+  :math:`h(x)` ir ieteicamais bitu skaits.
   Ja ziņojumiem :math:`x_i` atbilst varbūtības
   :math:`p_i`, tad katrs no tiem aizņem kaut gabalu no 
   "kodu telpas". Piemēram, izmantojot kodēšanai 4 bitus, esam aizņēmuši
   1/16 no kodu telpas.
 
-Pierādām ar nevienādību ķēdīti:
+**Pierādījums:** 
+  Rakstām nevienādību ķēdīti:
 
-.. math::
+  .. math::
 
-    H(S) - \ell_a(C) = \sum\limits_{s \in S} p(s)  \log_2 \frac{1}{p(s)} - 
-    \sum\limits_{s \in S} p(s)\ell(s) =
-    \sum\limits_{s \in S} p(s) \left( \log_2 \frac{1}{p(s)} - \log_2 2^{\ell(s)} \right) =
-    \sum\limits_{s \in S} p(s) \log_2 \frac{ 2^{-\ell(s)}}{p(s)} \leq 
-    \log_2 \sum_{s \in S} 2^{-\ell(s)} \leq 0.
+    \begin{array}{rl}
+      H(S) - \ell_a(C) &= \sum\limits_{s \in S} p(s)  \log_2 \frac{1}{p(s)} - 
+      \sum\limits_{s \in S} p(s)\ell(s) =\\
+      &= \sum\limits_{s \in S} p(s) \left( \log_2 \frac{1}{p(s)} - \log_2 2^{\ell(s)} \right) = \\
+      &= \sum\limits_{s \in S} p(s) \log_2 \frac{ 2^{-\ell(s)}}{p(s)} \leq 
+      \log_2 \sum_{s \in S} 2^{-\ell(s)} \leq 0.\\
+    \end{array}
 
-$\blacksquare$
+  :math:`\blacksquare`
 
 
 
@@ -710,57 +597,27 @@ Kādēļ ir spēkā nevienādība?
   neviens nav prefikss otram, neviens nevar būt pilnīgi otra iekšpusē.
   Pilnās kodu telpas tilpums ir :math:`1`, tādēļ summa 
   visiem :math:`2^{-k_i}`, kur :math:`k_i = \ell(w_i)` nepārsniedz 1.  
-  $\blacksquare$
+  :math:`\blacksquare`
 
 
 
 
-**Optimāla kodējuma garums**
+Jau agrāk pamatojām rezultātu: 
+Katrai ziņojumu kopai :math:`S` ar zināmu varbūtību sadalījumu 
+un optimālu prefiksu kodējumu :math:`C`:
 
-**Teorēma 3:** 
-  Katrai ziņojumu kopai :math:`S` ar zināmu varbūtību sadalījumu 
-  un optimālu prefiksu kodējumu :math:`C`:
+.. math::
 
-  .. math::
-
-      \ell_a(C) \leq H(S) + 1.
+   \ell_a(C) \leq H(S) + 1.
 
 **Sekas:** 
   Tā kā Hafmana algoritms rada optimālo
-  (vai vienu no optimālajiem) prefiksu kodējumu (sk. Teorēmu 4), tad 
+  (vai vienu no optimālajiem) prefiksu kodējumu, tad 
   arī Hafmana kodējumam :math:`C^{\ast}` ir spēkā: 
 
   .. math::
 
     \ell_a(C^{\ast}) \leq H(S) + 1.
-
-
-**Pierādījums:** 
-  Katram ievades ziņojumam/simbolam :math:`s \in S` izvēlamies 
-
-  .. math::
-    \ell(s) = \left\lceil \log_2 \frac{1}{p(s)} \right\rceil. 
-
-  Tādā gadījumā:
-
-  .. math::
-    \sum\limits_{s \in S} 2^{-\ell(s)} = \sum\limits_{s \in S} 2^{-\left\lceil \log_2 \frac{1}{p(s)} \right\rceil} \leq \sum\limits_{s \in S} 2^{- \log_2 \frac{1}{p(s)}} = \sum\limits_{s \in S} p(s) = 1.
-
-
-  Pēc Krafta-Makmilana teorēmas (pretējā virziena) varam 
-  atrast tādu prefiksu kodu :math:`C'`, kam ir tieši šādi kodavārdu garumi. 
-  Vidējā garuma :math:`\ell_{avg}(C')` novērtējums:
-
-  .. math::
-
-      \ell_{avg}(C') = \sum\limits_{s \in S} p(s) \cdot \left\lceil \log_2 \frac{1}{p(s)} \right\rceil \leq \sum\limits_{s \in S} p(s)\left( 1 + \log_2 \frac{1}{p(s)} \right) = 1 + H(S).
-
-  Optimālajam prefiksu kodam :math:`C` jābūt vismaz tikpat labam kā nupat piedāvātais :math:`C'`. 
-  Tādēļ arī tam būs novērtējums:
-
-  .. math::
-
-    \ell_{avg}(C) \leq \ell_{avg}(C') \leq 1 + H(S).
 
 
 
@@ -810,24 +667,78 @@ risinājuma.
 * Insert(Q,z) laiks arī ir :math:`O(\log n)`.
 * Huffman(S) laiks ir :math:`O(n \log n)`.
 
-**Kā atspiest Hafmana kodējumu**
 
-`Kanoniskais Hafmana kodējums <https://en.wikipedia.org/wiki/Canonical_Huffman_code>`_
 
-* **A1** Vispirms sakārto pēc kodavārda garuma; ja vienādi kodavārdi, tad pēc alfabēta.
-* **A2** Īsākiem kodavārdiem piekārto nulli, garākiem - vieninieku.
+Kanoniski Hafmana koki 
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: 
+**Kā efektīvi iekodēt pašu Hafmana koku:**
 
-  B = 0     (1 bits)
-  A = 10    (2 biti)
-  C = 110   (3 biti)
-  D = 111   (3 biti)
+Var sūtīt pilnu kodējumu tabulu (katram simbolam/ziņojumam pieraksta 
+to bitu virknīti, ar kuru tas kodējams). 
+Šāds pieraksta veids satur daudz liekas informācijas. 
 
-Ja kodētājs un saņēmējs zina, ka lietots **sakārtots** ziņojumu alfabēts 
-:math:`S=\{ A,B,C,D \}`, tad pietiek paziņot attiecīgo burtu kodavārdu garumus: 2, 1, 3, 3.
+**Kanonisks Hafmana kodējums:** 
+  `Kanoniskais Hafmana kodējums <https://en.wikipedia.org/wiki/Canonical_Huffman_code>`_ ir 
+  veids, kā (nemainot kodējumu garumus nevienam burtam), 
+  tos var piešķirt, ievērojot alfabētisku secību. Tādā gadījumā (zināmam ziņojumu alfabētam)
+  pietiek nosūtīt tikai to kodējumu garumus -- visu 
+  kodējumu tabulu no tā var atjaunot. 
+  Vienkārši sakot, kanoniskā Hafmana kokā 
+  simbolus (koka lapas) vispirms sakārto pēc kodējuma garuma; ja vienādi 
+  garumi, tad pēc alfabēta. Formāli to var uzrakstīt šādi: 
 
-**Daži Hafmana algoritma lietojumi**
+  * Apstaigājot koka lapas jeb iekodētos simbolus 
+    "in-order" secībā (vispirms zaru ar "0", tad zaru ar "1), kodējumu garumi veido nedilstošu virkni. 
+  * Vienādiem kodējumu garumiem simbols, kurš ir alfabētiski pirms cita simbola, 
+    atrodas kokā pa kreisi (t.i. agrākam burtam arī tā kodējums ir 
+    leksikogrāfiski agrāk).  
+  * Īsākais kodējums (vai viens no īsākajiem, ja tādu ir vairāki) 
+    sastāv no visām nullēm. Turpmākos kodējumus piešķir pēc kārtas, neko neizlaižot; 
+    ja kodējuma garums kādā solī palielinās, tad ne tikai pieskaita binārajam skaitlim "1", 
+    bet arī pieraksta tam galā vajadzīgo skaitu nuļļu.
+
+
+**Kanoniska koka piemērs:**
+  Uzbūvēt kanonisku Hafmana kodējumu koku alfabētam :math:`\left\{ \mathtt{A}, \mathtt{B}, 
+  \mathtt{C}, \mathtt{D} \right\}`, kam atbilstošie kodējumu garumi ir :math:`(2,1,3,3)`. 
+
+**Atrisinājums:** 
+  Īsākais kodējums ir simbolam `B` - šis kodējums satur tikai nulles (tātad ir `0`). 
+  Nākamais ir simbola `A` kodējums, kas ir `10`. 
+  Visbeidzot ir abi garākie kodējumi, kurus piešķiram alfabētiskā secībā. 
+  Tātad simbola `C` kodējums ir `110`, bet simbola `D` kodējums ir `111`. 
+  
+  .. code-block:: text
+
+    B = 0     (1 bits)
+    A = 10    (2 biti)
+    C = 110   (3 biti)
+    D = 111   (3 biti)
+
+  Ja lietots kanonisks Hafmana koks un ir zināms simbolu alfabēts  
+  (piemēram, :math:`S=\{ A,B,C,D \}`), tad 
+  pietiek paziņot attiecīgo burtu kodavārdu garumus: :math:`(2, 1, 3, 3)`.
+
+**Par nekanoniskiem Hafmana kokiem:**
+  Protams, Hafmana algoritma darbināšanas laikā var rasties 
+  arī nekanonisks koks (un tātad arī kodējumu tabula). 
+  Piemēram, 
+
+  .. code-block:: text
+
+    A = 11
+    B = 0
+    C = 101
+    D = 100
+
+  Šādam kokam ir kodējuma īsums ir tāds pats kā kanoniskajam (jo kodējuma
+  garumi ir tādi paši), 
+  bet kodējumi neseko viens otram leksikogrāfiskā/sakārtotā secībā.
+
+
+Hafmana algoritma lietojumi
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * PKZIP (Phil Katz) arhivators - PKZIP 2.04g un jaunāki standarti, 
   kuri lieto DEFLATE saspiešanas standartu (tas pats, 
@@ -892,32 +803,24 @@ Hafmana koka aprakstītajā kodējumā :math:`C^{\ast}` būs vismazākais (vai v
       no jebkura optimāla koka var iegūt citu optimālu koku, kuram :math:`x` un :math:`y` ir blakus.
 
     .. figure:: figs/switching-x-y.png
-       :width: 1.5in
+       :width: 1in
 
        Maina vietām :math:`x` un :math:`y`.
 
 
 
+Kodu tabulas nosūtīšana 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+* Saspiešanas algoritmi izmanto *kodējumu tabulu* (*codebook*); 
+  prefiksu kodiem to var iztēloties kā koku.
+* Ja ziņojumu biežumi ir zināmi, koku sūtītājs un saņēmējs var izrēķināt paši. 
+  Parasti šie biežumi atklājas sūtītājam. Tad kodējumu koks vai tabula ir jāsūta 
+  kopā ar iekodētajiem datiem. 
 
-
-
-
-
-Hafmana koda praktiskie apsvērumi
-------------------------------------
-
-**Problēma: Kā pārsūta pašu koku?**
-
-* Saspiešanas algoritmi izmanto simetrisku
-  *kodējuma tabulu* (*codebook*); prefiksu kodiem var iztēloties kā koku.
-* Ja ziņojumu biežumi ir zināmi jau iepriekš, koks zināms sūtītājam un saņēmējam, to var nesūtīt.
-* Biežāk ziņojumu biežumi ir empīriski jānoskaidro pārsūtāmajos datos.
-
-Saspiežot īsu ziņojumu virkni lielā alfabētā kodējuma tabula 
-var aizņemt ievērojamu vietu.
-
-Sk. `Kanonisks Hafmana kods <https://en.wikipedia.org/wiki/Canonical_Huffman_code>`_
+Lielā alfabētā kodējuma tabula var aizņemt ievērojamu vietu, tāpēc 
+ir īpaši taupīgs Hafmana koka nosūtīšanas veids: 
+`Kanoniskais Hafmana kods <https://en.wikipedia.org/wiki/Canonical_Huffman_code>`_
 
 
 
@@ -955,7 +858,7 @@ Piemērs: Negodīgās monētas alfabēts :math:`S = \{ A,B \}` ar varbūtībām
   virsotnē :math:`v` iekodētā virkne ir par 1 garāka nekā virsotnē :math:`u`. 
 
   .. figure:: figs/trie-koks.png
-     :width: 4in
+     :width: 2.5in
 
      "Trie" koks.
 
@@ -1117,9 +1020,115 @@ Uzdevumi
   :math:`\square`
 
 
+**1.5. uzdevums** 
+  Ēdnīcā ir pieejamas trīs dažādas zupas, kuras maksā attiecīgi 1, 2, vai 3 eiro. 
+  Ir arī trīs otrie ēdieni, kuri maksā attiecīgi 2, 4, un 6 eiro. 
+  Katrs apmeklētājs nejauši izvēlas vienu no zupām un vienu no otrajiem ēdieniem. 
 
-Nodarbības kopsavilkums
----------------------------
+  * Kāda ir entropija gadījumlielumam, kas apraksta 1 izvēlēto zupu?
+  * Kāda ir entropija gadījumlielumam, kas apraksta 1 izvēlēto otro ēdienu?
+  * Kāda ir pusdienu komplekta entropija, ja zupu un otro ēdienu izvēlas 
+    neatkarīgi? 
+  * Kāda ir entropija gadījumlielumam, kas apraksta par abiem ēdieniem samaksāto cenu? 
+
+
+**1.6. uzdevums** 
+  Uz :math:`11` klucīšiem uzrakstīti burti: "MISSISSIPPI". 
+  Tie visi sabērti tumšā maisā. 
+  Vienā gājienā no maisa izvelk vienu klucīti, noraksta uz tā esošo 
+  burtu un atliek klucīti atpakaļ maisā. 
+
+  Ja pēc :math:`11` šādiem gājieniem ir izrakstīti burti "MISSISSIPPI" tieši 
+  šādā secībā, tad spēlētājs saņem lielu naudas prēmiju. 
+  Apzīmēsim prēmijas saņemšanas varbūtību ar :math:`P`. 
+  Izteikt :math:`\log_2 (P)` ar :math:`H(X)` -- ar viena klucīša 
+  izvilkšanas gadījumlieluma entropiju. 
+
+
+**1.7. uzdevums** 
+  Dotas :math:`12` monētas, no kurām visām ir vienādas masas, 
+  izņemot vienu, kura ir vai nu vieglāka, vai nu smagāka nekā citas.   
+  Ar kādu mazāko svēršanu skaitu var noskaidrot, vai tā ir vieglāka
+  vai smagāka kā arī atrast šo smonētu?
+
+
+
+.. only:: Internal
+
+  **Atbilde:** 
+
+    Daži vienkārši jautājumi: 
+
+    * Cik svēršanas būtu nepieciešamas, ja jau zinām atbildi un mums tā 
+      jāpierāda, piemēram, tiesas ekspertīzē?  
+      *Nedeterministiskie algoritmi* (*non-deterministic algorithms*). 
+    * Cik svēršanas nepieciešamas deterministiskam algoritmam? 
+      Pamatojums ar variantu saskaitīšanu un Dirihlē principu?
+
+
+    **Pirmais solis** 
+      Cik pret cik svērt vispirms? Rēķinām entropiju (vidējo 
+      sagaidāmo Šenona informācijas saturu no 1.svēršanas):
+
+      ==========  =============================================================  ====================  
+      Svēršana    Rezultātu varbūtība                                            Entropija (biti)
+      ==========  =============================================================  ====================
+      6 pret 6    :math:`p(\text{L},\text{Eq},\text{R})=(1/2,0,1/2)`             :math:`1`
+      5 pret 5    :math:`p(\text{L},\text{Eq},\text{R})=(5/12,1/6,5/12)`         :math:`1.483356`
+      4 pret 4    :math:`p(\text{L},\text{Eq},\text{R})=(1/3,1/3,1/3)`           :math:`1.584963`
+      3 pret 3    :math:`p(\text{L},\text{Eq},\text{R})=(1/4,1/2,1/4)`           :math:`1.5`
+      2 pret 2    :math:`p(\text{L},\text{Eq},\text{R})=(1/6,2/3,1/6)`           :math:`1.251629`
+      1 pret 1    :math:`p(\text{L},\text{Eq},\text{R})=(1/12,5/6,1/12)`         :math:`0.816689`
+      ==========  =============================================================  ====================
+
+
+
+
+      .. note:: 
+        Ja jāsaspiež dati, tad ir izdevīgi, ja ieejas datu 
+        entropija ir minimāla. 
+        Savukārt, ja kaut kas jāuzzina ar mazāko iespējamo jautājumu 
+        (svēršanu utml.) skaitu, tad parasti cenšas panākt, lai informācijas saturs 
+        un arī saņemtā entropija būtu iespējami liela. 
+
+    :math:`\square`
+
+**1.8. uzdevums** 
+  Morzes kodu definē šādi: 
+
+  * Kodējamais alfabēts sastāv no :math:`27` simboliem -- 
+    26 angļu alfabēta burtiem un vārdu atstarpēm. 
+  * Katram no 26 burtiem kodējums ir kāda unikāla īso un garo svītriņu 
+    kombinācija. Garā svītriņa (piemēram, pīkstiens radio sakaros) ir 
+    tieši trīs reizes garāks nekā īsā svītriņa. 
+  * Starp svītriņām viena burta ietvaros atstājamas pauzes īsā pīkstiena garumā. 
+  * Starp diviem burtiem vienā vārdā atstājama pauze trīs īso pīkstienu garumā. 
+  * Atstarpe starp vārdiem ir pauze septiņu īso pīkstienu garumā.  
+
+  .. figure:: figs/morse-sample.png
+     :width: 4in
+
+     :math:`\mathtt{"PARIS_"}` Morzes kods (vārdam seko vārdu atsarpe).
+
+  Vārda :math:`\mathtt{"PARIS_"}` kodējums ir 
+  :math:`\mathtt{10111011101000101110001011101000101000101010000000}`
+  Sk. `Morse structure and timing 
+  <http://www.nu-ware.com/NuCode%20Help/index.html?morse_code_structure_and_timing_.htm>`_
+
+  .. figure:: figs/morse-decoder-chart.png
+     :width: 4in
+
+     Burtu kodējumi (Dave Nathanson, KG6ZJO, 2010.)
+
+  Jautājumi par Morzes kodu:
+    * Vai tas ir viennozīmīgi atkodējams?
+    * Vai tas ir prefiksu kods (ja uzskatām, ka ikviena burta kodējumam seko "000" 
+      jeb pauze trīs īso pīkstienu garumā)? 
+    * Kāds ir Morzes koda vidējais garums :math:`\ell_a(C)`?
+
+
+Kopsavilkums
+----------------
 
 1. Aprakstījām ziņojumus un to alfabētus
 2. Atšķīrām bezzudumu/zudumradošo saspiešanu

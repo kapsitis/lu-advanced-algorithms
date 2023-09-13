@@ -1,3 +1,10 @@
-# LU studiju kurss "Lietišķie algoritmi"
+# Lietišķie algoritmi
 
-Šajā vietnē apkopoti lekciju materiāli, uzdevumi un koda paraugi. 
+Šajā vietnē apkopoti lekciju materiāli, uzdevumi un koda paraugi kursam 
+DatZ4020 "Lietišķie algoritmi".
+
+
+
+
+
+

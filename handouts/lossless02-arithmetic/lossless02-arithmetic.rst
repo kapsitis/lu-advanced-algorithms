@@ -179,8 +179,8 @@ entropiju 1.485475. Kāpēc?
     var atrast skaitli, kura binārajā pierakstā ir 
     ne vairāk kā :math:`-\left\lceil \log_2 s \right\rceil` biti.
   * Gribam sūtīt tikai vienu skaitli. Lai saprastu, cik garš ir 
-    tā intervāls, interpretējam, teiksim $.010$ nevis vienkārši 
-    kā $1/4$, bet kā intervālu $[1/4, 3/8)$. 
+    tā intervāls, interpretējam, teiksim :math:`0.010` nevis vienkārši 
+    kā :math:`1/4`, bet kā intervālu :math:`[1/4, 3/8)`. 
   * Nepazaudējot vairāk kā 1-2 bitus, varam izveidot šādu 
     intervālu :math:`[k/2^n,(k+1)/2^n)`, kurš atradīsies stingri iekšpusē 
     tam :math:`I`, ko dod aritmētiskais kods.
@@ -206,13 +206,7 @@ Sūtām stringu :math:`\textcolor{blue}{\mathtt{GACGU\$}}`, kur simboli
 ir RNS-virknes nukleobāzes, 
 bet :math:`\textcolor{blue}{\mathtt{\$}}` apzīmē stringa beigas.  Simbolu apriorās varbūtības ir šādas:
 
-::
 
-    -------------------------------
-    $\mathtt{A}$ $\mathtt{C}$ $\mathtt{G}$ $\mathtt{U}$ $\mathtt{\$}$
-    -------------------------------
-    30%           10%         30%        20%        10%
-    -------------------------------
 
 .. figure:: figs/arithmetic-coding.png
    :width: 6in
@@ -257,8 +251,6 @@ Tieši 15 cipari aiz komata un :math:`\left[\beta;\,\beta + \frac{1}{2^{15}}\rig
   var mēģināt dalīt tekstu blokos, pirms tos aritmētiski iekodē.
 
 
-
-**Beigu marķieris**
 
 .. note:: 
   PSEUDO_EOF - Hafmana kods var beigties baita vidū. 
@@ -369,11 +361,8 @@ vispirms būs :math:`k-1 = 10` ziņojumi `A`, pēc tam sekos ziņojums `B`.
 
 
 .. note::
-  :math:`{\displaystyle \frac{1}{3}` binārais pieraksts: 
-  Pamatojam, ka :math:`(1/3)_{10}` (viena trešdaļa decimālpierakstā)
-  vienāda ar :math:`0.010101\ldots_2` (bezgalīga periodiska daļa 
-  divnieku pierakstā). 
-
+  :math:`{\displaystyle \frac{1}{3}}` 
+  binārais pieraksts: 
   Summējot :math:`0.010101\ldots` nenulles ciparus, iegūstam:
 
   .. math::
@@ -390,8 +379,8 @@ vispirms būs :math:`k-1 = 10` ziņojumi `A`, pēc tam sekos ziņojums `B`.
 
 
 
-Nodarbības kopsavilkums
----------------------------
+Kopsavilkums
+---------------
 
 1. Ar Hafmana algoritmu uzbūvēts prefiksu koks ir savā ziņā optimāls kodējums, 
    bet tas katru ziņojumu iekodē ar veselu skaitu bitu (var nevajadzīgi iztērēt 
@@ -404,14 +393,14 @@ Nodarbības kopsavilkums
    Tāpēc var izmantot arī veselo skaitļu variantu. 
 4. Kopš 1986.g. pazīstams arī aritmētiskā koda variants, kurā nevajag reizināt 
    (pietiek ar bitu nobīdēm). 
-4. Aritmētiskā koda idejas var pielāgot arī adaptīviem modeļiem, kuri ņem vērā 
+5. Aritmētiskā koda idejas var pielāgot arī adaptīviem modeļiem, kuri ņem vērā 
    ziņojumu sadalījuma nosacītās varbūtības. 
-5. 1980-tajos un 1990-tajos gados vairumu saprātīgo aritmētiskā kodējuma lietojumu 
+6. 1980-tajos un 1990-tajos gados vairumu saprātīgo aritmētiskā kodējuma lietojumu 
    ierobežoja patenti. Tādēļ `bzip2` arhivators un JPEG failu formāts 
    izmantoja Hafmana kodējumu (mazāk optimāls viņu vajadzībām, bet bez patentu 
    ierobežojumiem). Patenti, kuru pieteikumi tika iesūtīti jau 
    1976.g. (Jorma Rissanen, IBM) iespaido tehnoloģiju standartus joprojām. 
-6. 2004.g. publicētais video kodeka standarts H.264/AVC izmanto aritmētiskā kodējuma 
+7. 2004.g. publicētais video kodeka standarts H.264/AVC izmanto aritmētiskā kodējuma 
    variantu CABAC - `Context-adaptive binary arithmetic coding 
    <https://en.wikipedia.org/wiki/Context-adaptive_binary_arithmetic_coding>`_. 
 

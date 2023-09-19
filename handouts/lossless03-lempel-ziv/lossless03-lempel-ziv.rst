@@ -1,108 +1,207 @@
 3. Bezzudumu saspiešana: Lempela-Ziva algoritms
 =================================================
 
-1. Sarežģītības apsvērumi (cik reizes lasa ievadi?)
-2. Lietot un analizēt Lempela-Ziva LZ77 algoritmu.
-3. Saprast un lietot Lempela-Ziva LZ78 algoritmu un tā variantus.
-4. Lempela Ziva algoritmu praktiski lietojumi.
+1. Sarežģītības apsvērumi (cik reizes lasa ievadi). 
+2. Lietot un analizēt Lempela-Ziva algoritmu (LZ77). Arī LZ78 un Lempela-Ziva-Velša algoritmu (LZW). 
+3. Vārdnīcu saspiešanas algoritmu lietojumi.
 
 Motivācija saspiešanai ar vārdnīcas algoritmiem:
 
-* Datu saspiešanas metode nevar būt labāka par entropiju, ja simboli ir neatkarīgi.
+* Entropijas saspiešanas metodes nevar būt labākas par datu avota entropiju.
 * Reālos datos nākošais simbols atkarīgs no iepriekšējā.
-* Var veidot N-grammas (2 burtu virknes kā jaunus "simbolus": aa, ab, ac, ad, ...). Tam pielieto Hafmana vai aritmētisko kodu).
-* Var arī izmantojot to, ka ir simbolu virknes, kas atkārtojas (kodus veido tikai reāli esošajām). Ievieš jaunus simbolus priekš šādām virknēm; 
+* Var veidot N-grammas (2 burtu virknes kā jaunus "simbolus": aa, ab, ac, ad, ...). 
+  Tam pielieto Hafmana vai aritmētisko kodu. Jau nelielam skaitam simbolu 
+  virknīšu kļūst ļoti daudz un Hafmana/aritmētiskie kodi kļūst sarežģīti.
+* Var arī izmantojot to, ka ir simbolu virknes, kas atkārtojas. 
+  Ievieš jaunus simbolus priekš šādām virknēm; 
   tās arī ir Lempela-Ziva metodes (LZ77 vai LZ78).
 
 
+Entropijas kodu vispārinājumi
+-------------------------------
 
 Ne vienmēr burti saspiešanas algoritma ievadē ir 
 neatkarīgi un vienādi sadalīti (kā tas ir entropijas koda gadījumā). 
-
 Jau aritmētiskais kods labi atbalsta tādas gadījumlielumu 
-virknes, kurām ir "atmiņa" -- tās atceras iepriekšējo burtu.  
-Markova ķēde, ko ģenerē automāts ar :math:`3` stāvokļiem:
+virknes, kurām ir "atmiņa" -- tās atceras iepriekšējo burtu.
 
-.. figure:: figs/markov-chain.png
-   :width: 3in
+**Definīcija**
+  Par *Markova ķēdi* (*Markov chain*) sauc varbūtisku procesu, 
+  kas ģenerē burtu virknīti
+  ar orientētu grafu: 
+  
+  * katrs izvades burts ir automāta stāvoklis
+  * pāreja no viena burta uz citu ir izsakāma ar varbūtību
+  * modelim nav atmiņas (tas neatceras neko citu kā vien iepriekšējo burtu)
 
-   Markova ķēde
+**Piemērs:** 
+  Šāds orientēts grafs ar :math:`3` stāvokļiem apraksta Markova ķēdi:
 
-:math:`18` burtu virknīte, sākot ar :math:`A`: `ABCABCBCAAABCABBAB`
+  .. figure:: figs/markov-chain.png
+     :width: 1.5in
 
-.. note:: 
-   Var ģenerēt pastaigu pa automātu.
-   
-   ```r
-   sample(1:4,size=17, replace=TRUE)  
-   [1] 3 3 1 2 3 4 3 2 1 1 4 4 2 3 2 1 4 
-   ```
+  :math:`18` burtu virknīte iegūta nejauši staigājot pa šo grafu, 
+  sākot ar :math:`A`: `ABCABCBCAAABCABBAB`. 
 
-   * `LZW algoritma piemērs 
-     <http://web.mit.edu/6.02/www/f2010/handouts/recitations/Recitation21VergheseFall2010.pdf>`_  
-   * `LZ78 sliktākā gadījuma teorija 
-     <http://www-math.mit.edu/~shor/PAM/lempel_ziv_notes.pdf>`_  
-
-
-
-**LZ78 iekodēšanas pseidokods**
-
-
-.. table:: LZ78Encode.Pseudocode
-
-   ========  ==============================================
-    Line      Description
-   ========  ==============================================
-    1         :math:`D = \text{\sc Dictionary}(S)` :math:`\;\;\;\;`  *saliek vārdnīcā visus burtus*
-    2         :math:`w = \varepsilon` :math:`\;\;\;\;` *tukšais strings*
-    3         :math:`k = text{\sc ReadSymbol}(F)`
-    4         **while** :math:`k \neq \text{\sc eof}`
-    5         :math:`\;\;\;\;` **if** :math`wk \in D.\text{\sc keys}()`
-    6         :math:`\;\;\;\;\;\;\;\;` :math:`w = wk`
-    7         :math:`\;\;\;\;` **else:**
-    8         :math:`\;\;\;\;\;\;\;\;` \text{\sc Output}(D[w])`
-    9         :math:`\;\;\;\;\;\;\;\;` \text{\sc Insert}(D,w)` :math:`\;\;\;\;` *Pievieno vārdnīcai ar jaunu kārtas numuru*
-    10        :math:`\;\;\;\;\;\;\;\;` :math:`w=k`
-    11        :math:`k = \text{\sc ReadSymbol}(F)`
-    12        :math:`\text{\sc Output}(D[w])`
-   ========  ==============================================
+**Apgalvojums:** 
+  Hafmana koki var nebūt optimāli, saspiežot virknītes no Markova ķēdēm 
+  (jo nākamais burts ir atkarīgs no iepriekšējā). 
+  Savukārt aritmētisko kodu var pielāgot tā, lai tas mainītu burtiem 
+  piesaistīto intervālu garumus atkarībā no iepriekš redzētā burta.
 
 
+Ar Markova ķēdi iegūtā virknītē burti vairs nav *neatkarīgi un vienādi sadalīti*
+(*independent and identically distributed*), jo burta parādīšanās 
+varbūtību ietekmē iepriekšējais burts. Tie vairs nav entropijas kodi. 
 
-**LZW(S$)** -- Kodē simbolu plūsmu/stream
-==================================================
-| 1. :math:`C = \text{\sc ReadSymbol}(S)`
-| 2. **while** :math:`C \neq \text{\sc eof}`
-| 3. :math:`C' = \text{\sc GetIndex}(C,x)`
-| 4. **while** :math:`C' \neq -1`:
-| 5. :math:`C = C'`
-| 6. :math:`x = \text{\sc ReadSymbol}(S)`
-| 7. :math:`C' = \text{\sc GetIndex}(C,x)`
-| 8. :math:`\text{\sc Output}(C)`
-| 9. :math:`\text{\sc AddDict}(C,x)`
-| 10. :math:`C =x`
+**Definīcija:** 
+  Aplūkojam :math:`X_1 X_2 X_3\ldots` - ziņojumu virkni, kas ģenerēta 
+  ar Markova ķēdi. Par par šīs virknes *vidējo entropiju* (*entropy rate*)
+  sauc robežu: 
 
+  .. math::
 
+    H(X) = \lim_{n \to \infty} \frac{1}{n} H\left( X_1, X_2, \ldots X_n \right). 
 
-
-**1. piemērs**
-  Dota virkne :math:`\mathtt{abcabcabcdabcaba}`, 
-  kura jānokodē, izmantojot Lempela - Ziva algoritmu.
-  Vajadzētu sanākt 
+  Markova ķēdēm (un daudziem citiem varbūtiskiem procesiem) tā vienāda ar 
+  entropiju, kas izrēķināta no nosacītajām varbūtībām
+  (t.i. pieņemam, ka pirmos :math:`n-1` simbolus jau esam redzējuši, atrodam
+  kārtējā :math:`n`-tā simbola nosacīto varbūtību sadalījumu un tā entropiju):  
 
   .. math:: 
+  
+    H'(X) = \lim_{n \to \infty} H\left( X_n \,\mid\, X_{n-1}, X_{n-2}, \ldots X_1 \right).
 
-    \mathtt{a,b,c,1,3,2,d,4,1,a}
-
-
-
-**LZ78 atkodēšanas pseidokods**
+  Parasti :math:`H(X) = H'(X)`.
 
 
-.. figure:: figs/LZ78-decode.png
-   :width: 6in
+Dabīgo valodu apraksta vēl sarežģītāki modeļi (piemēram *Hidden Markov model*), 
+kur atkal ir galīgs grafs ar stāvokļiem (kuri nav redzams burtu virknē)
+un katru stāvokļu pāreju saistām ar noteikta burta izvadi (ir redzami virknē).
+Slēptajam Markova modelim un citiem sarežģītākiem 
+modeļiem (arī dabiskajai valodai) entropiju jeb saspiežamības robežu definēt
+ir grūtāk, jo nav saprotams varbūtiskais modelis, kas to visu ģenerē. 
+Dabiskajām valodām bieži izvēlas kādu no šiem diviem modeļiem: 
 
-   LZ78 atkodēšana
+* n-grammu modelis: Faktiski pieņem, ka nākamā simbola (valodas burta vai arī vārda)
+  parādīšanās varbūtību iespaido :math:`n` iepriekš saņemtie simboli. 
+* Neironu tīklu modelis: Apmāca neironu tīklu, kurš pēc tam var prognozēt varbūtības.  
+
+Novērojums (literatūrkritiķe Ruta Veidemane "Izteikt neizsakāmo") - dzejas valodas
+informatīvais saturs ir lielāks nekā prozai. 
+
+**Definīcija:** 
+  Par *n-grammu* (*n-gram*) sauc dotajā tekstā sastopamu :math:`n` pēc kārtas 
+  sekojošu simbolu virknīti. 
+
+Ja simbolu virknē simboli nav neatkarīgi, tad divu simbolu pārīšiem 
+(*digrammām* jeb 2-grammām) entropija ir mazāka nekā divkāršota entropija 
+vienam ziņojumam.
+Individuālo simbolu entropijas kodu vietā varētu izmantot 
+*n-gramu* entropijas kodus, bet jau nelielām vērtībām (n=2,3) kodu tabulas 
+mēdz būt nenormāli lielas -- saspiest it kā var efektīvāk, bet kodu tabulu 
+kļūst nepraktiski nosūtīt. 
+
+Ir adaptīvāki algoritmi, kuri iekodē n-grammas, balstoties uz to, kas datos redzams. 
+Tāds piemērs ir *Prediction by partial matching* -- viens no stiprākajiem 
+saspiešanas algoritmiem dabiskās valodas tekstam.
+
+
+LZ77-veida algoritmi
+-----------------------
+
+Šajā gadījumā vārdnīca ir gabals no jau iekodētās virknes. 
+Iekodētājs redz beigu gabalu no iekodētās virknes kā slīdošo logu: 
+
+.. figure:: figs/lz77-window.png
+   :width: 2in 
+
+Logs ir kā atmiņas buferis, kurā var atrast nesen iekodētas virknes 
+un izmantot tās, lai īsāk pierakstītu to virknes gabaliņu, kurš sekos. 
+
+**Piemērs:** 
+  Aizkodēt virkni :math:`\mathtt{abcabcabcdabc}`, ja loga garums :math:`k = 6`. 
+
+  Vajadzētu sanākt :math:`\mathtt{(1,a),(1,b),(1,c),(0,1,6),(1,d),(0,3,3)}`. 
+
+
+
+
+
+LZ78-veida algoritmi
+----------------------
+
+
+**LZ78 saspiešanas algoritms**
+  **Ievade:** :math:`F` -- plūsma simbolu nolasīšanai.  
+  **Izvade:** Simboli un cipari (adreses vārdnīcā).  
+  
+  | :math:`\text{\sc LZ78encode}(F)`:
+  | 1. :math:`\;\;\;\;\;` :math:`D = \text{\sc Dictionary}(S)` :math:`\;\;\;\;\;\;\;\;\;\;`
+    :math:`\textcolor{teal}{\text{\em saliek vārdnīcā visus burtus}}`
+  | 2. :math:`\;\;\;\;\;` :math:`w = \varepsilon` :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;`
+    :math:`\textcolor{teal}{\text{\em tukšais strings}}`
+  | 3. :math:`\;\;\;\;\;` :math:`k = \text{\sc readSymbol}(F)`
+  | 4. :math:`\;\;\;\;\;` **while** :math:`k \neq \text{\sc eof}`
+  | 5. :math:`\;\;\;\;\;\;\;\;\;\;`  **if** :math:`wk \in D.\text{\sc keys}()`:
+  | 6. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`w = wk`
+  | 7. :math:`\;\;\;\;\;\;\;\;\;\;`  **else:**
+  | 8. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`\text{\sc output}(D[w])`
+  | 9. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`\text{\sc insert}(D,w)` :math:`\;\;\;\;\;\;\;\;\;\;`
+    :math:`\textcolor{teal}{\text{\em pievieno vārdnīcai ar jaunu kārtas numuru}}`
+  | 10. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`w=k`
+  | 11. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`k = \text{\sc readSymbol}(F)`
+  | 12. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`\text{\sc output}(D[w])`
+    
+
+**LZ78 atspiešanas algoritms** 
+  **Ievade:** :math:`F` -- saspiesto datu plūsma
+  **Izvade:** Atspiestais teksts
+
+
+  | :math:`\text{\sc LZ78decode}(F)`:
+  | 1. :math:`\;\;\;\;\;` :math:`w = \text{\sc lookup}(\text{\sc readCode}())`
+  | 2. :math:`\;\;\;\;\;` :math:`\text{\sc output}(w)`
+  | 3. :math:`\;\;\;\;\;` :math:`c = \text{\sc readCode()}` 
+  | 4. :math:`\;\;\;\;\;` **while** :math:`c \neq \text{\sc eof}`:
+  | 5. :math:`\;\;\;\;\;\;\;\;\;\;` **if** :math:`c \in D`: :math:`\;\;\;\;\;\;\;\;\;\;` 
+    :math:`\textcolor{teal}{\text{\em if $c$ is in the dictionary}}`
+  | 6. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`wn = \text{\sc lookup}(c)`
+  | 7. :math:`\;\;\;\;\;\;\;\;\;\;` **else**:
+  | 8. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`wn = \text{\sc stringcat}(w, w[0])`
+  | 9. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`\text{\sc output}(wn)`
+  | 10. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`k = wn[0]`
+  | 11. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`D.\text{\sc add}(wk)` :math:`\;\;\;\;\;\;\;\;\;\;` 
+    :math:`\textcolor{teal}{\text{\em add wk to dictionary}}`
+  | 12. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`w = wn`
+
+
+
+
+
+**Piemērs:**
+  Dota virkne :math:`\mathtt{abcabcabcdabcaba}`, 
+  kura jānokodē, izmantojot LZ78 algoritmu.
+
+=======  =====================  ====  ========  ===================
+Solis    Garākais w vārdnīcā    k     Izvade    Pievieno vārdnīcai
+=======  =====================  ====  ========  ===================
+1.       a                      b     a         ab
+2.       b                      c     b         bc
+3.       c                      a     c         ca
+4.       ab                     c     ab        abc
+5.       ca                     b     ca        cab
+6.       bc                     d     bc        dbc
+7.       d                      a     d         da
+8.       abc                    a     abc       abca
+9.       ab                     a     ab        aba
+10.                                   a
+=======  =====================  ====  ========  ===================
+
+Parasti kodē burtus par burtiem, bet garākas virknes aizstāj ar tā soļa numuru, 
+kurā šī virkne ir ievietota vārdnīcā. Tas nozīmē, ka 1. piemērā virkne `ab` 
+tiktu kodēta kā 1, `bc` kā 2, `ca`` kā 3, utt.
+Beigās iegūta virkne :math:`\mathtt{a,b,c,1,3,2,d,4,1,a}` 
 
 
 **2. piemērs** 
@@ -118,226 +217,189 @@ Markova ķēde, ko ģenerē automāts ar :math:`3` stāvokļiem:
 
 
 
-**LZ78 (biti par bitiem)**
 
-Cits LZ78 variants (sāk ar tukšu vārdnīcu).
+Lempel-Ziv-Welch algoritms (LZW) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-:math:`\mathtt{AABABBBABAABABBBABBABB}` (22 biti)  
-:math:`\mathtt{A.AB.ABB.B.ABA.ABAB.BB.ABBA.BB}`
+**Saspiešanas algoritms:**
+  * Ievade: :math:`F` -- plūsma (sākotnējais teksts)
+  * Izvade: saarhivēts teksts.
 
-1. :math:`\mathtt{A}`
-2. :math:`\mathtt{AB}`
-3. :math:`\mathtt{ABB}`
-4. :math:`\mathtt{B}`
-5. :math:`\mathtt{ABA}`
-6. :math:`\mathtt{ABAB}`
-7. :math:`\mathtt{BB}`
-8. :math:`\mathtt{ABBA}`
-9. :math:`\mathtt{BB}`
-
-:math:`\varnothing\mathtt{A}`
-
-10. :math:`\mathtt{1A}`
-11. :math:`\mathtt{2B}`
-12. :math:`\varnothing\mathtt{B}`
-13. :math:`\mathtt{2A}`
-14. :math:`\mathtt{5B}`
-15. :math:`\mathtt{4B}`
-16. :math:`\mathtt{3A}`
-17. :math:`\mathtt{7}`
-
-LZ78 kods:  
-:math:`\textcolor{blue}{\mathtt{01110100101001011100101100111}}` (29 biti)  
-(Sākot no elementa :math:`2^k+1` 
-viņa vārdnīcas adresi kodē ar :math:`k+1` bitiem.)
+  | :math:`\text{\sc LZWencode}(F)` 
+  | 1. :math:`\;\;\;\;\;` :math:`C = \text{\sc ReadSymbol}(F)`
+  | 2. :math:`\;\;\;\;\;` **while** :math:`C \neq \text{\sc eof}`
+  | 3. :math:`\;\;\;\;\;\;\;\;\;\;` :math:`x = \text{\sc ReadSymbol}(F)`
+  | 4. :math:`\;\;\;\;\;\;\;\;\;\;` :math:`C' = \text{\sc getIndex}` 
+  | 5. :math:`\;\;\;\;\;\;\;\;\;\;` **while** :math:`C' \neq -1`: 
+  | 6. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`C  = C'`
+  | 7. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`C' = \text{\sc getIndex}(C,x)`
+  | 8. :math:`\;\;\;\;\;\;\;\;\;\;` :math:`\text{\sc output}(C)`
+  | 9. :math:`\;\;\;\;\;\;\;\;\;\;` :math:`\text{\sc addDict}(C,x)`
+  | 10. :math:`\;\;\;\;\;\;\;\;\;\;` :math:`C = x`
 
 
+**Atspiešanas algoritms:**
+  * Ievade: :math:`F` -- plūsma (saspiests teksts)
+  * Izvade: atarhivēts teksts.
 
-
-
-
-**Kur lieto LZ saimes algoritmus**
-
-* Gzip, ZIP un V.42bis (modēmos lietots protokols) balstās uz LZ77. 
-* Unix `compress`, un GIF formāti izmanto LZ78.
-
-IBM patenti algoritmiem LZ78 un LZW iesniegti 1981 un 1983.g. 
-(sk. `LZW Patents <https://en.wikipedia.org/wiki/Lempel%E2%80%93Ziv%E2%80%93Welch#Patents>`_)
-
-Citi patenti saistībā ar saspiešanu:
-
-* GIF (Unisys patents beidzās ap 2004.g.). 
-  Radās aizstājējformāts PNG - tāda pati bezzudumu saspiesta rastra grafika 
-  (tika pievienota "alpha-transparency"). 
-* MP3 (patenti ASV beidzās ap 2017.g.). 
-  Radās OGG Vorbis formāti skaņai un video. 
-* MP3 patentu beigas: 23.aprīlis 2017.g. 
-  `<https://www.audioblog.iis.fraunhofer.com/mp3-software-patents-licenses>`_
-
-* Galalietotājam šie formāti arvien bijuši brīvi, bet dzelžu vai programmatūras ražotājiem, 
-  kuri no tiem atvasina komerciālus produktus, reizēm bija jāmaksā - turklāt patentu tiesības 
-  (MP3 gadījumā) bija samudžinātas (pamatos Technicolor and Fraunhofer).
-* Debian Linux papildu repozitoriji.
+  | :math:`\text{\sc LZWdecode}(F)` 
+  | 1. :math:`\;\;\;\;\;` :math:`C = \text{\sc readIndex}(F)`
+  | 2. :math:`\;\;\;\;\;` :math:`W = \text{\sc getString}(C)`
+  | 3. :math:`\;\;\;\;\;` :math:`\text{\sc output}(W)`
+  | 4. :math:`\;\;\;\;\;` **while** :math:`C \neq \text{\sc eof}`:
+  | 5. :math:`\;\;\;\;\;\;\;\;\;\;` :math:`C' = \text{\sc readIndex}(F)`
+  | 6. :math:`\;\;\;\;\;\;\;\;\;\;` **if** :math:`\text{\sc indexInDict}(C')`:
+  | 7. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`W = \text{\sc getString}(C')`
+  | 8. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`\text{\sc addDict}(C,W[0])`
+  | 9. :math:`\;\;\;\;\;\;\;\;\;\;` **else**: 
+  | 10. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`C' = \text{\sc addDict}(C, W[0])`
+  | 11. :math:`\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;` :math:`W = \text{\sc getString}(C')`
+  | 12. :math:`\;\;\;\;\;\;\;\;\;\;` :math:`\text{\sc output}(W)`
+  | 13. :math:`\;\;\;\;\;\;\;\;\;\;` :math:`C = C'`
 
 
 
 
-Praktiski LZW algoritma apsvērumi:  
-`What if dictionary is full 
-<https://stackoverflow.com/questions/40054218/what-if-dictionary-size-in-lzw-algorithm-is-full>`. 
 
 
 
 
-Saspiešanas rīki
-^^^^^^^^^^^^^^^^^
+Vārdnīcas saspiešanas algoritmu lietojumi 
+-------------------------------------------
 
-**Kritēriji**
+**Saspiešanas standarti:** 
+  Saspiešanas standartus un rīkus var dažādi salīdzināt:
 
-* Rīka standartizācija un saspiešanas/atspiešanas vispārēja pieejamība. 
-  (Dažos gadījumos arī - nedaudz sabojātu arhīvu atjaunošana).
-* Rīka izmaksas un licencēšanas kārtība.
-* Vai tikai saspiež vai arī sapako lielākas direktorijas un/vai pievieno 
-  šifrēšanu vai e-parakstu.
-* Rīka saspiešanas attiecība, piemēram, cilvēku valodas tekstiem (arī 
-  programmu izejas tekstiem, rastra grafikai, u.c.).
-* Rīka saspiešanas un atspiešanas ātrums. 
+  * Rīka standartizācija un licences. 
+  * Iespēja atjaunot nepilnīgi nosūtītus arhīvus?
+  * Papildu īpašības (direktoriju sapakošana 1 failā, šifrēšana vai e-paraksts).
+  * Saspiešanas attiecība cilvēku valodai, rastra grafikai, u.c.
+  * Rīka saspiešanas un atspiešanas ātrums, prasības pēc RAM. 
 
+**Standarti ar LZ77:**
+  Gzip, ZIP, PNG balstās uz LZ77 (reizēm kopā ar Hafmana kodu - t.s. "deflate" algoritms).  
 
-
-**Linux komandrindu rīks "tar"**
-
-.. code-block:: bash
-
-   # install on Ubuntu/Debian
-   sudo apt-get install tar
-   # install on CentOS
-   sudo yum install tar
-
-   # compress
-   tar -cvfz result.tar.gz original.txt
-   # uncompress
-   tar xvzf result.tar.gz
-
-* "c" - *create* (veidot arhīvu),
-* "x" - *eXtract* (atpakot arhīvu),
-* "z" - *gZip* (lietot gzip saspiedēju papildus "Tape ARchive").
-* "z" vietā "j" - (lietot bzip2 saspiedēju - t.i. Berouza-Vīlera algoritmu).
+**Standarti ar LZ78:**
+  Unix `compress`, un GIF formāti. 
 
 
 
-**Rīks gzip**
+
+
+
+**Linux rīki "tar" un "gzip"**
+  "Tape archive" - lenšu arhīvs:
 
   .. code-block:: bash
 
-     # Uzstāda uz Ubuntu/Debian
-     sudo apt-get install gzip
-     # compress
-     gzip examplefile
-     # list properties
+     tar -cvfz result.tar.gz original.txt
+     tar xvzf result.tar.gz
+     # gzip komandas:
      gzip -l examplefile.gz
-     # uncompress 
      gzip -d examplefile.gz
+
+  * "c" - *create* (veidot arhīvu),
+  * "x" - *eXtract* (atpakot arhīvu),
+  * "z" - *gZip* (lietot gzip saspiedēju papildus "Tape ARchive").
+  * "z" vietā "j" - (lietot bzip2 saspiedēju - t.i. Berouza-Vīlera algoritmu).
+
 
 
 **Rīks LZMA**
 
   .. code-block:: bash
 
-   # compress
-   lzma -c --stdout examplefile> examplefile.lzma
-   # uncompress
-   lzma -d --stdout examplefile.lzma >examplefile
-
-
-
-**Rīks 7Zip**
-  `<https://linuxhint.com/install-7zip-compression-tool-on-ubuntu/>`_
-
-
-
-**Kalgari un Kenterberijas korpusi**
-
-* `Kalgari korpuss <http://corpus.canterbury.ac.nz/descriptions/#calgary>`_ - 
-  dažādi failu tipi (ieskaitot melnbaltus attēlus, faksus, veclaicīgu mašīnkodu); 
-  `dažu algoritmu salīdzinājums <https://en.wikipedia.org/wiki/Calgary_corpus#Benchmarks>`_.  
-  Kalgari korpusu arvien lieto metožu salīdzināšanai un pat saspiešanas sacensībām.
-* `Kenterberijas korpuss <http://corpus.canterbury.ac.nz/>`_ - 
-  mūsdienīgāks korpuss.
-
-
-
-
-**Izsaukumi no Pitona**
-
-* `zlib` bibliotēka. 
-* `<https://stackabuse.com/python-zlib-library-tutorial/>`_
-* `Python zlib tutorial <https://stackabuse.com/python-zlib-library-tutorial/>`_
-
+    lzma -c --stdout examplefile > examplefile.lzma
+    lzma -d --stdout examplefile.lzma > examplefile
 
 **Par PNG formātu**
-
-* PNG ir bezzudumu = pēc atspiešanas vienmēr tas pats rezultāts 
+  PNG ir bezzudumu = pēc atspiešanas vienmēr tas pats rezultāts 
   (turklāt atspiešanas ātrums būtiski nemainās).
-* Augstāks līmenis - lielāks bloku izmērs, lielāka vārdnīca.
-* `pngcrush` var piemeklēt optimālus parametrus, jei svarīgi iegūt vismazāko PNG.
+  
+  * Augstāks līmenis - lielāks bloku izmērs, lielāka vārdnīca.
+  * `pngcrush` var piemeklēt optimālus parametrus, ja svarīgi iegūt vismazāko PNG.
+  * Saspiešanas līmenis (0 - nesaspiests, ātrākais), (9 - visvairāk saspiests, lēnākais). 
+
+  .. code-block:: bash
+
+    $ fmpeg -i input -vframes 1 -compression_level 0 0.png
+    $ ffmpeg -i input -vframes 1 -compression_level 9 9.png
 
 
-**PNG saspiešanas līmeņi**
+  .. code-block:: python 
 
-Saspiešanas līmenis (0 - nesaspiests, ātrākais), 
-(9 - visvairāk saspiests, lēnākais). 
+    from PIL import Image
+    import numpy as np
 
-.. code-block:: bash
+    # 100x100 nejauši reāli skaitļi intervālā [0;1]
+    imageArray = np.random.rand(100,100)
+    # Izmaina mērogu uz [0;255] melnbaltā attēlā "255" ir balts
+    img = Image.fromarray(imageArray * 255)
+    # Eksportē uz PNG failu
+    img.convert('RGB').save('raster_output.png')
 
-   $ fmpeg -i input -vframes 1 -compression_level 0 0.png
-   $ ffmpeg -i input -vframes 1 -compression_level 9 9.png
 
-
-
-Lietojumi DLP produktos
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Arhivatori un datu noplūde**
-
-* `Symantec DLP risinājumi <https://www.symantec.com/products/dlp>`_
-* `Forcepoint DLP risinājumi <https://www.forcepoint.com/product/dlp-data-loss-prevention>`_
-* `Digital Guardian DLP aģents <https://digitalguardian.com/products/endpoint-dlp>`_
-
-* Arhīvu atspiešana, saspiešana (reizēm arī TLS atšifrēšana/aizšifrēšana) ir laikietilpīga. 
-* DLP notiek kanālos, kuri ir jūtīgi pret novēlošanos (Web, Email) -
-  sk. `failu izmēru limiti 
-  <https://www.websense.com/content/support/library/data/v84/file_support/file_size_limits.aspx>`_, 
-  `atbalstītie arhīvu formāti 
-  <https://www.websense.com/content/support/library/data/v84/file_support/dlp_file_support.pdf>`_.
+  .. figure:: figs/raster_output.png
+     :width: 2in
 
 
 
+**Lietojumi DLP produktos**
+  DLP (Data Leak Prevention) rīki var novērst konfidenciālu datu 
+  nekontrolētu noplūdi uzņēmumā -- piemēram, ja darbinieks pārsūta 
+  jūtīgus failus, teksta fragmentus u.c. nepiemērotam mērķim. 
+  
+  
+  * Datu *klasifikatori* (*classifiers*) ir likumi, kas definē konfidenciālu datu tipus. 
+    (Adreses, telefonu numuri, epasti, personas kodi, IBAN kontu numuri, 
+    kredītkaršu numuri, rindkopas no konfidenciāliem dokumentiem utml.)
+    Daži klasifikatori ir kā universāli paterni (visi faili noteiktā formātā, 
+    stringi atbilstoši regulārai izteiksmei), citi ir nolasāmi no datubāzēm 
+    (piemēram, tikai mūsu klientu telefonu numuri) vai iegūstami ar mašīnmācīšanos.
+  * Datu *kanāli* (*channels*) ir viss, ko var novērot -- piemēram 
+    HTTP augšupielādes, izejošie epasti, "clipboard" jeb kopēšanas darbības, 
+    ekrānuzņēmumi. 
+  * Aizsardzības politikas (*policies*) nosaka, ko pa kuru kanālu kuriem adresātiem 
+    drīkst vai nedrīkst sūtīt. Politikai (bez kanāla un klasifikatora) ir arī darbība -- 
+    piemēram "Monitor" un "Block" (neļauj sūtīt).
 
 
+  Ir vairāki komerciāli produkti par DLP: 
 
-**Daži arhīvu lietojumi DLP**
+  * `Symantec DLP risinājumi <https://www.symantec.com/products/dlp>`_
+  * `Forcepoint DLP risinājumi <https://www.forcepoint.com/product/dlp-data-loss-prevention>`_
+  * `Digital Guardian DLP aģents <https://digitalguardian.com/products/endpoint-dlp>`_
+  * Arhīvu atspiešana, saspiešana (reizēm arī TLS atšifrēšana/aizšifrēšana) ir laikietilpīga. 
+  * DLP notiek kanālos, kuri ir jūtīgi pret novēlošanos (Web, Email) -
+    sk. `failu izmēru limiti 
+    <https://www.websense.com/content/support/library/data/v84/file_support/file_size_limits.aspx>`_, 
+    `atbalstītie arhīvu formāti 
+    <https://www.websense.com/content/support/library/data/v84/file_support/dlp_file_support.pdf>`_.
 
-* Kas notiek, ja atarhivējot failu, rodas ļoti daudz failu? 
-* Kas notiek, ja atarhivējot failu, rodas ļoti garš fails?
-* Vai saspiešanas algoritms ļauj sākt arhivēt un sūtīt prom datus pirms
-  saņemts viss nosūtāmais fails vai faili?  
-  Starpniekserveris (*proxy server*) nevar analizēt lietotāju Web transakcijas ilgāk 
-  kā aptuveni 10 sekundes, jo pārlūkprogrammu lietotāji nav pieraduši ilgi gaidīt. 
-* Kas notiek, ja datus sāk sūtīt adresātam un pēkšņi pamana privātu datu noplūdi?  
-  Vai saņēmējs arhīvu var saprast arī tad, ja saņemta daļa no tā?
+
+  **Arhīvu lietojumi DLP**
+    Bieži datu noplūde ir arhīvs. Tāpēc ir vairāki praktiski apsvērumi: 
+
+    * Kas notiek, ja atarhivējot failu, rodas ļoti daudz failu? 
+    * Kas notiek, ja atarhivējot failu, rodas ļoti garš fails?
+    * Vai saspiešanas algoritms ļauj sākt arhivēt un sūtīt prom datus pirms
+      saņemts viss nosūtāmais fails vai faili?  
+      Starpniekserveris (*proxy server*) nevar analizēt lietotāju Web transakcijas ilgāk 
+      kā aptuveni 10 sekundes, jo pārlūkprogrammu lietotāji nav pieraduši ilgi gaidīt. 
+    * Kas notiek, ja datus sāk sūtīt adresātam un pēkšņi pamana privātu datu noplūdi?  
+      Vai saņēmējs arhīvu var saprast arī tad, ja saņemta daļa no tā?
 
 
-**DLP atbildes uz izaicinājumiem**
-
-* DLP analīzi censties biežāk veikt lokāli uz lietotāja datora 
-  (*endpoint* jeb *agent* programmatūra, kas var veltīt vairāk CPU resursu
-  konkrētā lietotāja failu analīzei).
-* Konfigurēt DLP produktus novērošanas (*monitoring*) režīmā - tad
-  ir vairāk laika analīzei, jo transakcijas var uzreiz atļaut neatkarīgi no to satura.
-* Dažus grūti analizējamus failus (dīvaini saspiestus, ar parolēm aizsargātus
-  biroja programmu dokumentus, šifrētus datus) var nelaist cauri vārtejām, 
-  piespiest lietotājus sūtīt DLP rīkam saprotami.
+  **Kā DLP atbild uz izaicinājumiem**
+    
+    * DLP analīzi censties biežāk veikt lokāli uz lietotāja datora 
+      (*endpoint* jeb *agent* programmatūra, kas var veltīt vairāk CPU resursu
+      konkrētā lietotāja failu analīzei).
+    * Konfigurēt DLP produktus novērošanas (*monitoring*) režīmā - tad
+      ir vairāk laika analīzei, jo transakcijas var uzreiz atļaut neatkarīgi no to satura.
+    * Dažus grūti analizējamus failus (dīvaini saspiestus, ar parolēm aizsargātus
+      biroja programmu dokumentus, šifrētus datus) var nelaist cauri vārtejām, 
+      piespiest lietotājus sūtīt DLP rīkam saprotami.
 
 
 
@@ -361,15 +423,14 @@ Uzdevumi
   Atrast tajā trešā burta varbūtību sadalījumu (ar kādām 
   varbūtībām tur ir attiecīgi :math:`A, B, C`).  
 
-  Ierakstīt trīs racionālus skaitļus, atdalot tos 
-  ar komatiem formātā `a/b,c/d,e/f` _____
+  Ierakstīt atbildē trīs racionālus skaitļus. 
 
 .. only:: Internal 
 
   **Atbilde:**
 
     .. figure:: figs/markov-chain.png
-       :width: 3in
+       :width: 1.5in
 
        Markova ķēde
 
@@ -402,10 +463,6 @@ Uzdevumi
     Tātad varbūtību sadalījums ir :math:`\left( \frac{1}{4}, \frac{3}{8}, \frac{3}{8} \right)`. 
 
 
-
-
-
-
     Starp citu, trešajam burtam atbilstošā varbūtību sadalījuma :math:`\{ 1/4, 3/8, 3/8 \}` 
     entropija ir :math:`1.56`. Bet faktiski no Markova ķēdes
     saņemtās virknes var saspiest labāk 
@@ -419,11 +476,33 @@ Uzdevumi
 
 
 
-Kopsavilkums
--------------
+**Kopsavilkums:**
 
 1. Apspriedām entropijas kodu lietojamības robežas.
 2. Ieviesām Lempela Ziva algoritmu LZ77.
 3. Ieviesām Lempela Ziva algoritmu LZ78.
 4. Apspriedām LZ77, LZ78 lietojumus, failu formātus un 
    arhivēšanas bibliotēkas.
+
+
+**Bibliogrāfija:** 
+
+  * `LZW algoritma piemērs 
+    <http://web.mit.edu/6.02/www/f2010/handouts/recitations/Recitation21VergheseFall2010.pdf>`_.
+  * Praktiski LZW algoritma apsvērumi:  
+    `What if dictionary is full 
+    <https://stackoverflow.com/questions/40054218/what-if-dictionary-size-in-lzw-algorithm-is-full>`. 
+  * `LZ78 sliktākā gadījuma teorija 
+    <http://www-math.mit.edu/~shor/PAM/lempel_ziv_notes.pdf>`_.
+  * `PPM algoritms <https://en.wikipedia.org/wiki/Prediction_by_partial_matching>`_. 
+  * `<https://stackabuse.com/python-zlib-library-tutorial/>`_
+  * `Python zlib tutorial <https://stackabuse.com/python-zlib-library-tutorial/>`_
+  * IBM patenti algoritmiem LZ78 un LZW iesniegti 1981 un 1983.g. 
+    (sk. `LZW Patents <https://en.wikipedia.org/wiki/Lempel%E2%80%93Ziv%E2%80%93Welch#Patents>`_)
+  * `<https://linuxhint.com/install-7zip-compression-tool-on-ubuntu/>`_. 
+  * `Kalgari korpuss <http://corpus.canterbury.ac.nz/descriptions/#calgary>`_ - 
+    dažādi failu tipi (ieskaitot melnbaltus attēlus, faksus, veclaicīgu mašīnkodu); 
+    `dažu algoritmu salīdzinājums <https://en.wikipedia.org/wiki/Calgary_corpus#Benchmarks>`_.  
+    Kalgari korpusu arvien lieto metožu salīdzināšanai un pat saspiešanas sacensībām.
+  * `Kenterberijas korpuss <http://corpus.canterbury.ac.nz/>`_ - 
+    mūsdienīgāks korpuss.

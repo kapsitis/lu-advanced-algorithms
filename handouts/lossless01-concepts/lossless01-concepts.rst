@@ -1093,7 +1093,27 @@ Uzdevumi
 
     :math:`\square`
 
-**1.8. uzdevums** 
+**1.8. uzdevums:** 
+  Vienā varbūtiskā eksperimentā met godīgu monētu kamēr uzkrīt pirmais ģerbonis. 
+  Iespējamie šī eksperimenta iznākumi un varbūtības: 
+
+  .. math:: 
+
+    (\mathtt{T}, 1/2), (\mathtt{HT}, 1/4), (\mathtt{HHT}, 1/8), (\mathtt{HHHT}, 1/16), \ldots,   
+
+  Bez tam ir arī notikums, kurā ģerbonis neuzkrīt vispār: :math:`\mathtt{HHHH}\ldots`. 
+  Tā varbūtība ir :math:`0` (tāpēc šis noteikums entropiju neiespaido). 
+
+  Atrast entropiju diskrētam gadījumlielumam :math:`X`, kuram ir šie bezgalīgi daudzie 
+  iznākumi. Citiem vārdiem, atrast summu: 
+
+  .. math:: 
+
+    H(X) = \sum_{i = 1}^{\infty} \frac{1}{2^i}\left( - \log_2 \frac{1}{2^i} \right) = 
+    \sum_{i=1}^{\infty} \frac{1}{2^i} \cdot i. 
+
+
+**1.9. uzdevums** 
   Morzes kodu definē šādi: 
 
   * Kodējamais alfabēts sastāv no :math:`27` simboliem -- 

@@ -1,48 +1,97 @@
 4. Bezzudumu saspiešana: BWT transformācija
 =======================================================
 
+**Definīcija:** 
+  Par :math:`n` elementu saraksta *permutāciju* (*permutation*) sauc jebkuru
+  citu sarakstu, kurā izmainīta šo elementu secība. Šādu permutāciju ir :math:`n!`. 
+  Par *ciklisku permutāciju* sauc tādu permutāciju, kurā elementiem saglabājas 
+  abi kaimiņi -- t.i. vienu vai vairākus 
+  elementus no saraksta beigām var pārlikt uz saraksta sākumu. 
+
+(Ja permutācijas notiek tekstā ar burtiem, kuri atkārtojas, tad variantu skaitu 
+nosaka citādi.)
+
+**Piemērs:** 
+  Izrakstīt visas cikliskās permutācijas vārdam :math:`\mathtt{BONBON}`. 
+
+
+
+**Cikliskās permutācijas tekstā**
+
+  .. figure:: figs/cyclic-permuations.png
+     :width: 2in
+
+     Cikliskas permutācijas
+
+  * Ja dotajā tekstā ar garumu "n" visu laiku rotē burtus (pārliek pēdējo burtu uz sākumu utt.), 
+    tad pēc "n" soļiem teksts atgriežas sākumstāvoklī. 
+  * Ja visas cikliskās permutācijas izraksta vienu zem otras, katrā kolonnā nonāks visi burti, 
+    kas ir tekstā. 
+
+
+
+
 **Berouza-Vīlera transformācija**
 
-.. figure:: figs/cyclic-permuations.png
-   :width: 2in
+.. code-block:: 
 
-   Cyclic permutations
-
-Katram burtam atrodam visas cikliskās permutācijas. 
-Tās pēc tam sakārtojam inversi-leksikogrāfiski.
-
-
-
-**Inversi leksikogrāfiskā kārtība**
-
-.. figure:: figs/inverse-lexicographic-sort.png
-   :width: 1.5in
-
-   Inverse lexicographic order
-
-Pēc sakārtošanas (sākot ar priekšpēdējo burtu, tad priekšpriekšpēdējo, utt.)
-iegūstam matricu, no kuras mums vajag tikai pēdējo kolonnu.
-
-Turklāt vajag zināt, kurā rindiņā ir rakstīta mūsu virkne (šajā piemērā
-sākotnējā virkne :math:`a_1c_1c_2b_1a_2c_3c_4a_3c_5b_2a_4` atrodas piektajā
-inversi sakārtotās tabulas rindiņā.
+  B A N A N A $
+  $ B A N A N A
+  A $ B A N A N 
+  N A $ B A N A 
+  A N A $ B A N 
+  N A N A $ B A 
+  A N A N A $ B
 
 
-**Var kārtot arī parasti leksikogrāfiski**
+
 
 .. figure:: figs/alpha-sort.png
    :width: 2in
 
-   Parasta kārtošana
+   Ciklisko permutāciju kārtošana alfabētiski.
 
-Daudzos avotos (atskaitot G.Blelloch tekstu) 
-Berouza-Vīlera transformāciju apraksta izmantojot 
-parastu leksikogrāfisku kārtošanu.
-Lielas atšķirības teorijā nav (tekstu pirms saspiešanas
-var uzrakstīt no otra gala).
+
+Berouza-Vīlera transformācija ir šajā sakārtojumā 
+iegūtā pēdējā kolonna. 
+
+**Definīcija:** 
+  Par burta "x" *labo kontekstu* sauc tekstu kaut kādā fiksētā garumā "k", 
+  kas tieši seko burtam "x" (ja burts "x" ir tuvu vārda beigām, tad 
+  kontekstu iegūst cikliski pārvietojoties uz teksta sākumu). 
+
+Berouza-Vīlera transformācija sakārto visus labos kontekstus leksikogrāfiski 
+un izraksta teksta burtus secībā, kuru nosaka šie labie konteksti. 
+
+
+.. figure:: figs/burrows-wheeler-fragment.png
+   :width: 5in
+
+
+
+
+.. note:: 
+  Varētu kārtot arī inversi leksikogrāfiski (t.i. alfabētiski, bet skatoties 
+  vārdam no otra gala). Šādā gadījumā pirmā kolonna kļūtu par Berouza-Vīlera 
+  transformāciju. T.i. var izmantot arī sakārtošanu pēc "kreisajiem kontekstiem". 
+  Šādi to apraksta Guy Blelloch *Introduction to Data Compression* grāmatā.
+
+
+
+
 
 
 **Kāpēc var atjaunot sākotnējo?**
+
+No Berouza-Vīlera transformācijas (pēdējās kolonnas) var izsecināt, kāda 
+būs pirmā kolonna (tie paši burti, bet alfabētiskā secībā). 
+Var pamatot, ka vienādo burtu secība Berouza-Vīlera transformācijas rezultātā 
+nemainās. Tāpēc pietiek zināt šīs divas kolonnas un izmantot L2F (Last-to-First)
+kodējuma tabulu.
+
+
+
+Ir arī iespējams atjaunot visu matricu: 
 
 .. figure:: figs/burrows-decode.png
    :width: 7in
@@ -63,23 +112,6 @@ var uzrakstīt no otra gala).
   Sk. 177 lapu <https://www.cs.helsinki.fi/u/tpkarkka/opetus/12s/spa/lecture11.pdf>`_
 
 
-Sašķiroti konteksti ļauj saspiest dabīgās valodas tekstus. 
-Berouza-Vīlera algoritmā tiek atssevišķi saspiesti gari teksta bloki - 
-apmēram 1MiB garumā. 
-
-.. figure:: figs/text-after-th.png
-   :width: 4in
-
-   Izejas teksts
-
-
-
-**Sašķiroti burti pēc TH**
-
-.. figure:: figs/sorted-contexts.png
-   :width: 6in
-
-   Izejas teksts
 
 
 Sufiksu masīvi
@@ -91,8 +123,7 @@ lai tos būtu praktiski apstrādāt un vienlaikus varētu optimāli
 izmantot atrastos kontekstus. Praktisks labums ir arī no īsākiem blokiem - 
 dažu kilobaitu garumā.
 
-Šajā sadaļā aplūkosim veidu, kā praktiski
-veikt Berouza-Vīlera transformāciju šādiem gariem blokiem -- tie ir
+Berouza-Vīlera transformāciju šādiem gariem blokiem var veikt gandrīz lineārā laikā -- tie ir
 *sufiksu masīvi* (*suffix arrays*). 
 Sākotnējā implementācija tiem nebūs sevišķi efektīva (tie paši :math:`O(n^2 \log n)`, 
 ko nodrošina arī naivais algoritms),

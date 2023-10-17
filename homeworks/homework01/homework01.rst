@@ -76,7 +76,7 @@
 **Brīvprātīgi vingrinājumi un skaitļošanas eksperimenti**
 
 Izpildīts vingrinājums (programma, dati, apraksts un ieskaitīšana konsultācijā) 
-var aizstāt semestra vidus eksāmenu -- līdz 30% no atzsīmes.  
+var aizstāt semestra vidus eksāmenu -- līdz 30% no atzīmes.  
 Var piedāvāt arī savu tēmu, saskaņojot ar pasniedzēju.
 Šeit dažas idejas par entropiju un saspiešanu (1.-4. nodarbība). 
 

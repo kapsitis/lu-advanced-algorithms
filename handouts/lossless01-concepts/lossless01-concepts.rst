@@ -1163,6 +1163,11 @@ Kopsavilkums
    informācijas garumu.
 
 
+**Bibliogrāfija:** 
 
+1. `Entropija un temperatūra 
+   <https://ocw.mit.edu/courses/6-050j-information-and-entropy-spring-2008/pages/temperature/>`_. 
+2. `Information theory and coding 
+   <https://youtu.be/UrefKMSEuAI?si=WNG7raJwWR99a1L4>`_. 
 
 

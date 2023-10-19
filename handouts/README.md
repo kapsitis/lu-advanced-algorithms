@@ -1,4 +1,4 @@
-Please convert Reveal.js Markup into ReStructured Text. 
+
 (1) Preserve all inline LaTeX formulas, add `:math:` prefix.
 (2) For display-style math formulas `$$x$$` - drop `$$`, add `.. math::`. 
 (3) Slide titles `# ...` or `## ....` become bold text. 
@@ -8,8 +8,24 @@ Please convert Reveal.js Markup into ReStructured Text.
 (7) Convert `<blue>` or `<emblue>` into italic. 
 (8) HTML-style tables converted into RST tables.
 
+
+## ###########################################################
+Please convert Reveal.js Markup into ReStructured Text. 
+
 Input example: 
 ```md
+<table>
+<tr>
+<th>$aa$</th>
+<th>$cc$</th>
+</tr>
+<tr>
+<td>$bb$</td>
+<td>$dd$</td>
+</tr>
+</table>
+
+
 ## <lo-theory/> Kā pamatot Krafta-Makmilana teorēmu?
 
 **Pierādījums:**  
@@ -27,6 +43,14 @@ $$\sum\limits_{s \in S} 2^{-\ell(s)}$$
 
 converts to 
 ```rst
+.. list-table:: 
+   :header-rows: 1
+
+   * - :math:`aa`
+     - :math:`cc`
+   * - :math:`bb`
+     - :math:`dd`
+
 **Kā pamatot Krafta-Makmilana teorēmu?**
 
 **Pierādījums:**  
@@ -46,7 +70,6 @@ converts to
 
    Prefiksu koks
 ```
-
 
 Here is the text to convert: 
 

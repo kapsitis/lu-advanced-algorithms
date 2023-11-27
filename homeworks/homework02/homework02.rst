@@ -40,13 +40,17 @@
   Dots kamenes attēls `bumblebee.png` (tas pats, kas iepriekšējā uzdevumā). 
 
   **(A)** 
-    Izvadīt DCT rezultātu kamenes attēla kreisajā augšējā stūrī esošajam 8x8 blokam (aplūkojot 
-    tikai melnbalto Y koordināti). Izdrukāt to kā 8x8 matricu ar reāliem skaitļiem (ar precizitāti 0.0001). 
+    Izvadīt DCT rezultātu kamenes attēla kreisajā augšējā stūrī esošajam :math:`8 \times 8` blokam (aplūkojot 
+    tikai melnbalto Y krāsas komponenti). Izdrukāt to kā :math:`8 \times 8` matricu ar reāliem skaitļiem (ar precizitāti 0.0001). 
 
   **(B)**
-    Visiem kamenes attēla blokiem veikt DCT; tos DCT koeficientus, kas  mazāki par :math:`X`, noapaļot uz 0. 
+    Visiem kamenes attēla blokiem veikt DCT; pēc tam noapaļot uz :math:`0` tos DCT koeficientus, 
+    kas  mazāki par :math:`65`, tos aplūkojot intervālā :math:`[0;255]` (vai arī DCT koeficientus, kas 
+    :math:`{\displaystyle \leq \frac{1}{4}}`, tos aplūkojot intervālā
+    :math:`[0;1]`). 
     Veikt inverso DCT pārveidojumu no frekvenču pasaules atpakaļ uz 2D pasauli. 
     Izvadīt iegūto "noapaļoto" attēlu -- tā arī būs melnbalta PNG bilde. 
+    (To var ielīmēt mājasdarba PDF tekstā.)
 
 
 **3. uzdevums:** 
@@ -77,7 +81,7 @@
      
     .. math:: 
       
-      2,\;\; \ast,\;\; (a + b) \operatorname{mod} 11,\;\; (3b + 2) \operatorname{mod} 11
+      2,\;\; \ast,\;\; (a + b) \operatorname{mod} 11,\;\; (3b + 2) \operatorname{mod} 11,\;\; \ast
      
     kur saņemtās vērtības visas ir pareizas, bet ar :math:`\ast` apzīmētās vērtības ir pazaudētas.
 

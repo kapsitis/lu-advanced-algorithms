@@ -1,4 +1,3 @@
-
 (1) Preserve all inline LaTeX formulas, add `:math:` prefix.
 (2) For display-style math formulas `$$x$$` - drop `$$`, add `.. math::`. 
 (3) Slide titles `# ...` or `## ....` become bold text. 
@@ -13,6 +12,7 @@
 Please convert Reveal.js Markup into ReStructured Text. 
 
 Input example: 
+
 ```md
 <table>
 <tr>
@@ -72,6 +72,19 @@ converts to
 ```
 
 Here is the text to convert: 
+
+
+
+
+
+Lūdzu iztulkot šo ReStructured Text fragmentu latviski. 
+Tulkojumā ir svarīgi saglabāt esošo marķējumu - atkāpes un speciālos simbolus. 
+Failu nosaukumi, matemātikas formulas un URL adreses NAV jātulko. 
+
+
+
+
+
 
 
 

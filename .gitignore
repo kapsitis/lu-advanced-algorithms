@@ -55,3 +55,4 @@ _templates
 !exams/*/*.pdf
 !worksheets/*/*.pdf
 crypto/rsa/
+homeworks/to-be-graded

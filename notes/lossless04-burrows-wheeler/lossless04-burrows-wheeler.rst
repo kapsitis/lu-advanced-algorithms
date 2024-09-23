@@ -1,73 +1,156 @@
-4. Bezzudumu saspiešana: BWT transformācija
+4. Berouza-Vīlera transformācija
 =======================================================
+
+Berouza-Vīlera transformācijas (BWT) ideja: Ievades tekstā samaina burtu secību tā, 
+ka tie burti, kuri atrodas tūlīt aiz (vai arī - tieši pirms) 
+līdzīgiem kontekstiem, nonāk blakus.
+
+Citiem vārdiem - teksta burtus ar īpašu pārveidojumu pārkārto tā, 
+ka pārkārtojumā atspoguļojas teksta "iekšējās simetrijas"; nereti 
+blakus nonāk atkārtoti burti.  
+
+
+Kodēšana ar pārvietošanu uz priekšu
+--------------------------------------
+
+Pirms BWT aplūkojam citu kodējumu, ko sauc par *Move-to-front*. 
+To bieži lieto tūlīt pēc Berouza-Vīlera transformācijas, 
+bet to var izmantot arī neatkarīgi -- 
+jebkuras ziņojumu virknes iekodēšanai.  
+
+Ja ievadē ir teksts, kurā mēdz bieži nonākt blakus vienādi burti
+(vai arī burti no nelielas kopas, kas mazāka par pilno alfabētu). 
+to var efektīvi saspiest, ar *Move-to-front* kodējumu:
+
+1. Alfabēta burtus sakārto sarakstā, kura pozīcijas numurē, sākot ar :math:`0`.
+2. Katru burtu kodē ar tā pozīciju šajā sarakstā, tad pārvieto šo 
+   burtu uz saraksta pašu sākumu. 
+
+Vajadzīga datu struktūra -- saraksts :math:`L`, kas ļauj atrast burta kārtas 
+numuru sarakstā :math:`L.\text{\sc index}(c)`, ļauj izmest 
+elementu dotajā pozīcijā :math:`L.\text{\sc delete}(\text{\it pos})`
+un ļauj iespraust izmesto elementu saraksta sākumā 
+:math:`L.\text{\sc insert}(\text{\it pos},c)`. 
+Biežāk lietotie burti atradīsies saraksta priekšā, 
+izejā būs galvenokārt mazi skaitļi. 
+(Ja ievadē biežāk lietotie burti lēnām mainās, attiecīgi adaptējas arī 
+saraksts.)
+
+
+**Piemērs:** 
+  Ar :math:`\text{\sc MoveToFrontEncode()}` iekodēt šādu virkni: 
+  :math:`\mathtt{abaccab}` alfabētā :math:`S=\{ \mathtt{a}, \mathtt{b}, \mathtt{c} \}`. 
+
+  Tabulā attēlojam katra ievades burta apstrādi - katra soļa beigās 
+  izvadei pievieno jaunu skaitli. Alfabēta permutācija parādīta
+  *pirms* attiecīgā ievades burta apstrādes. Pēc kārtējā burta 
+  apstrādes alfabētu pārkārto, pārvietojot iekodēto burtu uz pašu sākumu.
+
+  =======================  ====================  ====================  
+  Ievade                   Izvade                Alfabēts pirms soļa
+  =======================  ====================  ====================
+  **a**,b,a,c,c,a,b        0                     ``[a,b,c]``
+  a,**b**,a,c,c,a,b        0,1                   ``[a,b,c]``
+  a,b,**a**,c,c,a,b        0,1,1                 ``[b,a,c]``
+  a,b,a,**c**,c,a,b        0,1,1,2               ``[a,b,c]``
+  a,b,a,c,**c**,a,b        0,1,1,2,0             ``[c,a,b]``
+  a,b,a,c,c,**a**,b        0,1,1,2,0,1           ``[c,a,b]``
+  a,b,a,c,c,a,**b**        0,1,1,2,0,1,2         ``[a,c,b]``
+                                                 ``[b,a,c]``
+  =======================  ====================  ====================
+
+**Piemērs:** 
+  Ar :math:`\text{\sc MoveToFrontEncode()}` iekodēt šādu virkni: 
+  :math:`\mathtt{abababca}` alfabētā :math:`S=\{ \mathtt{a}, \mathtt{b}, \mathtt{c} \}`. 
+
+  ============================  ====================  ====================  
+  Ievade                        Izvade                Alfabēts pirms soļa
+  ============================  ====================  ====================
+  **a**, b, a, b, a, b, c, a    0                     ``[a,b,c]``
+  a, **b**, a, b, a, b, c, a    0,1                   ``[a,b,c]``
+  a, b, **a**, b, a, b, c, a    0,1,1                 ``[b,a,c]``
+  a, b, a, **b**, a, b, c, a    0,1,1,1               ``[a,b,c]``
+  a, b, a, b, **a** ,b, c, a    0,1,1,1,1             ``[b,a,c]``
+  a, b, a, b, a, **b**, c, a    0,1,1,1,1,1           ``[a,b,c]``
+  a, b, a, b, a, b, **c**, a    0,1,1,1,1,1,2         ``[b,a,c]``
+  a, b, a, b, a, b, c, **a**    0,1,1,1,1,1,2,2       ``[c,b,a]``
+  &nbsp;                        &nbsp;                ``[a,c,b]``
+  ============================  ====================  ====================
+
+
+**Piemērs:**
+  Atkodēt :math:`\mathtt{010010}` alfabētā :math:`S=\{ \mathtt{a}, \mathtt{b} \}`
+
+  =======================  ====================  ====================  
+  Ievade                   Izvade                Alfabēts pirms soļa
+  =======================  ====================  ====================
+  **0**,1,0,0,1,0          a                     ``[a,b]``
+  0,**1**,0,0,1,0          a,b                   ``[a,b]``
+  0,1,**0**,0,1,0          a,b,b                 ``[b,a]``
+  0,1,0,**0**,1,0          a,b,b,b               ``[b,a]``
+  0,1,0,0,**1**,0          0,b,b,b,a             ``[b,a]``
+  0,1,0,0,1,**0**          a,b,b,b,a,a           ``[a,b]``
+                                                 ``[a,b]``
+  =======================  ====================  ====================
+
+
+
+
+Berouza-Vīlera transformācija
+-------------------------------
 
 **Definīcija:** 
   Par :math:`n` elementu saraksta *permutāciju* (*permutation*) sauc jebkuru
-  citu sarakstu, kurā izmainīta šo elementu secība. Šādu permutāciju ir :math:`n!`. 
+  citu sarakstu, kurā izmainīta šo elementu secība.
   Par *ciklisku permutāciju* sauc tādu permutāciju, kurā elementiem saglabājas 
   abi kaimiņi -- t.i. vienu vai vairākus 
-  elementus no saraksta beigām var pārlikt uz saraksta sākumu. 
+  elementus no saraksta beigām pārliek uz saraksta sākumu, nemainot 
+  pārvietoto elementu savstarpējo secību.
 
-(Ja permutācijas notiek tekstā ar burtiem, kuri atkārtojas, tad variantu skaitu 
-nosaka citādi.)
+Ja visi burti ir atšķirami, tad :math:`n` elementu sarakstam 
+ir ir :math:`n!` permutāciju (bet tikai :math:`n` cikliskas permutācijas). 
 
 **Piemērs:** 
-  Izrakstīt visas cikliskās permutācijas vārdam :math:`\mathtt{BONBON}`. 
+  Izrakstīt visas cikliskās permutācijas vārdiem :math:`\mathtt{BONBON\$}`, 
+  un :math:`\mathtt{BANANA\$}`, tad sakārtot tās alfabētiski.
+
+  .. code-block:: text
+
+    B O N B O N $              $ B O N B O N
+    $ B O N B O N              B O N $ B O N
+    N $ B O N B O              B O N B O N $
+    O N $ B O N B     --->     N $ B O N B O  
+    B O N $ B O N              N B O N $ B O
+    N B O N $ B O              O N $ B O N B 
+    O N B O N $ B              O N B O N $ B 
 
 
+  .. code-block:: 
 
-**Cikliskās permutācijas tekstā**
+    B A N A N A $              $ B A N A N A
+    $ B A N A N A              A $ B A N A N
+    A $ B A N A N              A N A $ B A N
+    N A $ B A N A     --->     A N A N A $ B
+    A N A $ B A N              B A N A N A $
+    N A N A $ B A              N A $ B A N A
+    A N A N A $ B              N A N A $ B A
 
-  .. figure:: figs/cyclic-permuations.png
-     :width: 2in
-
-     Cikliskas permutācijas
-
-  * Ja dotajā tekstā ar garumu "n" visu laiku rotē burtus (pārliek pēdējo burtu uz sākumu utt.), 
-    tad pēc "n" soļiem teksts atgriežas sākumstāvoklī. 
-  * Ja visas cikliskās permutācijas izraksta vienu zem otras, katrā kolonnā nonāks visi burti, 
-    kas ir tekstā. 
-
-
-
-
-**Berouza-Vīlera transformācija**
-
-.. code-block:: 
-
-  B A N A N A $
-  $ B A N A N A
-  A $ B A N A N 
-  N A $ B A N A 
-  A N A $ B A N 
-  N A N A $ B A 
-  A N A N A $ B
-
-
-
-
-.. figure:: figs/alpha-sort.png
-   :width: 2in
-
-   Ciklisko permutāciju kārtošana alfabētiski.
-
-
-Berouza-Vīlera transformācija ir šajā sakārtojumā 
-iegūtā pēdējā kolonna. 
+  Berouza-Vīlera transformācija ir šajā sakārtojumā iegūtā pēdējā kolonna -- 
+  :math:`BWT(\mathtt{BONBON\$}) = \mathtt{NN\$OOBB}` un 
+  :math:`BWT(\mathtt{BANANA\$}) = \mathtt{ANNB\$AA}`. 
+  
 
 **Definīcija:** 
-  Par burta "x" *labo kontekstu* sauc tekstu kaut kādā fiksētā garumā "k", 
-  kas tieši seko burtam "x" (ja burts "x" ir tuvu vārda beigām, tad 
+  Par alfabēta burta :math:`x \in S` *labo kontekstu* 
+  dotajā tekstā :math:`T` sauc jebkuru stringu fiksētā garumā :math:`k`, 
+  kas tieši seko aiz šī burta :math:`x` (ja burts :math:`x` ir tuvu vārda beigām, tad 
   kontekstu iegūst cikliski pārvietojoties uz teksta sākumu). 
 
 Berouza-Vīlera transformācija sakārto visus labos kontekstus leksikogrāfiski 
 un izraksta teksta burtus secībā, kuru nosaka šie labie konteksti. 
 
-
 .. figure:: figs/burrows-wheeler-fragment.png
    :width: 5in
-
-
 
 
 .. note:: 
@@ -79,9 +162,8 @@ un izraksta teksta burtus secībā, kuru nosaka šie labie konteksti.
 
 
 
-
-
-**Kāpēc var atjaunot sākotnējo?**
+Apgrieztā Berouza-Vīlera transformācija
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 No Berouza-Vīlera transformācijas (pēdējās kolonnas) var izsecināt, kāda 
 būs pirmā kolonna (tie paši burti, bet alfabētiskā secībā). 
@@ -109,25 +191,30 @@ Ir arī iespējams atjaunot visu matricu:
    rindiņu matricā.
 
 .. note::
-  Sk. 177 lapu <https://www.cs.helsinki.fi/u/tpkarkka/opetus/12s/spa/lecture11.pdf>`_
+  Sk. 177 lapu no `<https://www.cs.helsinki.fi/u/tpkarkka/opetus/12s/spa/lecture11.pdf>`_
 
 
 
 
-Sufiksu masīvi
--------------------------
+Efektīva BWT ar sufiksu kokiem 
+-------------------------------
+
+**Apgalvojums:** 
+  BWT naivā implementācija prasa laiku :math:`O(n^2 \log n)`. 
+
+**Pierādījums:** 
+  Ciklisko permutāciju izrakstīšana prasa aizpildīt :math:`n \times n`
+  matricu ar burtiem; tas prasa :math:`n^2` laiku. 
 
 Praksē garus tekstus saspiež veicot Berouza-Vīlera transformāciju 
-atsevišķiem blokiem. Tipisks bloku garums ir apmēram viens megabaits, 
-lai tos būtu praktiski apstrādāt un vienlaikus varētu optimāli 
-izmantot atrastos kontekstus. Praktisks labums ir arī no īsākiem blokiem - 
-dažu kilobaitu garumā.
+atsevišķiem blokiem. Tipisks bloku garums ir daži simti kilobaitu. 
+Blokiem nav labi būt pārāk gariem, lai tos būtu praktiski apstrādāt.  
+Tiem nevajadzētu arī būt pārāk īsiem, lai atrastu un optimāli 
+izmantotu atkārtotos kontekstus.
 
-Berouza-Vīlera transformāciju šādiem gariem blokiem var veikt gandrīz lineārā laikā -- tie ir
-*sufiksu masīvi* (*suffix arrays*). 
-Sākotnējā implementācija tiem nebūs sevišķi efektīva (tie paši :math:`O(n^2 \log n)`, 
-ko nodrošina arī naivais algoritms),
-bet sufiksu masīvus var optimizēt - lai izveidotu tos jau :math:`O(n \log n)` laikā. 
+Berouza-Vīlera transformāciju var veikt lineārā laikā no vārda garuma
+:math:`O(n)`, izmantojot  
+*sufiksu masīvus* (*suffix arrays*). 
 
 
 
@@ -204,15 +291,9 @@ Uzdevumi
   :math:`\square`
 
 
-**Kopsavilkums:** 
+Izmantotā literatūra 
+-----------------------
 
-1. Berouza-Vīlera transformācija un tās tālāka saspiešana
-2. Bijektīvā Berouza-Vīlera transformācija. 
-3. Sufiksu masīvi. 
-
-
-**Bibliogrāfija:**
-  
 * `https://www.cs.helsinki.fi/u/tpkarkka/opetus/12s/spa/lecture11.pdf <https://www.cs.helsinki.fi/u/tpkarkka/opetus/12s/spa/lecture11.pdf>`_
 * `https://docs.python.org/3/library/bz2.html <https://docs.python.org/3/library/bz2.html>`_
 * `https://serverfault.com/questions/2600/how-do-you-set-bzip2-block-size-when-using-tar <https://serverfault.com/questions/2600/how-do-you-set-bzip2-block-size-when-using-tar>`_

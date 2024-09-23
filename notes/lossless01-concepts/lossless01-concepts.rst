@@ -1,60 +1,87 @@
 1. Bezzudumu saspiešana: Hafmana kods
 ========================================
 
+
 Kursa tvērums un metodes
 ------------------------------
 
-Kursā aplūkotas šādas tēmas (parasti saistītas ar sakaru tehnoloģijām): 
-(1) Bezzudumu saspiešana (*lossless compression*),
-(2) Zudumradošā saspiešana (*lossy compression*); attēlu un video saspiešana,
-(3) Kļūdu labošanas kodi (*error correction codes*), 
-(4) Lineārā programmēšana (*linear programming*); 
-optimizācija ar lineāriem ierobežojumiem; 
+Kursā aplūkotas vairākas algoritmu tēmas, kas noderīgas sakaru tehnoloģijās un citur: 
+(1) Bezzudumu saspiešana (*lossless compression*), (2) Zudumradošā saspiešana 
+(*lossy compression*); attēlu un video saspiešana,
+(3) Kļūdu labošanas kodi (*error correction codes*), (4) Lineārā programmēšana
+(*linear programming*); optimizācija ar lineāriem ierobežojumiem; 
 (5) Stringu meklēšanas algoritmi. 
 
-Netiek aplūkoti paralēli, varbūtiski, nedeterministiski, kvantu algoritmi, 
-NP-pilnu algoritmu tuvināšana, kriptogrāfija. Par katru tēmu cenšamies 
-aplūkot šādas 4 lietas:
+**Teorija:**
+  Katrai algoritmu tēmai apskatām matemātikas pamatus. Piemēram, informācijas 
+  entropiju, nepārtraukta signāla paraugu biežumu, galīgus laukus, 
+  ekstrapolāciju ar polinomiem, lineārās optimizācijas uzdevumus un to dualitāti, 
+  hešfunkciju un sufiksu koku izmantošanu stringu meklēšanā.
 
-**(1) Teorija:** 
-  Katrā nozarē apskatām matemātikas pamatus. Piemēram, 
-  entropija, Naikvista-Šenona teorēma par paraugu biežumu, galīgie lauki,
-  ekstrapolācija ar polinomiem, lineāru uzdevumu dualitāte, sufiksu koki.
+**Uz papīra pildāmi algoritmi:** 
+  Algoritmiem pieejams pseidokods un paraugi, lai pašus algoritmus un izmantotās 
+  datu struktūras varētu zīmēt uz papīra, analizēt un mainīt.
 
-**(2) Uz papīra pildāmi algoritmi:** 
-  Algoritmu pseidokods un datu struktūras, ko apspriest uz tāfeles/papīra.
+**Standarti un rīki:** 
+  Aplūkojam kursa algoritmu klātbūtni populāros rīkos, standartos un bibliotēkās.
 
-**(3) Standarti un rīki:** 
-  Algoritmu lietojums populāros rīkos vai standartos.
-
-**(4) Eksperimenti:** 
-  Var vizualizēt vai pamainīt algoritmus interaktīvās vidēs uz lielākām datu kopām.
+**Eksperimenti:** 
+  Algoritmus vizualizējam un darbinām interaktīvās vidēs, arī uz 
+  lielākām datu kopām, nekā būtu iespējams uzzīmēt uz papīra.
 
 
-**Reizēm klasificējam pēc paradigmas:**
-  Anany Levitin *Introduction to The Design and Analysis of Algorithms* 
-  apraksta vairākas algoritmu *izstrādes paradigmas* (*design techniques*):  
+Kā analizēt algoritmus
+~~~~~~~~~~~~~~~~~~~~~~~
+
+**Iedalījums pēc paradigmas:**
   Pārlases, rupjā spēka tehnika (*exhaustive search*, *brute force*),
   Pakāpeniska vienkāršošana (*decrease-and-conquer*),
   Skaldi-valdi (*divide-and-conquer*),
   Ievades datu pārveidojumi (*transform-and-conquer*),
   Dinamiskā programmēšana (*dynamic programming*),
   Rijīgā tehnika (*greedy technique*),
-  Iteratīvā uzlabošana (*iterative improvement*). 
+  Iteratīvā uzlabošana (*iterative improvement*).
+  Algoritmu *izstrādes paradigmas* (*design techniques*) sk. 
+  :ref:`[Lev12] <Lev12>`.
+
+**Iedalījums pēc skaitļošanas modeļa:**
+  Deterministiski, nedeterministiski, varbūtiski algoritmi. 
+  Klasiski un kvantu algoritmi. 
 
 
-**Reizēm klasificējam pēc sarežģītības un skaitļošanas modeļa:** 
+**Iedalījums pēc sarežģītības:**
   Sliktākā gadījuma sarežģītība :math:`O(f(n))`, caurmēra sarežģītība
-  (varbūtiski izvēlētai ievadei), vidējā sagaidāmā sarežģītība 
-  (atkārtoti darbinot varbūtisku algoritmu). 
+  (varbūtiski izvēlētai ievadei), vidējā sagaidāmā sarežģītība (varbūtiskam algoritmam). 
 
-**Kursa prasības** 
+Kurss ilustrē dažādas algoritmu izstrādes paradigmas. Skaitļošanas modelis parasti ir 
+deterministisks un klasisks (ne-kvantu). 
+Atsevišķi pieminēti arī daži varbūtiski algoritmi. 
+
+
+
+Kursa prasības
+~~~~~~~~~~~~~~~
+
+.. list-table:: 
+    :header-rows: 1 
+
+    * - :math:`a \in S`
+      - :math:`w(a)`
+      - :math:`\ell_a`
+      - :math:`p(a)`
+    * - I 
+      - 0
+      - 1
+      - :math:`4/11`
+
+
+
 
 1. 4 mājasdarbi (kopā :math:`40\%`) - teorijas jautājumi un algoritmu 
    pildīšana vienkāršiem datiem uz papīra. 
 2. 10 minūšu uzstāšanās par sagatavotu tēmu (:math:`10\%`);
    eksperimentēšana ar kursa tēmām radniecīgu algoritmu (:math:`20\%`). 
-3. Gala eksāmens (:math:`30\%`)
+3. Gala eksāmens (:math:`30\%`). 
 
 
 
@@ -82,7 +109,7 @@ Bezzudumu saspiešana: Ievads
   ir varbūtība :math:`p(x_i)`, ar kuru tas parādās ievadē. 
 
   *  Latīņu/angļu alfabēts: 26 simboli; latviešu alfabēts: 33 simboli; 
-  * `ASCII alfabēts <http://www.asciitable.com/>`: :math:`128` simboli; 
+  * `ASCII alfabēts <http://www.asciitable.com/>`_: :math:`128` simboli; 
   * Unikoda alfabēts (UCS-2, *Basic Multilingual Plane*): 65536 simboli. 
   * Visu ar AES-128 vai AES-256 iekodējamo bloku alfabēts: 
     (viens bloks ir :math:`16` baiti jeb alfabēta izmērs ir :math:`2^{128}`).
@@ -211,15 +238,11 @@ Bet "informācijas daudzums" (intuitīvi - kodējuma garums) saskaitās.
 
   *Piezīme:* Informācijas saturs izrādīsies vienāds ar bitu skaitu, kas
   izmantojami, lai pārraidītu ziņojumu :math:`x_i` kaut kādā optimālā kodējumā.)
-  Šo ieviesa *Klods Šenons* (*Claude Shannon (1916-2001)*) 
 
+Šo ieviesa *Klods Šenons* (*Claude Shannon*). Pastāv sakarība starp 
+informācijas teorijas entropiju un termodinamikas entropiju, bet tā nav vienkārša.  
+Par to ir MIT studiju kurss :ref:`[Mil11] <Mil11>`.  
 
-Informācijas saturs ļoti retiem ziņojumiem (:math:`p(x_i) \rightarrow 0`):
-
-.. math:: 
-
-  \lim\limits_{p(x_i) \rightarrow 0} (-\log_2\,p(x_i)) = \infty\;\;\text{bet}\;\;  
-  \lim\limits_{p(x_i) \rightarrow 0} (-\log_2\,p(x_i)) \cdot p(x_i) = 0.
 
 
 **Piemēri:** 
@@ -276,29 +299,35 @@ Tad varbūtība saņemt tos vienu aiz otra ir
 
 
 **Piemērs (Entropija negodīgai monētai):**
-  Ja varbūtības diviem monētas mešanas iznākumiem ir 
-  attiecīgi :math:`0.9` un :math:`0.1`, tad pirmajam iznākumam informācijas
-  saturs ir :math:`0.152`, bet otrajam :math:`3.32`. 
+  Ja, metot monētu, cipars (:math:`\mathtt{heads}`) uzkrīt ar varbūtību 
+  :math:`0.9`, bet ģerbonis (:math:`\mathtt{tails}`) -- ar varbūtību :math:`0.1`, tad 
+  ciparam informācijas saturs ir :math:`h(\mathtt{heads}) = -\log_2 0.9 \approx 0.152`, 
+  bet ģerbonim informācijas saturs ir :math:`h(\mathtt{tails}) = -\log_2 0.1 \approx 3.32`. 
+  Savukārt entropija pašam monētas mešanas procesam ir abu šo lielumu *svērts vidējais* 
+  :math:`H(\{\mathtt{heads}, \mathtt{tails} \}) = -0.9 \log_2 0.9 - 0.1 \log_2 0.1 \approx 0.469`. 
   
   *Piezīme:* Informācijas saturu un entropiju
   mēra "bitos". Datoru arhitektūrā ir reāli biti, 
-  bet entropijā tie ir "perfekti saspiestas" informācijas biti, kas var būt 
+  bet entropijā ir informācijas daudzuma biti - var būt 
   arī daļskaitļi.
 
-
-    .. figure:: figs/info-content.png
-       :width: 3in
-
-
-    .. figure:: figs/entropy-graph.png
-       :width: 3in
+  
+  .. plot:: figs/entropy.py
+       :include-source: false
+       :width: 5.5in
    
-    Informācijas saturs un entropija. 
+       Informācijas saturs un entropija divu ziņojumu alfabētam :math:`S = \{\mathtt{heads}, \mathtt{tails} \}`.
 
-Vislielākā entropija jeb nenoteiktība ir tad, ja 
-2 iznākumu gadījumlielums ir ar divām vienādām varbūtībām. 
-Ja veic Bernulli eksperimentu - met godīgu monētu :math:`n` reizes, 
-tad pēc katra monētas metiena entropijai pievienojas tieši :math:`1` bits.
+  Vislielākā entropija divu ziņojumu gadījumlielumam ir tad, ja 
+  abi ziņojumi rodas ar vienādām varbūtībām. Tad :math:`H(S) = 1`. 
+  Visos citos gadījumos :math:`H(S) < 1`. 
+
+  Ievērojam, ka entropija ir definēta arī tad, ja 
+  kāda no varbūtībām ir :math:`0` (abi atzīmētie punkti entropijas grafikā pa labi). 
+  Ziņojumam ar nulles varbūtību 
+  ir "bezgalīgs" logaritms un tātad arī informācijas saturs, bet, pareizinot ar svaru :math:`0`, 
+  šāda ziņojuma ieguldījums kopējā entropijā ir :math:`0`, jo 
+  :math:`{\displaystyle \lim\limits_{p \rightarrow 0} - p \cdot \log_2 p = 0}`. 
 
 
 
@@ -405,9 +434,9 @@ varbūtība :math:`p(x_i)` un :math:`p(x_1)+\ldots+p(x_n)=1`.
 
     
 **Teorēma (Krafta-Makmilana nevienādība):** 
-  (*Kraft-McMillan Inequality*) 
-  Ja ir *viennozīmīgi atkodējams kods* 
-  (*Uniquely decodable code*) :math:`C = \{ (x_1,w_1),\ldots,(x_n,w_n)\}`, tad
+  (:ref:`[Ble13, Lemma 3.1.1] <Ble13>`) 
+  Ja :math:`C` ir *viennozīmīgi atkodējams kods* 
+  (*uniquely decodable code*) :math:`C = \{ (x_1,w_1),\ldots,(x_n,w_n)\}`, tad
 
   .. math::
 
@@ -420,7 +449,7 @@ varbūtība :math:`p(x_i)` un :math:`p(x_1)+\ldots+p(x_n)=1`.
 
 
 **Pierādījums:** 
-  Vispārīgiem "uniquely decodable codes" pierādīt piņķerīgi.
+  Vispārīgiem viennozīmīgi atkodējamiem kodiem to pierādīt ir piņķerīgi.
 
   *Prefiksu kodiem* (*prefix-free codes*) ievērojam, ka ikviens
   :math:`k_i`-bitu kods aizpilda prefiksu kokā (sauktā arī par "kodu telpu") 
@@ -581,28 +610,30 @@ paradigmai - "lokāla" optimizēšana šoreiz noved pie globāli optimāla
 risinājuma.
 
 
-**Hafmana pseidokods**
+**Hafmana algoritma pseidokods:**
+  *Ievade:* Ziņojumu alfabēts :math:`S` ar varbūtību :math:`x.\mathit{freq}` 
+  katram ziņojumam :math:`x \in S`.  
+  *Izvade:* Prefiksu koks, kas katram ziņojumam piekārto kodējumu. 
 
-| :math:`\text{\sc Huffman}(S)`
-| 1. :math:`n = |S|` :math:`\;\;\;\;\;` *// elementu skaits*
-| 2. :math:`Q = \text{\sc MinimumPriorityQueue}(S)`
-| 3. **for** :math:`i = 1` **to** :math:`n-1`: 
-| 4. :math:`\;\;\;\;\;` :math:`\text{\sc CreateNode}(z)`
-| 5. :math:`\;\;\;\;\;` :math:`z.\mathit{left} = x = Q.\text{\sc ExtractMin}()`
-| 6. :math:`\;\;\;\;\;` :math:`z.\mathit{right} = Y = Q.\text{\sc ExtractMin}()`
-| 7. :math:`\;\;\;\;\;` :math:`z.\mathit{freq} = x.\mathit{freq} + y.\mathit{freq}`
-| 8. :math:`\;\;\;\;\;` :math:`Q.\text{\sc insert}(z)`
-| 9. **return** :math:`Q.\text{\sc ExtractMin}()`
+  | :math:`\text{\sc Huffman}(S)`
+  | 1. :math:`\quad` :math:`n = |S|` :math:`\quad` *// elementu skaits*
+  | 2. :math:`\quad` :math:`Q = \text{\sc MinimumPriorityQueue}(S)`
+  | 3. :math:`\quad` **for** :math:`i = 1` **to** :math:`n-1`: 
+  | 4. :math:`\quad\quad` :math:`\text{\sc CreateNode}(z)`
+  | 5. :math:`\quad\quad` :math:`z.\mathit{left} = x = Q.\text{\sc ExtractMin}()`
+  | 6. :math:`\quad\quad` :math:`z.\mathit{right} = Y = Q.\text{\sc ExtractMin}()`
+  | 7. :math:`\quad\quad` :math:`z.\mathit{freq} = x.\mathit{freq} + y.\mathit{freq}`
+  | 8. :math:`\quad\quad` :math:`Q.\text{\sc insert}(z)`
+  | 9. :math:`\quad` **return** :math:`Q.\text{\sc ExtractMin}()`
 
-*Piezīme:* Pseidokodu sk. (Cormen2009, p.431)
+  Pseidokods aizgūts no :ref:`[CLR22, p.431] <CLR22>`.
 
+**Hafmana algoritma laika sarežģītība:**  
+  Laika sarežģītība gadījumā, ja prioritāšu rindu implementē kā kaudzi (*heap*): 
 
-
-**Algoritma sarežģītība**
-
-* ExtractMin(Q) minimuma prioritāšu kaudzē vajag :math:`O(\log n)`.
-* Insert(Q,z) laiks arī ir :math:`O(\log n)`.
-* Huffman(S) laiks ir :math:`O(n \log n)`.
+  * :math:`\text{\sc ExtractMin}(Q)` (minimuma atrašanai) prioritāšu rindā vajag :math:`O(\log n)` laiku.
+  * :math:`\text{\sc Insert}(Q,z)` arī vajag :math:`O(\log n)` laiku.
+  * Pilns laiks :math:`\text{\sc Huffman}(S)` izsaukumam ir :math:`O(n \log n)`, kur :math:`n = |S|`. 
 
 
 
@@ -742,7 +773,7 @@ kopā ar iekodētajiem datiem.
 
 Lielā alfabētā kodējuma tabula var aizņemt ievērojamu vietu, tāpēc 
 ir īpaši taupīgs Hafmana koka nosūtīšanas veids: 
-`Kanoniskais Hafmana kods <https://en.wikipedia.org/wiki/Canonical_Huffman_code>`_
+`Kanoniskais Hafmana kods <https://en.wikipedia.org/wiki/Canonical_Huffman_code>`_. 
 
 
 **Kā efektīvi iekodēt pašu Hafmana koku:**
@@ -897,7 +928,7 @@ Uzdevumi
   **Atbilde:** 
 
     .. figure:: figs/mississippi.png  
-       :width: 3in
+       :width: 2in
 
        Prefiksu koks
 
@@ -986,7 +1017,7 @@ Uzdevumi
   Ja pēc :math:`11` šādiem gājieniem ir izrakstīti burti "MISSISSIPPI" tieši 
   šādā secībā, tad spēlētājs saņem lielu naudas prēmiju. 
   Apzīmēsim prēmijas saņemšanas varbūtību ar :math:`P`. 
-  Izteikt :math:`\log_2 (P)` ar :math:`H(X)` -- ar viena klucīša 
+  Izteikt :math:`\log_2(P)` ar :math:`H(X)` -- ar viena klucīša 
   izvilkšanas gadījumlieluma entropiju. 
 
 
@@ -994,7 +1025,7 @@ Uzdevumi
   Dotas :math:`12` monētas, no kurām visām ir vienādas masas, 
   izņemot vienu, kura ir vai nu vieglāka, vai nu smagāka nekā citas.   
   Ar kādu mazāko svēršanu skaitu var noskaidrot, vai tā ir vieglāka
-  vai smagāka kā arī atrast šo smonētu?
+  vai smagāka kā arī atrast šo monētu?
 
 
 
@@ -1078,7 +1109,7 @@ Uzdevumi
   Vārda :math:`\mathtt{"PARIS_"}` kodējums ir 
   :math:`\mathtt{10111011101000101110001011101000101000101010000000}`
   Sk. `Morse structure and timing 
-  <http://www.nu-ware.com/NuCode%20Help/index.html?morse_code_structure_and_timing_.htm>`_
+  <http://www.nu-ware.com/NuCode%20Help/index.html?morse_code_structure_and_timing_.htm>`_.
 
   .. figure:: figs/morse-decoder-chart.png
      :width: 4in
@@ -1094,15 +1125,44 @@ Uzdevumi
 
 
 
-**Bibliogrāfija:** 
+Izmantotā literatūra
+---------------------
 
-**(MIT:6-050j)** 
-  `Entropija un temperatūra <https://ocw.mit.edu/courses/6-050j-information-and-entropy-spring-2008/pages/temperature/>`_. 
+.. _Ble13:
 
-**(YouTube:mathematicalmonk)**
- `Information theory and coding <https://youtu.be/UrefKMSEuAI?si=WNG7raJwWR99a1L4>`_. 
+**[Ble13]**
+  G. Blelloch, *Introduction to Data Compression*, 
+  Computer Science Department, Carnegie Mellon University, 2013. 
+  Available at `<https://bit.ly/3Bp1mj2>`_, 
+  `Archived <https://web.archive.org/web/20191115000000*/https://www.cs.cmu.edu/~guyb/realworld/compression.pdf>`__.
 
-**(Cormen2009)**
-  `Cormen, Leiserson, Rivest, Stein. Introduction to Algorithms <https://dl.ebooksworld.ir/books/Introduction.to.Algorithms.4th.Leiserson.Stein.Rivest.Cormen.MIT.Press.9780262046305.EBooksWorld.ir.pdf>`_.
+.. _CLR22:
+
+**[CLRS22]**
+  T. Cormen, C. Leiserson, R. Rivest, and C. Stein, *Introduction to Algorithms*, 
+  4th ed., The MIT Press, Cambridge, MA, 2022.
+  Available at `<https://bit.ly/3XwfYVr>`_. 
+
+.. _Lev12:
+
+**[Lev12]**
+  A. Levitin, *Introduction to The Design and Analysis of Algorithms*, 3rd ed.,
+  Addison-Wesley, 2012. 
+
+.. _Mil11:
+
+**[Mil11]** 
+  Jeffrey W. Miller, *Information Theory*, YouTube playlist, 2011. 
+  Available at `<https://www.youtube.com/playlist?list=PLE125425EC837021F>`_.
+
+.. _P-L2008:
+
+**[P-L2008]**
+  P. Penfield and S. Lloyd, *Information and Entropy*, MIT OpenCourseWare, 
+  Massachusetts Institute of Technology, Spring 2008. 
+  Available at `<https://bit.ly/3ZBmaxZ>`_, 
+  `Archived <https://web.archive.org/web/20240000000000*/https://ocw.mit.edu/courses/6-050j-information-and-entropy-spring-2008/>`__.
+
+
 
 

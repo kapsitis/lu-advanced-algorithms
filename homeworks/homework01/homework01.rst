@@ -59,7 +59,7 @@
 
 **3. uzdevums:** 
 
-  Ar LZ78 algoritmu kodēt tekstu "POTATO TOMATO GO TO TORONTO". 
+  Ar LZW algoritmu kodēt tekstu "POTATO TOMATO GO TO TORONTO". 
   Arī tukšums pieder ziņojumu alfabētam (bet pēdiņas nepieder). 
 
 **4. uzdevums:** 
@@ -73,11 +73,8 @@
     Izmantot "move-to-front" un "run-length encoding", lai iekodētu iepriekšējā 
     solī iegūto transformācijas rezultātu.
 
-**Brīvprātīgi vingrinājumi un skaitļošanas eksperimenti**
+**Priekšnesumu tēmas**
 
-Izpildīts vingrinājums (programma, dati, apraksts un ieskaitīšana konsultācijā) 
-var aizstāt semestra vidus eksāmenu -- līdz 30% no atzīmes.  
-Var piedāvāt arī savu tēmu, saskaņojot ar pasniedzēju.
 Šeit dažas idejas par entropiju un saspiešanu (1.-4. nodarbība). 
 
 **1. vingrinājums (Wordle):** 
@@ -92,28 +89,8 @@ Var piedāvāt arī savu tēmu, saskaņojot ar pasniedzēju.
   * Atrast vārdu (vai vārdus), kas pirmajā solī sasniedz vislielāko entropiju.
   * Pēc vajadzības, katrai no atbildēm uz pirmo vārdu, piedāvāt otro vārdu ar vislielāko entropiju. 
 
-**2. vingrinājums (Divkāršā iekodēšana):** 
-  Pieņemsim, ka angļu valodas teksts satur 26 burtus
-  un tukšumus. Kāds to iekodējis, izmantojot Morzes kodu (iegūstot virkni ar "1" - pīkstieniem 
-  un "0" - klusumiem). Piemēram, vārdu "PARIS" kodētu šādi: 
 
-  .. figure:: figs/morse-sample.png
-    :width: 4in
-
-  Šajā uzdevumā Jūs salīdzināt saspiešanu tieši no angļu valodas teksta ar 26+1 simboliem un 
-  saspiešanu no tā paša teksta Morzes koda. Mērķis ir atrast to saspiešanas metodi, kura 
-  dod labu rezultātu neatkarīgi no ievades reprezentācijas veida.
-  Salīdzināšanai var izmantot Python pakas (var instalēt ar Conda vai pip): 
-  `zlib` un/vai `gzip` (LZ77 - Lempela Ziva algoritms), `bz2` (Berouza-Vīlera algoritms), 
-  `lzma` ("range encoding" kas ir aritmētiskā koda variants). 
-
-  Katram no saspiešanas algoritmiem (aritmētiskajam, LZ77, BW) iekodēt un atkodēt pietiekami 
-  garu angļu tekstu (nepārveidotu) un to pašu tekstu (jau iekodētu ar Morzes kodu). 
-  Kurai saspiešanas metodei pārkodēšana caur Morzes kodu 
-  vismazāk pasliktina galarezultātu? Apkopot rezultātus tabulā - pavisam 6 mērījumi: 
-  katrai no 3 saspiešanas metodēm tiek iegūti divi skaitļi.
-
-**3. vingrinājums:** 
+**2. vingrinājums:** 
   Izveidot Python programmu, kas veic bijektīvo variantu 
   `Berouza-Vīlera transformācijai 
   <https://en.wikipedia.org/wiki/Burrows%E2%80%93Wheeler_transform#Bijective_variant>`_. 
@@ -121,22 +98,5 @@ Var piedāvāt arī savu tēmu, saskaņojot ar pasniedzēju.
   Izmantot šo transformāciju, lai bijektīvi attēlotu garāku Markdown tekstu, 
   piemēram, O.Vācieša dzejoļu krājumu `Tālu ceļu vējš 
   <https://raw.githubusercontent.com/kapsitis/ddgatve-poetry/master/source-rst/talu-celu-vejs.rst>`_.
-
-**4. vingrinājums (AES128 laušana ar DCA):** 
-  "Baltā kaste" ir tāds kriptogrāfijas modelis, kurā uzbrucējs var lasīt 
-  mašīnas izpildes laika atmiņu vai mainīt to (memory faults), 
-  debugot programmas, utml. Jautājums -- vai šādā modelī ir iespējams nodarboties 
-  ar kriptogrāfiju (iekodējot un atkodējot kriptotekstu) tā, lai neatklātu uzbrucējam 
-  atslēgu -- un viņam/viņai nebūtu viegli nozagt šo algoritmu, lai to darbinātu citur.
-  "Baltās kastes" modeli reizēm izmanto DRM - ar autortiesībām saistītu darbu 
-  izplatīšanā: Lietotājam ļauj atšifrēt datu plūsmu tikai tad, ja to dara
-  autentificēts lietotājs, izmantojot atļautu ierīci un programmatūru. 
-
-  * Iepazīties ar `DCA Hiding your White-Box Designs is Not Enough <https://eprint.iacr.org/2015/753.pdf>`_ -- 
-    rakstu par to, kā novērojot korelācijas starp teksta ievadi un AES128 kriptoalgoritma 
-    pirmās iterācijas (round) rezultātu var uzminēt kriptoatslēgas bitus. 
-  * Darbināt kādu no 
-    `Side-Channel Marvels <https://github.com/SideChannelMarvels/Deadpool/blob/master/README_dca.md>`_ 
-    uzbrukumiem, lai atminētu agrāko gadu kriptogrāfijas konferencēs piedāvātos "challenges". 
 
   

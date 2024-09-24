@@ -54,8 +54,7 @@ Konteineri un kodeki
 ------------------------
 
 Filma pie patērētāja nonāk kā fails vai kā straumējams video. 
-
-**Konteineri, ko atbalsta YouTube**
+Šie ir konteineru formāti, ko atbalsta YouTube:
 
 * MP4 (daļa no MPEG-4 standarta); paplašinājums `*.mp4`
 * AVI (Audio Video Interleaved/Microsoft); paplašinājums `*.avi`
@@ -64,8 +63,6 @@ Filma pie patērētāja nonāk kā fails vai kā straumējams video.
 * MOV (QuickTime/Apple); paplašinājums `*.qt`
 * FLV (Flash Video)
 * 3GP (3G mobilo sakaru video)
-
-
 
 Google piedāvā vienkāršus konteinerus 
 **WebP** (attēliem) un **WebM** (filmām). 
@@ -119,6 +116,26 @@ netika samontēti divi gabali vai krasi mainīts kameras stāvoklis).
     gan nākamo freimu, kas var būt gan I-, gan P-freims.
 
 
+**I-freimu kodēšana**
+  Līdzīgi kā JPEG (8x8 bloki), arī MPEG kodē vienādus blokus: 16x16 pikseļi. 
+  I-freimiem algoritms līdzīgs kā JPEG. I-freimi ir "pieturas punkti", uz kuriem būvē citus. 
+  `YCbCr krāsu plakne <https://en.wikipedia.org/wiki/YCbCr>` - nav tas pats kas YIQ.
+
+
+
+
+
+
+
+**P-freimu kodēšana**
+  **Kustības vektors:** P-freima 16x16 pikseļu blokam meklē līdzīgāko iepriekšējā I-freimā vai 
+  P-freimā. Dažreiz tas var būt nobīdīts - ja video attēlota kustība vai 
+  kameras slīdēšana - *panning*. 
+
+
+  ![P-freimu kodēšana](p-frame-encoding.png)<!-- .element: width="600px" -->
+
+
 **B-freimus atliek nosūtītajos datos**
 
   .. figure:: figs/b-frames-postponed.png
@@ -129,122 +146,80 @@ netika samontēti divi gabali vai krasi mainīts kameras stāvoklis).
   ir optimizēti kaut kādam "caurmēra" ritmam. 
 
 
-**Kustības vektors**
-
-  * Līdzīgi kā JPEG (8x8 bloki), arī MPEG kodē vienādus blokus: 16x16 pikseļi. 
-  * I-freimiem algoritms līdzīgs kā JPEG. I-freimi ir "pieturas punkti", 
-    uz kuriem būvē citus. 
-  * P-freima 16x16 pikseļu blokam meklē līdzīgāko iepriekšējā I-freimā vai 
-    P-freimā (dažreiz tas var būt nobīdīts - ja video attēlota kustība vai 
-    kameras iefokusēšanās - *panning*). 
 
 
---
+Saspiešanas datu piemēri
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## <lo-theory/> P-freimu kodēšana
-
-[YCbCr krāsu plakne](https://en.wikipedia.org/wiki/YCbCr) - nav tas pats kas YIQ.
-
-![P-freimu kodēšana](p-frame-encoding.png)<!-- .element: width="600px" -->
-
-
---
-
-## <lo-theory/> Saspiešanas piemērs
-
-
-<div style="font-size:80%">
-
-Ja video ir $356 \times 260$ pikseļi, tad freimu izmēri 
+Ja video ir :math:`356 \times 260` pikseļi, tad freimu izmēri 
 un saspiešanas attiecības ir sekojošas: 
 
-<table>
-<tr><th>Freims</th><th>Izmērs</th><th>Saspiešana</th></tr>
-<tr><td>I-Freims</td><td>18 KiB</td><td>7:1</td></tr>
-<tr><td>P-Freims</td><td>6 KiB</td><td>20:1</td></tr>
-<tr><td>B-Freims</td><td>2.5 KiB</td><td>50:1</td></tr>
-<tr><td>Vidēji</td><td>4.8 KiB</td><td>27:1</td></tr>
-</table>
+===========  =============  ================
+Freims       Izmērs         Saspiešana
+===========  =============  ================
+I-Freims     18 KiB         7:1
+P-Freims     6 KiB          20:1
+B-Freims     2.5 KiB        50:1
+Vidēji       4.8 KiB        27:1
+===========  =============  ================
 
-Tādēļ šādu attēlu pārraidīšanai vajadzīgais tīkla
+Šādu attēlu pārraidīšanai vajadzīgais tīkla
 savienojums: 
 
-`$$30\,\text{frame/s}\cdot 4.8\,\text{Kb/frame}\,\cdot 8 = 1.2\,\text{Mbit/s}.$$`
+.. math::
+  
+    30\,\text{frame/s}\cdot 4.8\,\text{Kb/frame}\,\cdot 8 = 1.2\,\text{Mbit/s}.
 
 Kopā ar audio tas var būt 1.45 megabiti sekundē, kas aizņem T1 Interneta
 savienojumu (viens vītais pāris; 1.544 Mbps).
 
-</div>
 
---
-
-## <lo-theory/> MPEG lietojumi
+MPEG lietojumi
+~~~~~~~~~~~~~~~~~~~
 
 * Satelīttelevīzijas pārraides, kas digitālu signālu no 
-satelīta pārtaisa krāsainā TV signālā (kas var joprojām 
-būt analogs). 
+  satelīta pārtaisa krāsainā TV signālā (kas var joprojām 
+  būt analogs). 
 * Kabeļtelevīzija. 
 * On-demand televīzija ar desmitiem tūkstošu lejupielādējamu 
-(vai straumējamu) filmu. 
+  vai straumējamu filmu. 
 
 
 
+MP3 Saspiešana
+-------------------
 
------
-
-# &nbsp;
-
-<hgroup>
-
-<h1 style="font-size:28pt">Lietišķie algoritmi</h1>
-
-<blue>Zudumradošā saspiešana - 2</blue>
-
-</hgroup><hgroup>
-
-<span>(1) [Ievads](#section)</span>  
-<span>(2) [Redzes un dzirdes sajūtas](#section-1)</span>  
-<span>(3) [Konteineri un kodeki](#section-2)</span>  
-<span>(4) [MPEG4 saspiešana](#section-3)</span>  
-<span style="color:darkgreen">**(5) MP3 saspiešana**</span>  
-<span>(6) [(P) DRM un ūdenszīmes](#section-5)</span>  
-<span>(7) [Kopsavilkums](#section-6)</span>
-
-</hgroup>
-
-
---
-
-# <lo-theory/> MP3 mērķi
-
-* Saspiest mūziku u.c. audiofailus, lai tos varētu pārraidīt 
+MP3 mērķis ir saspiest mūziku u.c. audiofailus, lai tos varētu pārraidīt 
 datortīklos un glabāt mūzikas atskaņotājos. 
-* Publiska programmatūra parādījās ap 1994.g.
-* Līdz pat 2017.g. Fraunhofer Institute for Integrated Circuits (svarīgāko patentu turētāji) 
+MP3 atskaņošanai publiska programmatūra parādījās ap 1994.g. 
+Napster parādījās 1999.gadā; agrīns failu apmaiņas serviss, bet 
+failu direktoriju glabāja centralizēti, tāpēc pret to vērsās 
+tiesā un servisu 2001.gadā nācās slēgt.
+
+
+Līdz pat 2017.g. Fraunhofer Institute for Integrated Circuits (svarīgāko patentu turētāji) 
 uzlika tam ierobežojošas licences; ievāca maksu no softa ražotājiem. 
 
-* Mūsdienās MP3 ir "mantots" (*legacy*) jeb "miris" formāts, bet 
+Mūsdienās MP3 ir "mantots" (*legacy*) jeb "miris" formāts, bet 
 tam joprojām plašs rīku atbalsts.
-* Radio un video straumēšana izmanto ISO-MPEG kodekus; 
-piemēram, AAC (Advanced Audio Coding) vai MPEG-H. 
-* [The MP3 is dead, say creators after terminating licensing](https://www.cnbc.com/2017/05/15/mp3-dead-say-creators-after-terminating-licensing.html)
 
 
------
+Parauga ātrums (sample rate)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# <lo-theory/> Parauga ātrums (sample rate)
-
-* *Sample rate* mēra hercos (1 Hz = 1 s^{-1}) - cik reizes
-sekundē kaut kas notiek. 
-* CD-ROM kvalitātes ierakstam parasti vajag 
-ap 44.1 kHz (CD). (Ir arī 
+*Sample rate* mēra hercos (1 Hz = 1 s^{-1}) - cik reizes
+sekundē kaut kas notiek (piemēram, cik bieži nomēra skaņu kā membrānas stāvokli). 
+CD-ROM kvalitātes ierakstam parasti vajag ap 44.1 kHz (CD). (Ir arī 
 standarti, kas izmanto 48 kHz, 88.2 kHz, vai 96 kHz.)
 
-**Naikvista-Šenona teorēma:** (*Nyquist-Shannon Sampling theorem*)
-Ja funkcijai $x(t)$ (pēc Furjē transformācijas pielietošanas)
-nav frekvenču, kas pārsniegtu $B$ hercus, tad to 
-var pilnībā (bez zudumiem) atjaunot, ja zināmas tās 
-vērtības ik pēc laika intervāliem `$\Delta t = 1/(2B)$`.
+**Naikvista-Šenona teorēma:** 
+  Ja funkcijai $x(t)$ (pēc Furjē transformācijas pielietošanas)
+  nav frekvenču, kas pārsniegtu $B$ hercus, tad to 
+  var pilnībā (bez zudumiem) atjaunot, ja zināmas tās 
+  vērtības ik pēc laika intervāliem :math:`{\displaystyle \Delta t = \frac{1}{2B}`.
+
+  (*Nyquist-Shannon Sampling theorem*)
+
 
 
 --
@@ -365,15 +340,13 @@ tuva frekvence, laika sakritība.
 
 --
 
-## <lo-theory/> FFT (ātrā Furjē transformācija)
+Pilns saspiešanas modelis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-<hgroup style="width:55%">
+.. 
 
 ![Full MP3 model](full-mp3-model.png)<!-- .element: width="500px" -->
 
-</hgroup>
-
-<hgroup style="width:40%">
 
 * Ik pēc aptuveni 25 ms rodas jauns MP3 freims. 
 * Tajā saspiež esošās frekvences ar FFT. 
@@ -395,6 +368,35 @@ Stereo skaņa
 * Joprojām grūti risināms jautājums, kā novietot skaļruņus un mainīt
   austiņās dzirdamās lietas, ja cilvēks pārvietojas telpā. 
   Bet MP3 šo nerisina.
+
+
+Opus kodeks 
+-------------
+
+Failu nosaukumos var parādīties, bet to bieži aizstāj konteinera faila paplašinājums. 
+
+* `audiofile.opus` (noteikti iekodēts ar Opus), 
+* `audiofile.ogg` (Ogg konteiners, ja tas nelieto citu kodeku, piemēram, Vorbis; 
+  reāli izmantoto kodeku var redzēt Ogg metadatos), 
+* `audiofile.webm` (WebM konteiners straumēšanai vai Web lietojumiem)
+* `audiofile.mka` (Matreska vai MKV konteiners; paplašinājums ``*.mka`` nozīmē tikai audio)
+
+
+Opus māk pārslēgties starp divām modēm, kas optimizē dažādas lietas -- 
+vai nu augsta skaņas kvalitāte vai arī spēja pielāgoties dažādas caurlaidības 
+transporta kanāliem un zema aizture (*latency*).
+
+
+**CELT Mode:** 
+  Parasti izmanto mūzikas saspiešanai. 
+  Tas nozīmē CELT (Constrained Energy Lapped Transform). 
+  Tas izmanto Izmainīto Diskrēto Kosinusu pārveidojumu (*Modified Discrete 
+  Cosine Transform*, MDCT).  
+
+**SILK Mode:**
+  SILK mode ir piemērotāka runas saspiešanai. SILK izmanto lineāru paredzošo kodējumu 
+  (*Linear Predictive Coding*, LPC) nevis MDCT. 
+
 
 
 
@@ -498,10 +500,16 @@ var saspiest vai pārveidot -- permutēt pikseļus, apgriezt, mērogot,
 Izmantotā literatūra
 ----------------------
 
-1. `Watermarking overview
-<http://www.rroij.com/open-access/a-review-of-watermarking-algorithms-fordigital-image.php?aid=46871>`_.
+**[Guru14]**
+  Guru, J. and Damecha, H. (2014). 
+  A review of watermarking algorithms for digital image. *Int. J. Innov. Res. Comput. Commun. Eng.*, 2, 
+  5701--5708. Available at `<https://api.semanticscholar.org/CorpusID:44191784>`_.
 
 
-
+**[Pol16]**
+  Yury Polyanskiy, *Information Theory*, MIT OpenCourseWare, 
+  Massachusetts Institute of Technology, Spring 2016. 
+  Available at `<https://bit.ly/47EfIZ8>`_,
+  `Archived <https://web.archive.org/web/20240000000000*/https://ocw.mit.edu/courses/6-441-information-theory-spring-2016/>`_.
 
 

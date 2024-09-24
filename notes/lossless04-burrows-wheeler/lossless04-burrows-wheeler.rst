@@ -1,6 +1,10 @@
 4. Berouza-Vīlera transformācija
 =======================================================
 
+To piedāvājuši M.Berouzs (*Michael Burrows*) un D.Vīlers (*David 
+Wheeler*) 1994.gadā. Transformācija bija pazīstama D.Vīleram arī 
+agrāk; M.Berouzs izdomāja efektīvu algoritmu, kā veikt šo transformāciju.
+
 Berouza-Vīlera transformācijas (BWT) ideja: Ievades tekstā samaina burtu secību tā, 
 ka tie burti, kuri atrodas tūlīt aiz (vai arī - tieši pirms) 
 līdzīgiem kontekstiem, nonāk blakus.
@@ -49,14 +53,14 @@ saraksts.)
   =======================  ====================  ====================  
   Ievade                   Izvade                Alfabēts pirms soļa
   =======================  ====================  ====================
-  **a**,b,a,c,c,a,b        0                     ``[a,b,c]``
-  a,**b**,a,c,c,a,b        0,1                   ``[a,b,c]``
-  a,b,**a**,c,c,a,b        0,1,1                 ``[b,a,c]``
-  a,b,a,**c**,c,a,b        0,1,1,2               ``[a,b,c]``
-  a,b,a,c,**c**,a,b        0,1,1,2,0             ``[c,a,b]``
-  a,b,a,c,c,**a**,b        0,1,1,2,0,1           ``[c,a,b]``
-  a,b,a,c,c,a,**b**        0,1,1,2,0,1,2         ``[a,c,b]``
-                                                 ``[b,a,c]``
+  **a**, b, a, c, c, a, b        0               ``[a,b,c]``
+  a, **b**, a, c, c, a, b        0,1             ``[a,b,c]``
+  a, b, **a**, c, c, a, b        0,1,1           ``[b,a,c]``
+  a, b, a, **c**, c, a, b        0,1,1,2         ``[a,b,c]``
+  a, b, a, c, **c**, a, b        0,1,1,2,0       ``[c,a,b]``
+  a, b, a, c, c, **a**, b        0,1,1,2,0,1     ``[c,a,b]``
+  a, b, a, c, c, a, **b**        0,1,1,2,0,1,2   ``[a,c,b]``
+  N/A                      N/A                   ``[b,a,c]``
   =======================  ====================  ====================
 
 **Piemērs:** 
@@ -74,7 +78,7 @@ saraksts.)
   a, b, a, b, a, **b**, c, a    0,1,1,1,1,1           ``[a,b,c]``
   a, b, a, b, a, b, **c**, a    0,1,1,1,1,1,2         ``[b,a,c]``
   a, b, a, b, a, b, c, **a**    0,1,1,1,1,1,2,2       ``[c,b,a]``
-  &nbsp;                        &nbsp;                ``[a,c,b]``
+  N/A                           N/A                   ``[a,c,b]``
   ============================  ====================  ====================
 
 
@@ -84,13 +88,13 @@ saraksts.)
   =======================  ====================  ====================  
   Ievade                   Izvade                Alfabēts pirms soļa
   =======================  ====================  ====================
-  **0**,1,0,0,1,0          a                     ``[a,b]``
-  0,**1**,0,0,1,0          a,b                   ``[a,b]``
-  0,1,**0**,0,1,0          a,b,b                 ``[b,a]``
-  0,1,0,**0**,1,0          a,b,b,b               ``[b,a]``
-  0,1,0,0,**1**,0          0,b,b,b,a             ``[b,a]``
-  0,1,0,0,1,**0**          a,b,b,b,a,a           ``[a,b]``
-                                                 ``[a,b]``
+  **0**, 1, 0, 0, 1, 0     a                     ``[a,b]``
+  0, **1**, 0, 0, 1, 0     a,b                   ``[a,b]``
+  0, 1, **0**, 0, 1, 0     a,b,b                 ``[b,a]``
+  0, 1, 0, **0**, 1, 0     a,b,b,b               ``[b,a]``
+  0, 1, 0, 0, **1**, 0     0,b,b,b,a             ``[b,a]``
+  0, 1, 0, 0, 1, **0**     a,b,b,b,a,a           ``[a,b]``
+  N/A                      N/A                   ``[a,b]``
   =======================  ====================  ====================
 
 
@@ -125,7 +129,7 @@ ir ir :math:`n!` permutāciju (bet tikai :math:`n` cikliskas permutācijas).
     O N B O N $ B              O N B O N $ B 
 
 
-  .. code-block:: 
+  .. code-block:: text
 
     B A N A N A $              $ B A N A N A
     $ B A N A N A              A $ B A N A N
@@ -196,29 +200,177 @@ Ir arī iespējams atjaunot visu matricu:
 
 
 
-Efektīva BWT ar sufiksu kokiem 
+Efektīvs BWT ar sufiksu kokiem 
 -------------------------------
 
 **Apgalvojums:** 
-  BWT naivā implementācija prasa laiku :math:`O(n^2 \log n)`. 
+  BWT naivā implementācija prasa laiku :math:`O(n^2 \log n)`
+  un :math:`O(n^2)` telpu. 
 
 **Pierādījums:** 
   Ciklisko permutāciju izrakstīšana prasa aizpildīt :math:`n \times n`
-  matricu ar burtiem; tas prasa :math:`n^2` laiku. 
+  matricu ar burtiem; aizņemtā telpa ir :math:`O(n^2)`. 
+  Pēc tam jāšķiro :math:`n` stringi; divu stringu salīdzināšana
+  sliktākajā gadījumā prasa :math:`O(n)` soļus. 
+  Pilnā laika sarežģītība ir :math:`O(n \log_2 n) \cdot O(n) = O(n^2 \log_2 n)`. 
+   
 
 Praksē garus tekstus saspiež veicot Berouza-Vīlera transformāciju 
 atsevišķiem blokiem. Tipisks bloku garums ir daži simti kilobaitu. 
 Blokiem nav labi būt pārāk gariem, lai tos būtu praktiski apstrādāt.  
 Tiem nevajadzētu arī būt pārāk īsiem, lai atrastu un optimāli 
-izmantotu atkārtotos kontekstus.
+izmantotu atkārtotos kontekstus. Tomēr :math:`O(n^2 \log_2 n)`
+laika sarežģītība ir ļoti neefektīvi arī tipiskām :math:`n` 
+vērtībām (100KiB līdz 1MiB). 
 
 Berouza-Vīlera transformāciju var veikt lineārā laikā no vārda garuma
 :math:`O(n)`, izmantojot  
-*sufiksu masīvus* (*suffix arrays*). 
+*sufiksu masīvus* (*suffix arrays*).
+
+**Definīcija** 
+  Par ievades stringa :math:`w` sufiksu masīvu sauc datu struktūru, kuras atslēgu kolonnā 
+  ir sanumurēti :math:`w` sufiksi (katra sufiksa numurs parāda, cik burti no vārda sākuma 
+  jānodzēš, lai dabūtu šo sufiksu), bet otrā kolonnā - katra sufiksa kārtas numurs alfabētiskajā 
+  sakārtojumā, sākot ar :math:`0`. 
+
+**Piemērs**
+  Sufiksu masīvs stringam :math:`w = \mathtt{BANANA\$}`. 
+  Izveidojam alfabētisku sufiksu sakārtojumu:
+
+  * ``$`` -> 6  (cik burti jānodzēš no ``BANANA$``, lai paliktu dolārs)
+  * ``A$`` -> 5
+  * ``ANA$`` -> 3
+  * ``ANANA$`` -> 1
+  * ``BANANA$`` -> 0
+  * ``NA$`` -> 4
+  * ``NANA$`` -> 2 
+
+  Iegūstam, ka sufiksu masīvs ir ``[6, 5, 3, 1, 0, 4, 2]``
 
 
+**Piemērs**
+  Sufiksu masīvs stringam :math:`w = \mathtt{TATACATTAG\$}`. 
+
+  =====================  ================
+  Sufikss (to neglabā)   Sufiksa numurs     
+  =====================  ================
+  ``$``                  10
+  ``ACATTAG$``           3
+  ``AG$``                8
+  ``ATACATTAG$``         1
+  ``ATTAG$``             5
+  ``CATTAG$``            4
+  ``G$``                 9
+  ``TACATTAG$``          2
+  ``TAG$``               7
+  ``TATACATTAG$``        0
+  ``TTAG$``              6
+  =====================  ================
 
 
+Sufiksu kokus var izmantot stringu meklēšanā. 
+(Piemēram, var informāciju labajā kolonnā pielietot, 
+lai atrastu ``TA`` visās vietās, var izmantot 
+bināro meklēšanu -- atrodot burtu ``T`` sākotnējā 
+stringā tajās pozīcijās, uz kurām norāda sufiksu masīvs.
+Pēc tam meklē, kur atrodas otrs burts ``A``.)
+
+**Apgalvojums:** 
+  Stringam :math:`w`  no :math:`|w| = n` burtiem sufiksu masīvu var izveidot :math:`O(n)`
+  laikā un tas aizņem :math:`O(n)` vietu. 
+  
+  (Šo apgalvojumu pamato pašās 
+  kursa beigās - sufiksu koka/masīva algoritmā par stringu meklēšanu). 
+
+
+**Apgalvojums:** 
+  Sufiksu masīvs stringam :math:`w`, kura beigās ir dolārs (alfabētiski pirms visiem 
+  citiem burtiem alfabētā), sufiksu masīva pozīcijas sakrīt ar Berouza-Vīlera 
+  sakārtoto rotāciju pozīcijām: 
+
+.. figure:: figs/rotations-and-suffixes.png
+   :width: 5in 
+
+
+Tā kā Berouza-Vīlera transformācija ir redzama pēdējā kolonnā, tad to var iegūt 
+
+
+**BWT Transformācija ar Sufiksu Masīvu**
+  Ievade ir vārds :math:`w`, kura pēdējais simbols ir ``$``.
+  
+  | :math:`\text{\sc efficientBWT}(w)`
+  | 1. :math:`\quad` :math:`A = \mathtt{\sc getSuffixArray}(w)` :math:`\quad` *// inicializē sufiksu masīvu*
+  | 2. :math:`\quad` :math:`n = |w|` :math:`\quad` *// n ir stringa w garums, ieskaitot beigu dolāru*
+  | 3. :math:`\quad` **for** :math:`i = 0` **to** :math:`n-1` *// atkārto n reizes*
+  | 4. :math:`\quad\quad` :math:`j = A[i]-1` *// j ir vienu pozīciju pirms A[i]*
+  | 5. :math:`\quad\quad` **if** :math:`j == -1`
+  | 6. :math:`\quad\quad\quad` :math:`j == n-1` *// "-1" pozīcija cikliskā permutācijā ir stringa beigās*
+  | 7. :math:`\quad\quad` :math:`\text{\sc output}(w[j])`
+
+
+**Piemērs** 
+  Stringam :math:`w = \mathtt{BANANA\$}` sufiksu masīvs ir ``[6, 5, 3, 1, 0, 4, 2]``. 
+  Tāpēc algoritma rezultāts būs šāds: 
+
+  ===========  =============  =================  =============
+  :math:`i`    :math:`A[i]`   :math:`j=A[i]-1`   :math:`w[j]`
+  ===========  =============  =================  =============
+  0            6              5                  ``A``
+  1            5              4                  ``N``
+  2            3              2                  ``N``
+  3            1              0                  ``B``
+  4            0              6                  ``$``
+  5            4              3                  ``A``
+  6            2              1                  ``A``
+  ===========  =============  =================  =============
+
+
+  Jau agrākā piemērā redzējām, ka :math:`\text{BWT}(\mathtt{BANANA\$}) = \mathtt{ANNB\$AA}`, 
+  kas sakrīt ar šī algoritma izvadi. 
+
+
+**Piemērs**
+  Izveidot BWT un sufiksu masīvu stringam :math:`\mathtt{CAA}` (bez beigu dolāra). 
+
+  Izrakstām un alfabētiski sakārtojam cikliskās permutācijas: 
+
+  .. code-block:: text
+
+    C A A             A A C
+    A C A     -->     A C A
+    A A C             C A A
+
+  Pēdējā kolonna (BWT transformācijas rezultāts) ir :math:`\mathtt{CAA}`. 
+  
+  .. note::
+
+    Lai šādu BWT transformāciju bez dolāra atkodētu, atodētājam ir arī jāzina, 
+    kur BWT transformācijas rezultātā atrodas pirmais burts. Pretējā gadījumā 
+    viņš var atjaunot BWT matricu, bet nevar uzzināt, kura no matricā norādītajām cikliskajām 
+    permutācijām ir īstā.
+
+  Izrakstām un alfabētiski sakārtojam sufiksus: 
+
+  .. code-block:: text
+
+    C A A              A      (idx=2, šajā sufiksā nodzēsti pirmie 2 burti)
+    A A       --->     A A    (idx=1, nodzēsts pirmais 1 burts) 
+    A                  C A A  (idx=0, nodzēsti 0 burti)
+
+  Sufiksu masīvs ir ``[2,1,0]``  (sufiksu indeksi izrakstīti alfabētiski sakārtotajā secībā).
+  Mēģinām šādam stringam lietot :math:`\text{\sc efficientBWT}(w)`:
+  
+  ===========  =============  =================  =============
+  :math:`i`    :math:`A[i]`   :math:`j=A[i]-1`   :math:`w[j]`
+  ===========  =============  =================  =============
+  0            2              1                  ``A``
+  1            1              0                  ``A``
+  2            0              2                  ``C``
+  ===========  =============  =================  =============
+
+  Ievērojam, ka iegūtais rezultāts ``AAC`` nesakrīt ar BWT īsto rezultātu ``CAA``. 
+  Tāpēc :math:`\text{\sc efficientBWT}(w)` ir svarīgs pieņēmums, ka :math:`w` beidzas 
+  ar dolāru (pašu pirmo burtu alfabētā). 
 
 
 
@@ -297,3 +449,4 @@ Izmantotā literatūra
 * `https://www.cs.helsinki.fi/u/tpkarkka/opetus/12s/spa/lecture11.pdf <https://www.cs.helsinki.fi/u/tpkarkka/opetus/12s/spa/lecture11.pdf>`_
 * `https://docs.python.org/3/library/bz2.html <https://docs.python.org/3/library/bz2.html>`_
 * `https://serverfault.com/questions/2600/how-do-you-set-bzip2-block-size-when-using-tar <https://serverfault.com/questions/2600/how-do-you-set-bzip2-block-size-when-using-tar>`_
+* `<https://youtu.be/w-Cnkg6ANG8?si=wC5UeoUDhXq56qzw>`_.

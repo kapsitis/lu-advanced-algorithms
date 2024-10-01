@@ -47,17 +47,22 @@ Atkārtojums -- matricas reizināšana ar vektoru ir lineārs pārveidojums jeb 
 
 
 
-**JPEG algoritma uzdevums**
+JPEG algoritma apraksts
+------------------------------
 
-* JPEG ir algoritms. Arī formāts attēlu glabāšanai.
+JPEG ir algoritms attēlu saspiešanai un arī formāts attēlu glabāšanai.
+Tā mērķis ir iegūt saspiestu failu, no kura var atjaunot attēlu, 
+kas ir līdzīgs sākotnējam. Saspiešana notiek ar zudumiem.
+Algoritma soļi ir saistīti ar to, kā cilvēks uztver krāsu.
+
 * Ievade:  punktu attēls, katra punkta krāsu apraksta 
   trīs :math:`8` bitu skaitļi (robežās no :math:`0` līdz :math:`255`) -- 
   R, G, B (red, green, blue). 
-* Mērķis -- iegūt saspiestu failu, no kura var atjaunot attēlu, 
-  kas ir līdzīgs sākotnējam. Saspiešana notiek ar zudumiem.
-* Soļi ir saistīti ar to, kā cilvēks uztver krāsu.
+* Izvade: bitu virkne. 
 
-**JPEG 1.solis: Pārveido no RGB par YIQ**
+
+Pārveido krāsu telpu no RGB par YIQ
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Y,I,Q vērtības iegūst no R,G,B vērtībām, pareizinot tās ar koeficientu matricu. 
 Šis pārveidojums ir atgriezenisks (bezzudumu), t.i., zinot YIQ 
@@ -87,7 +92,7 @@ vērtības, var atjaunot RGB vērtības.
 Redze precīzāk uztver "I" (pāreju no oranžā uz zilo) nevis
 "Q" (pāreju no zaļā uz violeto) - tāpēc Q var vairāk saspiest.
 
-**Pārveidojums no RGB uz YIQ**
+**JPEG 1.solis: Pārveidojums no RGB uz YIQ**
   Šeit :math:`R,G,B` ir veseli skaitļi no intervāla :math:`[0;255]`. 
   
   * Vispirms intervālu :math:`[0;255]` vienmērīgi saspiež līdz :math:`[0;1]`, 
@@ -114,7 +119,7 @@ Redze precīzāk uztver "I" (pāreju no oranžā uz zilo) nevis
        \end{array} \right)
 
 
-  * Visbeidzot panāksim, ka jaunizveidotie parametri: :math:`Y \in [0;1]`, 
+  * Visbeidzot panāk, ka jaunizveidotie parametri: :math:`Y \in [0;1]`, 
     :math:`I \in [-0.5957; 0.5957]`, un :math:`Q \in [-0.5226; 0.5226]`. 
     Lai tas notiktu, pēc lineārā pārveidojuma veic vēl 
     vērtību apgriešanu pret gada maksimālo vai vidējo ar šādām formulām: 
@@ -128,85 +133,89 @@ Redze precīzāk uztver "I" (pāreju no oranžā uz zilo) nevis
       \end{array} \right.
 
 
-
-**Pārveido atpakaļ uz RGB:**
-
-Ja nepieciešams, var arī pārveidot atpakaļ: 
+Šis pārveidojums saglabā informāciju, jo var 
+pārveidot atpakaļ uz RGB: 
 
 .. math::
 
-   \left( \begin{array}{c} 
-   R \\ 
-   G \\ 
-   B 
-   \end{array} \right)
-   \approx
-   \left( \begin{array}{ccc}
-   1 &  0.956 &  0.619 \\
-   1 & -0.272 & -0.647 \\
-   1 & -1.106 &  1.703
-   \end{array} \right)
-   \left( \begin{array}{c} 
-   Y \\ 
-   I \\ 
-   Q \end{array} \right)
+  \left( \begin{array}{c} 
+  R \\ 
+  G \\ 
+  B 
+  \end{array} \right)
+  \approx
+  \left( \begin{array}{ccc}
+  1 &  0.956 &  0.619 \\
+  1 & -0.272 & -0.647 \\
+  1 & -1.106 &  1.703
+  \end{array} \right)
+  \left( \begin{array}{c} 
+  Y \\ 
+  I \\ 
+  Q \end{array} \right)
 
-**JPEG 2.solis**
+
+Izretina režģi un sagriež blokos
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. figure:: figs/sparser-grid.png
    :width: 1.5in
 
    Režģa izretināšana (*Skipping grid*)
 
-Patur visas "Y" vērtības (melnbalto/gaišuma komponenti), 
-taču katrā virzienā atstāj tikai katru otro "I" un "Q" vērtību 
-(datu punktu skaits samazinās :math:`4` reizes). 
-Redze pārmaiņas gaišumā uztver daudz labāk nekā pārmaiņas nokrāsā.
-
-**JPEG 3.solis**
-
-YIQ vērtības sadala :math:`8 \times 8` blokos. Tā kā tika atstāta tikai katra 
-otrā "I" un "Q" vērtība, tad šo bloku izmērs sākotnējā attēlā ir 
-:math:`16 \times 16`. Katrs bloks tiek apstrādāts atsevišķi.
+**JPEG 2.solis: 4:2:0 subsampling:** 
+  Patur visas "Y" vērtības (melnbalto/gaišuma komponenti) - *full luminiscence*, 
+  bet "I" un "Q" vērtībām izrēķina aritmētisko vidējo katrā :math:`2 \times 2`
+  kvadrātiņā -- *half chrominance*. 
+  Tāpēc krāsu datiem informācijas apjoms samazinās :math:`4` reizes. 
+  Redze pārmaiņas gaišumā uztver daudz labāk nekā pārmaiņas nokrāsā.
 
 
-
-Kosinusu transformācija utt. (4.-7. solis)
--------------------------------------------
-
-**JPEG 4.solis**
-
-Katram :math:`8 \times 8` blokam DCT lieto abos virzienos:
-
-.. math::
-
-   \begin{array}{ll}
-   x'_0 = \frac{1}{\sqrt{8}} \sum\limits_{k=0}^7 x_k \\
-   x'_j = \frac{2}{\sqrt{8}} \sum\limits_{k=0}^7 \cos \frac{j(2k+1)\pi}{8}x_k,\;\;\mbox{ja $1 \leq j \leq 7$}\\
-   \end{array}
-
-Vispirms diskrēto kosinusu transformāciju pielieto katrai matricas kolonnai,
-pēc tam to pašu izdara katrai iegūtās matricas rindai.
+**JPEG 3.solis: Sadalīšana blokos**
+  YIQ vērtības sadala :math:`8 \times 8` blokos. Tā kā tika atstāta tikai katra 
+  otrā "I" un "Q" vērtība, tad šo bloku izmērs sākotnējā attēlā ir 
+  :math:`16 \times 16`. Katru bloku turpmāk apstrādā atsevišķi.
+  
+  No :math:`16 \times 16` pikseļu kvadrātiņa rodas četri "Y" (melnbaltie) bloki, 
+  viens "I" bloks un viens "Q" bloks. 
 
 
-.. code-block:: python 
 
-  import numpy as np
-  from scipy.fftpack import dct, idct
+Diskrētā Kosinusu transformācija
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  def dct2(arr):
-      return dct(dct(arr.T, norm='ortho').T, norm='ortho')
+**4.solis: DCT-II** 
+  Katram :math:`8 \times 8` blokam lieto otrā tipa DCT gan horizontāli, gan vertikāli.
 
-  def idct2(arr):
-      return idct(idct(arr.T, norm='ortho').T, norm='ortho')
+  .. math::
 
-  # Create an 8x8 matrix with random values between 0 and 1
-  matrix = np.random.rand(8, 8)
-  print(matrix)
-  dct_coefficients = dct2(matrix)
-  print(dct_coefficients)
-  inverse_dct = idct2(dct_coefficients)
-  print(inverse_dct)
+     \begin{array}{ll}
+     x'_0 = \frac{1}{\sqrt{8}} \sum\limits_{k=0}^7 x_k \\
+     x'_j = \frac{2}{\sqrt{8}} \sum\limits_{k=0}^7 \cos \frac{j(2k+1)\pi}{8}x_k,\;\;\mbox{ja $1 \leq j \leq 7$}\\
+     \end{array}
+
+  Vispirms diskrēto kosinusu transformāciju pielieto katrai matricas kolonnai,
+  pēc tam to pašu izdara katrai iegūtās matricas rindai.
+
+
+  .. code-block:: python 
+
+    import numpy as np
+    from scipy.fftpack import dct, idct
+
+    def dct2(arr):
+        return dct(dct(arr.T, norm='ortho').T, norm='ortho')
+
+    def idct2(arr):
+        return idct(idct(arr.T, norm='ortho').T, norm='ortho')
+
+    # Create an 8x8 matrix with random values between 0 and 1
+    matrix = np.random.rand(8, 8)
+    print(matrix)
+    dct_coefficients = dct2(matrix)
+    print(dct_coefficients)
+    inverse_dct = idct2(dct_coefficients)
+    print(inverse_dct)
 
 
 
@@ -222,218 +231,122 @@ pēc tam to pašu izdara katrai iegūtās matricas rindai.
   * Visu :math:`8 \times 8` matricu kreisos augšējos elementus saliek 
     kopīgā virknē. Šādi tiks iegūtas trīs virknes -- 
     katrai no trim krāsu telpas YIQ komponentēm. 
-  * Raksta starpības :math:`a_1, a_2-a_1, a_3 - a_2,\ldots`.
+  * Kodē nevis pašas noapaļotās frekvences, bet to starpības 
+    :math:`a_1, a_2-a_1, a_3 - a_2,\ldots`.
 
 **JPEG 7.solis**
-  Iegūtajai starpību virknei lieto Hofmana vai aritmētisko kodēšanu.
+  Iegūtajai starpību virknei lieto Hafmana vai aritmētisko kodēšanu.
 
 
 
 
+Diskrēto kosinusu transformācijas
+----------------------------------
 
+Nasirs Ahmeds 1972.gadā piedāvāja šo algoritmu signālu saspiešanai:
 
-MP3, Zudumradoši algoritmi skaņai
------------------------------------
+.. math::
 
-**MP3 (MPEG-1 Audio Layer 3)**
-  Standarts radies 1991.g. Vācijā. Līdz 2017.g. bija patentēts *Fraunhofer Society*, kas 
-  apgrūtināja softa radīšanu šim formātam. 
-  Izmantots *Internet Underground Music Archive* (neatkarīgo mūzikas mākslinieku publicēšanās 
-  vieta), kļuva populārs pateicoties *Winamp* atskaņotājam un *Napster* failu apmaiņas servisam. 
+  y_k = \alpha_k \sum_{n=0}^{N-1} x_n \cos \left[ \frac{\pi (2n + 1) k}{2N} \right]
 
-**Advanced Audio Coding (AAC):** 
-   Tālāka MP3 attīstība, ņemot vērā cilvēku psihoakustiskās īpašības un ar  
-   labāku skaņas kvalitāti tam pašam *bitu ātrumam* (*bit rate*).
+kur :math:`k \in \{ 0, \ldots, N-1 \}` un normalizācijas reizinātājs 
+ir :math:`\alpha_k`, kur 
 
-**Opus:**   
-  Laba skaņas kvalitāte dažādiem bitu ātrumiem, lieto reālā laika aplikācijām 
-  (VoIP) pateicoties zemajai *aizkavēšanai* (*delay*). 
+.. math::
 
-**FLAC (Free Lossless Audio Codec)**
-  Vienīgais no kodekiem, kas ir bezzudumu. Audio kvalitāte ir identiska sākotnējam 
-  audio failam. 
+  \alpha_k = \begin{cases}
+  \sqrt{\frac{1}{N}} & \text{if } k = 0 \\
+  \sqrt{\frac{2}{N}} & \text{if } k \neq 0
+  \end{cases}
 
-**OGG Vorbis:** 
-  Veidots uz līdzīgiem principiem kā MP3, bet savlaicīgi izvairījies no patentētām 
-  tehnoloģijām. Populārs starp atvērtā koda entuziastiem, pirātisku skaņas failu izplatītājiem. 
+Divu dimensiju gadījums parādījās drīz pēc tam un ir dabisks vispārinājums. 
+To var pierakstīt matricu formā šādi: 
 
+Katrai :math:`8 \times 8` krāsu intensitāšu matricai (*spatial domain*)
+izveidojam matricu :math:`A`.  
+DCT transformācijas rezultāts ir tāda paša izmēra matrica :math:`B` (*frequence domain*), ko 
+var iegūt šādi: 
 
-**MP3 mērķi**
+.. math:: 
 
-* Saspiest mūziku u.c. audiofailus, lai tos varētu pārraidīt 
-  datortīklos un glabāt mūzikas atskaņotājos. 
-* Publiska programmatūra parādījās ap 1994.g.
-* Līdz pat 2017.g. *Fraunhofer Institute for Integrated Circuits*
-  uzlika tam ierobežojošas licences. 
-* Mūsdienās MP3 ir "mantots" (*legacy*) jeb "miris" formāts, bet 
-  tam joprojām plašs rīku atbalsts.
-* Mūsdienās radio un video straumēšana izmanto ISO-MPEG kodekus; 
-  piemēram, AAC (Advanced Audio Coding) vai MPEG-H; bet MP3 joprojām daudz 
-  kur tiek radīts un atbalstīts. 
+  B = C A C^T,
 
+kur :math:`C` ir :math:`8 \times 8` koeficientu matrica, ko definē šādi: 
 
+.. math:: 
 
+  C_{k, n} = \alpha_k \cos\left(\frac{(2n + 1)k\pi}{16}\right),
 
+kur :math:`k, n = 0, 1, \ldots, 7`, un normalizācijas reizinātāji :math:`\alpha_k` ir šādi:
 
-**Parauga ātrums (sample rate)**
+.. math::
 
-* *Sample rate* mēra hercos (1 Hz = 1 :math:`s^{-1}`) - cik reizes
-  sekundē kaut kas notiek. 
-* CD-ROM kvalitātes ierakstam parasti vajag 
-  ap 44.1 kHz (CD). (Ir arī 
-  standarti, kas izmanto 48 kHz, 88.2 kHz, vai 96 kHz.)
+  \alpha_k = \begin{cases}
+  \sqrt{\frac{1}{8}} & \text{if } k = 0 \\
+  \sqrt{\frac{2}{8}} & \text{if } k \neq 0
+  \end{cases}
 
-**Naikvista-Šenona teorēma:** (*Nyquist-Shannon Sampling theorem*)
-  Ja funkcijai :math:`x(t)` (pēc Furjē transformācijas pielietošanas)
-  nav frekvenču, kas pārsniegtu :math:`B` hercus, tad to 
-  var pilnībā (bez zudumiem) atjaunot, ja zināmas tās 
-  vērtības ik pēc laika intervāliem :math:`\Delta t = 1/(2B)`.
+Vienu elementu :math:`B_{u,v}` matricā :math:`B` var pierakstīt šādi:
 
+.. math:: 
+  
+  B_{u, v} = \sum_{x=0}^{7} \sum_{y=0}^{7} A_{x, y} \cos\left(\frac{(2x + 1)u\pi}{16}\right) \cos\left(\frac{(2y + 1)v\pi}{16}\right) \alpha_u \alpha_v
 
-**Ekvivalenti apgalvojumi**
+kur :math:`u, v, x, y \in \{0, 1, ..., 7\}`.
 
-**Nyquist-Shannon 1:**
-  Funkciju :math:`f(t)`, kuras vērtības zināmas pēc vienādiem laika intervāliem 
-  :math:`\Delta T` var viennozīmīgi atjaunot no šīm vērtībām :math:`\{ f_n \}` 
-  tad un tikai tad, ja :math:`f(t)` enerģijas spektrs nesatur frekvences virs :math:`\frac{\pi}{\Delta T}` rad/s. 
 
-**Nyquist-Shannon 3:** 
-  Ir tikai viena funkcija :math:`f(t)`, kuras frekvenču spektrs viss atrodas zem :math:`\frac{\pi}{\Delta T}`, 
-  ko apmierina dotās vērtības :math:`\{ f_n \}`.
 
-`Lecture10 in 2.161 <https://ocw.mit.edu/courses/mechanical-engineering/2-161-signal-processing-continuous-and-discrete-fall-2008/lecture-notes/lecture_10.pdf>`_
 
 
+AVIF attēlu formāts
+---------------------
 
-**Kas notiek, ja neievēro teorēmu**
+* Izņemot JPEG, ir populārs Google izveidotais formāts WebP, kas labi saspiežams un 
+  ir populārs pārlūkprogrammās. 
+* HEIF/HEIC (High Efficiency Image Format) ir radniecīgs video kodekam H.265; 
+  to veicina Apple. 
+* AVIF ir radniecīgs pazīstamajam atvērtajam video kodekam AV1. 
+* JPEG XL ir vēl visai jauns formāts (nav sevišķi plaši atbalstīts), bet ar 
+  vairākām jaunām iespējām, labu saspiešanu dažādos robežgadījumos un 
+  arī pilnu savietojamību ar JPEG. 
 
-.. figure:: figs/sinus-functions.png
-   :width: 3in
+AVIF idejas mazliet apskatām šajā kursā. 
 
-   Sinusu starpība
 
-**Bitu pārraide? (bitrate)**
+Python piemērs
+~~~~~~~~~~~~~~~~
 
-* Svarīgākais saspiešanas parametrs. 
-* MP3 (MPEG layer 3 standarts) atļauj bitu ātrumus no 8 kbit/s līdz 320 kbit/s. 
-  Noklusējums ir 128 kbit/s.
-* Salīdzinājumam, audio CD-ROM satur 2048 baitus sektorā 
-  (un atskaņo 75 sektorus sekundē). Tātad  = 153,600 baiti sekundē jeb 
-  1200 kbit/s. 
+.. code-block:: bash 
 
-Tipiski MP3 faili ir 10-reiz mazāki par audio kompaktdiska failiem. 
+  pip install pillow imageio pillow-avif-plugin
 
-`CD-ROM bitrate <https://en.wikipedia.org/wiki/Compact_Disc_Digital_Audio#Bit_rate>`_
+.. code-block:: python 
 
+  from PIL import Image, ImageDraw
+  import imageio
 
+  # Create a white square image
+  image_size = 256
+  white_image = Image.new("RGB", (image_size, image_size), "white")
 
+  # Draw a red circle in the middle
+  draw = ImageDraw.Draw(white_image)
+  circle_radius = 50
+  circle_center = (image_size // 2, image_size // 2)
+  draw.ellipse(
+      [
+          (circle_center[0] - circle_radius, circle_center[1] - circle_radius), 
+          (circle_center[0] + circle_radius, circle_center[1] + circle_radius)
+      ], 
+      fill="red"
+  )
 
-**CBR un VBR**
+  import pillow_avif
+  white_image.save("output.avif", format="AVIF")
+  print("Image saved as output.avif")
 
-*Constant bitrate* un *Variable bitrate* - var lietot gan vienu, gan otru. 
 
-* Mūzikas sarežģītība var būt atkarīga no tā, cik daudzi instrumenti spēlē. 
-  VBR to risina, ļaujot bitu ātrumam mainīties atkarībā no signāla. 
-  Mūzikas gabalu sadala vairākos *freimos* (*frames*) un iekodē ar atšķirīgiem 
-  bitu ātrumiem. 
-* Ieraksta kvalitāti VBR gadījumā nosaka lietotāja izraudzīts parametrs (maksimāli 
-  atļautais bitu ātrums). 
-* VBR var radīt dažiem atskaņotājiem (dekoderiem) grūtības pateikt, cik ilgi gabals skanēs. 
-* VBR nav piemērots straumēšanai. 
 
-
-
-
-**Dzirdamās skaņas frekvences** 
-
-* Cilvēka ausis var uztvert no :math:`20` līdz :math:`20\,000` hercu 
-  skaņas frekvenci. Pusmūža cilvēki - no :math:`16\,000` herciem 
-  (*dog whistle* uz dzirdamības diapazona robežas). 
-* Pirmās oktāvas "la" (jeb **A4**) izmanto toņdakšu, 
-  ko sauc **Stuttgart pitch**, kam
-  ir 440 Hz (nosvārsta gaisu 440 reizes sekundē). 
-  Ja frekvence palielinās divkārt, skaņa par oktāvu augstāka. 
-* "Labi temperēta" skaņu skala saliek :math:`12` pustoņus 
-  ar vienādām blakusesošo pustoņu frekvenču attiecībām. 
-* Piemēram, "do" (C) un "do diēzs" (Cis) frekvenču
-  attiecība ir :math:`1` pret :math:`\sqrt[12]{2}`. 
-
-
-.. figure:: figs/hearing-threshold.png
-   :width: 4in
-
-   Dzirdamības slieksnis atkarībā no skaņas frekvences
-
-
-
-
-
-**Analizējošās filtrubankas (filterbanks)**
-
-Atdarina cilvēka ausī esošās struktūras, no kurām katra uztver 
-skaņas kaut kādā šaurā frekvenču diapazonā. 
-Šo diapazonu cilvēkam ir :math:`24`, tie noskaidroti eksperimentāli.  
-
-.. figure:: figs/critical-bands.png
-   :width: 3in
-
-   Kritiskās frekvenču joslas (*Critical bands*)
-
-Skaņu plūsmā ir dažas situācijas, kad viens tonis
-nomaskē otru (MP3 paredz, ka otru toni nevarēs dzirdēt; 
-tāpēc tas tiek nomaskēts). Divi gadījumi - 
-tuva frekvence, laika sakritība.
-
-
-
-**Skaņas maskēšana**
-
-.. figure:: figs/simultaneous-masking.png
-   :width: 3in
-
-   Vienlaicīgā maskēšana (*Simultaneous Masking*)
-
-.. figure:: figs/temporal-masking.png
-   :width: 3in
-
-   Temporālā maskēšana (*Temporal Masking*)
-
-
-
-**FFT (ātrā Furjē transformācija)**
-
-.. figure:: figs/full-mp3-model.png
-   :width: 3px
-
-   Full MP3 model
-
-* Ik pēc aptuveni 25 ms rodas jauns MP3 freims. 
-* Tajā saspiež esošās frekvences ar FFT. 
-  "Sample rate" (ap 40Hz) ir tāds, ka vienā freimā
-  ir 1152 datu punkti. 
-
-
-
-**Stereo-mūzikas dati**
-
-**Joint Stereo** pārraida kreisās un labās auss skaņu 
-divos kanālos: Vienā kanālā summu, otrā kanālā - starpību. 
-
-* Tā kā abām ausīm ir ļoti līdzīga skaņa, tad summa ir 
-  vidējota skaņa, bet starpība ir neliela un to var labi saspiest. 
-* Cilvēka telpiskā skaņas uztvere (*immersive sound*) ir ļoti niansēta: 
-  skaņas virzienu/azimutu var sadzirdēt ar 1 grāda precizitāti; 
-  augstumu virs horizonta - ar apmēram 10 grādu precizitāti.
-* Joprojām grūti risināms jautājums, kā novietot skaļruņus un mainīt
-  austiņās dzirdamās lietas, ja cilvēks pārvietojas telpā. 
-  Bet MP3 šo nerisina.
-
-
-
-.. figure:: figs/mp3-process.png
-   :width: 5in
-
-   MP3 saspiešanas process.
 
 
 
@@ -441,7 +354,7 @@ Kvantizācija citās jomās
 -------------------------------
 
 **Definīcija:**
-  Dotai punktu kopai :math:`S` par *Voronoja diagrammu* (*Voronoi diagram*) sauc plaknes vai plaknes apgabala 
+  Dotai punktu kopai :math:`S` par *Voronoja diagrammu* (*Voronoi diagram*) sauc plaknes apgabala 
   punktu sadalījumu klasēs atkarībā no tā, kurš punkts no :math:`S` ir tuvākais. 
   
 Voronoja diagrammas klašu skaits sakrīt ar kopas :math:`S` elementu skaitu. 
@@ -454,7 +367,8 @@ Voronoja diagramma sastāv no daudzstūrveida šūnām, kur katras šūnas iekš
    Kvantizācijas piemērs
 
 
-**Proporcionālās vēlēšanu sistēmas**
+Proporcionālās vēlēšanu sistēmas
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Definīcija:** 
   Baricentriskās koordinātes 3 dimensijās piekārto katram punktam regulārā trijstūrī
@@ -514,7 +428,8 @@ Uzdevumi
 
 
 
-**Bibliogrāfija** 
+Izmantotā literatūra
+-----------------------
 
 1. `The MP3 is dead, say creators after terminating licensing 
    <https://www.cnbc.com/2017/05/15/mp3-dead-say-creators-after-terminating-licensing.html>`_ -- 

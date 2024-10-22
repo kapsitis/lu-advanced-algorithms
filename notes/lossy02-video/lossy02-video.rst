@@ -132,14 +132,19 @@ netika samontēti divi gabali vai krasi mainīts kameras stāvoklis).
   P-freimā. Dažreiz tas var būt nobīdīts - ja video attēlota kustība vai 
   kameras slīdēšana - *panning*. 
 
-
-  ![P-freimu kodēšana](p-frame-encoding.png)<!-- .element: width="600px" -->
+  .. figure:: figs/p-frame-encoding.png
+     :width: 4in
 
 
 **B-freimus atliek nosūtītajos datos**
 
-  .. figure:: figs/b-frames-postponed.png
-     :width: 8in
+  =================  ====  ====  ====  ====  ====  ====  ====  ====  ====  ====
+  Playback order     0     1     2     3     4     5     6     7     8     9
+  =================  ====  ====  ====  ====  ====  ====  ====  ====  ====  ====
+  Frame type         I     B     B     P     B     B     P     B     B     I
+  Data stream order  0     2     3     1     5     6     4     8     9     7
+  =================  ====  ====  ====  ====  ====  ====  ====  ====  ====  ====
+  
 
   Ja filmas scēna strauji mainās, ir izdevīgi biežāk lietot I-freimus, ja tā ir relatīvi
   statiska, tad - sajauktus P-freimus un B-freimus. Kodeki parasti 
@@ -207,151 +212,113 @@ tam joprojām plašs rīku atbalsts.
 Parauga ātrums (sample rate)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*Sample rate* mēra hercos (1 Hz = 1 s^{-1}) - cik reizes
+*Sample rate* mēra hercos (1 Hz = :math:`1\ \mathrm{s}^{-1}`) - cik reizes
 sekundē kaut kas notiek (piemēram, cik bieži nomēra skaņu kā membrānas stāvokli). 
 CD-ROM kvalitātes ierakstam parasti vajag ap 44.1 kHz (CD). (Ir arī 
 standarti, kas izmanto 48 kHz, 88.2 kHz, vai 96 kHz.)
 
 **Naikvista-Šenona teorēma:** 
-  Ja funkcijai $x(t)$ (pēc Furjē transformācijas pielietošanas)
-  nav frekvenču, kas pārsniegtu $B$ hercus, tad to 
-  var pilnībā (bez zudumiem) atjaunot, ja zināmas tās 
-  vērtības ik pēc laika intervāliem :math:`{\displaystyle \Delta t = \frac{1}{2B}`.
-
+  Ja funkcijai :math:`x(t)` (pēc Furjē transformācijas pielietošanas)
+  nav frekvenču, kas pārsniegtu :math:`B` hercus, tad to 
+  var pilnībā atjaunot, ja zināmas tās 
+  vērtības ik pēc laika intervāliem :math:`{\displaystyle \Delta t = \frac{1}{2B}}`.
   (*Nyquist-Shannon Sampling theorem*)
 
+Šie divi apgalvojumi ir ekvivalenti
 
-
---
-
-## <lo-theory/> Ekvivalenti apgalvojumi
-
-<hgroup>
-
-**Nyquist-Shannon 1:** Funkciju $f(t)$, kuras vērtības zināmas pēc vienādiem laika intervāliem 
-$\Delta T$ var viennozīmīgi atjaunot no šīm vērtībām `$\{ f_n \}$` 
-tad un tikai tad, ja $f(t)$ enerģijas spektrs nesatur frekvences virs `$\frac{\pi}{\Delta T}$` rad/s. 
-
-</hgroup>
-<hgroup>
+**Nyquist-Shannon 1:** 
+  Funkciju :math:f(t)$, kuras vērtības zināmas pēc vienādiem laika intervāliem 
+  :math:`\Delta T` var viennozīmīgi atjaunot no šīm vērtībām :math:`\{ f_n \}` 
+  tad un tikai tad, ja $f(t)$ enerģijas spektrs nesatur frekvences virs 
+  :math:`\frac{\pi}{\Delta T}\ \mathrm{rad/s}`. 
 
 **Nyquist-Shannon 3:** 
-Ir tikai viena funkcija $f(t)$, kuras frekvenču spektrs viss atrodas zem `$\frac{\pi}{\Delta T}$`, 
-ko apmierina dotās vērtības `$\{ f_n \}$`.
+  Ir tikai viena funkcija :math:`f(t)`, kuras frekvenču spektrs viss atrodas 
+  zem :math:`\frac{\pi}{\Delta T}`, ko apmierina dotās vērtības :math:`\{ f_n \}`.
 
 
-[Lecture10 in 2.161](https://ocw.mit.edu/courses/mechanical-engineering/2-161-signal-processing-continuous-and-discrete-fall-2008/lecture-notes/lecture_10.pdf)
+`Lecture10 in 2.161 <https://ocw.mit.edu/courses/mechanical-engineering/2-161-signal-processing-continuous-and-discrete-fall-2008/lecture-notes/lecture_10.pdf>`_.
 
 
-</hgroup>
+Pretpiemērs augstām frekvencēm (divu sinusu starpība):
 
---
-
-## <lo-theory/> Kas notiek, ja neievēro teorēmu
-
-
-![Sinusu starpība](sinus-functions.png)<!-- .element: width="600px" -->
+.. figure:: figs/sinus-functions.png
+   :width: 300px
 
 
+Bitrate (Bitu pārraides ātrums)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
------
+Svarīgākais saspiešanas parametrs. 
 
-# <lo-theory/> Bitu pārraide? (bitrate)
-
-* Svarīgākais saspiešanas parametrs. 
 * MP3 (MPEG layer 3 standarts) atļauj bitu ātrumus no 8 kbit/s līdz 320 kbit/s. 
-Noklusējums ir 128 kbit/s.
-* Salīdzinājumam, audio CD-ROM satur 2048 baitus sektorā 
-(un atskaņo 75 sektorus sekundē). Tātad  = 153,600 baiti sekundē jeb 
-1200 kbit/s. 
+  Noklusējums ir 128 kbit/s.
+* Salīdzinājumam, `audio CD-ROM <https://en.wikipedia.org/wiki/Compact_Disc_Digital_Audio#Bit_rate>`_ satur 2048 baitus sektorā 
+  (un atskaņo 75 sektorus sekundē). Tātad  = 153,600 baiti sekundē jeb 1200 kbit/s. 
 
-Tipiski MP3 faili ir 10-reiz mazāki par audio kompaktdiska failiem. 
-
-[CD-ROM bitrate](https://en.wikipedia.org/wiki/Compact_Disc_Digital_Audio#Bit_rate)
+Tipiski MP3 faili ir :math:`10 \times` mazāki par audio kompaktdiska failiem. 
 
 
 
---
 
-## <lo-theory/> CBR un VBR
-
-*Constant bitrate* un *Variable bitrate* - var lietot gan vienu, gan otru. 
+*Constant bitrate* (CBR) un  *Variable bitrate* (VBR) 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Mūzikas sarežģītība var būt atkarīga no tā, cik daudzi instrumenti spēlē. 
-VBR to risina, ļaujot bitu ātrumam mainīties atkarībā no signāla. 
-Mūzikas gabalu sadala vairākos *freimos* (*frames*) un iekodē ar atšķirīgiem 
-bitu ātrumiem. 
+  VBR to risina, ļaujot bitu ātrumam mainīties atkarībā no signāla. 
+  Mūzikas gabalu sadala vairākos *freimos* (*frames*) un iekodē ar atšķirīgiem 
+  bitu ātrumiem. 
 * Ieraksta kvalitāti VBR gadījumā nosaka lietotāja izraudzīts parametrs (maksimāli 
-atļautais bitu ātrums). 
+  atļautais bitu ātrums). 
 * VBR var radīt dažiem atskaņotājiem (dekoderiem) grūtības pateikt, cik ilgi gabals skanēs. 
 * VBR nav piemērots straumēšanai. 
 
 
 
-
---
-
-## <lo-theory/> Dzirdamās skaņas frekvences 
+Dzirdamās skaņas frekvences 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Cilvēka ausis var uztvert no $20$ līdz $20\,000$ hercu 
-skaņas frekvenci. Pusmūža cilvēki - no $16\,000$ herciem 
-(*dog whistle* uz dzirdamības diapazona robežas). 
+  skaņas frekvenci. Pusmūža cilvēki - no $16\,000$ herciem 
+  (*dog whistle* uz dzirdamības diapazona robežas). 
 * Pirmās oktāvas "la" (jeb **A4**) izmanto toņdakšu, 
-ko sauc **Stuttgart pitch**, kam
-ir 440 Hz (nosvārsta gaisu 440 reizes sekundē). 
-Ja frekvence palielinās divkārt, skaņa par oktāvu augstāka. 
+  ko sauc **Stuttgart pitch**, kam
+  ir 440 Hz (nosvārsta gaisu 440 reizes sekundē). 
+  Ja frekvence palielinās divkārt, skaņa par oktāvu augstāka. 
 * "Labi temperēta" skaņu skala saliek $12$ pustoņus 
-ar vienādām blakusesošo pustoņu frekvenču attiecībām. 
+  ar vienādām blakusesošo pustoņu frekvenču attiecībām. 
 * Piemēram, "do" (C) un "do diēzs" (Cis) frekvenču
-attiecība ir $1$ pret $\sqrt[12]{2}$. 
+  attiecība ir $1$ pret $\sqrt[12]{2}$. 
 
 
---
+**Analizējošās filtrubankas (filterbanks)**
+  Atdarina cilvēka ausī esošās struktūras, no kurām katra uztver 
+  skaņas kaut kādā šaurā frekvenču diapazonā. 
+  Šo diapazonu ir ap :math:`24`.
 
-## <lo-theory/> Analizējošās filtrubankas (filterbanks)
+  .. figure:: figs/filter-banks.png
+     :width: 350px
 
-Atdarina cilvēka ausī esošās struktūras, no kurām katra uztver 
-skaņas kaut kādā šaurā frekvenču diapazonā. 
-Šo diapazonu ir ap $24$. 
-
-![Critical bands](critical-bands.png)<!-- .element: width="400px" -->
-
-Skaņu plūsmā ir dažas situācijas, kad viens tonis
-nomaskē otru (MP3 paredz, ka otru toni nevarēs dzirdēt; 
-tāpēc tas tiek nomaskēts). Divi gadījumi - 
-tuva frekvence, laika sakritība.
+  Skaņu plūsmā ir dažas situācijas, kad viens tonis
+  nomaskē otru (MP3 paredz, ka otru toni nevarēs dzirdēt; 
+  tāpēc tas tiek nomaskēts). Divi gadījumi - 
+  tuva frekvence, laika sakritība.
 
 
---
+**Skaņas maskēšana**
+  Tuvo frekvenču maskēšana (*frequency masking*): 
 
-## <lo-theory/> Skaņas maskēšana
+  .. figure:: figs/frequency-masking.png
+     :width: 300px
 
-<hgroup>
+  Temporālā maskēšana (*temporal masking*): 
 
-![Simultaneous Masking](masking-by-freq.png)<!-- .element: width="400px" -->
+  .. figure:: figs/temporal-masking.png 
+     :width: 300px
 
-</hgroup>
-<hgroup>
-
-![Temporal Masking](temporal-masking.png)<!-- .element: width="400px" -->
-
-</hgroup>
+  ..  https://www.soundonsound.com/sound-advice/q-can-you-help-me-mp3-file-conversion
 
 
---
-
-Pilns saspiešanas modelis
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. 
-
-![Full MP3 model](full-mp3-model.png)<!-- .element: width="500px" -->
-
-
-* Ik pēc aptuveni 25 ms rodas jauns MP3 freims. 
-* Tajā saspiež esošās frekvences ar FFT. 
-"Sample rate" (ap 40Hz) ir tāds, ka vienā freimā
-ir 1152 datu punkti. 
 
 
 
@@ -396,6 +363,7 @@ transporta kanāliem un zema aizture (*latency*).
 **SILK Mode:**
   SILK mode ir piemērotāka runas saspiešanai. SILK izmanto lineāru paredzošo kodējumu 
   (*Linear Predictive Coding*, LPC) nevis MDCT. 
+
 
 
 
@@ -482,8 +450,6 @@ izcelsmi un vēl arī - vai tas nav ticis mainīts pa ceļam līdz saņēmējam.
   grūtāk atšķir.
 
 Spektrālas ūdenszīmes mēdz būt noturīgākas.
-
-
 Ūdenszīmēm vēl arī būtiska ietilpība (*capacity*) - cik daudz datu ūdenszīmē var ievietot.
 Un zema sarežģītība (*low complexity*), ja digitāla satura izmantošanas pārkāpumu 
 jāvar pamatot vispārsaprotamā veidā.

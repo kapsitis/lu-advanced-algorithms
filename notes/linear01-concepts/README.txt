@@ -1,3 +1,17 @@
+P2.
+Simpleksu metodes atkārtojums
+Dualitāte
+Simpleksu sarežģītība
+Elipsoīdu  metode
+
+P3.
+Visādas iekšējo punktu metodes
+
+https://www.abacademies.org/articles/an-application-of-linear-programming-in-performance-evaluation-6723.html
+
+
+
+
 Rate-distortion theory
 provides a framework for optimally trading off a signal's distortion (a measure of fidelity) 
 and the rate (the amount of data) necessary to represent it. 

@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'lossy03-hamming'
+project = 'lossy02-video'
 copyright = '2023, Kalvis Apsītis'
 author = 'Kalvis Apsītis'
 

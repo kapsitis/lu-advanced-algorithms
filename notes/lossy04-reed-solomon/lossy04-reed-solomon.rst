@@ -86,10 +86,10 @@ Rīda-Solomona metodes ievads
 
   *Piemēri:* Caur diviem punktiem var novilkt tikai vienu 
   taisni (1.pakāpes polinomu) :math:`P(x)=a_1x+a_2`.  
-  Caur trim punktiem :math:`(a_1,b_1)`,:math:`(a_2,b_2)`,:math:`(a_3,b_3)`, 
+  Caur trim punktiem :math:`(a_1,b_1)`, :math:`(a_2,b_2)`, :math:`(a_3,b_3)`, 
   kur :math:`a_1,a_2,a_3` ir pa pāriem dažādi,
   var novilkt tikai vienu parabolu vai taisni 
-  (t.i. 2.pakāpes vai 1.pakāpes polinomu, utt.).
+  (otrās vai pirmās pakāpes polinomu, utt.).
 
 
 
@@ -119,8 +119,7 @@ Rīda-Solomona metodes ievads
 
   .. math::
 
-    s-(k-1) \geq 2c+1 \;\;\Rightarrow\;\; s - k \geq 2c \;\;\Rightarrow
-    \Rightarrow\;\;c \leq (s-k)/2
+    s-(k-1) \geq 2c+1 \;\;\Rightarrow\;\; s - k \geq 2c \;\;\Rightarrow c \leq (s-k)/2
 
   * Rīda-Solomona kods spēj labot līdz :math:`(s-k)/2` kļūdām. 
   * Ja :math:`s=2k`, tad var labot :math:`c \leq (2k-k)/2 = k/2` kļūdas.
@@ -131,7 +130,7 @@ Rīda-Solomona metodes ievads
 **Piemērs**
   
   * Cik kļūdas var labot, ja :math:`k=4`, :math:`s=9`, tad 
-    :math:`c \leq (s-k)/2 = 2.5`. **Tātad varēs labot :math:`2` kļūdas.**
+    :math:`c \leq (s-k)/2 = 2.5`. **Tātad varēs labot 2 kļūdas.**
   * Kāpēc nevaram labot :math:`3` kļūdas. Lai tās labotu, 
     katriem diviem pārraidītajiem ziņojumiem jāatšķiras :math:`2c+1` 
     vietās (:math:`2\cdot 3 + 1 = 7` vietās). 
@@ -175,8 +174,8 @@ Galuā lauki
     vērtības ātri kļūst lielas. 
   * Rīda-Solomona kodiem veselo skaitļu vietā izmanto 
     polinomu koeficientus un vērtības no galīga lauka,
-    piemēram :math:`\text{GF}\!\left(2^{12}\right)`.  (Galuā lauks 
-    ar :math:`2^{12}` elementiem).
+    piemēram :math:`\text{GF}\!\left(2^{8}\right)`.  (Galuā lauks 
+    ar :math:`2^{8} = 256` elementiem).
 
   `Sk. primitīvo polinomu sarakstu <https://www.partow.net/programming/polynomials/index.html>`_, 
   lai konstruētu :math:`\text{GF}\!\left(2^n\right)` pakāpēm līdz :math:`2^{32}`.
@@ -206,8 +205,8 @@ Galuā lauki
 Lauks ir jebkura skaitļu vai citu objektu kopa, kurā var izpildīt visas četras aritmētiskās darbības
 pēc parastajiem likumiem. 
 
-* Racionālo skaitļu kopa :math:`\mathbb{Q}` ir lauks (katrai racionālai daļai :math:`a/b` eksistē pretējā: :math:`-a/b` un 
-  apgrieztā: :math:`b/a`). 
+* Racionālo skaitļu kopa :math:`\mathbb{Q}` ir lauks (katrai racionālai daļai 
+  :math:`a/b` eksistē pretējā: :math:`-a/b` un apgrieztā: :math:`b/a`). 
 * Reālo skaitļu kopa :math:`\mathbb{R}` ir lauks
 * Komplekso skaitļu kopa :math:`\mathbb{C}` (vai arī tikai 
   to komplekso skaitļu kopa :math:`a+bi`, kur :math:`a,b \in \mathbb{Q}`) ir lauks. 
@@ -426,7 +425,7 @@ Atkodēšanas algoritms un izlabojamo kļūdu skaits nemainās, jo pierādījum�
 kļūdu korekcijas spējām netiek izmantots nekas, kas neizpildās patvaļīgā laukā. 
 Galīgie lauki tomēr ļauj izvairīties no darbībām ar lieliem skaitļiem.
 
-**Piemēri ar :math:`\text{GF}(5)`:** 
+**Piemēri ar GF(5):** 
 
 Turpmākajos trijos piemēros izmantojam galīgo lauku 
 
@@ -560,8 +559,9 @@ Pieņemsim, ka
 
 Tā kā :math:`p(x)` – polinoms ar pakāpi :math:`k-1`, tad
 
-:::math::: 
-Z(x) = a_{k+c-1} x^{k+c-1} + a_{k+c-2} x^{k+c-2} + \ldots + a_0.
+.. math::
+
+  Z(x) = a_{k+c-1} x^{k+c-1} + a_{k+c-2} x^{k+c-2} + \ldots + a_0.
 
 * polinoms ar pakāpi :math:`c`
 * polinoms ar pakāpi :math:`k+c-1`

@@ -118,7 +118,8 @@ Kļūdu korekcijas algoritmu jēdzieni
 
 
 
-Kļūdu korekcijas koda nepieciešamās un pietiekamās īpašības:
+Kļūdu korekcijas kodu īpašības
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 **Teorēma:** 
@@ -141,55 +142,51 @@ Kļūdu korekcijas koda nepieciešamās un pietiekamās īpašības:
 
 
 
-**Piemērs n=3**
+**Piemērs n=3:**
+  Ja pārraidāmo bitu skaits ir :math:`n=3`, 
+  bet maksimāli pieļaujamo kļūdu skaits :math:`d=1`, 
+  tad vairāk par divām virknēm kopai :math:`S` nevar
+  piederēt. Ja :math:`x_1x_2x_3 \in S`, tad 
+  otra var būt vienīgi tāda :math:`y_1y_2y_3`, ka 
+  :math:`y_1 \neq x_1`, :math:`y_2 \neq x_2`, :math:`y_3 \neq x_3`. 
 
-Ja pārraidāmo bitu skaits ir :math:`n=3`, 
-bet maksimāli pieļaujamo kļūdu skaits :math:`d=1`, 
-tad vairāk par divām virknēm kopai :math:`S` nevar
-piederēt. Ja :math:`x_1x_2x_3 \in S`, tad 
-otra var būt vienīgi tāda :math:`y_1y_2y_3`, ka 
-:math:`y_1 \neq x_1`, :math:`y_2 \neq x_2`, :math:`y_3 \neq x_3`. 
+**Secinājums:** 
+  Eksistē :math:`[n,k,d]` kods :math:`[3,1,1]`, kas 
+  :math:`n=3` bitos pārraida :math:`k=1` satura bitu un 
+  var izlabot kļūdas, kuru skaits nepārsniedz :math:`d = 1`.  
+  Lielāku bitu skaitu nekā :math:`k=1` (jeb divas 
+  atšķiramas virknes) pārraidīt nevar.
 
-**Secinājums:** Eksistē 
-:math:`[n,k,d]` kods :math:`[3,1,1]`, kas 
-:math:`n=3` bitos pārraida :math:`k=1` satura bitu un 
-var izlabot kļūdas, kuru skaits nepārsniedz :math:`d = 1`.  
-Lielāku bitu skaitu nekā :math:`k=1` (jeb divas 
-atšķiramas virknes) pārraidīt nevar.
-
-
-**Piemērs n=4**
 
 **Apgalvojums:** 
-Ja pārraida :math:`n=4` bitus, arī tad nevar 
-iekodēt vairāk par divām virknēm (kuras 
-atšķiramas, ja kļūdu skaits nepārsniedz :math:`d=1`). 
+  Ja pārraida :math:`n=4` bitus, arī tad nevar 
+  iekodēt vairāk par divām virknēm (kuras 
+  atšķiramas, ja kļūdu skaits nepārsniedz :math:`d=1`). 
 
 **Pierādījums:** 
-Pieņemsim pretējo un aplūkosim trīs virknes, 
-ko satur kopa :math:`S`: :math:`x_1x_2x_3x_4`,  
-:math:`y_1y_2y_3y_4` un :math:`z_1z_2z_3z_4`. 
-Nekādas divas virknes nevar sakrist 
-vairāk kā vienā vietā. 
-Līdz ar to kopējais sakritību skaits 
-nevar būt lielāks par :math:`3`.
+  Pieņemsim pretējo un aplūkosim trīs virknes, 
+  ko satur kopa :math:`S`: :math:`x_1x_2x_3x_4`,  
+  :math:`y_1y_2y_3y_4` un :math:`z_1z_2z_3z_4`. 
+  Nekādas divas virknes nevar sakrist 
+  vairāk kā vienā vietā. 
+  Līdz ar to kopējais sakritību skaits 
+  nevar būt lielāks par :math:`3`.
 
+  Ja kādā pozīcijā :math:`i` 
+  visi trīs biti sakristu (:math:`x_i = y_i = z_i`), tad 
+  būtu iegūta pretruna: visas trīs sakritības 
+  jau izlietotas, bet kaut kādām sakritībām 
+  jābūt arī citās pozīcijās :math:`j \neq i`, 
+  jo ir trīs skaitļi :math:`x_j`, :math:`y_j`, :math:`z_j` un 
+  tikai divas vērtības. 
 
-Ja kādā pozīcijā :math:`i` 
-visi trīs biti sakristu (:math:`x_i = y_i = z_i`), tad 
-būtu iegūta pretruna: visas trīs sakritības 
-jau izlietotas, bet kaut kādām sakritībām 
-jābūt arī citās pozīcijās :math:`j \neq i`, 
-jo ir trīs skaitļi :math:`x_j`, :math:`y_j`, :math:`z_j` un 
-tikai divas vērtības. 
+  Ja divi biti sakrīt, bet trešais – atšķiras,
+  tad sakritību skaits šajā bitā ir 1.
+  Tā kā mums ir 4 biti, tad varam secināt, 
+  ka kopējais sakritību skaits būs vismaz 4, kas ir pretrunā ar to, ka šis skaits nevar būt lielāks par 3. 
 
-Ja divi biti sakrīt, bet trešais – atšķiras,
-tad sakritību skaits šajā bitā ir 1.
-Tā kā mums ir 4 biti, tad varam secināt, 
-ka kopējais sakritību skaits būs vismaz 4, kas ir pretrunā ar to, ka šis skaits nevar būt lielāks par 3. 
-
-Tātad kopa :math:`S` nevar saturēt vairāk par divām virknēm. 
-:math:`\blacksquare`
+  Tātad kopa :math:`S` nevar saturēt vairāk par divām virknēm. 
+  :math:`\blacksquare`
 
 
 
@@ -236,40 +233,39 @@ Heminga kodi
 
 **Ja pārraida n=7 bitus**
 
-No :math:`n=7` iespējams izveidot :math:`2^4 = 16` atšķiramas virknes:
+  No :math:`n=7` iespējams izveidot :math:`2^4 = 16` atšķiramas virknes:
 
-.. code-block:: 
+  .. code-block:: text
 
-  0000000
-  0000111
-  0011001
-  0011110
-  0101010
-  0101101
-  0110011
-  0110100
-  1100001
-  1100110
+    0000000
+    0000111
+    0011001
+    0011110
+    0101010
+    0101101
+    0110011
+    0110100
+    1100001
+    1100110
 
 **Heminga koda konstruēšana**
+  Virkni :math:`x_1x_2x_3x_4` pārraida 
+  kā :math:`x_1x_2x_3y_1x_4y_2y_3`, kur 
 
-Virkni :math:`x_1x_2x_3x_4` pārraida 
-kā :math:`x_1x_2x_3y_1x_4y_2y_3`, 
-kur 
+  .. math:: 
 
-.. math:: 
+    \begin{array}{l}
+    y_1 = \left( x_1 + x_2 + x_3 \right)\,\text{mod}\,2\\
+    y_2 = \left( x_1 + x_2 + x_4 \right)\,\text{mod}\,2\\
+    y_3 = \left( x_1 + x_3 + x_4 \right)\,\text{mod}\,2\\
+    \end{array}
 
-  y_1 = \left( x_1 + x_2 + x_3 \right)\,\text{mod}\,2
-  y_2 = \left( x_1 + x_2 + x_4 \right)\,\text{mod}\,2
-  y_3 = \left( x_1 + x_3 + x_4 \right)\,\text{mod}\,2
-
-Šis ir :math:`[7,4,1]`-kods, ko sauc arī par 
-*Heminga kodu* (*Haming code*).
-
+  Šis ir :math:`[7,4,1]`-kods, ko sauc arī par *Heminga kodu* (*Haming code*).
 
 
-**Apgalvojums par Hemingu [7,4,1]**
-  Katras divas šādi konstruētas
+
+**Apgalvojums par Heminga kodu [7,4,1]**
+  Katras divas Heminga koda
   7-bitu virknes atšķirsies vismaz :math:`3` vietās
   (tātad varēs izlabot vienu kļūdu). 
 
@@ -289,9 +285,11 @@ kur
 
     .. math:: 
 
-      y_1 = \left( x_1 + x_2 + x_3 \right)\,\text{mod}\,2
-      y_2 = \left( x_1 + x_2 + x_4 \right)\,\text{mod}\,2
-      y_3 = \left( x_1 + x_3 + x_4 \right)\,\text{mod}\,2
+      \begin{array}{l}
+      y_1 = \left( x_1 + x_2 + x_3 \right)\,\text{mod}\,2\\
+      y_2 = \left( x_1 + x_2 + x_4 \right)\,\text{mod}\,2\\
+      y_3 = \left( x_1 + x_3 + x_4 \right)\,\text{mod}\,2\\
+      \end{array}
 
 
   **2.gadījums:** 
@@ -398,8 +396,6 @@ kur
 Citi lineāri kodi
 ---------------------
 
-
-
 **Definīcija**
   Jebkuru kodu, kurā katrs nokodētās virknes bits ir aprakstāms ar formulu
 
@@ -476,7 +472,7 @@ Citādi tur ir :math:`0`.
 
   .. math::
 
-     P\mathbb{y} = \left( \begin{array}{c}
+     P\mathbf{y} = \left( \begin{array}{c}
      0 \\ 
      0 \\
      0 

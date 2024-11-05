@@ -4,50 +4,48 @@
 **1. uzdevums:** 
 
   Dots attēls "bumblebee.png"
-  (PNG failu šeit izmanto kā "raw data" avotu, kuram var lietot dažādus JPEG-stila saspiešanas paņēmienus.)
+  (PNG failu šeit izmanto kā "raw data" avotu -- krāsu pikseļu matricu, 
+  kam var lietot dažādus JPEG-stila saspiešanas paņēmienus.)
 
   .. figure:: figs/bumblebee.png
      :width: 300px
   
   **(A)**
-    Pārveidot to YIQ koordinātēs; katrai koordinātei izveidot 
+    Pārveidot attēlu YCbCr koordinātēs; katrai koordinātei izveidot 
     attēlu (attiecīgi melnbaltu Y koordinātei, zili-oranžu I koordinātei 
-    un zaļi-violetu Q koordinātei). Iekopēt iegūtos 3 attēlus mājasdarbā. 
+    un zaļi-violetu Q koordinātei). Iekopēt iegūtos 3 attēlus mājasdarbā.
+    Pārveidojumu formulas var aizgūt no Vikipēdijas raksta 
+    `YCbCr <https://en.wikipedia.org/wiki/YCbCr>`_. 
 
 
   **(B)** 
-    Uzzīmēt histogrammas tam, kā attēlā sadalītas attiecīgi Y, I un Q krāsas.
-    T.i. katrai no YIQ krāsu modeļa 3 koordinātēm :math:`Y \in [0;1]`, 
-    `I \in [-0.5;0.5]` un `Q \in [-0.5; 0.5]` uzzīmēt atsevišķu grafiku, kuram uz 
+    Uzzīmēt histogrammas tam, kā attēlā sadalītas attiecīgi Y, Cb un Cr krāsas.
+    T.i. katrai no YCbCr krāsu modeļa koordinātēm no itervāla :math:`[16, 240]` 
+    uzzīmēt grafiku, kurā uz 
     horizontālās ass ir visas teorētiski iespējamās attiecīgās krāsu koordinātes 
-    :math:`Y`, :math:`I`, vai :math:`Q` vērtības ar soli 0.01, bet uz vertikālās ass
+    vērtības ar soli 5, bet uz vertikālās ass
     svītriņas augstums attēlo biežumu, ar kuru pikseļi attēlā `bumblebee.png` 
-    pieņem attiecīgo vērtību (kas noapaļota līdz tuvākajai simtdaļai).
-    Piemēram, virs horizontālās ass skaitļa :math:`0.51` stabiņa augstums parāda, 
-    cik daudz attēlā bija pikseļu, kam :math:`Y` koordināte noapaļojas uz vērtību :math:`0.51`.
+    pieņem attiecīgo vērtību.
     
     .. note:: 
-      Starp citu, YIQ koordinātu histogrammas var lietot, lai uzlabotu attēla kontrastu -- 
+      Starp citu, YCbCr koordinātu histogrammas var lietot, lai uzlabotu attēla kontrastu -- 
       `Histogram equalization <https://en.wikipedia.org/wiki/Histogram_equalization>`_.
-      (Ja šādi mēģina izlīdzināt atsevišķi R, G, B krāsu koordinātes, kontrasts arī uzlabojas, bet 
-      attēlā var pasliktināties krāsu līdzsvars - atsevišķi attēla apgabali var kļūt 
-      nedaudz sarkanāki, zilāki utml. Savukārt YIQ krāsu modelī līdzīgas manipulācijas 
-      krāsu līdzsvaru neiespaido.) Nekāds *histogram equalization* jums šajā uzdevumā nav jāveic.
 
 
 **2. uzdevums:** 
-
-  Dots kamenes attēls `bumblebee.png` (tas pats, kas iepriekšējā uzdevumā). 
+  
+  Par ievadi izmantot melnbalto `bumblebee.png` attēlu no iepriekšējā uzdevuma. 
 
   **(A)** 
-    Izvadīt DCT rezultātu kamenes attēla kreisajā augšējā stūrī esošajam :math:`8 \times 8` blokam (aplūkojot 
-    tikai melnbalto Y krāsas komponenti). Izdrukāt to kā :math:`8 \times 8` matricu ar reāliem skaitļiem (ar precizitāti 0.0001). 
+    Izvadīt DCT rezultātu kamenes attēla kreisajā augšējā stūrī esošajam 
+    :math:`8 \times 8` blokam (aplūkojot 
+    tikai melnbalto Y krāsas komponenti). Izdrukāt to kā 
+    :math:`8 \times 8` matricu ar reāliem skaitļiem (ar precizitāti 0.0001). 
 
   **(B)**
-    Visiem kamenes attēla blokiem veikt DCT; pēc tam noapaļot uz :math:`0` tos DCT koeficientus, 
-    kas  mazāki par :math:`65`, tos aplūkojot intervālā :math:`[0;255]` (vai arī DCT koeficientus, kas 
-    :math:`{\displaystyle \leq \frac{1}{4}}`, tos aplūkojot intervālā
-    :math:`[0;1]`). 
+    Visiem kamenes attēla blokiem veikt DCT; pēc tam noapaļot uz :math:`0` visus tos 
+    DCT koeficientus :math:`X_{ij}`, kam :math:`i > 4` vai :math:`j > 4` 
+    (t.i. no visiem 64 koeficientiem paturēt tikai 25 koeficientus). 
     Veikt inverso DCT pārveidojumu no frekvenču pasaules atpakaļ uz 2D pasauli. 
     Izvadīt iegūto "noapaļoto" attēlu -- tā arī būs melnbalta PNG bilde. 
     (To var ielīmēt mājasdarba PDF tekstā.)

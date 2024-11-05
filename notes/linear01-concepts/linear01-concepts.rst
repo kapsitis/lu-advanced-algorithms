@@ -107,49 +107,83 @@ NP-pilni uzdevumi
 Lineāru programmu lietojumi
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Piemērs: Pārtikas iepirkšana**
-  Doti produkti :math:`1,\ldots, n` ar cenām :math:`p_1,\ldots, p_n`.
-  Ir :math:`k` uzturvielu tipi un vienā dienā cilvēkam vajadzīgs daudzums :math:`c_i` ar
-  uzturvielu math:`i`. Atrast lētāko produktu
-  kombināciju, kas nodrošina pietiekami daudz katras uzturvielas.
+**Resursu piešķiršanas problēma:** 
+  Populārs tuvinājums ekonomikā pazīstamai problēmai (*Resource allocation problem*). 
+  Spēja to efektīvi risināt var atbildēt uz filozofisku jautājumu -- vai ir 
+  nepieciešams tirgus?
+
+  **Mērķis:** 
+    Maksimizēt peļņu, nosakot optimālos ražošanas apjomus dažādiem produktiem, 
+    ievērojot pastāvošos ierobežojumus. 
+
+  **Mainīgie:** 
+    :math:`x_1, x_2, \ldots, x_n` ir produktu ražošanas apjomi.
+
+  **Mērķa funkcija:** 
+    :math:`\textcolor{blue}{\max \left( z = c_1x_1 + c_2x_2 + \ldots + c_nx_n \right)}`, 
+    kur :math:`c_i` ir peļņa, saražojot vienu vienību ar :math:`i`-to produktu. 
+  
+  **Ierobežojumi:** 
+    Resursu pieejamības ierobežojumi -- darbs, izejvielas, kapitāls. 
+
+    .. math:: 
+  
+      \begin{array}{ll}
+      a_{11}x_1 + a_{12}x_2 + \ldots + a_{1n}x_n \leq b_1 & (\text{Resurss 1}) \\
+      a_{21}x_1 + a_{22}x_2 + \ldots + a_{2n}x_n \leq b_2 & (\text{Resurss 2}) \\
+      &\vdots \\
+      a_{m1}x_1 + a_{m2}x_2 + \ldots + a_{mn}x_n \leq b_m & (\text{Resurss m}) \\
+      x_i \geq 0 & (\text{Nevar ražot negatīvus daudzumus})\\
+      \end{array}
+  
 
 
-**Pārtikas iepirkšanas lineārais modelis**
-  Ar :math:`x_i` apzīmējam :math:`i`-tā produkta daudzumu, 
-  ko iegādāsimies. Tad jāminimizē kopējās izmaksas
-
-  .. math: 
-    
-    \textcolor{blue}{p_1 x_1 + p_2 x_2 + \ldots + p_n x_n}
-
-  pie nosacījumiem
-
-  .. math:: 
-
-    \left\{ \begin{array}{l}
-    x_1 \geq 0,\;\; x_2 \geq 0,\;\; \ldots,\;\; x_n \geq 0,\\
-    a_{11} x_1 + a_{12} x_2 + \ldots + a_{1n} x_n \geq c_1,\\
-    \ldots,\\
-    a_{k1} x_1 + a_{k2} x_2 + \ldots + a_{kn} x_n \geq c_k,
-    \end{array} \right.
-
-  kur :math:`a_{ij}` apzīmē :math:`i`-tās uzturvielas daudzumu produktā :math:`j`.
-
-*Piezīme.* Ja produktu daudzumi ir mērāmi veselos skaitļos 
-(piemēram, veselā skaitā :math:`1~\mathrm{L}` paku), 
-tad iegūstam lineāro programmēšanu veselos skaitļos. 
-Ja dažiem mainīgajiem jābūt veseliem, 
-bet citi drīkst būt patvaļīgi reāli skaitļi, 
-tad tā ir jauktā veselo skaitļu programmēšana 
-(*mixed integer programming*).
 
 
+**Diētas problēma**
+  Līdzīgi iepriekšējam uzdevumam -- doti ierobežojumi (cilvēka uztura 
+  vajadzības) un jāpieņem lēmums par 
+  produktu iepirkšanu. 
+
+  **Mērķis:** 
+    Samazināt izmaksas diētai, kas apmierina visas cilvēka uztura vajadzības. 
+
+  **Mainīgie:** 
+    Ar :math:`x_1, x_2, \ldots, x_n` apzīmējam dažādu pārtikas produktu 
+    daudzumus, ko iekļaut diētā.
+
+  **Mērķa funkcija:** 
+    :math:`\textcolor{blue}{\min\left( z = c_1x_1 + c_2x_2 + \ldots + c_nx_n \right)}`, 
+    kur :math:`c_i` ir izmaksas :math:`i`-tajam pārtikas produktam par vienu vienību. 
+
+  **Ierobežojumi:** 
+    Sasniegt nepieciešamo uzturvielu daudzumu, 
+    piemēram, kalorijām, olbaltumvielām, vitamīniem. 
+  
+    .. math:: 
+
+      \begin{array}{ll}
+      a_{11}x_1 + a_{12}x_2 + \ldots + a_{1n}x_n \geq d_1 & (\text{Uzturviela 1}) \\
+      a_{21}x_1 + a_{22}x_2 + \ldots + a_{2n}x_n \geq d_2 & (\text{Uzturviela 2}) \\
+      &\vdots \\
+      a_{m1}x_1 + a_{m2}x_2 + \ldots + a_{mn}x_n \geq d_m & (\text{Uzturviela m}) \\
+      x_i \geq 0 & (\text{Nevar patērēt negatīvu daudzumu produkta})\\
+      \end{array}
+  
+
+  *Piezīme.* Ja produktu daudzumi ir mērāmi veselos skaitļos 
+  (piemēram, veselā skaitā iepakojumu), 
+  tad iegūstam lineāro programmēšanu veselos skaitļos. 
+  Ja dažiem mainīgajiem jābūt veseliem, 
+  bet citi drīkst būt patvaļīgi reāli skaitļi, 
+  tad tā ir jauktā veselo skaitļu programmēšana 
+  (*mixed integer programming*).
 
 
 **Leonīds Kantorovičs (Leonid Kantorovich, 1912-1986):** 
   Optimāla izejvielu izmantošana finiera 
-  rūpniecībā (1939.g.). Agrīni optimizācijas uzdevumi bieži saistīti ar
-  ražošanas plānošanu, it īpaši situācijās, kurās nav brīvā tirgus.
+  rūpniecībā (1939.g.). Agrīni optimizācijas uzdevumi mēdz būt saistīti ar
+  ražošanas plānošanu.
 
 
 
@@ -258,7 +292,7 @@ apgabals ir galīgs.
 
 
 
-LP lietojumi un redukcijas
+LP risināšanas algoritmi 
 ----------------------------
 
 * (Reālo skaitļu) LP ir pirmais solis, lai risinātu 
@@ -272,13 +306,12 @@ Veselie skaitļi kā nezināmie (*Integer Programming*)
 labāk modelē Yes/No lēmumu pieņemšanu (0 un 1 vērtības), 
 bet šādus uzdevumus ir grūtāk risināt. 
 
+Ir pazīstami šādi algoritmi:
 
-LP risināšanas algoritmi 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* Simpleksalgoritmi (Kantorovičs, 1939; Dantzig, 1947).
-* Elipsoīda algoritms (Khachian, 1979)
+* Simpleksalgoritms (Kantorovičs, 1939; Dantzig, 1947).
+* Elipsoīda algoritms (Khachian, 1979); pirmais pierādāmi efektīvais algoritms.
 * Iekšējo punktu metodes (*Interior Point methods*).
+
     - Projektīvā metode (Karmarkar, 1984).
     - Afīnā metode (Dikin, 1967).
     - Log Barrier Method. 
@@ -293,6 +326,69 @@ skaitļu šajās matricās nav nulles.
 
 Maksimālā plūsma orientētā grafā
 ----------------------------------
+
+Plūsmu maksimizācijas uzdevumi ir lineārās programmēšanas uzdevumu 
+atsevišķs gadījums -- tiem ir specializēti algoritmi. 
+Bet tos var efektīvi risināt arī ar lineārās programmēšanas līdzekļiem
+un arī izmantot lineārās programmēšanas (tsk. duālās problēmas) teorijas 
+ilustrēšanai. 
+
+Maksimālās plūsmas uzdevums
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ieviešam dažus apzīmējumus:
+
+* Dots neorientēts plūsmas grafs :math:`N = (V, E)`, kurā :math:`s, t \in V`, 
+  ko sauc attiecīgi par *ieteku* (*source*) un *izteku* (*sink*). 
+* Uz grafa šķautnēm :math:`(u,v)` var definēt dažādas funkcijas, ko apzīmē 
+  ar :math:`g(u,v)` vai :math:`g_{uv}`. 
+
+**Definīcija:** 
+  Par šķautnes ietilpību (*capacity*) sauc maksimālo plūsmu, 
+  ko var piešķirt attiecīgajai šķautnei. 
+  Ietilpību atzīmē ar :math:`c: E \to \mathbb{R}^+`. 
+
+**Definīcija:** 
+  Par *plūsmu* (*flow*) sauc funkciju :math:`f : E \to \mathbb{R}`, 
+  kas apmierina šādus nosacījumus:
+
+  * Plūsma ne uz vienas šķautnes nevar pārsniegt tās kapacitāti. Citiem vārdiem, 
+    :math:`f_{uv} \leq c_{uv}` visiem :math:`(u, v) \in E`.
+  * Plūsmu summa, kas ienāk virsotnē, ir vienāda ar plūsmu summu, 
+    kas iziet no virsotnes, izņemot ieteku un izteku. Citiem vārdiem: 
+
+    .. math:: 
+      
+       \forall v \in V \quad \left( v \not\in \{s, t\} \quad \Rightarrow \quad 
+       \sum_{u:(u, v) \in E, f_{uv}>0} f_{uv} = \sum_{u:(v, u) \in E, f_{vu}>0} f_{vu}. \right)
+
+*Piezīme:* Plūsmas ir asimetriskas: :math:`f_{uv} = -f_{vu}` visiem :math:`(u, v) \in E`.
+
+**Definīcija:**  
+  Plūsmas vērtība ir plūsmas daudzums, kas pārvietojas no ietekas uz izteku. 
+  Plūsmas :math:`f : E \to \mathbb{R}^+` gadījumā to aprēķina šādi:
+
+  .. math:: 
+    
+    |f| = \sum_{v:\ (s,v) \in E} f_{sv} = \sum_{u:\ (u,t) \in E} f_{ut}.
+
+**Definīcija:** 
+  Maksimālās plūsmas problēma nozīmē atrast plūsmas funkciju (plūsmu uz katras 
+  grafa šķautnes), kas maksimāli daudz plūsmu novada no 
+  ietekas uz izteku. Citiem vārdiem, atrod :math:`f_\textrm{max}` ar maksimālo vērtību.
+
+*Piezīme:* Maksimālās plūsmas uzdevumus var vispārināt arī orientētiem 
+grafiem. Šajā gadījumā starp katrām divām virsotnēm :math:`u,v \in V` 
+var būt šķautnes abos virzienos :math:`(u,v)` un :math:`(v,u)` ar atšķirīgām 
+kapacitātēm. Plūsmas var piešķirt katrai šķautnei atsevišķi -- un šīs 
+plūsmas orientētos grafos nemēdz būt negatīvas. (Ja eksistē nenulles plūsma no 
+:math:`u` uz :math:`v`, tad plūsma pretējā virzienā ir :math:`0`. 
+Ja šis noteikums neizpildās, tad abas nenulles plūsmas 
+pretējos virzienos var noīsināt, lai tas izpildītos.)
+
+
+Forda-Falkersona/Edmonda-Karpa algoritms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Forda-Falkersona algoritms atrod maksimālo plūsmu orientētā grafā 
 ar noteiktām šķautņu kapacitātēm. 
@@ -323,7 +419,9 @@ vienmēr :math:`v_i` apmeklē pirms :math:`v_j`, ja :math:`i<j`.
 
 
 
-**Piemērs: Edmonda-Karpa Algoritms**
+Edmonda-Karpa algoritma piemērs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
   Darbināt Edmonda-Karpa algoritmu uz šāda grafa:
 
   .. figure:: figs/edmonds-karp-graph.png

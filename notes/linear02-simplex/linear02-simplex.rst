@@ -746,3 +746,25 @@ Pārveidošana standartformā
 
 
 
+Lineāra un veselo skaitļu programmēšana ar Python  
+---------------------------------------------------
+
+Mugursomas uzdevums 
+~~~~~~~~~~~~~~~~~~~~~~
+
+Doti :math:`N` objekti. Katram no tiem dota 
+cena :math:`c_i` un svars :math:`w_i`. 
+
+===========  ====  ====  ====  ====  ====  ====  ====  ====
+:math:`i`    1     2     3     4     5     6     7     8
+===========  ====  ====  ====  ====  ====  ====  ====  ====
+:math:`c_i`  19    17    30    13    25    29    23    10
+:math:`w_i`  4     2     8     3     7     5     9     6
+===========  ====  ====  ====  ====  ====  ====  ====  ====
+
+Pārveidot mugursomas uzdevumu par lineārās/veselo skaitļu 
+programmēšanas uzdevumu.
+Use "pulp" package to solve this in Python.
+
+.. https://youtu.be/E72DWgKP_1Y?si=hcea7o5EMqtuY0OS
+

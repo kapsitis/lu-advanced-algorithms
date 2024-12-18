@@ -54,6 +54,8 @@ Aprakstām mākslīgu mainīgo pievienošanas dažādus gadījumus.
 
 
 
+Log Barrier Method and how to prepare or it? 
+https://people.csail.mit.edu/moitra/docs/6854lec16.pdf
 
 
 ### 1. **Gradient Descent**

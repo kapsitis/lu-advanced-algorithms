@@ -1,0 +1,33 @@
+7 4 5 25 
+9 12 3 28 
+5 3 6 19 
+4 3 5
+
+
+Teksta entropija pa 1 simbolam
+Pa 2 simboliem 
+Pa 3 simboliem
+
+
+
+
+
+
+
+
+
+
+
+Spēle par lin programmēšanu
+Ir d
+
+
+Hešinga vērtību sadalījums Blūma filtrā
+
+.. math:: 
+  
+  hash(s) = (c_1 \times p^{(n-1)} + c_2 \times p^{(n-2)} + \ldots + c_n \times p^0) \mod m
+
+kur :math:`p=37` un  :math:`m=2^{31} - 1`. 
+
+

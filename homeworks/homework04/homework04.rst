@@ -1,141 +1,96 @@
-4. mājasdarbs: Sufiksu masīvi un lineārā programmēšana
-=======================================================
+4. mājasdarbs: Stringu algoritmi
+====================================================
 
 **1. uzdevums:** 
 
-  :math:`\mathtt{TORABORA}` ir nosaukums alu sistēmai Afganistānā. 
-  Pierakstīt šim vārdam beigās dolāra simbolu (kas alfabētiski ir pirms visiem burtiem). 
+  Alfabētā ir :math:`100` simboli, kas apzīmēti ar ciparu pāriem: 
+  :math:`\{ \mathtt{00}, \mathtt{01}, \ldots, \mathtt{99} \}`. 
+  Iedomāsimies, ka hešinga funkcijai Rabina-Karpa algoritmā jāaprēķina
+  hešfunkcijas vērtības teksta simbolu virknītēm garumā 
+  :math:`k = 5` un pirmskaitlis moduļa rēķināšanai ir :math:`n = 23`.
+  Hešfunkcija definēta ar izteiksmi 
+  
+  .. math::
+  
+    H = (c_1 a^{k-1} + c_2 a^{k-2} + c_3 a^{k-3} + ... + c_k a^{0})\,\text{mod}\,n, 
+	
+  kur :math:`a = 100` ir alfabēta burtu skaits 
+  un :math:`c_i` ir ievades simboli (skaitļi no 0 līdz 99).
+  Sal. `Polynomial Rolling Hash
+  <https://en.wikipedia.org/wiki/Rolling_hash#Polynomial_rolling_hash>`_ definīciju. 
 
-  **(A)** 
-    Apskatām *nesaspiestu sufiksu koku* (*suffix tree* jeb *trie*) šim 9 simbolu vārdam.
-    Tas ir koks, kurā no katras virsotnes, ja apakšstringu šajā 
-    vietā vēl var turpināt, iziet šķautnes; katra šķautne apzīmēta ar alfabēta simbolu  
-    (*trie* datu struktūra, kas ļauj iet pa vienam burtam uz priekšu).
-    No katras virsotnes izejošās šķautnes sakārtoti alfabētiski. 
+  **(A)**
     
-    Uzzīmēt šo koku un uzrakstīt, cik virsotņu tajā ir. 
-
-  **(B)** 
-    Attēlot *saspiestu sufiksu koku* šim pašam vārdam.
-    Atšķirībā no nesaspiesta sufiksu koka, šis koks nesatur tādas virsotnes, kurām ir tikai 
-    viens bērns (jeb attiecīgo apakšstringu var turpināt tikai vienā veidā.) 
-    Šķautnes saspiestajam sufiksu kokam var būt apzīmētas gan ar atsevišķiem simboliem, 
-    gan arī ar garākām simbolu virknēm.  
-
-    Uzzīmēt šo koku un uzrakstīt, cik virsotņu tajā ir. 
+    Uzrakstīt formulu funkcijai `skip(oldval,c)`, kas veco hešfunkcijas vērtību 
+    (iepriekšējai 5 simbolu virknītei) pārveido par hešfunkcijas vērtību, kurai burts "c"
+    virknītes sākumā ir nodzēsts (t.i. jaunā virknīte ir tikai 4 simbolus gara). 
+	
+    Uzrakstīt formulu funkcijai `append(oldval,c)`, kas veco hešfunkcijas vērtību 
+    (4 simbolu virknītei) pārveido par jaunu vērtību, kur virknītei galā pierastīts
+    burts "c" (jaunā virknīte ir 5 simbolus gara). 
+	
+  **(B)** 	
+    Uzrakstīt ripojošās hešfunkcijas pārveidojumu, ja ievades virkne ir  
+    ``[03, 14, 15, 92, 65, 35, 89, 79, 31]``,  un ievades vārds 
+    aizveļas no ``[03, 14, 15, 92, 65]`` uz ``[14, 15, 92, 65, 35]``. 
+    To dara 3 soļos: 
+	
+    * Aprēķina hešfunkciju H no ``[03, 14, 15, 92, 65]``,
+    * Lieto `skip()` lai nomestu burtu "03" vārda sākumā, 
+    * Lieto `append()`, lai pievienotu burtu "35" vārda beigās.
+	
+    Pārbaudīt, ka pēc šiem soļiem iegūta tā pati vērtība, kas
+    būtu rēķinot polinomiālo hešfunkciju tieši no ievades ``[14, 15, 92, 65, 35]``. 
 
 
 **2. uzdevums:** 
 
-  Aplūkot stringu :math:`W = \mathtt{TORABORA}\mathtt{\$}_1\mathtt{LABORATORY}\mathtt{\$}_2`. 
-  Atdalītājsimboli :math:`\mathtt{\$}_1, \mathtt{\$}_2` ir alfabētiski pirms visiem citiem 
-  burtiem, turklāt :math:`\mathtt{\$}_1` ir pirms :math:`\mathtt{\$}_2`. 
+  **(A)** 
+    Uzrakstīt Knuta-Morisa-Prata algoritmā izmantoto tabulu 
+    (prefiksu funkciju :math:`\pi(i)`, `i \in [1;m]`, 
+    ja meklējamais vārds ir :math:`P=\mathtt{ABCDABD}`. 
+	
+  **(B)** 
+    Uzrakstīt šī algoritma izpildi tabulas veidā šī vārda meklēšanai, ja teksts ir 
+    :math:`\mathtt{ABC\_ABCDAB\_ABCDABCDABDE}`, kur pasvītrojumzīme 
+    ir atsevišķs burts ievades alfabētā.
+    *Tabulā katra rindiņa atbilst noteiktai nobīdei starp vārdu un tekstu un 
+    pie tās pašas nobīdes tiek salīdzināti 1 vai vairāki burti.*
 
-  **(A)**
-    Izveidot sufiksu masīvu šim stringam no :math:`20` simboliem. 
-    Attēlot šo sufiksu masīvu kā tabulu ar četrām kolonnām (tabulu var pareizi sakārtot un 
-    iekopēt no izklājlapas vai tml.): 
-
-    * Masīva indeksu kolonna (augoša skaitļu virkne no :math:`0` līdz :math:`19`, kas sanumurē masīvā esošos elementus pēc kārtas). 
-    * Sufiksa indeksa kolonna (skaitļi no :math:`0` līdz :math:`19` jauktā secībā) -- katram sufiksam norādīts, cik burtu no 
-      sākotnējā stringa jānosvītro, lai iegūtu šo sufiksu. 
-    * LCP (*longest common prefix*) kolonna -- tie ir dažādi veseli nenegatīvi skaitļi 
-      kas parāda, cik garš ir kopīgais gabals šīs rindas sufiksam ar iepriekšējās rindas sufiksu. (Pašā pirmajā rindā 
-      pieņemts rakstīt LCP vērtību :math:`0`, jo pirms šī sufiksa nekā alfabētiski agrāka nav. Tāpat LCP vērtība ir :math:`0` 
-      ja šīs rindas sufikss sākas ar citu burtu nekā iepriekšējās rindas sufikss.) 
-    * Pats sufikss, izmetot no :math:`W` tik daudz burtu, cik norādīts otrajā kolonnā. Tas palīdz pareizi izrēķināt citas kolonnas. 
-      (Gariem tekstiem visus 
-      sufiksus nav praktiski šādi izrakstīt, jo tas aizņem daudz laika un vietas.)
-
-  **(B)**  
-    Parādīt, kā šo sufiksu masīvu var izmantot, lai atrastu vārdu :math:`\mathtt{TORABORA}` un 
-    :math:`\mathtt{LABORATORY}` garāko kopīgo apakšstringu, izmantojot slīdošā loga algoritmu.
-    Sk. `Youtube. William Fisset: Longest common substring problem <https://youtu.be/DTLjHSToxmo?si=UDHJ0O74byKS_6QJ>`_. 
-    Uzrakstīt šī algoritma pseidokodu (tieši 2 stringu gadījumam, ko atdala :math:`\mathtt{\$}_1` un :math:`\mathtt{\$}_2`) 
-    un atrast tā laika sarežģītību 
-    atkarībā no ievades vārda garuma :math:`|W| = n`. 
-
-  **(C)**
-    Izmantot sufiksu masīvu, lai atrastu stringam :math:`W` tā Berouza-Vīlera pārveidojumu 
-    (sk. 4. lekciju). 
-   
 
 **3. uzdevums:** 
 
-  Apskatām lineāro programmu: Maksimizēt :math:`5x_1 + 7x_2 + 6x_3` pie nosacījumiem
-
-  .. math::
-
-    \left\{ \begin{array}{l}
-    6x_1 + 5x_2 + 8x_3 \leq 16,\\
-    10x_1 + 20x_2 + 10x_3 \leq 35,\\
-    x_1 \geq 0,\;\; x_2 \geq 0,\;\; x_3 \geq 0,\\
-    \end{array} \right.
-
-  **(A)**
-    Atrisināt šo lineāro programmu, izmantojot simpleksa metodes tabulas.
-    Sākt ar tuvinājumu :math:`(x_1,x_2,x_3) = (0,0,0)`, katrā solī nākamo tuvinājumu var
-    izvēlēties jekburā veidā, ja tas palielina mērķa funkcijas vērtību. 
-
+  **(A)** 
+    Uzrakstīt Bojera-Mūra algoritmā izmantotās tabulas
+    (sliktā simbola funkciju :math:`\lambda(i)` un 
+    labā sufiksa funkciju :math:`\gamma(i)`), ja
+    meklējamais vārds ir :math:`\mathtt{ABCBCAB}`. 
+	
   **(B)** 
-    Uzrakstīt šai lineārajai programmai duālo programmu (ar diviem mainīgajiem :math:`y_1,y_2` un trim 
-    nevienādībām) un atrisināt to 
-    ar kādu bibliotēku (piemēram, Python ``linprog`` no ``scipy.optimize``). 
-    Ja šai bibliotēkai labāk patīk lineāras programmas standartformātā (maksimizēt nevis minimizēt, vai 
-    nevienādības uz otru pusi), varat pārveidot šo duālo lineāro programmu nepieciešamajā formātā, 
-    pārmainot mainīgajiem zīmes vai ieviešot nokares (*slack*) mainīgos. 
-
-  **(C)** 
-    Iedomāsimies, ka primārajā uzdevumā :math:`X_1,X_2,X_3` ir trīs izstrādājumi, ko var pārdot attiecīgi par cenām
-    :math:`5`, :math:`7`, un :math:`6` EUR. Tiem nepieciešamas divas izejvielas :math:`A` un :math:`B`, kuru 
-    esošie krājumi ir attiecīgi :math:`16` un :math:`35` kilogrami. Zināms arī, ka pirmā izstrādājuma :math:`X_1` izgatavošanai 
-    vajag :math:`6` vienības ar izejvielu :math:`A` un :math:`10` vienības ar izejvielu :math:`B`; 
-    izstrādājumam :math:`X_2` vajag attiecīgi :math:`5` un :math:`20` (un tā tālāk -- 
-    kā ierakstīts primārā uzdevuma matricā). 
-
-    Primārā uzdevuma atrisinājums :math:`x_1,x_2,x_3` pasaka, cik vienības ar katru izstrādājumu :math:`X_1,X_2,X_3`
-    jāražo, lai visu saražoto varētu iespējami dārgāk pārdot.
-
-    Duālā uzdevuma atrisinājums :math:`y_1,y_2` parāda "ēnu cenas" jeb "shadow prices" (t.i. nevis reālās cenas, 
-    bet konkrētajai izejvielai ekonomiski pamatotu iepirkuma cenu) -- piemēram :math:`y_1` parāda lielāko cenu (EUR/kg), cik 
-    uzņēmums būtu gatavs maksāt par izejvielu :math:`A`, lai varētu palielināt ieņēmumus nedaudz virs 
-    maksimālās summas :math:`5x_1 + 7x_2 + 6x_3`, ko pašlaik atļauj primārā uzdevuma atbilde. 
-
-    * Atrast, kurai no izejvielām :math:`A` vai :math:`B` ir lielāka "ēnu cena" -- kuras izejvielas krājuma 
-      palielināšana straujāk paaugstinātu mūsu ieņēmumus.
-    * Pieņemsim, ka uzņēmums var palielināt šīs vērtīgākās izejvielas krājumu (otru atstājot nemainīgu). 
-      Cik daudz šīs izejvielas jāiegādājas, lai duālās problēmas atrisinājums aizlēktu uz citu stūri un 
-      attiecīgās izejvielas "ēnu cena" izmainītos?
-
+    Uzrakstīt šī algoritma izpildi tabulas veidā šī vārda meklēšanai, ja teksts ir 
+    :math:`\mathtt{ABCABBCABCBCABABABABCBCAB}`. 
 
 **4. uzdevums:** 
 
-  Apskatām uzdevumu par maksimālo sapārojumu (*maximum matching*). 
-  Šajā uzdevumā doti :math:`n` cilvēki un :math:`n` uzdevumi ar nosacījumiem, 
-  kuri cilvēki drīkst pildīt kurus uzdevumus. 
+  Dota :math:`n \times m` tabula, katrā rūtiņā ir ierakstīts 
+  tieši viens simbols. Teiksim, ka vārds ir *paslēpts* tabulā, 
+  ja to var nolasīt, sākot ar kādu rūtiņu un katru nākamo 
+  simbolu nolasot no rūtiņas, kurai ar iepriekšējo ir kopīga mala. 
+  Vārds, paslēpts tabulā, drīkst arī pārklāties pats ar sevi.
+
+  Piemēram, šajā tabulā ir paslēpti vārdi :math:`\mathtt{SAULE}` un 
+  :math:`\mathtt{SOS}`:  
+
+  ===  ===  ===
+  S    A    E
+  O    U    L
+  ===  ===  ===
+
+  Aprakstīt algoritmu, kas noskaidro, vai dotais vārds garumā 
+  :math:`w` paslēpts tabulā un pamatot, ka tas strādā laikā 
+  :math:`O(wnm)`. 
+
+
+
+
   
-  Jānosaka maksimālais uzdevumu skaits, ko var pildīt vienlaikus, 
-  ja viens cilvēks drīkst pildīt ne vairāk kā vienu uzdevumu 
-  (un vienu uzdevumu drīkst pildīt ne vairāk kā viens cilvēks). 
-  Šo uzdevumu var modelēt ar lineāru programmu ar mainīgajiem :math:`x_{ij}` 
-  katram :math:`i,j`, kur :math:`i` ir cilvēks, kas drīkst pildīt uzdevumu :math:`j`. 
-  (Ja cilvēks :math:`i` nedrīkst pildīt uzdevumu :math:`j`, tad attiecīgo mainīgo :math:`x_{ij}` neievieš.)
-  Lineārā programma izskatīsies šādi: 
-
-  .. math:: 
-
-    \begin{array}{c}
-    \text{Maksimizēt}\;\sum x_{ij},\;\text{kur} \\
-    \left\{ \begin{array}{l}
-    \sum_{j \in [1;n]} x_{ij} \leq 1,\;\text{katram $i$}\\
-    \sum_{i \in [1;n]} x_{ij} \leq 1,\;\text{katram $j$}\\
-    x_{ij} \leq 1,\;\text{katriem $i,j$}\\
-    x_{ij} \geq 0,\;\text{katriem $i,j$}\\
-    \end{array} \right.
-    \end{array}
-
-
-  Pierādīt, ka šīs lineārās programmas atrisinājums reālos skaitļos (kas sasniedz, piemēram, summu :math:`S`), 
-  ir vienlaikus arī atrisinājums veselos skaitļos -- to pašu maksimumu var sasniegt arī prasot, 
-  lai visi :math:`x_{ij}` būtu veseli skaitļi no :math:`\{ 0, 1 \}`. 
-    

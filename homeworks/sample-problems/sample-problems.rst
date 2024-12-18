@@ -2,13 +2,12 @@ DatZ 4020: Kontroldarbu uzdevumu piemēri
 ====================================================
 
 Šajā dokumentā iekļautie uzdevumi iecerēti kā paraugi, lai gatavotos 
-kontroldarbiem semestra vidū vai beigās. 
+kontroldarbiem vai eksāmeniem. 
+Daži uzdevumi var prasīt skaitļošanas ierīces. 
 
-Daži uzdevumi var prasīt skaitļošanas ierīces vai arī ir 
-nedaudz grūtāki kā citi -- tie zemāk atzīmēti kā 
-paraugi kontroldarbu neklātienes daļai. 
 
-Entropija un entropijas saspiešana (1. un 2. tēmas)
+
+Entropija un entropijas saspiešana
 -----------------------------------------------------
 
 Uzdevumi par entropiju, Hafmana kods, aritmētiskais kods. 
@@ -71,7 +70,7 @@ Uzdevumi par entropiju, Hafmana kods, aritmētiskais kods.
     Pārveidot Hafmana koku kanoniskā formā.
 
 
-**4.uzdevums (Aritmētiskais kods; neklātienes daļai):** 
+**4.uzdevums (Aritmētiskais kods):** 
   Dota ziņojumu kopa :math:`S = \{ A,B,C,D \}` ar attiecīgajām varbūtībām 
   :math:`\{ 0.2, 0.5, 0.2, 0.1 \}`.
 
@@ -93,7 +92,7 @@ Uzdevumi par entropiju, Hafmana kods, aritmētiskais kods.
 
 
 
-**5.uzdevums (nav piemērots kontroldarbiem):**
+**5.uzdevums:**
   Mums ir teksts, kurā sastopami 
   :math:`n = 2^k` dažādi simboli (:math:`k \geq 2`)
   ar biežumiem :math:`p1,p2,\ldots,pn` (:math:`p_1 + p_2 + \ldots + p_n =1`).
@@ -108,7 +107,7 @@ Uzdevumi par entropiju, Hafmana kods, aritmētiskais kods.
     :math:`{\displaystyle p \leq \frac{2}{2^k+1}}` ,ja :math:`k` ir patvaļīgs.
 
 
-**6. uzdevums (nav piemērots kontroldarbiem):**
+**6. uzdevums:**
   Pieņemsim, ka ziņojumu kopai :math:`S = \{ x_1, x_2, \ldots, x_n \}` 
   ir izveidots optimāls prefiksu kodējums. Šis kodējums jāpārraida,
   izmantojot minimālu bitu skaitu.
@@ -130,7 +129,7 @@ Uzdevumi par entropiju, Hafmana kods, aritmētiskais kods.
 
 
 
-Vārdnīcu un konteksta saspiešana (3. un 4. tēma)
+Vārdnīcu un konteksta saspiešana
 ---------------------------------------------------
 
 Lempela-Ziva saimes saspiešanas algoritmi, Berouza-Vīlera transformācija. 
@@ -180,7 +179,7 @@ Lempela-Ziva saimes saspiešanas algoritmi, Berouza-Vīlera transformācija.
 
 
 
-**10.uzdevums (neklātienes daļai):** 
+**10.uzdevums:** 
 
   **(A)**
     Kāds ir rezultāts (transformētā simbolu virkne un sākotnējās virknes pozīcija), 
@@ -203,11 +202,11 @@ Lempela-Ziva saimes saspiešanas algoritmi, Berouza-Vīlera transformācija.
 
 
 
-Mediju saspiešana (5. un 6. tēma)
+Mediju saspiešana 
 ------------------------------------
 
 
-**11.uzdevums (Diskrētā krāsu plakne YCbCr):** 
+**11.uzdevums:** 
   Koordinātes :math:`(Y,Cb,Cr)` 
   aprēķina no koordinātēm :math:`(R,G,B)` atbilstoši šādai vektoru algebras sakarībai:
 
@@ -259,7 +258,7 @@ Mediju saspiešana (5. un 6. tēma)
 
 
 
-**12.uzdevums (Diskrētais kosinusu pārveidojums, neklātienes daļai):**
+**12.uzdevums (Diskrētais kosinusu pārveidojums):**
   Dota funkcija :math:`f(x)`, kas definēta argumentiem :math:`x=0,1,\ldots,N-1`. 
   Par 1-dimensionālu DCT (diskrēto kosinusu pārveidojumu, *discrete cosine transform*) 
   sauksim funkciju :math:`F(u)`, kas definēta tām pašām argumenta vērtībām :math:`u=0,1,\ldots,N-1` 
@@ -304,11 +303,11 @@ Mediju saspiešana (5. un 6. tēma)
 
 
 
-Kļūdu korekcija (7. un 8. tēma)
+Kļūdu korekcija
 ---------------------------------
 
 
-**13.uzdevums (neklātienes daļai):**
+**13.uzdevums:**
   Ziņojums nokodēts ar grafu kodu, kas atbilst augstāk uzzīmētajam grafam 
   (:math:`x_i` ir ziņojuma biti, :math:`y_i` ir kontrolbiti). 
   Saņemot pazaudēti :math:`3` ziņojuma biti. 
@@ -321,7 +320,7 @@ Kļūdu korekcija (7. un 8. tēma)
     virsotnēm :math:`y_1, \ldots ,y_k` tā, ka kontrolbits :math:`y_j` veidojas, 
     saskaitot (pēc moduļa 2) visus tos datu bitus, kuri grafā ir ar šo kontrolbitu savienoti. 
 
-**14.uzdevums (neklātienes daļai):** 
+**14.uzdevums:** 
 
   **(A)**
     Uzrakstīt grafu kodu ar 9 ziņojuma bitiem :math:`x_1,\ldots , x_{15}` un pēc 
@@ -338,7 +337,7 @@ Kļūdu korekcija (7. un 8. tēma)
     pazaudētus ziņojuma bitus :math:`x_i`.
 
 
-**15.uzdevums (Heminga kodi, neklātienes daļai):** 
+**15.uzdevums:** 
   
   Pseidonejaušu skaitļu vikrnes iegūšanai 
   uzrakstām skaitļa :math:`\pi = 3.14159\ldots` pierakstu divnieku skaitīšanas sistēmā un 
@@ -369,6 +368,3 @@ Kļūdu korekcija (7. un 8. tēma)
     izlabot kļūdas, ja tās ir, un uzrakstīt visus ziņojuma bitus 
     (ziņojumu bitu secība apgriezti leksikogrāfiska :math:`x_{1111}\ldots{}x_{0011}`).
 
-
-
-(*Galaeksāmena tēmām uzdevumu paraugu vēl nav.*)

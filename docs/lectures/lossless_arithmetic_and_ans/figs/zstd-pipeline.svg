@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 336" width="940" height="336" role="img" aria-label="Zstandard bloka uzbūve">
+<title>Zstandard bloka uzbūve</title>
+<rect x="0" y="0" width="940" height="336" fill="#ffffff"/>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+  </marker>
+</defs>
+<text x="20" y="28" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" fill="#222" text-anchor="start" font-weight="bold">Zstandard: LZ77 + entropijas kodēšana (FSE = tANS un Hafmans)</text>
+<rect x="20" y="132" width="168" height="56" rx="6" fill="#f4f6f8" stroke="#5a6a7a" stroke-width="1.4"/>
+<text x="104.0" y="156" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">ievades bloks</text>
+<text x="104.0" y="173" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">(līdz 128 KB)</text>
+<line x1="196" y1="160.0" x2="224" y2="160.0" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="228" y="132" width="168" height="56" rx="6" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="312.0" y="156" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">LZ77 meklētājs</text>
+<text x="312.0" y="173" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">(atkārtojumi logā)</text>
+<line x1="400" y1="160.0" x2="424" y2="160.0" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="440" y="56" width="186" height="56" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
+<text x="533" y="80" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">literāļi</text>
+<text x="533" y="97" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="middle" font-weight="normal">(nesakritušie baiti)</text>
+<line x1="630" y1="84" x2="656" y2="84" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="660" y="61" width="128" height="46" rx="6" fill="#ffffff" stroke="#F58518" stroke-width="1.4"/>
+<text x="724" y="89" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#F58518" text-anchor="middle" font-weight="bold">Hafmana koks</text>
+<line x1="792" y1="84" x2="820" y2="84" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<path d="M 428 160 L 428 84 L 432 84" stroke="#444" stroke-width="1.4" fill="none"/>
+<line x1="430" y1="84" x2="438" y2="84" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="440" y="132" width="186" height="56" rx="6" fill="#dcecd8" stroke="#54A24B" stroke-width="1.4"/>
+<text x="533" y="156" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">garumi</text>
+<text x="533" y="173" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="middle" font-weight="normal">(match / literal length)</text>
+<line x1="630" y1="160" x2="656" y2="160" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="660" y="137" width="128" height="46" rx="6" fill="#ffffff" stroke="#54A24B" stroke-width="1.4"/>
+<text x="724" y="165" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#54A24B" text-anchor="middle" font-weight="bold">FSE  (tANS)</text>
+<line x1="792" y1="160" x2="820" y2="160" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<path d="M 428 160 L 428 160 L 432 160" stroke="#444" stroke-width="1.4" fill="none"/>
+<line x1="430" y1="160" x2="438" y2="160" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="440" y="208" width="186" height="56" rx="6" fill="#ecdcea" stroke="#B279A2" stroke-width="1.4"/>
+<text x="533" y="232" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">nobīdes</text>
+<text x="533" y="249" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="middle" font-weight="normal">(match offsets)</text>
+<line x1="630" y1="236" x2="656" y2="236" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="660" y="213" width="128" height="46" rx="6" fill="#ffffff" stroke="#B279A2" stroke-width="1.4"/>
+<text x="724" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#B279A2" text-anchor="middle" font-weight="bold">FSE  (tANS)</text>
+<line x1="792" y1="236" x2="820" y2="236" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<path d="M 428 160 L 428 236 L 432 236" stroke="#444" stroke-width="1.4" fill="none"/>
+<line x1="430" y1="236" x2="438" y2="236" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="824" y="74" width="76" height="176" rx="6" fill="#f4f6f8" stroke="#5a6a7a" stroke-width="1.4"/>
+<text x="862" y="156" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#16324f" text-anchor="middle" font-weight="bold">saspiests</text>
+<text x="862" y="172" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#16324f" text-anchor="middle" font-weight="bold">bloks</text>
+<text x="20" y="306" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#444" text-anchor="start" font-weight="normal">Katra bloka galvenē glabā arī sablīvētas frekvenču tabulas, tāpēc atkodētājs uzbūvē tieši tās pašas FSE tabulas.</text>
+</svg>

@@ -1,0 +1,14 @@
+- title: Sākums
+  url: /
+- title: Lekciju materiāli
+  children:
+    - title: Entropija un Hafmana koki
+      url: /lectures/lossless_entropy_and_huffman/
+    - title: Aritmētiskā saspiešana un ANS
+      url: /lectures/lossless_arithmetic_and_ans/
+    - title: Lempela-Ziva algoritmi
+      url: /lectures/lossless_lempel_ziv/
+    - title: Berouza-Vīlera transformācija
+      url: /lectures/lossless_burrows_wheeler/
+    - title: Bezzudumu saspiešanas uzdevumi
+      url: /lectures/lossless_final_problemsets/

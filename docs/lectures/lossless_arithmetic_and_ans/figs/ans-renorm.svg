@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 296" width="800" height="296" role="img" aria-label="Straumējošs rANS: stāvokļa renormalizācija">
+<title>Straumējošs rANS: stāvokļa renormalizācija</title>
+<rect x="0" y="0" width="800" height="296" fill="#ffffff"/>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+  </marker>
+</defs>
+<text x="20" y="28" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" fill="#222" text-anchor="start" font-weight="bold">Kāpēc praksē x neaug bez gala: renormalizācija</text>
+<text x="20" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#444" text-anchor="start" font-weight="normal">Stāvokli visu laiku tur šaurā „logā“;  liekos zemos bitus izraksta baitu straumē.</text>
+<rect x="70" y="96" width="660" height="46" rx="6" fill="#eef3f8" stroke="#5a6a7a" stroke-width="1.4"/>
+<rect x="70" y="96" width="140" height="46" rx="6" fill="#f7d9d9" stroke="#b23b3b" stroke-width="1.2"/>
+<rect x="590" y="96" width="140" height="46" rx="6" fill="#f7d9d9" stroke="#b23b3b" stroke-width="1.2"/>
+<text x="140" y="124" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#7a1f1f" text-anchor="middle" font-weight="normal">par mazs</text>
+<text x="660" y="124" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#7a1f1f" text-anchor="middle" font-weight="normal">par liels</text>
+<text x="400.0" y="124" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" fill="#16324f" text-anchor="middle" font-weight="bold">derīgais logs   L ≤ x &lt; 2ᵇ · L</text>
+<text x="70" y="86" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13" fill="#333" text-anchor="middle" font-weight="normal">L</text>
+<text x="730" y="86" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13" fill="#333" text-anchor="middle" font-weight="normal">2ᵇ · L</text>
+<line x1="140" y1="182" x2="140" y2="148" stroke="#2a6b2a" stroke-width="1.6" marker-end="url(#arw)"/>
+<text x="140" y="200" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#1f5a1f" text-anchor="middle" font-weight="bold">ATKODĒTĀJS</text>
+<text x="140" y="218" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#1f5a1f" text-anchor="middle" font-weight="normal">kamēr x &lt; L:  ielasa b bitus,</text>
+<text x="140" y="235" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#1f5a1f" text-anchor="middle" font-weight="normal">x ← x · 2ᵇ + biti</text>
+<line x1="660" y1="182" x2="660" y2="148" stroke="#b23b3b" stroke-width="1.6" marker-end="url(#arw)"/>
+<text x="660" y="200" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#7a1f1f" text-anchor="middle" font-weight="bold">KODĒTĀJS</text>
+<text x="660" y="218" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#7a1f1f" text-anchor="middle" font-weight="normal">kamēr x ≥ 2ᵇ·L:  izvada b zemos bitus,</text>
+<text x="660" y="235" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#7a1f1f" text-anchor="middle" font-weight="normal">x ← ⌊x / 2ᵇ⌋</text>
+<text x="20" y="278" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#444" text-anchor="start" font-weight="normal">Tāpēc rANS pietiek ar fiksēta platuma veseliem skaitļiem (32 vai 64 biti) — bez lielo skaitļu aritmētikas.</text>
+</svg>

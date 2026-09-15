@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 664 396" width="664" height="396" role="img" aria-label="rANS: atkodēšana">
+<title>rANS: atkodēšana</title>
+<rect x="0" y="0" width="664" height="396" fill="#ffffff"/>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+  </marker>
+</defs>
+<text x="20" y="28" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" fill="#222" text-anchor="start" font-weight="bold">rANS atkodēšana: simboli iznāk pareizā (sākuma → beigu) secībā</text>
+<text x="20" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#444" text-anchor="start" font-weight="normal">D(x) = (s, x′),  kur simbolu s nosaka atlikums  x mod 10</text>
+<text x="80" y="88" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#666" text-anchor="middle" font-weight="normal">x  (stāvoklis)</text>
+<text x="200" y="88" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#666" text-anchor="middle" font-weight="normal">x mod 10</text>
+<text x="303" y="88" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#666" text-anchor="middle" font-weight="normal">simbols</text>
+<text x="366" y="88" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#666" text-anchor="start" font-weight="normal">jaunais  x′ = f(s)·⌊x/10⌋ + (x mod 10) − c(s)</text>
+<rect x="20" y="100" width="624" height="30" rx="3" fill="#fbfcfd" stroke="#dde3e9" stroke-width="1"/>
+<text x="80" y="122" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#16324f" text-anchor="middle" font-weight="bold">18244</text>
+<text x="200" y="122" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#333" text-anchor="middle" font-weight="normal">4</text>
+<rect x="286" y="104" width="34" height="22" rx="3" fill="#dcecd8" stroke="#54A24B" stroke-width="1.2"/>
+<text x="303" y="122" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#234d1c" text-anchor="middle" font-weight="bold">G</text>
+<text x="366" y="122" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13.5" fill="#333" text-anchor="start" font-weight="normal" xml:space="preserve">3·1824 + 4 − 4  =  5472</text>
+<rect x="20" y="134" width="624" height="30" rx="3" fill="#f2f5f8" stroke="#dde3e9" stroke-width="1"/>
+<text x="80" y="156" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#16324f" text-anchor="middle" font-weight="bold">5472</text>
+<text x="200" y="156" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#333" text-anchor="middle" font-weight="normal">2</text>
+<rect x="286" y="138" width="34" height="22" rx="3" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.2"/>
+<text x="303" y="156" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#1f3a5f" text-anchor="middle" font-weight="bold">A</text>
+<text x="366" y="156" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13.5" fill="#333" text-anchor="start" font-weight="normal" xml:space="preserve">3·547 + 2 − 0  =  1643</text>
+<rect x="20" y="168" width="624" height="30" rx="3" fill="#fbfcfd" stroke="#dde3e9" stroke-width="1"/>
+<text x="80" y="190" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#16324f" text-anchor="middle" font-weight="bold">1643</text>
+<text x="200" y="190" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#333" text-anchor="middle" font-weight="normal">3</text>
+<rect x="286" y="172" width="34" height="22" rx="3" fill="#fde5cc" stroke="#F58518" stroke-width="1.2"/>
+<text x="303" y="190" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#7a3d00" text-anchor="middle" font-weight="bold">C</text>
+<text x="366" y="190" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13.5" fill="#333" text-anchor="start" font-weight="normal" xml:space="preserve">1·164 + 3 − 3  =  164</text>
+<rect x="20" y="202" width="624" height="30" rx="3" fill="#f2f5f8" stroke="#dde3e9" stroke-width="1"/>
+<text x="80" y="224" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#16324f" text-anchor="middle" font-weight="bold">164</text>
+<text x="200" y="224" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#333" text-anchor="middle" font-weight="normal">4</text>
+<rect x="286" y="206" width="34" height="22" rx="3" fill="#dcecd8" stroke="#54A24B" stroke-width="1.2"/>
+<text x="303" y="224" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#234d1c" text-anchor="middle" font-weight="bold">G</text>
+<text x="366" y="224" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13.5" fill="#333" text-anchor="start" font-weight="normal" xml:space="preserve">3·16 + 4 − 4  =  48</text>
+<rect x="20" y="236" width="624" height="30" rx="3" fill="#fbfcfd" stroke="#dde3e9" stroke-width="1"/>
+<text x="80" y="258" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#16324f" text-anchor="middle" font-weight="bold">48</text>
+<text x="200" y="258" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#333" text-anchor="middle" font-weight="normal">8</text>
+<rect x="286" y="240" width="34" height="22" rx="3" fill="#ecdcea" stroke="#B279A2" stroke-width="1.2"/>
+<text x="303" y="258" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#4f2a48" text-anchor="middle" font-weight="bold">U</text>
+<text x="366" y="258" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13.5" fill="#333" text-anchor="start" font-weight="normal" xml:space="preserve">2·4 + 8 − 7  =  9</text>
+<rect x="20" y="270" width="624" height="30" rx="3" fill="#f2f5f8" stroke="#dde3e9" stroke-width="1"/>
+<text x="80" y="292" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#16324f" text-anchor="middle" font-weight="bold">9</text>
+<text x="200" y="292" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#333" text-anchor="middle" font-weight="normal">9</text>
+<rect x="286" y="274" width="34" height="22" rx="3" fill="#e8e2dc" stroke="#9C755F" stroke-width="1.2"/>
+<text x="303" y="292" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="15" fill="#4a382c" text-anchor="middle" font-weight="bold">$</text>
+<text x="366" y="292" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13.5" fill="#333" text-anchor="start" font-weight="normal" xml:space="preserve">1·0 + 9 − 9  =  0</text>
+<text x="20" y="326" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#B22222" text-anchor="start" font-weight="normal">x = 0  →  viss ziņojums atkodēts, stāvoklis atgriezies sākumā.</text>
+<text x="20" y="352" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" fill="#16324f" text-anchor="start" font-weight="bold">Atkodētais ziņojums:  G A C G U $</text>
+</svg>

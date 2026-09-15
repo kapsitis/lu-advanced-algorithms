@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - Markdown Example</title>
+
+		<link rel="stylesheet" href="../../reveal.js.40/dist/reveal.css">
+		<link rel="stylesheet" href="../../reveal.js.40/dist/theme/ddgatve.css" id="theme">
+
+        <link rel="stylesheet" href="../../reveal.js.40/plugin/highlight/monokai.css">
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+
+                <!-- Use external markdown resource, separate slides by three newlines; vertical slides by two newlines -->
+                <section data-markdown="slides.md" data-separator="^\r?\n-----+\s*\r?\n\s*$" data-separator-vertical="^\r?\n--\s*\r?\n\s*$"></section>
+
+
+            </div>
+		</div>
+
+		<script src="../../reveal.js.40/dist/reveal.js"></script>
+        <script src="../../reveal.js.40/plugin/markdown/markdown.js"></script>
+        <script src="../../reveal.js.40/plugin/highlight/highlight.js"></script>
+        <script src="../../reveal.js.40/plugin/notes/notes.js"></script>
+		<script src="../../reveal.js.40/plugin/math/math.js"></script>
+		<script src="../../reveal.js.40/plugin/ddgatve/ddgatve.js"></script>
+
+		<script>
+
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+                math: {
+                    mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+                    config: 'TeX-AMS_HTML-full',
+                    // pass other options into `MathJax.Hub.Config()`
+                    TeX: { Macros: { RR: "{\\bf R}" } }
+                },
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ]
+			});
+
+		</script>
+
+	</body>
+</html>

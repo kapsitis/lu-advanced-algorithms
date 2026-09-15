@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{{ '/style/main.css' | relative_url }}">
+<title>{{ page.title | default: site.title }}</title>
+<script>
+    window.MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']]
+    },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+</script>
+
+<script>
+  function changeImage(base) {
+    const select = document.getElementById("selectSvg");
+    const img = document.getElementById("svgImage");
+    if (!select || !img) return;
+
+    const [file, w, h] = (select.value || '').split(";");
+    const prefix = base.endsWith('/') ? base : base + '/';
+    img.src = prefix + file;
+    if (w) img.width = parseInt(w, 10);
+    if (h) img.height = parseInt(h, 10);
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const select = document.getElementById("selectSvg");
+    const img = document.getElementById("svgImage");
+    if (!select || !img) return;
+
+    // Prefer a data-base on the select; else fall back to img src directory
+    let base = select.dataset.base || img.dataset.base;
+    if (!base) {
+      const p = new URL(img.getAttribute('src'), document.baseURI).pathname;
+      base = p.replace(/[^/]+$/, ''); // strip filename
+    }
+
+    const handler = () => changeImage(base);
+    select.addEventListener("change", handler);
+    handler(); // initialize once at load
+  });
+</script>
+
+
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <ul class="nav__list">
+    {% for item in site.data.nav %}
+      <li class="nav__item {% if item.children %}has-children{% endif %}">
+        {% if item.url %}
+          <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+        {% else %}
+          <span class="nav__label">{{ item.title }}</span>
+        {% endif %}
+        {% if item.children %}
+          <ul class="nav__submenu">
+            {% for child in item.children %}
+              <li><a href="{{ child.url | relative_url }}">{{ child.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+
+{{ content }}
+</body>
+</html>

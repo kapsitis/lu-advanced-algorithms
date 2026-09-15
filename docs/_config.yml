@@ -1,0 +1,7 @@
+markdown: kramdown
+kramdown:
+  input: GFM
+  # no math_engine here when using MathJax v3
+  # math_engine: mathjax
+url: https://kapsitis.github.io
+baseurl: /nms-courses/

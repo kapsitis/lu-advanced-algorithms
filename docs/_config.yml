@@ -4,4 +4,4 @@ kramdown:
   # no math_engine here when using MathJax v3
   # math_engine: mathjax
 url: https://kapsitis.github.io
-baseurl: /nms-courses/
+baseurl: /lu-advanced-algorithms/

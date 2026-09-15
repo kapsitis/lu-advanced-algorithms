@@ -18,7 +18,8 @@ saimēs - katrā nodarbību ciklā apskatīsim vienu no tām:
 5. Lineārā programmēšana (*linear programming*) jeb lineāra optimizācija; 
 6. Stringu meklēšanas algoritmi.
 
-**Teorija:** Katrai algoritmu tēmai apskatām matemātikas pamatus. Piemēram, informācijas entropiju, nepārtraukta signāla paraugu biežumu, galīgus laukus, ekstrapolāciju ar polinomiem, lineārās optimizācijas uzdevumus un to dualitāti, hešfunkciju un sufiksu koku izmantošanu stringu meklēšanā.
+**Teorija:** Katrai algoritmu tēmai apskatām matemātikas pamatus. Piemēram, saspiešanā 
+ir svarīga ziņojumu avota entropija;  nepārtraukta signāla paraugu biežumu, galīgus laukus, ekstrapolāciju ar polinomiem, lineārās optimizācijas uzdevumus un to dualitāti, hešfunkciju un sufiksu koku izmantošanu stringu meklēšanā.
 
 **Uz papīra pildāmi algoritmi:** Algoritmiem pieejams pseidokods un paraugi, lai pašus algoritmus un izmantotās datu struktūras varētu zīmēt uz papīra, analizēt un mainīt.
 

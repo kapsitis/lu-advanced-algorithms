@@ -3,9 +3,10 @@ layout: default
 title: "Bezzudumu saspiešana: uzdevumu krājums"
 permalink: /lectures/lossless_final_problemsets/
 ---
-# Bezzudumu saspiešana: uzdevumu krājums
+# Bezzudumu saspiešana: Beigu uzdevumi
 
-Uzdevumi aptver nodaļas par entropiju un Hafmana kodu, aritmētisko kodu un ANS, Lempela-Ziva algoritmiem un Berouza-Vīlera transformāciju. Visus aprēķinus var veikt uz papīra; algoritmu apzīmējumi ir tādi paši kā attiecīgajās nodaļās.
+Uzdevumi aptver nodaļas par entropiju un Hafmana kodu, aritmētisko kodu un ANS, Lempela-Ziva algoritmiem un 
+Berouza-Vīlera transformāciju. Visus aprēķinus var veikt uz papīra; algoritmu apzīmējumi ir tādi paši kā attiecīgajās nodaļās.
 
 **Noderīgas vērtības:** $\log_2 3 \approx 1.585$, $\;\log_2 5 \approx 2.322$.
 

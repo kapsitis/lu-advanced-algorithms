@@ -3,8 +3,17 @@ layout: default
 title: "Lossless Compression: Problem Set"
 lang: en
 permalink: /lectures/lossless_final_problemsets/
+
+docx_header: "Lossless Compression. Sample Problems"
+docx_footer: "Fall 2026 Seminar: Algorithms in Telecommunications and Security"
+docx_font: "Calibri"
+docx_fontsize: 10
+docx_heading_font: "Calibri Light"
+docx_heading_color: "2F5496"
+docx_heading1_size: 14
+geometry: "a4paper, top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm"
 ---
-# Lossless Compression: Final Problem Set
+# Lossless Compression: Sample Problems
 
 The problems cover the chapters on entropy and Huffman coding, arithmetic coding and ANS, Lempel–Ziv algorithms, and 
 the Burrows–Wheeler transform. All calculations can be done on paper; the notation for the algorithms is the same as in the corresponding chapters.

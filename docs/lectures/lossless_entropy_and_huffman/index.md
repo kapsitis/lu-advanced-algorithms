@@ -7,7 +7,16 @@ permalink: /lectures/lossless_entropy_and_huffman/
 
 ## Kursa tvērums un metodes
 
-Kursā aplūkotas vairākas algoritmu tēmas, kas noderīgas sakaru tehnoloģijās un citur: (1) Bezzudumu saspiešana (*lossless compression*), (2) Zudumradošā saspiešana (*lossy compression*); attēlu un video saspiešana, (3) Kļūdu labošanas kodi (*error correction codes*), (4) Lineārā programmēšana (*linear programming*); optimizācija ar lineāriem ierobežojumiem; (5) Stringu meklēšanas algoritmi.
+Kursā apkopoti dažādi IT industrijā svarīgi algoritmi, ar uzsvaru uz telekomunikācijām, 
+drošību, optimizācijas uzdevumiem un datu meklēšanu. Aplūkojamie algoritmi iedalās vairākās 
+saimēs - katrā nodarbību ciklā apskatīsim vienu no tām: 
+
+1. Bezzudumu saspiešana (*lossless compression*), 
+2. Zudumradošā saspiešana (*lossy compression*); attēlu un video saspiešana, 
+3. Kļūdu labošanas kodi (*error correction codes*),
+4. Kriptogrāfijas lietojumi (*applied cryptography*), 
+5. Lineārā programmēšana (*linear programming*) jeb lineāra optimizācija; 
+6. Stringu meklēšanas algoritmi.
 
 **Teorija:** Katrai algoritmu tēmai apskatām matemātikas pamatus. Piemēram, informācijas entropiju, nepārtraukta signāla paraugu biežumu, galīgus laukus, ekstrapolāciju ar polinomiem, lineārās optimizācijas uzdevumus un to dualitāti, hešfunkciju un sufiksu koku izmantošanu stringu meklēšanā.
 

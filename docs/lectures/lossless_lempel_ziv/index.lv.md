@@ -1,7 +1,8 @@
 ---
 layout: default
 title: "Bezzudumu saspiešana: Lempela-Ziva algoritmi"
-permalink: /lectures/lossless_lempel_ziv/
+lang: lv
+permalink: /lectures/lossless_lempel_ziv/index.lv.html
 ---
 # 3. Bezzudumu saspiešana: Lempela-Ziva algoritmi
 

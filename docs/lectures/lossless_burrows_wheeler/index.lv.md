@@ -1,7 +1,8 @@
 ---
 layout: default
 title: "Berouza-Vīlera transformācija"
-permalink: /lectures/lossless_burrows_wheeler/
+lang: lv
+permalink: /lectures/lossless_burrows_wheeler/index.lv.html
 ---
 # 4. Berouza-Vīlera transformācija
 
@@ -59,7 +60,7 @@ Tabulā attēlojam katra ievades burta apstrādi - katra soļa beigās izvadei p
 | 0, **1**, 0, 0, 1, 0 | a,b | `[a,b]` |
 | 0, 1, **0**, 0, 1, 0 | a,b,b | `[b,a]` |
 | 0, 1, 0, **0**, 1, 0 | a,b,b,b | `[b,a]` |
-| 0, 1, 0, 0, **1**, 0 | 0,b,b,b,a | `[b,a]` |
+| 0, 1, 0, 0, **1**, 0 | a,b,b,b,a | `[b,a]` |
 | 0, 1, 0, 0, 1, **0** | a,b,b,b,a,a | `[a,b]` |
 | N/A | N/A | `[a,b]` |
 
@@ -181,7 +182,7 @@ $\textsf{efficientBWT}(w)$
 3. $\quad$ **for** $i = 0$ **to** $n-1$ *// atkārto n reizes*
 4. $\quad\quad j = A[i]-1$ *// j ir vienu pozīciju pirms A[i]*
 5. $\quad\quad$ **if** $j == -1$
-6. $\quad\quad\quad j == n-1$ *// "-1" pozīcija cikliskā permutācijā ir stringa beigās*
+6. $\quad\quad\quad j = n-1$ *// "-1" pozīcija cikliskā permutācijā ir stringa beigās*
 7. $\quad\quad \textsf{output}(w[j])$
 
 **Piemērs:** Stringam $w$ = `BANANA$` sufiksu masīvs ir `[6, 5, 3, 1, 0, 4, 2]`. Tāpēc algoritma rezultāts būs šāds:
@@ -267,10 +268,10 @@ Transformācijas rezultāts ir labējā kolonna: `AB$BA`. Sākotnējā virkne ir
 | `*A*B$BA` | 1 | `($,A,B)` |
 | `A*B*$BA` | 2 | `(A,$,B)` |
 | `AB*$*BA` | 2 | `(B,A,$)` |
-| `AB$*B*A` | 2 | `($,B,A)` |
+| `AB$*B*A` | 1 | `($,B,A)` |
 | `AB$B*A*` | 2 | `(B,$,A)` |
 
-Iegūtais kods ir `12222`. $\square$
+Iegūtais kods ir `12212`. $\square$
 
 ## Izmantotā literatūra
 

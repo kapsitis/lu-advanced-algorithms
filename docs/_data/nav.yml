@@ -1,14 +1,18 @@
-- title: Sākums
+# Site navigation. Every title has an English (en) and a Latvian (lv) text.
+# `url` is the language-neutral directory URL of a page (the English version
+# lives there). The layout swaps in the Latvian page (index.lv.html) from the
+# same directory automatically when the current page is Latvian.
+- title: { en: Home, lv: Sākums }
   url: /
-- title: Lekciju materiāli
+- title: { en: Lectures, lv: Lekciju materiāli }
   children:
-    - title: Entropija un Hafmana koki
+    - title: { en: Entropy and Huffman Trees, lv: Entropija un Hafmana koki }
       url: /lectures/lossless_entropy_and_huffman/
-    - title: Aritmētiskā saspiešana un ANS
+    - title: { en: Arithmetic Coding and ANS, lv: Aritmētiskā saspiešana un ANS }
       url: /lectures/lossless_arithmetic_and_ans/
-    - title: Lempela-Ziva algoritmi
+    - title: { en: Lempel–Ziv Algorithms, lv: Lempela-Ziva algoritmi }
       url: /lectures/lossless_lempel_ziv/
-    - title: Berouza-Vīlera transformācija
+    - title: { en: Burrows–Wheeler Transform, lv: Berouza-Vīlera transformācija }
       url: /lectures/lossless_burrows_wheeler/
-    - title: Bezzudumu saspiešana - Beigu uzdevumi
+    - title: { en: "Lossless Compression: Final Problem Set", lv: Bezzudumu saspiešana - Beigu uzdevumi }
       url: /lectures/lossless_final_problemsets/

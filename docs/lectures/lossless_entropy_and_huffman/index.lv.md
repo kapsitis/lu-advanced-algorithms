@@ -1,7 +1,8 @@
 ---
 layout: default
 title: "Bezzudumu saspiešana: Hafmana kods"
-permalink: /lectures/lossless_entropy_and_huffman/
+lang: lv
+permalink: /lectures/lossless_entropy_and_huffman/index.lv.html
 ---
 # 1. Bezzudumu saspiešana: Hafmana kods
 
@@ -38,10 +39,6 @@ ir svarīga ziņojumu avota entropija;  nepārtraukta signāla paraugu biežumu,
 Kurss ilustrē dažādas algoritmu izstrādes paradigmas. Skaitļošanas modelis parasti ir deterministisks un klasisks (ne-kvantu). Atsevišķi pieminēti arī daži varbūtiski algoritmi.
 
 ### Kursa prasības
-
-| $a \in S$ | $w(a)$ | $\ell_a$ | $p(a)$ |
-| --- | --- | --- | --- |
-| I | 0 | 1 | $4/11$ |
 
 1. 4 mājasdarbi (kopā $40\%$) - teorijas jautājumi un algoritmu pildīšana vienkāršiem datiem uz papīra.
 2. 10 minūšu uzstāšanās par sagatavotu tēmu ($10\%$); eksperimentēšana ar kursa tēmām radniecīgu algoritmu ($20\%$).
@@ -162,7 +159,7 @@ kur $p(x_i)$ ir ziņojumam $x_i$ atbilstošā varbūtība.
 
 **Piemērs (Entropija nejaušu bitu virknei):** Aplūkosim entropiju bitu virknītei garumā $L$. Ja ir $n = 2^L$ ziņojumi ar vienādām varbūtībām $1/n$, tad katru no tiem var iekodēt ar $\log_2 n = L$ bitiem.
 
-Katra ziņojuma informācijas saturs $h(x_i) = -\log_2 (1/n) = \log_2 n = L$. Tātad arī entropija (visu šo informācijas saturu vidējā vērtība) ir $L$. Šajā ekstrēmajā gadījumā entropija precīzi sakrīt ar kodēšanai nepieciešamajiem baitiem.
+Katra ziņojuma informācijas saturs $h(x_i) = -\log_2 (1/n) = \log_2 n = L$. Tātad arī entropija (visu šo informācijas saturu vidējā vērtība) ir $L$. Šajā ekstrēmajā gadījumā entropija precīzi sakrīt ar kodēšanai nepieciešamajiem bitiem.
 
 **Piemērs (Entropija negodīgai monētai):** Ja, metot monētu, cipars ($\mathtt{heads}$) uzkrīt ar varbūtību $0.9$, bet ģerbonis ($\mathtt{tails}$) -- ar varbūtību $0.1$, tad ciparam informācijas saturs ir $h(\mathtt{heads}) = -\log_2 0.9 \approx 0.152$, bet ģerbonim informācijas saturs ir $h(\mathtt{tails}) = -\log_2 0.1 \approx 3.32$. Savukārt entropija pašam monētas mešanas procesam ir abu šo lielumu *svērts vidējais* $H(\lbrace\mathtt{heads}, \mathtt{tails} \rbrace) = -0.9 \log_2 0.9 - 0.1 \log_2 0.1 \approx 0.469$.
 
@@ -269,7 +266,7 @@ Pēc Krafta-Makmilana teorēmas (pretējā virziena) varam atrast tādu prefiksu
 $$
 \ell_{avg}(C') = \sum\limits_{x_i \in S} p(x_i) \cdot \left\lceil \log_2 \frac{1}{p(x_i)}
 \right\rceil \leq
-\sum\limits_{x_i \in S} p(s)\left( 1 + \log_2 \frac{1}{p(x_i)} \right) = 1 + H(S).
+\sum\limits_{x_i \in S} p(x_i)\left( 1 + \log_2 \frac{1}{p(x_i)} \right) = 1 + H(S).
 $$
 
 Optimālajam prefiksu kodam $C$ jābūt vismaz tikpat labam kā nupat piedāvātais $C'$. Tādēļ arī tam būs novērtējums:
@@ -343,7 +340,7 @@ $\textsf{Huffman}(S)$
 3. $\quad$ **for** $i = 1$ **to** $n-1$:
 4. $\quad\quad \textsf{CreateNode}(z)$
 5. $\quad\quad z.\mathit{left} = x = Q.\textsf{ExtractMin}()$
-6. $\quad\quad z.\mathit{right} = Y = Q.\textsf{ExtractMin}()$
+6. $\quad\quad z.\mathit{right} = y = Q.\textsf{ExtractMin}()$
 7. $\quad\quad z.\mathit{freq} = x.\mathit{freq} + y.\mathit{freq}$
 8. $\quad\quad Q.\textsf{insert}(z)$
 9. $\quad$ **return** $Q.\textsf{ExtractMin}()$
@@ -496,7 +493,7 @@ $$
 h(B)=h(C)= \log_2 \frac{1}{1/4} = \log_2 4 = 2.
 $$
 
-Entropija ir svērts vidējais $(1/2)p(A) + (1/4)p(B) + (1/4)p(C)$:
+Entropija ir svērts vidējais $(1/2)h(A) + (1/4)h(B) + (1/4)h(C)$:
 
 $$
 (1/2)\cdot 1 + (1/4) \cdot 2 + (1/4) \cdot 2 = 1.5.

@@ -68,3 +68,12 @@ table tbody tr td {
 .nav__item:hover > .nav__submenu,
 .nav__item:focus-within > .nav__submenu { display:block; }
 
+.nav__lang { margin-left:auto; display:flex; gap:.25rem; }
+.nav__lang-btn {
+  font-size:9pt; line-height:1; padding:.25rem .45rem; border:1px solid #2F5597; border-radius:3px;
+  color:#2F5597; background:#fff; text-decoration:none;
+}
+a.nav__lang-btn:hover { background:#f0f4ff; }
+.nav__lang-btn.is-active { background:#2F5597; color:#fff; }
+.nav__lang-btn.is-disabled { border-color:#bbb; color:#bbb; }
+

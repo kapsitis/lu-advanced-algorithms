@@ -1,7 +1,8 @@
 ---
 layout: default
 title: "Bezzudumu saspiešana: Aritmētiskais kods un ANS"
-permalink: /lectures/lossless_arithmetic_and_ans/
+lang: lv
+permalink: /lectures/lossless_arithmetic_and_ans/index.lv.html
 ---
 # 2. Bezzudumu saspiešana: Aritmētiskais kods
 
@@ -79,7 +80,7 @@ Dabīgo valodu burtu sadalījums parasti nav labākais piemērs, jo tie mēdz pa
 
 **Kāpēc lietot aritmētisko kodēšanu?** Ja ziņojumu telpā ir jocīgas varbūtības, tad Hafmana kodi (kas dala kodu telpas "nekustamo īpašumu" gabalos pa $1/2$, $1/4$ utt.) iznieko daudz vietas un neizmanto to, ka dažu ziņojumu informācijas saturs ir daudz mazāks par $1$.
 
-**Kā nosūtīt ziņojumu, kura informācijas saturs ir nepilns bits?** Piemēram, ziņojumam ar varbūtību $1023/1024$ informācijas saturs ir $\log_2 (1023/1024) \approx 0.0014$. Griežam kodu telpu cita veida gabalos, un bitos iekodējam tikai pašās beigās.
+**Kā nosūtīt ziņojumu, kura informācijas saturs ir nepilns bits?** Piemēram, ziņojumam ar varbūtību $1023/1024$ informācijas saturs ir $\log_2 (1024/1023) \approx 0.0014$. Griežam kodu telpu cita veida gabalos, un bitos iekodējam tikai pašās beigās.
 
 ### Aritmētiskās saspiešanas algoritms
 
@@ -96,13 +97,14 @@ Dabīgo valodu burtu sadalījums parasti nav labākais piemērs, jo tie mēdz pa
 
 **Intervālu konstruēšana**
 
-Dota ziņojumu virkne $x_1,x_2,\ldots,x_k \in \lbrace 1,\ldots,m \rbrace$. Veidojam intervālu virkni, kur katram intervālam zināms kreisais galapunkts $\ell_i$ un garums $s_i$.
+Dota ziņojumu virkne $x_1,x_2,\ldots,x_k \in \lbrace 1,\ldots,m \rbrace$. Veidojam intervālu virkni, kur katram 
+intervālam zināms kreisais galapunkts $\ell_i$ un garums $s_i$.
 
 $$
 [0;1] \supset [l_1;l_1+s_1) \supset [l_2;l_2+s_2) \supset \ldots \supset [l_k; l_k+s_k).
 $$
 
-1.intervāls: $[l_1;l_1 + s_1) = \left[ f(x_1);p(x_1) \right)$. Intervāliem $2,\ldots,k$ apzīmējam:
+1.intervāls: $[l_1;l_1 + s_1) = \left[ f(x_1); f(x_1) + p(x_1) \right)$. Intervāliem $2,\ldots,k$ apzīmējam:
 
 $$
 \left\{
@@ -127,7 +129,7 @@ $$
 
 **Intervālu nosūtīšana**
 
-* Ja dots intervāls ar garumu $s$, tad tā iekšienē var atrast skaitli, kura binārajā pierakstā ir ne vairāk kā $-\left\lceil \log_2 s \right\rceil$ biti.
+* Ja dots intervāls ar garumu $s$, tad tā iekšienē var atrast skaitli, kura binārajā pierakstā ir ne vairāk kā $\left\lceil - \log_2 s \right\rceil$ biti.
 * Gribam sūtīt tikai vienu skaitli. Lai saprastu, cik garš ir tā intervāls, interpretējam, teiksim $0.010$ nevis vienkārši kā $1/4$, bet kā intervālu $[1/4, 3/8)$.
 * Nepazaudējot vairāk kā 1-2 bitus, varam izveidot šādu intervālu $[k/2^n,(k+1)/2^n)$, kurš atradīsies stingri iekšpusē tam $I$, ko dod aritmētiskais kods.
 
@@ -262,7 +264,7 @@ Aritmētisko kodu var uzlabot, ja ņem vērā simbolu parādīšanās varbūtīb
 
 **Asimetriskās skaitīšanas sistēmas**
 
-*Asymmetric numeral systems (ASN)* -- Jaroslaw Duda (2014) pētījumi. Kalpo līdzīgam mērķim kā aritmētiskie kodi (saspiež ievades datu plūsmu līdz entropijas noteiktajai robežai). Ar ko atšķiras no aritmētiskajiem kodiem: Lietojumi dažos jaunos standartos.
+*Asymmetric numeral systems (ANS)* -- Jaroslaw Duda (2014) pētījumi. Kalpo līdzīgam mērķim kā aritmētiskie kodi (saspiež ievades datu plūsmu līdz entropijas noteiktajai robežai). Ar ko atšķiras no aritmētiskajiem kodiem: Lietojumi dažos jaunos standartos.
 
 1. Facebook Zstandard.
 2. Apple LZFSE.
@@ -610,7 +612,7 @@ $$
 *Bezgalīgas ģeometriskas progresijas summas formula:*
 
 $$
-b_1 + b_1q + b_1q^2 + b_2q^3 + \ldots = \frac{b_1}{1 - q}.
+b_1 + b_1q + b_1q^2 + b_1q^3 + \ldots = \frac{b_1}{1 - q}.
 $$
 
 $\square$

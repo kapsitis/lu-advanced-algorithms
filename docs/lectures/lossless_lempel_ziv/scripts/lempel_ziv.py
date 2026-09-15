@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""LZ77 un LZ78 algoritmi -- Python versijas pseidokodam no ../index.md.
+"""LZ77 un LZ78 algoritmi -- Python versijas pseidokodam no ../index.lv.md.
 
 Kods apzināti seko pseidokodam rindiņu pa rindiņai (komentāros ir pseidokoda
 rindiņu numuri), tāpēc tas nav ne ātrs, ne "pitonisks". Pseidokodā masīvi
 numurēti no 1; to panākam, masīva sākumā ievietojot neizmantotu elementu None.
 
-Kodējumus var pierakstīt tāpat kā ../index.md:
+Kodējumus var pierakstīt tāpat kā ../index.lv.md:
     LZ77 trijnieki:  "(0,0,a),(0,0,b),(0,0,c),(3,6,d),(4,2,c)"
     LZ78 kodi:       "a,b,c,1,3,2,d,4,1,a"  vai  "A.B.C.1.3.2.D.4.1.A"
 (LZ78 pierakstā alfabētā nedrīkst būt cipari, punkts vai komats.)

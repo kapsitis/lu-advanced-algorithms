@@ -91,7 +91,7 @@ def test_lz77_parse_rejects_garbage():
 
 # (teksts, alfabēts, kodi)
 LZ78_EXAMPLES = [
-    # piemērs no ../index.md
+    # piemērs no ../index.lv.md
     ("abcabcabcdabcaba", "abcd", "a,b,c,1,3,2,d,4,1,a"),
     # 3.2. uzdevums
     ("ABCABCABCDABCABA", "ABCD", "A.B.C.1.3.2.D.4.1.A"),

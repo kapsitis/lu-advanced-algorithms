@@ -1,7 +1,8 @@
 ---
 layout: default
 title: "Bezzudumu saspiešana: uzdevumu krājums"
-permalink: /lectures/lossless_final_problemsets/
+lang: lv
+permalink: /lectures/lossless_final_problemsets/index.lv.html
 ---
 # Bezzudumu saspiešana: Beigu uzdevumi
 

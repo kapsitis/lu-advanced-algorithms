@@ -1,0 +1,206 @@
+lv,en,kind,note
+Algoritmi telekomunikācijās un drošības risinājumos,Algorithms in Telecommunications and Security Solutions,course,Official English title of the seminar
+Lietišķie algoritmi,Applied Algorithms,course,Course DatZ4020 / DatZB060
+specseminārs,seminar,course,
+mājasdarbs,homework assignment,standard,
+uzstāšanās,presentation,standard,
+gala eksāmens,final exam,standard,
+nodarbību cikls,block of lectures,course,One algorithm family per block
+algoritmu saime,family of algorithms,standard,
+bezzudumu saspiešana,lossless compression,standard,
+zudumradošā saspiešana,lossy compression,standard,
+saspiešana,compression,standard,
+atspiešana,decompression,standard,
+saspiest / atspiest,compress / decompress,standard,
+saspiešanas attiecība,compression ratio,standard,
+saspiešanas pakāpe,compression ratio,standard,Used in benchmark tables; same meaning as saspiešanas attiecība
+kļūdu labošanas kodi,error-correcting codes,standard,
+kriptogrāfijas lietojumi,applied cryptography,standard,
+lineārā programmēšana,linear programming,standard,
+veselo skaitļu uzdevumu relaksācija,relaxation of integer programs,standard,
+stringu meklēšana,string searching,standard,Also: virkņu meklēšana
+strings,string,course,Latvian text uses strings / virkne / virknīte interchangeably
+virkne,string; sequence,standard,"""string"" for characters/bits; ""sequence"" for messages or numbers"
+virknīte,string,course,Diminutive of virkne; translate without diminutive
+bitu virkne,bit string,standard,
+izstrādes paradigma,design technique,standard,Levitin's term
+pārlase; rupjā spēka tehnika,exhaustive search; brute force,standard,
+pakāpeniska vienkāršošana,decrease-and-conquer,standard,
+skaldi-valdi,divide-and-conquer,standard,
+ievades datu pārveidojumi,transform-and-conquer,standard,
+rijīgā tehnika; rijīgs algoritms,greedy technique; greedy algorithm,standard,
+iteratīvā uzlabošana,iterative improvement,standard,
+skaitļošanas modelis,model of computation,standard,
+varbūtisks algoritms,randomized algorithm,standard,"""probabilistic"" is also acceptable"
+sliktākā gadījuma sarežģītība,worst-case complexity,standard,
+caurmēra sarežģītība,average-case complexity,standard,Averaged over random inputs
+vidējā sagaidāmā sarežģītība,expected complexity,standard,For a randomized algorithm
+ziņojums,message,course,A symbol of the source alphabet; may be a letter or a whole block
+ziņojumu alfabēts,message alphabet,course,
+ziņojumu avots,message source,course,
+alfabēts,alphabet,standard,
+simbols; burts,symbol; letter,standard,"Use ""letter"" only when the text is about letters"
+kodējums,encoding; code,standard,"""code"" for the mapping (prefix code); ""encoding"" for the process or result"
+kodavārds,codeword,standard,
+iekodēt / atkodēt,encode / decode,standard,
+kodētājs / atkodētājs,encoder / decoder,standard,
+informācijas saturs,information content,standard,Shannon self-information h(x)
+entropija,entropy,standard,
+gadījumlielums; gadījuma lielums,random variable,standard,
+varbūtību sadalījums,probability distribution,standard,
+svērts vidējais,weighted average,standard,
+godīga monēta / negodīga monēta,fair coin / biased coin,standard,
+blēdīga monēta,biased coin,course,
+cipars / ģerbonis,heads / tails,standard,Coin sides; the Latvian text maps cipars=heads and ģerbonis=tails
+metamais kauliņš,die (pl. dice),standard,
+injektīva funkcija,injective function,standard,
+Dirihlē princips,pigeonhole principle,standard,
+prefiksu kodējums; prefiksu kods,prefix code,standard,"Also called ""prefix-free code"""
+bezprefiksu kods,prefix-free code,standard,
+prefiksu koks,prefix tree; code tree,standard,
+viennozīmīgi atkodējams kods,uniquely decodable code,standard,
+neviennozīmība,ambiguity,standard,
+vidējais garums (kodējuma),average (code) length,standard,
+optimāls kodējums,optimal code,standard,
+kodu telpa,code space,course,
+Krafta-Makmilana nevienādība,Kraft–McMillan inequality,name,
+Jensena nevienādība,Jensen's inequality,name,
+izliekts uz augšu,concave,standard,f''(x) <= 0
+Hafmana kods / koks / algoritms,Huffman code / tree / algorithm,name,
+kanoniskais Hafmana kods,canonical Huffman code,standard,
+prioritāšu rinda,priority queue,standard,
+kaudze,heap,standard,
+kodu tabula; kodējumu tabula,codebook; code table,standard,
+simbolu grupēšana,grouping symbols (block coding),course,
+prediktīva kodēšana,predictive coding,standard,
+Dekarta reizinājums,Cartesian product,standard,
+Bernulli eksperiments,Bernoulli trial,name,
+aritmētiskais kods; aritmētiskā kodēšana,arithmetic coding,standard,"Official course description uses ""arithmetic coding"""
+aritmētiskā saspiešana,arithmetic coding,course,Same concept as aritmētiskais kods
+asimetriskās skaitīšanas sistēmas,asymmetric numeral systems (ANS),standard,
+kumulatīvā varbūtība,cumulative probability,standard,
+galīga binārā daļa,finite binary fraction,standard,
+veselo skaitļu aritmētika,integer arithmetic,standard,
+peldošā punkta skaitlis,floating-point number,standard,
+reģistra pārpildīšanās,overflow (underflow),standard,
+reģistra izmērs,register size,standard,
+mērogošana,rescaling,course,Interval doubling in integer arithmetic coding
+atliktie biti,pending bits,standard,Also known as underflow / follow bits
+beigu marķieris,end-of-data marker,course,PSEUDO_EOF symbol
+nosacītās varbūtības modelis,conditional probability model,standard,
+apriorā varbūtība,prior probability,standard,
+nukleobāze,nucleobase,standard,
+stāvoklis (ANS),state,standard,
+pozicionālā skaitīšanas sistēma,positional numeral system,standard,
+frekvenču kvantēšana,frequency quantization,standard,
+sprauga (ANS),slot,course,Values of x mod M owned by a symbol
+kārtas numurs,index; rank,standard,
+izkaisīšana (tANS),symbol spread,standard,
+renormalizācija,renormalization,standard,
+galīgs automāts,finite-state machine,standard,
+galvene,header,standard,
+literālis,literal,standard,
+secības (zstd),sequences,standard,zstd term for (literal length / match length / offset) triples
+kešatmiņa,cache,standard,
+bitu straume,bitstream,standard,
+pavediens; daudzpavedienu,thread; multithreaded,standard,
+kontrolsumma,checksum,standard,
+pirmkods,source code,standard,
+pakotņu sistēma,package manager,standard,
+failu sistēma,file system,standard,
+karodziņš (komandrindā),flag,standard,
+vārdnīca (saspiešanā),dictionary,standard,
+slīdošais logs,sliding window,standard,
+logs,window,standard,
+atpakaļskata buferis,search buffer,standard,"Also ""look-back buffer"""
+priekšskata buferis,look-ahead buffer,standard,
+kursors,cursor,course,Current coding position in LZ77
+trijnieks,triple,standard,
+sakritība,match,standard,
+nobīde,offset,standard,Also: distance (DEFLATE)
+garums,length,standard,
+marķieris (DEFLATE),token,course,
+papildu biti,extra bits,standard,DEFLATE term
+bloka beigas,end of block,standard,
+atkārtojumu kodi,repeat codes,course,Run-length codes for code lengths in DEFLATE
+nerijīgais variants,lazy matching,standard,gzip term for non-greedy parsing
+heštabula,hash table,standard,
+spainītis (heštabulā),bucket,standard,
+frāze,phrase,standard,
+tekošā frāze,current phrase,standard,
+žurnālfails,log file,standard,
+arhivators,archiver,standard,
+universāla saspiešana,universal compression,standard,
+Markova ķēde,Markov chain,name,
+vidējā entropija,entropy rate,standard,
+neatkarīgi vienādi sadalīti,independent and identically distributed (i.i.d.),standard,
+stacionārs process,stationary process,standard,
+ergodisks process,ergodic process,standard,
+dispersija,variance,standard,
+pāreju varbūtību matrica,transition matrix,standard,
+stacionārais sadalījums,stationary distribution,standard,
+korpuss (Kalgari / Kenterberijas),corpus (Calgary / Canterbury),name,
+DLP (datu noplūdes novēršana),DLP (data loss prevention),standard,
+klasifikators,classifier,standard,DLP
+kanāls,channel,standard,DLP
+aizsardzības politika,policy,standard,DLP
+viltus pozitīvs rezultāts,false positive,standard,
+starpniekserveris,proxy server,standard,
+vārteja,gateway,standard,
+drošības perimetrs,security perimeter,standard,
+Berouza-Vīlera transformācija,Burrows–Wheeler transform (BWT),name,
+apgrieztā Berouza-Vīlera transformācija,inverse Burrows–Wheeler transform,name,
+kodēšana ar pārvietošanu uz priekšu,move-to-front coding,standard,
+permutācija,permutation,standard,
+cikliskā permutācija,cyclic rotation,course,"Latvian text says ""permutation""; English literature says ""rotation"""
+labais konteksts,right context,course,
+leksikogrāfiski,lexicographically,standard,
+sufiksu masīvs,suffix array,standard,
+sufiksu koks,suffix tree,standard,
+binārā meklēšana,binary search,standard,
+sviru svari,balance scale,standard,
+svēršana,weighing,standard,
+viltota monēta,counterfeit coin,standard,
+klucītis,tile,course,Letter tiles drawn from a bag
+ēdnīca,canteen,standard,
+Definīcija,Definition,label,Bold paragraph label
+Teorēma,Theorem,label,
+Apgalvojums,Claim,label,
+Pierādījums,Proof,label,
+Sekas,Corollary,label,
+Piezīme,Note,label,
+Piemērs,Example,label,
+Piemēri,Examples,label,
+Bāze,Base case,label,Induction proof
+Indukcijas pāreja,Inductive step,label,
+Intuīcija,Intuition,label,
+Atbilde,Answer,label,
+Atrisinājums,Solution,label,
+Norāde,Hint,label,
+Jautājums,Question,label,
+Kopsavilkums,Summary,label,
+Secinājumi,Conclusions,label,
+Ievade / Izvade,Input / Output,label,
+pseidokods,pseudocode,standard,
+"N.uzdevums (e.g. ""1.1. uzdevums"")","Problem N (e.g. ""Problem 1.1"")",label,
+Uzdevumi,Problems,label,Section heading
+Beigu uzdevumi,Final Problem Set,course,
+Izmantotā literatūra; Bibliogrāfija,References,label,
+Hafmans,Huffman,name,David A. Huffman
+Klods Šenons,Claude Shannon,name,
+Krafts / Makmilans,Kraft / McMillan,name,
+Dirihlē,Dirichlet,name,
+Jensens,Jensen,name,
+Markovs,Markov,name,
+Alise / Bobs,Alice / Bob,name,
+A.Lempels,Abraham Lempel,name,
+J.Zivs,Jacob Ziv,name,
+T.Velčs,Terry Welch,name,
+F.Kacs,Phil Katz,name,
+M.Berouzs,Michael Burrows,name,
+D.Vīlers,David Wheeler,name,
+Jaroslavs Duda,Jarosław (Jarek) Duda,name,Jagiellonian University in Kraków
+Jans Kolē,Yann Collet,name,
+Jorma Rissanens,Jorma Rissanen,name,
+Jagelonu universitāte,Jagiellonian University,name,
+Tehnions,Technion (Israel Institute of Technology),name,

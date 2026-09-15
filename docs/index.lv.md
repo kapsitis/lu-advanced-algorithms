@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Sākumlapa
-permalink: /
+lang: lv
+permalink: /index.lv.html
 ---
 # Algoritmi telekomunikācijās un drošības risinājumos
 
@@ -21,8 +22,8 @@ veic mērījumus un prezentē.
 | **Datums** | **Temats** |
 | --- | --- |
 | 2026-09-01 | [Entropija un Hafmana (Huffman) koki]({{ '/lectures/lossless_entropy_and_huffman/' | relative_url }}) | 
-| 2026-09-08 | [Aritmētiskā saspiešana un ANS (Asymmetric Numbering Systems)]({{ '/lectures/lossless_arithmetic_and_ans/' | relative_url }}) | 
-| 2026-09-15 | [Lempela-Ziva (Lempel Ziv) algorithms Z77 un Gzip]({{ '/lectures/lossless_lempel_ziv/' | relative_url }}) |
+| 2026-09-08 | [Aritmētiskā saspiešana un ANS (Asymmetric Numeral Systems)]({{ '/lectures/lossless_arithmetic_and_ans/' | relative_url }}) | 
+| 2026-09-15 | [Lempela-Ziva (Lempel Ziv) algorithms LZ77 un Gzip]({{ '/lectures/lossless_lempel_ziv/' | relative_url }}) |
 | 2026-09-15 | [Berouza-Vīlera (Burrows-Wheeler) transformācija un BZip2]({{ '/lectures/lossless_burrows_wheeler/' | relative_url }}) |
 | 2026-09-22 | Kopsavilkums, citi priekšnesumi par saspiešanu |
 

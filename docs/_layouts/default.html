@@ -1,10 +1,59 @@
+{%- comment -%}
+  Bilingual pages: docs/**/index.lv.md (Latvian master) and index.en.md (English),
+  both in the same directory. English is served at the directory URL, Latvian at
+  index.lv.html. The "twin" is the page in the same directory with the other `lang`.
+{%- endcomment -%}
+{%- assign page_lang = page.lang | default: "en" -%}
+{%- if page_lang == "lv" -%}{%- assign other_lang = "en" -%}{%- else -%}{%- assign other_lang = "lv" -%}{%- endif -%}
+{%- assign twin = site.pages | where: "dir", page.dir | where: "lang", other_lang | first -%}
 <!doctype html>
-<html lang="lv">
+<html lang="{{ page_lang }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="{{ '/style/main.css' | relative_url }}">
 <title>{{ page.title | default: site.title }}</title>
+{%- if twin %}
+<link rel="alternate" hreflang="{{ page_lang }}" href="{{ page.url | absolute_url }}">
+<link rel="alternate" hreflang="{{ other_lang }}" href="{{ twin.url | absolute_url }}">
+{%- endif %}
+<script>
+  // Language preference (per browser, localStorage; silently ignored if unavailable).
+  //  - A language button link carries ?lang=xx: remember xx (and go to that version).
+  //  - Opening a Latvian page remembers "lv".
+  //  - Opening an English page (the language-neutral directory URL) while "lv" is
+  //    remembered redirects to the Latvian twin, so plain internal links keep the language.
+  (function () {
+    var KEY = "lu-advanced-algorithms.lang";
+    var pageLang = "{{ page_lang }}";
+    var twinUrl = {% if twin %}"{{ twin.url | relative_url }}"{% else %}null{% endif %};
+    function load() { try { return window.localStorage.getItem(KEY); } catch (e) { return null; } }
+    function save(v) { try { window.localStorage.setItem(KEY, v); } catch (e) {} }
+
+    var chosen = null;
+    try {
+      var params = new URLSearchParams(window.location.search);
+      chosen = params.get("lang");
+      if (chosen !== null) {
+        params.delete("lang");
+        var qs = params.toString();
+        history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+      }
+    } catch (e) {}
+
+    if (chosen === "en" || chosen === "lv") {
+      save(chosen);
+    } else if (pageLang === "lv") {
+      save("lv");
+      return;
+    } else {
+      chosen = load();
+    }
+    if (chosen && chosen !== pageLang && twinUrl) {
+      location.replace(twinUrl + location.hash);
+    }
+  })();
+</script>
 <script>
     window.MathJax = {
     tex: {
@@ -51,24 +100,42 @@
 </head>
 <body>
 
+{%- comment -%} Nav link in the current language: the page with that `lang` in the item's directory, else the item URL itself. {%- endcomment -%}
 <nav class="nav">
   <ul class="nav__list">
     {% for item in site.data.nav %}
+      {%- assign item_title = item.title[page_lang] | default: item.title.lv | default: item.title -%}
       <li class="nav__item {% if item.children %}has-children{% endif %}">
         {% if item.url %}
-          <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+          {%- assign target = site.pages | where: "dir", item.url | where: "lang", page_lang | first -%}
+          <a href="{% if target %}{{ target.url | relative_url }}{% else %}{{ item.url | relative_url }}{% endif %}">{{ item_title }}</a>
         {% else %}
-          <span class="nav__label">{{ item.title }}</span>
+          <span class="nav__label">{{ item_title }}</span>
         {% endif %}
         {% if item.children %}
           <ul class="nav__submenu">
             {% for child in item.children %}
-              <li><a href="{{ child.url | relative_url }}">{{ child.title }}</a></li>
+              {%- assign child_title = child.title[page_lang] | default: child.title.lv | default: child.title -%}
+              {%- assign target = site.pages | where: "dir", child.url | where: "lang", page_lang | first -%}
+              <li><a href="{% if target %}{{ target.url | relative_url }}{% else %}{{ child.url | relative_url }}{% endif %}">{{ child_title }}</a></li>
             {% endfor %}
           </ul>
         {% endif %}
       </li>
     {% endfor %}
+    <li class="nav__lang" aria-label="Language / Valoda">
+      {%- assign lang_codes = "en,lv" | split: "," -%}
+      {%- for code in lang_codes -%}
+        {%- if code == "en" -%}{%- assign code_label = "English" -%}{%- else -%}{%- assign code_label = "Latviešu" -%}{%- endif -%}
+        {%- if code == page_lang %}
+      <span class="nav__lang-btn is-active" lang="{{ code }}" title="{{ code_label }}" aria-current="true">{{ code | upcase }}</span>
+        {%- elsif twin %}
+      <a class="nav__lang-btn" href="{{ twin.url | relative_url }}?lang={{ code }}" hreflang="{{ code }}" lang="{{ code }}" title="{{ code_label }}">{{ code | upcase }}</a>
+        {%- else %}
+      <span class="nav__lang-btn is-disabled" lang="{{ code }}" title="{{ code_label }}: not available" aria-disabled="true">{{ code | upcase }}</span>
+        {%- endif -%}
+      {%- endfor %}
+    </li>
   </ul>
 </nav>
 

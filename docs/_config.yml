@@ -1,7 +1,17 @@
+title: Advanced Algorithms
+
 markdown: kramdown
 kramdown:
   input: GFM
-  # no math_engine here when using MathJax v3
-  # math_engine: mathjax
-url: https://kapsitis.github.io
-baseurl: /lu-advanced-algorithms/
+  math_engine: mathjax
+
+url: "https://kapsitis.github.io"
+baseurl: "/lu-advanced-algorithms"
+
+# Apply the default layout to pages unless they specify another one.
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: default

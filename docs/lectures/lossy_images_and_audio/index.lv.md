@@ -445,7 +445,32 @@ Pēdējā piemērā visām bloka rindām ir viena un tā pati vērtību virkne $
 * AVIF ir radniecīgs pazīstamajam atvērtajam video kodekam AV1.
 * JPEG XL ir vēl visai jauns formāts (nav sevišķi plaši atbalstīts), bet ar vairākām jaunām iespējām, labu saspiešanu dažādos robežgadījumos un arī pilnu savietojamību ar JPEG.
 
-AVIF idejas mazliet apskatām šajā kursā.
+*AVIF* (*AV1 Image File Format*, Alliance for Open Media, 2019) glabā attēlu kā vienu AV1 video kodeka *intra kadru* -- kadru, ko kodē bez atsaucēm uz citiem kadriem --, ietītu HEIF konteinerā (tas pats konteinera formāts, ko izmanto HEIC faili). Tā kā AV1 ir veidots video saspiešanai, tajā ir daudz vairāk izvēles iespēju nekā JPEG: iekodētājs katram attēla apgabalam meklē izdevīgāko bloku izmēru, prognozes režīmu un transformāciju. Tāpēc AVIF iekodēšana ir daudz lēnāka par JPEG, bet tāda paša izmēra failā kvalitāte ir ievērojami labāka.
+
+### AVIF iekodēšana
+
+Tipisks gadījums: digitāla fotogrāfija, ko saspiež ar zudumiem (piemēram, ar programmu `avifenc` no bibliotēkas *libavif*, kas izmanto AV1 iekodētāju *libaom*, *SVT-AV1* vai *rav1e*).
+
+<img
+  id="avif_kodesanas_soli"
+  alt="AVIF kodēšanas soļi"
+  src="{{ '/lectures/lossy_images_and_audio/figs/avif-pipeline.svg' | relative_url }}"
+  style="width: 100%; max-width: 980px; border:none; background-color:#FFFFFF;"
+/>
+
+*AVIF kodēšanas soļi; numuri atbilst tālāk uzskaitītajiem soļiem. Pārtrauktā bultiņa rāda, ka nākamo bloku prognozei izmanto jau atjaunotos (atkodētos) pikseļus.*
+
+1. **Krāsu telpas maiņa (RGB $\rightarrow$ YCbCr).** Tāpat kā JPEG, bet koeficientu matrica (piemēram, BT.601 vai BT.709), vērtību diapazons (pilns $0 \ldots 255$ vai ierobežots $16 \ldots 235$) un bitu dziļums ($8$, $10$ vai $12$ biti uz komponenti) ir izvēlami, un izvēli ieraksta failā. $10$ un $12$ bitu attēli ļauj glabāt arī HDR (*high dynamic range*) fotogrāfijas.
+2. **Krāsainības izretināšana.** Tāpat kā JPEG: fotogrāfijām parasti 4:2:0; augstas kvalitātes iestatījumos bieži izmanto 4:4:4 (bez izretināšanas).
+3. **Sadalīšana superblokos un blokos.** Katru komponenti sadala $64 \times 64$ (vai $128 \times 128$) *superblokos*, un katru superbloku rekursīvi sadala mazākos blokos -- ne tikai četros kvadrātos, bet arī divos vai četros taisnstūros un T veida daļās -- līdz pat $4 \times 4$. Iekodētājs sadalījumu izvēlas, salīdzinot, cik bitu prasa un cik lielu kļūdu dod katrs variants (*rate–distortion optimization*). *Atšķirība no JPEG:* JPEG bloks vienmēr ir $8 \times 8$; AVIF gludos apgabalos (debesis, siena) izmanto lielus blokus, bet detaļās -- mazus.
+4. **Intra prognoze.** Katra bloka vērtības paredz no jau iekodētajiem (un atjaunotajiem) kaimiņu pikseļiem virs bloka un pa kreisi no tā. Ir $56$ virziena režīmi (turpina malas un līnijas noteiktā leņķī), DC režīms (vidējā vērtība), gludie režīmi (*smooth*, *Paeth*), krāsainības prognoze no gaišuma (*chroma from luma*, CfL) un palete attēla apgabaliem ar dažām krāsām. Tālāk kodē tikai *atlikumu* -- starpību starp bloku un prognozi. *Atšķirība no JPEG:* JPEG no iepriekšējā bloka paredz tikai DC koeficientu; AV1 paredz visu bloku, tāpēc atlikums parasti ir tuvu nullei.
+5. **Atlikuma transformācija.** Atlikumu transformē blokos no $4 \times 4$ līdz $64 \times 64$ (arī taisnstūros). Horizontālajam un vertikālajam virzienam var izvēlēties dažādas 1D transformācijas: DCT, ADST (*asymmetric discrete sine transform* -- piemērota atlikumam, kas aug, attālinoties no bloka malas, no kuras prognozēja), spoguļoto ADST vai identitāti (bez transformācijas). Visas transformācijas rēķina veselos skaitļos, lai iekodētājs un atkodētājs iegūtu precīzi vienādu rezultātu. *Atšķirība no JPEG:* JPEG vienmēr lieto $8 \times 8$ DCT.
+6. **Kvantizācija.** Kvantizācijas soli nosaka viens parametrs *qindex* ($0 \ldots 255$; jo lielāks, jo rupjāka kvantizācija un mazāks fails), ar atsevišķām korekcijām DC un AC koeficientiem un katrai komponentei. Soli var mainīt arī pa superblokiem. Noapaļošanas virzienu katram koeficientam iekodētājs var izvēlēties tā, lai ietaupītu bitus (*trellis quantization*). *Atšķirība no JPEG:* JPEG izmanto $8 \times 8$ kvantizācijas tabulu un vienkāršu noapaļošanu.
+7. **Atjaunošana un cilpas filtri** (*in-loop filters*). Iekodētājs atjauno attēlu tieši tāpat kā atkodētājs (apgrieztā kvantizācija un transformācija, pieskaita prognozi), jo nākamie bloki jāprognozē no tiem pašiem pikseļiem, kas būs pieejami atkodētājam. Uz atjaunotā attēla piemēro trīs filtrus: *deblocking* (nogludina bloku robežas), CDEF (*constrained directional enhancement filter* -- noņem viļņošanos gar malām, ievērojot malas virzienu) un *loop restoration* (Wiener vai *self-guided* filtrs). Iekodētājs izvēlas filtru parametrus, kas atjaunoto attēlu padara vistuvāko oriģinālam, un ieraksta tos bitu plūsmā. Pēc izvēles var arī noņemt fotogrāfijas graudainību (*film grain*) un nosūtīt tikai tās statistiskos parametrus, lai atkodētājs graudainību uzzīmētu no jauna. *Atšķirība no JPEG:* JPEG filtru nav, tāpēc zemā kvalitātē redzamas $8 \times 8$ bloku robežas.
+8. **Entropijas kodēšana.** Visus lēmumus (bloku sadalījumu, prognozes režīmus, transformāciju tipus, filtru parametrus) un kvantizētos koeficientus kodē ar adaptīvu aritmētisko kodu, kura simboliem ir līdz $16$ vērtībām. Varbūtību sadalījumi pielāgojas pēc katra simbola, un tie atkarīgi no konteksta (piemēram, no kaimiņu bloku koeficientiem). Rezultāts ir AV1 bitu plūsma, kas sastāv no OBU (*open bitstream unit*) vienībām: secības galvenes un kadra datiem. *Atšķirība no JPEG:* JPEG izmanto Hafmana kodu, kura tabulas visā attēlā nemainās un kurš katram simbolam tērē vismaz $1$ bitu.
+9. **Konteiners.** AV1 datus ieliek HEIF (ISO bāzes mediju faila) konteinerā, kas sastāv no "kastēm" (*boxes*): `ftyp` (faila tips `avif`), `meta` (attēla izmēri, AV1 konfigurācija `av1C`, krāsu telpa `colr`, bitu dziļums) un `mdat` (paši AV1 dati). Tajā pašā failā var glabāt arī caurspīdīguma kanālu (kā otru AV1 attēlu), Exif metadatus un attēlu virknes (animāciju).
+
+**Atkodēšana** izpilda soļus pretējā secībā: nolasa konteineru un AV1 datus, aritmētiski atkodē, katram blokam aprēķina prognozi, pieskaita apgriezti transformēto atlikumu, piemēro cilpas filtrus un pārveido YCbCr $\rightarrow$ RGB. Atkodētājam nav jāmeklē labākie režīmi (tie ir ierakstīti failā), tāpēc atkodēšana ir daudz ātrāka par iekodēšanu.
 
 ### Python piemērs
 

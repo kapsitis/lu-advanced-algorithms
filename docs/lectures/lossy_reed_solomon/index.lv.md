@@ -434,7 +434,12 @@ $$
 
 atbilst šāds grafs (katrs kontrolbits $y_i$ šeit reizē ir arī pārbaude "$y_i \oplus$ savienotie $x_j = 0$"):
 
-![Heminga koda Tanera grafs](figs/hamming-as-tornado.png)
+<img
+  id="heminga_tanera_grafs"
+  alt="Heminga koda Tanera grafs"
+  src="{{ '/lectures/lossy_reed_solomon/figs/hamming-tanner.svg' | relative_url }}"
+  style="width: 100%; max-width: 316px; border:none; background-color:#FFFFFF;"
+/>
 
 Tālāk izmantosim nelielu "spēļu" LDPC kodu ar $n = 12$ bitiem un $6$ pārbaudēm; katrs bits piedalās $2$ pārbaudēs, katrā pārbaudē ir $4$ biti. Koda dimensija ir $k = 12 - \operatorname{rank}(H) = 7$, un minimālais attālums $d = 3$ -- tātad, tāpat kā Heminga kods, tas garantēti izlabo tikai vienu kļūdu. (Reāli LDPC kodi ir daudz garāki, bet algoritmi ir tie paši.)
 
@@ -638,7 +643,12 @@ Dalījums ir $f(x) = 3x^2 + 2x + 1$ bez atlikuma, tātad ziņojums ir $3, 2, 1$,
 
 **8.5. uzdevums:** Kods uzdots ar zīmējumā redzamo Tanera grafu: katrs kontrolbits $y_i$ ir ar to savienoto ziņojuma bitu $x_j$ XOR. Pārraidē daži biti pazuda, bet saņemtie ir pareizi (dzēsumu kanāls): $x_1 = 1$, $x_2 = 0$, $x_5 = 1$, $y_1 = 0$, $y_2 = 1$, $y_3 = 1$, $y_4 = 0$. Ar dzēsumu atkodēšanu (sk. "Dzēsumu atkodēšana") noteikt pazaudētos ziņojuma bitus $x_3$, $x_4$, $x_6$.
 
-![Tanera grafs 8.5. uzdevumam](figs/tornado-problem.png)
+<img
+  id="dzesumu_uzdevuma_grafs"
+  alt="Tanera grafs 8.5. uzdevumam"
+  src="{{ '/lectures/lossy_reed_solomon/figs/erasure-problem.svg' | relative_url }}"
+  style="width: 100%; max-width: 444px; border:none; background-color:#FFFFFF;"
+/>
 
 **Atbilde:** $(x_1,x_2,x_3,x_4,x_5,x_6) = (1,0,\textcolor{red}{x_3},\textcolor{red}{x_4},1,x_6)$, $(y_1,y_2,y_3,y_4) = (0,1,1,0)$.
 

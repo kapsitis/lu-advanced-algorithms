@@ -47,6 +47,15 @@ JPEG ir algoritms attēlu saspiešanai un arī formāts attēlu glabāšanai. T�
 * Ievade: punktu attēls, katra punkta krāsu apraksta trīs $8$ bitu skaitļi (robežās no $0$ līdz $255$) -- R, G, B (red, green, blue).
 * Izvade: bitu virkne.
 
+<img
+  id="jpeg_kodesanas_soli"
+  alt="JPEG kodēšanas soļi"
+  src="{{ '/lectures/lossy_images_and_audio/figs/jpeg-pipeline.svg' | relative_url }}"
+  style="width: 100%; max-width: 980px; border:none; background-color:#FFFFFF;"
+/>
+
+*JPEG kodēšanas soļi; numuri atbilst tālāk aprakstītajiem 1.-7. solim. Skaitļi ir īsti: paraugbloku pārveido ar DCT-II, kvantizē ar standarta gaišuma kvantizācijas tabulu un nolasa zig-zag secībā.*
+
 ### Pārveido krāsu telpu no RGB par YIQ
 
 Y,I,Q vērtības iegūst no R,G,B vērtībām, pareizinot tās ar koeficientu matricu. Šis pārveidojums ir atgriezenisks (bezzudumu), t.i., zinot YIQ vērtības, var atjaunot RGB vērtības.

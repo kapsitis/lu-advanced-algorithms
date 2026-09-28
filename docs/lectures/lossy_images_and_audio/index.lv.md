@@ -158,6 +158,33 @@ JPEG (*Joint Photographic Experts Group*) standarts ISO/IEC 10918-1 (1992) aprak
 
 *Režģa izretināšana (Skipping grid).*
 
+*Piezīme par apzīmējumu J:a:b.* Krāsainības izretināšanu apzīmē ar trim skaitļiem J:a:b, kas apraksta *atsauces apgabalu* -- J pikseļus platu un $2$ rindas augstu taisnstūri:
+
+* **J** -- apgabala platums pikseļos (gandrīz vienmēr $4$). Gaišuma ($Y$) plakni neizretina: katrā apgabala rindā ir J gaišuma paraugi.
+* **a** -- cik krāsainības paraugu ir apgabala *pirmajā* rindā. $a = J$ nozīmē, ka horizontāli neizretina, $a = J/2$ -- ka viens paraugs ir diviem blakus esošiem pikseļiem.
+* **b** -- cik krāsainības paraugu ir apgabala *otrajā* rindā. $b = a$ nozīmē, ka otrajā rindā ir savi paraugi (vertikāli neizretina), bet $b = 0$ -- ka otrajā rindā savu paraugu nav un tā izmanto pirmās rindas paraugus, t.i., vertikāli izretina divas reizes.
+
+Skaitļi a un b attiecas uz *katru* no abām krāsainības plaknēm ($\mathrm{Cb}$ un $\mathrm{Cr}$ tiek izretinātas vienādi). Tātad J:a:b **nav** attiecība "$Y : \mathrm{Cb} : \mathrm{Cr}$", un "0" apzīmējumā 4:2:0 nenozīmē, ka $\mathrm{Cr}$ komponentes nav -- tas nozīmē, ka katrā otrajā rindā nav jaunu krāsainības paraugu.
+
+<img
+  id="chroma_subsampling"
+  alt="Krāsainības izretināšanas shēmas"
+  src="{{ '/lectures/lossy_images_and_audio/figs/chroma-subsampling.svg' | relative_url }}"
+  style="width: 100%; max-width: 960px; border:none; background-color:#FFFFFF;"
+/>
+
+*Atsauces apgabals $4 \times 2$ pikseļi. Režģis -- gaišuma paraugi (katram pikselim savs); zaļie taisnstūri -- pikseļi, kuriem ir kopīgs krāsainības paraugs (tāds pats sadalījums gan $\mathrm{Cb}$, gan $\mathrm{Cr}$ plaknē).*
+
+| Shēma | Krāsainība horizontāli | Krāsainība vertikāli | Vērtības uz pikseli | JPEG faktori $Y$ ($H \times V$) | Kur lieto |
+| --- | --- | --- | --- | --- | --- |
+| 4:4:4 | pilna | pilna | $3$ | $1 \times 1$ | augsta kvalitāte, grafika un teksts |
+| 4:2:2 | $\frac{1}{2}$ | pilna | $2$ | $2 \times 1$ | profesionāls video, daļa kameru JPEG |
+| 4:2:0 | $\frac{1}{2}$ | $\frac{1}{2}$ | $1.5$ | $2 \times 2$ | vairums JPEG un video (H.264, AV1), AVIF |
+| 4:1:1 | $\frac{1}{4}$ | pilna | $1.5$ | $4 \times 1$ | DV video (NTSC) |
+| 4:4:0 | pilna | $\frac{1}{2}$ | $2$ | $1 \times 2$ | reti (dažas kameras) |
+
+Vērtību skaits uz pikseli ir $1 + 2 \cdot (\text{krāsainības paraugu daļa})$, piemēram, 4:2:0 gadījumā $1 + 2 \cdot \frac{1}{4} = 1.5$. JPEG failā pats apzīmējums J:a:b nav ierakstīts: SOF segmentā katrai komponentei norāda horizontālo un vertikālo izretināšanas faktoru $H \times V$ (relatīvo paraugu blīvumu). Ja $Y$ faktori ir $2 \times 2$, bet $\mathrm{Cb}$ un $\mathrm{Cr}$ -- $1 \times 1$, tā ir 4:2:0. Pelēktoņu attēlu, kurā ir tikai $Y$ plakne, dažkārt (piemēram, AV1 un AVIF dokumentācijā) apzīmē ar 4:0:0.
+
 **3. solis: Sadalīšana $8 \times 8$ blokos.** Attēla platumu un augstumu papildina līdz $16$ daudzkārtnim (parasti atkārtojot pēdējo kolonnu un rindu). Katru komponenti sadala $8 \times 8$ blokos. Ar 4:2:0 izretināšanu katram $16 \times 16$ pikseļu laukumam (*MCU, minimum coded unit*) atbilst četri $Y$ bloki, viens $\mathrm{Cb}$ bloks un viens $\mathrm{Cr}$ bloks; tos kodē šādā secībā. No katras bloka vērtības atņem $128$ (*level shift*), lai vērtības būtu intervālā $[-128; 127]$.
 
 **4. solis: Diskrētā kosinusu transformācija (DCT-II).** Katram blokam $A$ aprēķina tāda paša izmēra koeficientu matricu $B = C A C^T$ (sk. "Diskrēto kosinusu transformācijas"):
@@ -438,6 +465,69 @@ for row in dct2([[0, 0, 8, 8]] * 4):                   # vertikāla robeža 4x4 
 
 Pēdējā piemērā visām bloka rindām ir viena un tā pati vērtību virkne $(0, 0, 8, 8)$ (vertikāla robeža). Tāpēc nenulles ir tikai rezultāta pirmā rinda $(16, -14.782, 0, 6.123)$: blokam ir tikai horizontālas frekvences, bet vertikālo frekvenču nav.
 
+### Ko glabā DCT koeficienti: amplitūda un enerģija
+
+**Koeficienti ir kosinusoīdu amplitūdas.** Tā kā matrica $C$ ir ortonormēta, $x = C^T y$, t.i., signāls ir matricas $C$ rindu (*bāzes vektoru*) lineāra kombinācija:
+
+$$
+x = y_0\,c_0 + y_1\,c_1 + \ldots + y_{N-1}\,c_{N-1},
+\qquad
+c_k[n] = \alpha_k \cos\frac{\pi (2n+1) k}{2N}.
+$$
+
+Bāzes vektors $c_k$ ir kosinusoīda, kurai blokā ir $k$ pusviļņi: $c_0$ ir konstante, $c_1$ -- viens pusvilnis (lēna pāreja no viena gala uz otru), $c_{N-1}$ -- straujākās svārstības, kādas var attēlot $N$ punktos. Koeficients $y_k$ norāda, cik daudz šīs kosinusoīdas ir signālā; tās devums $y_k c_k$ svārstās ar amplitūdu $\alpha_k \lvert y_k \rvert$.
+
+<img
+  id="dct_bazes_vektori"
+  alt="DCT bāzes vektori"
+  src="{{ '/lectures/lossy_images_and_audio/figs/dct-basis.svg' | relative_url }}"
+  style="width: 100%; max-width: 900px; border:none; background-color:#FFFFFF;"
+/>
+
+*DCT-II bāzes vektori $c_0, \ldots, c_7$ ($N = 8$): punkti ir vektora elementi, plānā līnija -- kosinusoīda, no kuras tie ņemti. JPEG $8 \times 8$ blokā divdimensiju bāzes attēli ir $c_u$ un $c_v$ reizinājumi (vertikālā un horizontālā kosinusoīda).*
+
+Piemēram, signālam $x = (10, 20, 30, 40)$ ar $y = (50,\; -22.304,\; 0,\; -1.585)$ ("Skaitlisks piemērs") devumi ir šādi:
+
+| Koeficients | Devums $y_k c_k$ |
+| --- | --- |
+| $y_0 = 50$ | $(25,\; 25,\; 25,\; 25)$ |
+| $y_1 = -22.304$ | $(-14.571,\; -6.036,\; 6.036,\; 14.571)$ |
+| $y_2 = 0$ | $(0,\; 0,\; 0,\; 0)$ |
+| $y_3 = -1.585$ | $(-0.429,\; 1.036,\; -1.036,\; 0.429)$ |
+| **summa** | $(10,\; 20,\; 30,\; 40)$ |
+
+Augošais signāls ir galvenokārt vidējā vērtība plus viens kosinusa pusvilnis; $y_3$ tikai nedaudz "iztaisno" pusviļņa izliekumu līdz taisnei.
+
+**DC koeficients ir vidējā vērtība.** Tā kā $c_0 = \left(\frac{1}{\sqrt{N}}, \ldots, \frac{1}{\sqrt{N}}\right)$, tad $y_0 = \sqrt{N} \cdot \bar{x}$, kur $\bar{x}$ ir signāla vidējā vērtība. Piemērā $y_0 = 2 \cdot 25$; $8 \times 8$ blokā $B_{0,0} = 8 \cdot \bar{A}$ (sk. JPEG 4. soli).
+
+**Enerģija nemainās (Parsevāla vienādība).** Ortonormēta transformācija saglabā vektora garumu, tāpēc
+
+$$
+\sum_{n=0}^{N-1} x_n^2 = \sum_{k=0}^{N-1} y_k^2 .
+$$
+
+Izdalot ar $N$, iegūst signāla *vidējo kvadrātu* (vidējo jaudu), un tas sadalās divās daļās:
+
+$$
+\frac{1}{N} \sum_{n} x_n^2
+= \underbrace{\frac{y_0^2}{N}}_{=\ \bar{x}^2}
++ \underbrace{\frac{1}{N} \sum_{k \geq 1} y_k^2}_{=\ \sigma^2},
+$$
+
+kur $\sigma^2 = \frac{1}{N} \sum_n (x_n - \bar{x})^2$ ir dispersija. DC koeficients glabā vidējo gaišumu, bet AC koeficienti kopā -- tikai svārstības ap to (kontrastu, faktūru, malas). Piemērā: $\frac{3000}{4} = 750 = 25^2 + 125$; enerģija sadalās tā: $y_0$ -- $83.3\%$, $y_1$ -- $16.6\%$, $y_3$ -- $0.08\%$. Gludam signālam gandrīz visa AC enerģija ir zemajās frekvencēs.
+
+**Atmestie koeficienti nosaka kļūdu.** Ja koeficientus $y$ aizstāj ar citiem $y'$ (atmet, t.i., aizstāj ar $0$, vai kvantizē), tad atjaunotā signāla kļūda ir $x - x' = C^T (y - y')$, un tās kvadrātu summa ir tieši
+
+$$
+\sum_n (x_n - x'_n)^2 = \sum_k (y_k - y'_k)^2 .
+$$
+
+Tātad *vidējā kvadrātiskā kļūda* (MSE) signālā ir $\frac{1}{N}$ reizes atmesto koeficientu kvadrātu summa, un katrs koeficients kļūdā piedalās neatkarīgi no pārējiem. No tā izriet:
+
+* Labākā aproksimācija ar $M$ koeficientiem ir paturēt $M$ koeficientus ar lielāko $\lvert y_k \rvert$. Piemērā, atmetot $y_3$, $\mathrm{MSE} = 1.585^2 / 4 = 0.63$ (vidēji $\sqrt{0.63} = 0.79$ vienības uz punktu), bet paturot tikai $y_0$, $\mathrm{MSE} = \sigma^2 = 125$ -- signālu aizstāj ar tā vidējo vērtību.
+* Kvantizējot ar soli $Q$, katra koeficienta kļūda ir ne lielāka par $Q/2$; ja noapaļošanas kļūda ir vienmērīgi sadalīta, tās vidējais kvadrāts ir $Q^2/12$. Tāpēc iekodētājs kļūdu var novērtēt tieši koeficientos, nepārrēķinot pikseļus, un rupjāka kvantizācija augstajām frekvencēm maksā maz, jo tur koeficienti jau tā ir mazi.
+* Attēlu kvalitāti bieži mēra ar PSNR (*peak signal-to-noise ratio*) $= 10 \log_{10} \frac{255^2}{\mathrm{MSE}}$ decibelos; labas kvalitātes JPEG attēliem tas parasti ir $30$--$40$ dB.
+
 ## AVIF attēlu formāts
 
 * Izņemot JPEG, ir populārs Google izveidotais formāts WebP, kas labi saspiežams un ir populārs pārlūkprogrammās.
@@ -472,36 +562,22 @@ Tipisks gadījums: digitāla fotogrāfija, ko saspiež ar zudumiem (piemēram, a
 
 **Atkodēšana** izpilda soļus pretējā secībā: nolasa konteineru un AV1 datus, aritmētiski atkodē, katram blokam aprēķina prognozi, pieskaita apgriezti transformēto atlikumu, piemēro cilpas filtrus un pārveido YCbCr $\rightarrow$ RGB. Atkodētājam nav jāmeklē labākie režīmi (tie ir ierakstīti failā), tāpēc atkodēšana ir daudz ātrāka par iekodēšanu.
 
-### Python piemērs
+### Animēta AVIF faila piemērs
 
-```bash
-pip install pillow imageio pillow-avif-plugin
-```
+AVIF var glabāt arī attēlu virkni (animāciju) -- tad tie ir vairāki AV1 kadri, kurus var kodēt arī ar atsaucēm uz iepriekšējiem kadriem, tāpat kā video. Šī animācija ir izveidota ar Python skriptu [animated_avif.py]({{ '/lectures/lossy_images_and_audio/figs/animated_avif.py' | relative_url }}), kas izmanto bibliotēkas Pillow un NumPy:
 
-```python
-from PIL import Image, ImageDraw
-import imageio
+<img
+  id="animets_avif"
+  alt="Animēts AVIF: bumba atstarojas no taisnstūra malām"
+  src="{{ '/lectures/lossy_images_and_audio/figs/bouncing-ball.avif' | relative_url }}"
+  style="width: 100%; max-width: 640px; border:none; background-color:#F4F1E8;"
+/>
 
-# Create a white square image
-image_size = 256
-white_image = Image.new("RGB", (image_size, image_size), "white")
+*Bumba pārvietojas $45^\circ$ leņķī un atstarojas no malām. $280$ kadri ($640 \times 360$ pikseļi, $50$ kadri sekundē, $5.6$ sekundes) aizņem apmēram $12$ KB.*
 
-# Draw a red circle in the middle
-draw = ImageDraw.Draw(white_image)
-circle_radius = 50
-circle_center = (image_size // 2, image_size // 2)
-draw.ellipse(
-    [
-        (circle_center[0] - circle_radius, circle_center[1] - circle_radius),
-        (circle_center[0] + circle_radius, circle_center[1] + circle_radius)
-    ],
-    fill="red"
-)
-
-import pillow_avif
-white_image.save("output.avif", format="AVIF")
-print("Image saved as output.avif")
-```
+* Bumbas malas pikseļu krāsa ir fona un bumbas krāsu sajaukums proporcionāli tam, kāda pikseļa daļa ir bumbas iekšpusē (*anti-aliasing*; katru pikseli sadala $4 \times 4$ apakšpikseļos). Tāpēc bumba izskatās apaļa, un kustība ir gluda arī tad, ja bumbas centrs neatrodas pikseļa centrā.
+* Izmēri izvēlēti tā, lai animācija būtu bezšuvju cilpa: bumbas centrs pārvietojas $560$ pikseļus horizontāli un $280$ pikseļus vertikāli, tāpēc pēc $2 \cdot 560 = 1120$ pikseļu ceļa (pa $4$ pikseļiem kadrā) bumba atgriežas sākuma stāvoklī.
+* Kadrus saglabā ar `Image.save(..., format="AVIF", save_all=True, append_images=...)`; jaunākās Pillow versijās AVIF atbalsts ir iebūvēts.
 
 ## Kvantizācija citās jomās
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Ģenerē jpeg-pipeline.svg -- JPEG kodēšanas soļu shēmu (1.-7. solis).
 
-Shēmā soļi numurēti tāpat kā lekcijā (index.lv.md, "JPEG algoritma apraksts").
+Shēmā soļi numurēti tāpat kā lekcijā (index.lv.md, "JPEG iekodēšana").
 8x8 bloka skaitļi ir īsti: paraugbloku (Wikipedia "JPEG" piemērs) pārveido ar
 DCT-II (B = C A C^T), kvantizē ar standarta gaišuma tabulu un nolasa zig-zag
 secībā.
@@ -109,7 +109,7 @@ def plane(x, y, size, fill, stroke, letter=None, cells=8):
         s += line(x, y + i * step, x + size, y + i * step, stroke, 0.5,
                   ' stroke-opacity="0.5"')
     if letter:
-        s += txt(x + size - 8, y + 13, letter, 12, stroke, weight="bold")
+        s += txt(x + size - 3, y + 13, letter, 12, stroke, "end", weight="bold")
     return s
 
 
@@ -172,21 +172,21 @@ def build():
 
     s += arrow(160, 136, 236, 136)
     s += badge(198, 114, 1)
-    s += txt(198, 158, "RGB → YIQ", 12)
+    s += txt(198, 158, "RGB → YCbCr", 12)
 
-    s += stack(248, 64, 104, 16, [("#ecdcea", PURPLE, "Q"),
-                                  ("#fde5cc", ORANGE, "I"),
+    s += stack(248, 64, 104, 16, [("#ecdcea", PURPLE, "Cr"),
+                                  ("#fde5cc", ORANGE, "Cb"),
                                   ("#e9ecef", "#5a6a7a", "Y")])
-    s += txt(316, 222, "Y (gaišums), I, Q (krāsa)", 12)
+    s += txt(316, 222, "Y (gaišums), Cb, Cr (krāsa)", 12)
 
     s += arrow(386, 136, 462, 136)
     s += badge(424, 114, 2)
     s += txt(424, 158, "4:2:0", 12)
 
     s += plane(474, 72, 116, "#e9ecef", "#5a6a7a", "Y")
-    s += plane(602, 72, 56, "#fde5cc", ORANGE, "I", cells=4)
-    s += plane(602, 132, 56, "#ecdcea", PURPLE, "Q", cells=4)
-    s += txt(566, 222, "I, Q: vidējais katrā 2×2", 12)
+    s += plane(602, 72, 56, "#fde5cc", ORANGE, "Cb", cells=4)
+    s += plane(602, 132, 56, "#ecdcea", PURPLE, "Cr", cells=4)
+    s += txt(566, 222, "Cb, Cr: vidējais katrā 2×2", 12)
 
     s += arrow(670, 136, 734, 136)
     s += badge(702, 114, 3)
@@ -227,7 +227,7 @@ def build():
     s += arrow(548, 366, 448, 366)
     s += badge(498, 344, 5)
     s += txt(498, 388, "kvantizācija", 12)
-    s += txt(498, 404, "÷ a" + sub("ij") + ", noapaļo", 11, "#555", raw=True)
+    s += txt(498, 404, "÷ Q" + sub("u,v") + ", noapaļo", 11, "#555", raw=True)
 
     qx, qy, qc = 240, 266, 25
     pts = " ".join("%g,%g" % (qx + (j + 0.5) * qc, qy + (i + 0.5) * qc)
@@ -274,7 +274,7 @@ def build():
     s += txt(494, 647, "aritmētiskā", 12)
     s += txt(494, 663, "kodēšana", 12)
 
-    s += txt(556, 613, "0110 1011 1…", 13, INK, "start", family=MONO)
+    s += txt(552, 613, "1100 0101 0100…", 11.5, INK, "start", family=MONO)
     s += arrow(662, 609, 684, 609)
     fx, fy = 690, 589
     segs = [("SOI", 34), ("galvene, tabulas", 104), ("saspiestie dati", 100),

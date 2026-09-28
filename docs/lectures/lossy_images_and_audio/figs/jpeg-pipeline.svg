@@ -22,7 +22,7 @@
 <line x1="52" y1="142" x2="156" y2="142" stroke="#4C78A8" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="143" y1="64" x2="143" y2="168" stroke="#4C78A8" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="52" y1="155" x2="156" y2="155" stroke="#4C78A8" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="148" y="77" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4C78A8" text-anchor="middle" font-weight="bold" font-style="normal">B</text>
+<text x="153" y="77" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4C78A8" text-anchor="end" font-weight="bold" font-style="normal">B</text>
 <rect x="36" y="80" width="104" height="104" rx="0" fill="#dcecd8" stroke="#54A24B" stroke-width="1.4"/>
 <line x1="49" y1="80" x2="49" y2="184" stroke="#54A24B" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="36" y1="93" x2="140" y2="93" stroke="#54A24B" stroke-width="0.5" stroke-opacity="0.5"/>
@@ -38,7 +38,7 @@
 <line x1="36" y1="158" x2="140" y2="158" stroke="#54A24B" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="127" y1="80" x2="127" y2="184" stroke="#54A24B" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="36" y1="171" x2="140" y2="171" stroke="#54A24B" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="132" y="93" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#54A24B" text-anchor="middle" font-weight="bold" font-style="normal">G</text>
+<text x="137" y="93" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#54A24B" text-anchor="end" font-weight="bold" font-style="normal">G</text>
 <rect x="20" y="96" width="104" height="104" rx="0" fill="#fbdcdc" stroke="#E45756" stroke-width="1.4"/>
 <line x1="33" y1="96" x2="33" y2="200" stroke="#E45756" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="20" y1="109" x2="124" y2="109" stroke="#E45756" stroke-width="0.5" stroke-opacity="0.5"/>
@@ -54,12 +54,12 @@
 <line x1="20" y1="174" x2="124" y2="174" stroke="#E45756" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="111" y1="96" x2="111" y2="200" stroke="#E45756" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="20" y1="187" x2="124" y2="187" stroke="#E45756" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="116" y="109" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#E45756" text-anchor="middle" font-weight="bold" font-style="normal">R</text>
+<text x="121" y="109" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#E45756" text-anchor="end" font-weight="bold" font-style="normal">R</text>
 <text x="88" y="222" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">RGB attēls</text>
 <line x1="160" y1="136" x2="236" y2="136" stroke="#444" stroke-width="2.2" marker-end="url(#arw)"/>
 <circle cx="198" cy="114" r="11" fill="#4C78A8"/>
 <text x="198" y="118.5" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold" font-style="normal">1</text>
-<text x="198" y="158" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">RGB → YIQ</text>
+<text x="198" y="158" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">RGB → YCbCr</text>
 <rect x="280" y="64" width="104" height="104" rx="0" fill="#ecdcea" stroke="#B279A2" stroke-width="1.4"/>
 <line x1="293" y1="64" x2="293" y2="168" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="280" y1="77" x2="384" y2="77" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
@@ -75,7 +75,7 @@
 <line x1="280" y1="142" x2="384" y2="142" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="371" y1="64" x2="371" y2="168" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="280" y1="155" x2="384" y2="155" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="376" y="77" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#B279A2" text-anchor="middle" font-weight="bold" font-style="normal">Q</text>
+<text x="381" y="77" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#B279A2" text-anchor="end" font-weight="bold" font-style="normal">Cr</text>
 <rect x="264" y="80" width="104" height="104" rx="0" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
 <line x1="277" y1="80" x2="277" y2="184" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="264" y1="93" x2="368" y2="93" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
@@ -91,7 +91,7 @@
 <line x1="264" y1="158" x2="368" y2="158" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="355" y1="80" x2="355" y2="184" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="264" y1="171" x2="368" y2="171" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="360" y="93" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#F58518" text-anchor="middle" font-weight="bold" font-style="normal">I</text>
+<text x="365" y="93" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#F58518" text-anchor="end" font-weight="bold" font-style="normal">Cb</text>
 <rect x="248" y="96" width="104" height="104" rx="0" fill="#e9ecef" stroke="#5a6a7a" stroke-width="1.4"/>
 <line x1="261" y1="96" x2="261" y2="200" stroke="#5a6a7a" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="248" y1="109" x2="352" y2="109" stroke="#5a6a7a" stroke-width="0.5" stroke-opacity="0.5"/>
@@ -107,8 +107,8 @@
 <line x1="248" y1="174" x2="352" y2="174" stroke="#5a6a7a" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="339" y1="96" x2="339" y2="200" stroke="#5a6a7a" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="248" y1="187" x2="352" y2="187" stroke="#5a6a7a" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="344" y="109" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5a6a7a" text-anchor="middle" font-weight="bold" font-style="normal">Y</text>
-<text x="316" y="222" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">Y (gaišums), I, Q (krāsa)</text>
+<text x="349" y="109" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5a6a7a" text-anchor="end" font-weight="bold" font-style="normal">Y</text>
+<text x="316" y="222" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">Y (gaišums), Cb, Cr (krāsa)</text>
 <line x1="386" y1="136" x2="462" y2="136" stroke="#444" stroke-width="2.2" marker-end="url(#arw)"/>
 <circle cx="424" cy="114" r="11" fill="#4C78A8"/>
 <text x="424" y="118.5" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold" font-style="normal">2</text>
@@ -128,7 +128,7 @@
 <line x1="474" y1="159" x2="590" y2="159" stroke="#5a6a7a" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="575.5" y1="72" x2="575.5" y2="188" stroke="#5a6a7a" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="474" y1="173.5" x2="590" y2="173.5" stroke="#5a6a7a" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="582" y="85" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5a6a7a" text-anchor="middle" font-weight="bold" font-style="normal">Y</text>
+<text x="587" y="85" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5a6a7a" text-anchor="end" font-weight="bold" font-style="normal">Y</text>
 <rect x="602" y="72" width="56" height="56" rx="0" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
 <line x1="616" y1="72" x2="616" y2="128" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="602" y1="86" x2="658" y2="86" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
@@ -136,7 +136,7 @@
 <line x1="602" y1="100" x2="658" y2="100" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="644" y1="72" x2="644" y2="128" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="602" y1="114" x2="658" y2="114" stroke="#F58518" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="650" y="85" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#F58518" text-anchor="middle" font-weight="bold" font-style="normal">I</text>
+<text x="655" y="85" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#F58518" text-anchor="end" font-weight="bold" font-style="normal">Cb</text>
 <rect x="602" y="132" width="56" height="56" rx="0" fill="#ecdcea" stroke="#B279A2" stroke-width="1.4"/>
 <line x1="616" y1="132" x2="616" y2="188" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="602" y1="146" x2="658" y2="146" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
@@ -144,8 +144,8 @@
 <line x1="602" y1="160" x2="658" y2="160" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="644" y1="132" x2="644" y2="188" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
 <line x1="602" y1="174" x2="658" y2="174" stroke="#B279A2" stroke-width="0.5" stroke-opacity="0.5"/>
-<text x="650" y="145" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#B279A2" text-anchor="middle" font-weight="bold" font-style="normal">Q</text>
-<text x="566" y="222" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">I, Q: vidējais katrā 2×2</text>
+<text x="655" y="145" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#B279A2" text-anchor="end" font-weight="bold" font-style="normal">Cr</text>
+<text x="566" y="222" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">Cb, Cr: vidējais katrā 2×2</text>
 <line x1="670" y1="136" x2="734" y2="136" stroke="#444" stroke-width="2.2" marker-end="url(#arw)"/>
 <circle cx="702" cy="114" r="11" fill="#4C78A8"/>
 <text x="702" y="118.5" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold" font-style="normal">3</text>
@@ -307,7 +307,7 @@
 <circle cx="498" cy="344" r="11" fill="#4C78A8"/>
 <text x="498" y="348.5" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold" font-style="normal">5</text>
 <text x="498" y="388" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">kvantizācija</text>
-<text x="498" y="404" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#555" text-anchor="middle" font-weight="normal" font-style="normal">÷ a<tspan baseline-shift="sub" font-size="75%">ij</tspan>, noapaļo</text>
+<text x="498" y="404" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#555" text-anchor="middle" font-weight="normal" font-style="normal">÷ Q<tspan baseline-shift="sub" font-size="75%">u,v</tspan>, noapaļo</text>
 <rect x="240" y="266" width="25" height="25" rx="0" fill="#fff" stroke="#9aa5b1" stroke-width="0.6"/>
 <rect x="265" y="266" width="25" height="25" rx="0" fill="#fff" stroke="#9aa5b1" stroke-width="0.6"/>
 <rect x="290" y="266" width="25" height="25" rx="0" fill="#fff" stroke="#9aa5b1" stroke-width="0.6"/>
@@ -462,7 +462,7 @@
 <text x="494" y="631" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">Hafmana vai</text>
 <text x="494" y="647" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">aritmētiskā</text>
 <text x="494" y="663" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">kodēšana</text>
-<text x="556" y="613" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13" fill="#222" text-anchor="start" font-weight="normal" font-style="normal">0110 1011 1…</text>
+<text x="552" y="613" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="11.5" fill="#222" text-anchor="start" font-weight="normal" font-style="normal">1100 0101 0100…</text>
 <line x1="662" y1="609" x2="684" y2="609" stroke="#444" stroke-width="2.2" marker-end="url(#arw)"/>
 <rect x="690" y="589" width="34" height="40" rx="0" fill="#f4f6f8" stroke="#5a6a7a" stroke-width="1.4"/>
 <text x="707" y="614" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#222" text-anchor="middle" font-weight="normal" font-style="normal">SOI</text>

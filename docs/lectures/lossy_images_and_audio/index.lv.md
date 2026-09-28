@@ -8,11 +8,13 @@ permalink: /lectures/lossy_images_and_audio/index.lv.html
 
 Apskatām sekojošas sadaļas:
 
-* Krāsu pārveidojumi
+* Krāsas un kvantizācija
+* Krāsu telpas: RGB, YIQ, YUV un YCbCr
+* JPEG iekodēšana (7 soļi)
 * Diskrētā kosinusu transformācija
-* Nobeiguma soļi
+* Citi attēlu formāti; kvantizācija citās jomās
 
-## Krāsas un kvantizācija (1.-3.solis)
+## Krāsas un kvantizācija
 
 **Piemērs:** Melnbalti attēli.
 
@@ -30,7 +32,7 @@ Atkārtojums -- matricas reizināšana ar vektoru ir lineārs pārveidojums jeb 
 
 $$
 \left( \begin{array}{c} x'_1 \\ x'_2 \\ \cdots \\ x'_n \end{array} \right)
-\approx
+=
 \left( \begin{array}{cccc}
 a_{11} &  a_{12} & \cdots & a_{1n} \\
 a_{21} & a_{22} & \cdots & a_{2n} \\
@@ -40,12 +42,104 @@ a_{n1} & a_{n2} & \cdots & a_{nn}
 \left( \begin{array}{c} x_1 \\ x_2 \\ \cdots \\ x_n \end{array} \right)
 $$
 
-## JPEG algoritma apraksts
+## Krāsu telpas (*color spaces*)
 
-JPEG ir algoritms attēlu saspiešanai un arī formāts attēlu glabāšanai. Tā mērķis ir iegūt saspiestu failu, no kura var atjaunot attēlu, kas ir līdzīgs sākotnējam. Saspiešana notiek ar zudumiem. Algoritma soļi ir saistīti ar to, kā cilvēks uztver krāsu.
+Krāsu telpa nosaka, ar kādiem trim skaitļiem apraksta viena punkta (pikseļa) krāsu. Ekrāni un kameras strādā ar RGB, bet saspiešanai izdevīgāk krāsu sadalīt *gaišumā* (*luma*) un divās *krāsainības* (*chroma*) komponentēs. Redze gaišuma izmaiņas uztver daudz precīzāk nekā nokrāsas izmaiņas, tāpēc krāsainības komponentes var glabāt ar mazāku izšķirtspēju (sk. JPEG 2. soli).
 
-* Ievade: punktu attēls, katra punkta krāsu apraksta trīs $8$ bitu skaitļi (robežās no $0$ līdz $255$) -- R, G, B (red, green, blue).
-* Izvade: bitu virkne.
+### RGB
+
+*RGB* ir aditīva krāsu telpa: krāsu iegūst, sajaucot sarkanu (R), zaļu (G) un zilu (B) gaismu. Parasti katru komponenti glabā kā $8$ bitu skaitli no $0$ līdz $255$; $(0,0,0)$ ir melns, $(255,255,255)$ -- balts. Visas trīs komponentes ir vienlīdz svarīgas, tāpēc nevienu no tām nevar saspiest vairāk par citām.
+
+### YIQ
+
+*YIQ* izmantoja analogās krāsu televīzijas standarts NTSC (ASV, 1953). "Y" ir gaišums (to rādīja arī melnbaltie televizori), bet "I" (*in-phase*) un "Q" (*quadrature*) -- krāsainība (nosaukumi nāk no signāla modulācijas). Ja $R, G, B \in [0;1]$ (8 bitu vērtība, dalīta ar $255$), tad
+
+$$
+\left( \begin{array}{c} Y \\ I \\ Q \end{array} \right)
+= M
+\left( \begin{array}{c} R \\ G \\ B \end{array} \right),
+\qquad
+M = \left( \begin{array}{rrr}
+0.299 &  0.587 &  0.114 \\
+0.5959 & -0.2746 & -0.3213 \\
+0.2115 & -0.5227 &  0.3112
+\end{array} \right).
+$$
+
+Tad $Y \in [0;1]$, $I \in [-0.5959; 0.5959]$ un $Q \in [-0.5227; 0.5227]$. Pelēkām krāsām ($R = G = B$) $I = Q = 0$, jo matricas $M$ otrās un trešās rindas summa ir $0$. Matrica $M$ ir apgriežama, tāpēc pārveidojums ir bezzudumu: $(R, G, B)^T = M^{-1} (Y, I, Q)^T$. Noapaļojot līdz trim zīmēm aiz komata, matricas $M^{-1}$ elementi ir
+
+$$
+\left( \begin{array}{rrr}
+1 &  0.956 &  0.621 \\
+1 & -0.272 & -0.647 \\
+1 & -1.107 &  1.704
+\end{array} \right).
+$$
+
+Attēlā redzams fotoattēls un tā Y, I, Q komponentes (I un Q attēlotas ar krāsu, kas atbilst attiecīgajai komponentei, ja pārējās ir vidējas):
+
+| | |
+| --- | --- |
+| ![Kuldīga](figs/kuldiga.png) | ![Kuldīga -- Y komponente](figs/kuldiga1.png) |
+| *oriģināls (RGB)* | *Y komponente* |
+| ![Kuldīga -- I komponente](figs/kuldiga2.png) | ![Kuldīga -- Q komponente](figs/kuldiga3.png) |
+| *I komponente* | *Q komponente* |
+
+Gandrīz visa attēla struktūra (kontūras, detaļas) ir Y komponentē, bet I un Q komponentes ir izplūdušas. Redze precīzāk uztver "I" (pāreju no oranžā uz zilo) nekā "Q" (pāreju no zaļā uz violeto), tāpēc NTSC pārraidē Q signālam atvēlēja šaurāku frekvenču joslu nekā I.
+
+![IQ plakne](figs/YIQ_IQ_plane.svg.png)
+
+*IQ plakne, ja $Y=0.5$.*
+
+### YUV un YCbCr
+
+*YUV* ir analogās televīzijas (PAL, SECAM) krāsu telpa. Gaišums $Y$ ir tas pats, kas YIQ telpā, bet krāsainību apraksta ar zilās un sarkanās krāsas starpību no gaišuma ($R, G, B \in [0;1]$):
+
+$$
+Y = 0.299\,R + 0.587\,G + 0.114\,B, \qquad
+U = 0.492\,(B - Y), \qquad
+V = 0.877\,(R - Y).
+$$
+
+(YIQ ir tā pati UV plakne, pagriezta par $33^\circ$.)
+
+*YCbCr* ir YUV digitālais variants: $B - Y$ un $R - Y$ mērogo tā, lai tie ietilptu $8$ bitos, un pieskaita $128$. JPEG failu formāts JFIF izmanto YCbCr pilnā diapazonā (ITU-R BT.601 koeficienti). Ja $R, G, B \in \lbrace 0, \ldots, 255 \rbrace$, tad
+
+$$
+\begin{array}{rcl}
+Y  & = & 0.299\,R + 0.587\,G + 0.114\,B, \\[4pt]
+\mathrm{Cb} & = & 128 + \dfrac{B - Y}{1.772}, \\[8pt]
+\mathrm{Cr} & = & 128 + \dfrac{R - Y}{1.402}.
+\end{array}
+$$
+
+Dalītāji $1.772 = 2\,(1 - 0.114)$ un $1.402 = 2\,(1 - 0.299)$ izvēlēti tā, lai $\mathrm{Cb}$ un $\mathrm{Cr}$ paliktu intervālā $[0;255]$. Pēc aprēķina visas trīs vērtības noapaļo līdz veselam skaitlim un apgriež līdz intervālam $[0;255]$. Pretējais pārveidojums seko tieši no šīm formulām:
+
+$$
+\begin{array}{rcl}
+R & = & Y + 1.402\,(\mathrm{Cr} - 128), \\
+B & = & Y + 1.772\,(\mathrm{Cb} - 128), \\
+G & = & (Y - 0.299\,R - 0.114\,B) \,/\, 0.587.
+\end{array}
+$$
+
+Pats pārveidojums ir apgriežams; informāciju zaudē tikai noapaļošana līdz veseliem skaitļiem.
+
+<img
+  id="cbcr_plakne"
+  alt="CbCr plakne"
+  src="{{ '/lectures/lossy_images_and_audio/figs/cbcr-plane.svg' | relative_url }}"
+  style="width: 100%; max-width: 336px; border:none; background-color:#FFFFFF;"
+/>
+
+*CbCr plakne, ja $Y = 128$. Punktā $(\mathrm{Cb}, \mathrm{Cr}) = (128, 128)$ ir pelēks; krāsas, kas iziet ārpus RGB diapazona, ir apgrieztas.*
+
+## JPEG iekodēšana
+
+JPEG (*Joint Photographic Experts Group*) standarts ISO/IEC 10918-1 (1992) apraksta vairākus attēlu saspiešanas režīmus: secīgo (*baseline*) un progresīvo DCT kodēšanu, bezzudumu režīmu un hierarhisko režīmu. Tālāk aprakstīta visbiežāk lietotā -- secīgā (*baseline*) iekodēšana; rezultātu glabā JFIF faila formātā (`*.jpg`).
+
+* Ievade: punktu attēls; katra punkta krāsu apraksta trīs $8$ bitu skaitļi $R, G, B \in \lbrace 0, \ldots, 255 \rbrace$.
+* Izvade: baitu virkne (JFIF fails).
 
 <img
   id="jpeg_kodesanas_soli"
@@ -54,106 +148,86 @@ JPEG ir algoritms attēlu saspiešanai un arī formāts attēlu glabāšanai. T�
   style="width: 100%; max-width: 980px; border:none; background-color:#FFFFFF;"
 />
 
-*JPEG kodēšanas soļi; numuri atbilst tālāk aprakstītajiem 1.-7. solim. Skaitļi ir īsti: paraugbloku pārveido ar DCT-II, kvantizē ar standarta gaišuma kvantizācijas tabulu un nolasa zig-zag secībā.*
+*JPEG kodēšanas soļi; numuri atbilst tālāk aprakstītajiem 1.-7. solim. Skaitļi ir īsti: paraugbloku pārveido ar DCT-II, kvantizē ar standarta gaišuma kvantizācijas tabulu un nolasa zig-zag secībā (sk. "Python piemēri").*
 
-### Pārveido krāsu telpu no RGB par YIQ
+**1. solis: Krāsu telpas maiņa (RGB $\rightarrow$ YCbCr).** Katram pikselim no $(R, G, B)$ aprēķina $(Y, \mathrm{Cb}, \mathrm{Cr})$ ar JFIF formulām (sk. "YUV un YCbCr"), rezultātu noapaļo līdz veselam skaitlim un apgriež līdz $[0;255]$. Iegūst trīs attēla *komponentes* (plaknes): $Y$, $\mathrm{Cb}$ un $\mathrm{Cr}$.
 
-Y,I,Q vērtības iegūst no R,G,B vērtībām, pareizinot tās ar koeficientu matricu. Šis pārveidojums ir atgriezenisks (bezzudumu), t.i., zinot YIQ vērtības, var atjaunot RGB vērtības.
-
-| | |
-| --- | --- |
-| ![Kuldīga](figs/kuldiga.png) | ![Kuldīga -- 1.komponente](figs/kuldiga1.png) |
-| ![Kuldīga -- 2.komponente](figs/kuldiga2.png) | ![Kuldīga -- 3.komponente](figs/kuldiga3.png) |
-
-**Kas ir YIQ?**
-
-![IQ plakne](figs/YIQ_IQ_plane.svg.png)
-
-*IQ plakne, ja $Y=0.5$.*
-
-* "Y" - Luma informācija (melnbaltās televīzijas attēliem)
-* "I" - *in-phase*, "Q" - *quadrature* (NTSC - analogās krāsu televīzijas žargons)
-
-Redze precīzāk uztver "I" (pāreju no oranžā uz zilo) nevis "Q" (pāreju no zaļā uz violeto) - tāpēc Q var vairāk saspiest.
-
-**JPEG 1.solis: Pārveidojums no RGB uz YIQ.** Šeit $R,G,B$ ir veseli skaitļi no intervāla $[0;255]$.
-
-* Vispirms intervālu $[0;255]$ vienmērīgi saspiež līdz $[0;1]$, izdalot visus skaitļus ar $255$.
-* Pēc tam reizina ar lineāra pārveidojuma matricu:
-
-  $$
-  \left( \begin{array}{c}
-  Y \\
-  I \\
-  Q
-  \end{array} \right)
-  \approx
-  \left( \begin{array}{ccc}
-  0.299 &  0.587 &  0.114 \\
-  0.5959 & -0.2746 & -0.3213 \\
-  0.2115 & -0.5227 &  0.3112
-  \end{array} \right)
-  \left( \begin{array}{c}
-  R \\
-  G \\
-  B
-  \end{array} \right)
-  $$
-
-* Visbeidzot panāk, ka jaunizveidotie parametri: $Y \in [0;1]$, $I \in [-0.5957; 0.5957]$, un $Q \in [-0.5226; 0.5226]$. Lai tas notiktu, pēc lineārā pārveidojuma veic vēl vērtību apgriešanu (*clamping*) pret maksimālo vai minimālo ar šādām formulām:
-
-  $$
-  \left\{ \begin{array}{l}
-  Y' := Y, \\
-  I' := \max(\min(I, 0.5957), -0.5957), \\
-  Q' := \max(\min(Q, 0.5226), -0.5226). \\
-  \end{array} \right.
-  $$
-
-Šis pārveidojums saglabā informāciju, jo var pārveidot atpakaļ uz RGB:
-
-$$
-\left( \begin{array}{c}
-R \\
-G \\
-B
-\end{array} \right)
-\approx
-\left( \begin{array}{ccc}
-1 &  0.956 &  0.619 \\
-1 & -0.272 & -0.647 \\
-1 & -1.106 &  1.703
-\end{array} \right)
-\left( \begin{array}{c}
-Y \\
-I \\
-Q \end{array} \right)
-$$
-
-### Izretina režģi un sagriež blokos
+**2. solis: Krāsainības izretināšana (4:2:0 *chroma subsampling*).** $Y$ komponenti atstāj nemainītu. $\mathrm{Cb}$ un $\mathrm{Cr}$ komponentēs katru $2 \times 2$ pikseļu kvadrātu aizstāj ar vienu vērtību -- četru vērtību vidējo aritmētisko (noapaļotu). Krāsainības komponentes kļūst divreiz šaurākas un divreiz zemākas, tāpēc datu apjoms samazinās no $3$ līdz $1 + \frac{1}{4} + \frac{1}{4} = 1.5$ vērtībām uz pikseli. Standarts pieļauj arī 4:4:4 (bez izretināšanas) un 4:2:2 (izretina tikai horizontāli).
 
 ![Režģa izretināšana](figs/sparser-grid.png)
 
 *Režģa izretināšana (Skipping grid).*
 
-**JPEG 2.solis: 4:2:0 subsampling.** Patur visas "Y" vērtības (melnbalto/gaišuma komponenti) - *full luminiscence*, bet "I" un "Q" vērtībām izrēķina aritmētisko vidējo katrā $2 \times 2$ kvadrātiņā -- *half chrominance*. Tāpēc krāsu datiem informācijas apjoms samazinās $4$ reizes. Redze pārmaiņas gaišumā uztver daudz labāk nekā pārmaiņas nokrāsā.
+**3. solis: Sadalīšana $8 \times 8$ blokos.** Attēla platumu un augstumu papildina līdz $16$ daudzkārtnim (parasti atkārtojot pēdējo kolonnu un rindu). Katru komponenti sadala $8 \times 8$ blokos. Ar 4:2:0 izretināšanu katram $16 \times 16$ pikseļu laukumam (*MCU, minimum coded unit*) atbilst četri $Y$ bloki, viens $\mathrm{Cb}$ bloks un viens $\mathrm{Cr}$ bloks; tos kodē šādā secībā. No katras bloka vērtības atņem $128$ (*level shift*), lai vērtības būtu intervālā $[-128; 127]$.
 
-**JPEG 3.solis: Sadalīšana blokos.** YIQ vērtības sadala $8 \times 8$ blokos. Tā kā tika atstāta tikai katra otrā "I" un "Q" vērtība, tad šo bloku izmērs sākotnējā attēlā ir $16 \times 16$. Katru bloku turpmāk apstrādā atsevišķi.
-
-No $16 \times 16$ pikseļu kvadrātiņa rodas četri "Y" (melnbaltie) bloki, viens "I" bloks un viens "Q" bloks.
-
-### Diskrētā kosinusu transformācija
-
-**JPEG 4.solis: DCT-II.** Katram $8 \times 8$ blokam lieto otrā tipa DCT gan horizontāli, gan vertikāli.
+**4. solis: Diskrētā kosinusu transformācija (DCT-II).** Katram blokam $A$ aprēķina tāda paša izmēra koeficientu matricu $B = C A C^T$ (sk. "Diskrēto kosinusu transformācijas"):
 
 $$
-\begin{array}{ll}
-x'_0 = \frac{1}{\sqrt{8}} \sum\limits_{k=0}^7 x_k \\
-x'_j = \frac{2}{\sqrt{8}} \sum\limits_{k=0}^7 \cos \frac{j(2k+1)\pi}{8}x_k,\;\;\text{ja } 1 \leq j \leq 7\\
-\end{array}
+B_{u,v} = \alpha_u \alpha_v \sum_{x=0}^{7} \sum_{y=0}^{7} A_{x,y} \cos\frac{(2x+1)u\pi}{16} \cos\frac{(2y+1)v\pi}{16},
+\qquad
+\alpha_0 = \sqrt{\tfrac{1}{8}},\;\; \alpha_k = \sqrt{\tfrac{2}{8}} \;\; (k \geq 1).
 $$
 
-Vispirms diskrēto kosinusu transformāciju pielieto katrai matricas kolonnai, pēc tam to pašu izdara katrai iegūtās matricas rindai.
+$B_{0,0}$ ir *DC koeficients* -- tas ir $8$ reizes lielāks par bloka vidējo vērtību. Pārējie $63$ ir *AC koeficienti*; jo lielāki $u$ un $v$, jo augstākai vertikālai un horizontālai frekvencei (sīkākām detaļām) tie atbilst. Gludos attēla apgabalos gandrīz visa "enerģija" koncentrējas dažos koeficientos kreisajā augšējā stūrī. Šis solis pats par sevi ir bezzudumu (DCT ir apgriežama).
+
+**5. solis: Kvantizācija.** Katru koeficientu dala ar kvantizācijas tabulas elementu un noapaļo līdz tuvākajam veselajam skaitlim:
+
+$$
+\hat{B}_{u,v} = \operatorname{round}\left( \frac{B_{u,v}}{Q_{u,v}} \right).
+$$
+
+Šis ir galvenais solis, kurā zūd informācija: atkodētājs varēs atjaunot tikai $\hat{B}_{u,v} \cdot Q_{u,v}$. Augstām frekvencēm, kuras acs uztver vājāk, $Q_{u,v}$ ir lielāks, tāpēc lielākā daļa šo koeficientu kļūst par $0$. JPEG standarta (pielikums K) gaišuma tabula ir
+
+$$
+Q = \left( \begin{array}{rrrrrrrr}
+16 & 11 & 10 & 16 & 24 & 40 & 51 & 61 \\
+12 & 12 & 14 & 19 & 26 & 58 & 60 & 55 \\
+14 & 13 & 16 & 24 & 40 & 57 & 69 & 56 \\
+14 & 17 & 22 & 29 & 51 & 87 & 80 & 62 \\
+18 & 22 & 37 & 56 & 68 & 109 & 103 & 77 \\
+24 & 35 & 55 & 64 & 81 & 104 & 113 & 92 \\
+49 & 64 & 78 & 87 & 103 & 121 & 120 & 101 \\
+72 & 92 & 95 & 98 & 112 & 100 & 103 & 99
+\end{array} \right);
+$$
+
+mazākā vērtība ir $Q_{0,2} = 10$, lielākā -- $Q_{6,5} = 121$ (indeksus $u, v$ skaita no $0$). Krāsainības komponentēm ir cita tabula ar lielākām vērtībām. Kvalitātes parametrs $q \in \lbrace 1, \ldots, 100 \rbrace$ tabulu mērogo; bibliotēkā *libjpeg* $S = 5000/q$, ja $q < 50$, un $S = 200 - 2q$, ja $q \geq 50$, bet jaunā tabula ir $\max\left(1, \left\lfloor (S \cdot Q_{u,v} + 50)/100 \right\rfloor\right)$. Tabulas ($q = 50$ gadījumā -- tieši augstāk dotā) ieraksta failā, lai atkodētājs varētu tās izmantot.
+
+**6. solis: Zig-zag secība, DC un AC koeficientu kodēšana.** Kvantizēto bloku nolasa zig-zag secībā -- pa diagonālēm no kreisā augšējā stūra uz labo apakšējo. Skaitlis matricas pozīcijā $(u, v)$ ir šī koeficienta numurs virknē:
+
+$$
+\left( \begin{array}{rrrrrrrr}
+0 & 1 & 5 & 6 & 14 & 15 & 27 & 28 \\
+2 & 4 & 7 & 13 & 16 & 26 & 29 & 42 \\
+3 & 8 & 12 & 17 & 25 & 30 & 41 & 43 \\
+9 & 11 & 18 & 24 & 31 & 40 & 44 & 53 \\
+10 & 19 & 23 & 32 & 39 & 45 & 52 & 54 \\
+20 & 22 & 33 & 38 & 46 & 51 & 55 & 60 \\
+21 & 34 & 37 & 47 & 50 & 56 & 59 & 61 \\
+35 & 36 & 48 & 49 & 57 & 58 & 62 & 63
+\end{array} \right)
+$$
+
+Tā zemo frekvenču koeficienti nonāk virknes sākumā, bet nulles -- beigās.
+
+* **DC koeficients** (numurs $0$) kaimiņu blokos parasti ir līdzīgs, tāpēc kodē starpību $\mathrm{DIFF} = \mathrm{DC}_k - \mathrm{DC}_{k-1}$ ar tās pašas komponentes iepriekšējā bloka DC vērtību (pirmajam blokam $\mathrm{DC}_{k-1} = 0$). Šo paņēmienu sauc par DPCM (*differential pulse-code modulation*).
+* **AC koeficientus** (numuri $1 \ldots 63$) pārveido par pāru virkni $(\mathrm{RUN}, \mathrm{VALUE})$, kur $\mathrm{VALUE} \neq 0$ ir kārtējais nenulles koeficients, bet $\mathrm{RUN} \in \lbrace 0, \ldots, 15 \rbrace$ -- nuļļu skaits pirms tā. $16$ nulles pēc kārtas kodē ar īpašu pāri ZRL $= (15, 0)$. Ja līdz bloka beigām paliek tikai nulles, izvada simbolu EOB (*end of block*).
+
+Katru nenulles vērtību $v$ (gan $\mathrm{DIFF}$, gan $\mathrm{VALUE}$) pieraksta kā *kategoriju* $\mathrm{SIZE}$ -- skaitļa $\lvert v \rvert$ bināro ciparu skaitu -- un $\mathrm{SIZE}$ papildu bitiem: pozitīvam $v$ tie ir $v$ binārais pieraksts, negatīvam -- skaitļa $v + 2^{\mathrm{SIZE}} - 1$ binārais pieraksts. Piemēram, $-3$: $\mathrm{SIZE} = 2$, papildu biti `00`; $-26$: $\mathrm{SIZE} = 5$, papildu biti `00101`.
+
+*Piemērs* (attēlā redzamais bloks): $\mathrm{DC} = -26$, un AC virkne ir `−3 0 −3 −2 −6 2 −4 1 −3 1 1 5 1 2 −1 1 −1 2 0 0 0 0 0 −1 −1` un vēl $38$ nulles. Pāri: $(0,-3)$, $(1,-3)$, $(0,-2)$, $(0,-6)$, $(0,2)$, $(0,-4)$, $(0,1)$, $(0,-3)$, $(0,1)$, $(0,1)$, $(0,5)$, $(0,1)$, $(0,2)$, $(0,-1)$, $(0,1)$, $(0,-1)$, $(0,2)$, $(5,-1)$, $(0,-1)$, EOB.
+
+**7. solis: Entropijas kodēšana un faila izveide.** Baseline režīmā izmanto Hafmana kodu. DC koeficientam kodē simbolu $\mathrm{SIZE}$, bet AC pārim -- baitu $16 \cdot \mathrm{RUN} + \mathrm{SIZE}$ (EOB ir $0$, ZRL ir $240$). Aiz katra Hafmana kodavārda nekodētus pieraksta papildu bitus. Hafmana kodu tabulas (atsevišķas DC un AC simboliem, gaišumam un krāsainībai) var ņemt no standarta pielikuma K vai izveidot katram attēlam (optimizētas tabulas); tās ieraksta failā. Standarts pieļauj arī aritmētisko kodēšanu, bet to atbalsta reti.
+
+*Piemērs:* Ja iepriekšējā bloka DC ir $0$, tad $\mathrm{DIFF} = -26$, $\mathrm{SIZE} = 5$; standarta gaišuma DC tabulā kategorijai $5$ atbilst kodavārds `110`, tātad izvada `110` `00101`. Pirmais AC pāris $(0, -3)$ ir simbols $16 \cdot 0 + 2 = 2$ ar kodavārdu `01` un papildu bitiem `00`. Bitu virkne sākas ar `1100 0101 0100`...
+
+Bitus sapako baitos. Ja datos rodas baits `FF`, aiz tā ieraksta `00` (*byte stuffing*), lai to nevarētu sajaukt ar marķieri. JFIF failu veido marķieru segmenti: SOI (`FF D8`, attēla sākums), APP0 (JFIF galvene), DQT (kvantizācijas tabulas), SOF0 (attēla izmēri un komponentes), DHT (Hafmana tabulas), SOS (skenēšanas sākums) un tai sekojošie saspiestie dati, EOI (`FF D9`, attēla beigas).
+
+**Atkodēšana** izpilda tos pašus soļus pretējā secībā: Hafmana atkodēšana, DC un AC atjaunošana, $B_{u,v} = \hat{B}_{u,v} \cdot Q_{u,v}$, apgrieztā DCT $A = C^T B C$, $+128$, krāsainības komponenšu palielināšana un YCbCr $\rightarrow$ RGB. Informācija zūd tikai 2. un 5. solī (un noapaļojot 1. solī).
+
+### Python piemēri
+
+**DCT ar SciPy.** Funkcija `dct` ar `norm='ortho'` aprēķina tieši DCT-II, kas definēta augstāk (`dct2(A)` ir $C A C^T$):
 
 ```python
 import numpy as np
@@ -174,14 +248,68 @@ inverse_dct = idct2(dct_coefficients)
 print(inverse_dct)
 ```
 
-**JPEG 5.solis.** Elementu $x''_{ij}$ noapaļojam līdz precizitātei $a_{ij}$ (dala ar $a_{ij}$ un apaļo uz leju ar $\lfloor x \rfloor$). Elementu atšķirības, kas ir mazākas par $a_{ij}$ ir nebūtiskas. Galvenā viltība ir tā, ka skaitļi atšķiras dažādiem matricas elementiem. Tās komponentes, kuras acs uztver vājāk, tiek noapaļotas ar zemāku precizitāti. Mazākā vērtība $a_{13} = 10$, lielākā -- $a_{66} = 121$.
+**Viens bloks cauri 3.-6. solim.** Programma iegūst attēlā redzamos skaitļus: kvantizēto bloku, $\mathrm{DC} = -26$ un $(\mathrm{RUN}, \mathrm{VALUE})$ pārus.
 
-**JPEG 6.solis.**
+```python
+import numpy as np
 
-* Visu $8 \times 8$ matricu kreisos augšējos elementus saliek kopīgā virknē. Šādi tiks iegūtas trīs virknes -- katrai no trim krāsu telpas YIQ komponentēm.
-* Kodē nevis pašas noapaļotās frekvences, bet to starpības $a_1, a_2-a_1, a_3 - a_2,\ldots$.
+# 8x8 gaišuma (Y) bloks, vērtības 0..255
+A = np.array([
+    [52, 55, 61, 66, 70, 61, 64, 73],
+    [63, 59, 55, 90, 109, 85, 69, 72],
+    [62, 59, 68, 113, 144, 104, 66, 73],
+    [63, 58, 71, 122, 154, 106, 70, 69],
+    [67, 61, 68, 104, 126, 88, 68, 70],
+    [79, 65, 60, 70, 77, 68, 58, 75],
+    [85, 71, 64, 59, 55, 61, 65, 83],
+    [87, 79, 69, 68, 65, 76, 78, 94]])
 
-**JPEG 7.solis.** Iegūtajai starpību virknei lieto Hafmana vai aritmētisko kodēšanu.
+# JPEG standarta gaišuma kvantizācijas tabula (kvalitāte 50)
+Q = np.array([
+    [16, 11, 10, 16, 24, 40, 51, 61],
+    [12, 12, 14, 19, 26, 58, 60, 55],
+    [14, 13, 16, 24, 40, 57, 69, 56],
+    [14, 17, 22, 29, 51, 87, 80, 62],
+    [18, 22, 37, 56, 68, 109, 103, 77],
+    [24, 35, 55, 64, 81, 104, 113, 92],
+    [49, 64, 78, 87, 103, 121, 120, 101],
+    [72, 92, 95, 98, 112, 100, 103, 99]])
+
+# 3. solis: līmeņa nobīde
+A0 = A - 128
+
+# 4. solis: DCT-II, B = C A C^T
+k, n = np.meshgrid(range(8), range(8), indexing="ij")
+C = np.cos((2 * n + 1) * k * np.pi / 16)
+C[0, :] *= np.sqrt(1 / 8)
+C[1:, :] *= np.sqrt(2 / 8)
+B = C @ A0 @ C.T
+
+# 5. solis: kvantizācija
+Bq = np.round(B / Q).astype(int)
+
+# 6. solis: zig-zag secība un (RUN, VALUE) pāri
+order = sorted(((u, v) for u in range(8) for v in range(8)),
+               key=lambda p: (p[0] + p[1], p[1] if (p[0] + p[1]) % 2 == 0 else p[0]))
+zz = [int(Bq[u, v]) for u, v in order]
+dc, ac = zz[0], zz[1:]
+pairs, run = [], 0
+last = max((i for i, x in enumerate(ac) if x != 0), default=-1)
+for x in ac[:last + 1]:
+    if x == 0:
+        run += 1
+        if run == 16:
+            pairs.append((15, 0))   # ZRL: 16 nulles pēc kārtas
+            run = 0
+    else:
+        pairs.append((run, x))
+        run = 0
+pairs.append("EOB")
+
+print(Bq)
+print("DC =", dc)
+print(pairs)
+```
 
 ## Diskrēto kosinusu transformācijas
 

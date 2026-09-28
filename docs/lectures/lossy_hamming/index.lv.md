@@ -46,6 +46,32 @@ $$
 
 CRC-32 garantēti konstatē jebkuru kļūdu vienā bitā un jebkuru kļūdu virkni (*burst*), kas aptver ne vairāk kā $32$ blakusesošus bitus -- tādas rodas, piemēram, īsos traucējumos. Nejaušu bojājumu tas nepamana ar varbūtību apmēram $2^{-32}$.
 
+**Efektīva aprēķināšana.** Dalīšanu "stabiņā" var izpildīt pa vienam bitam: $32$ bitu reģistrā glabā pašreizējo atlikumu, katrā solī to pabīda un, ja no reģistra "izkrīt" vieninieks, pieskaita (XOR) ģeneratorpolinomu. Aparatūrā (tīkla kartē) tas ir bīdes reģistrs ar dažiem XOR elementiem. Programmatūrā izdevīgāk apstrādāt veselu baitu uzreiz: katra baita ietekmi uz reģistru ($8$ dalīšanas soļus) aprēķina iepriekš un saglabā $256$ elementu tabulā. Praktiskajā CRC-32 ir trīs papildu detaļas:
+
+* Ethernet katru baitu pārraida, sākot ar mazāko bitu, tāpēc reģistrā biti ir apgrieztā secībā: to bīda pa labi, un ģeneratorpolinoms ir `0x04C11DB7` ar apgrieztiem bitiem, t.i., `0xEDB88320`.
+* Reģistra sākuma vērtība ir `0xFFFFFFFF` (nevis $0$), lai CRC mainītos arī tad, ja ziņojuma sākumā pievieno vai izmet nulles baitus.
+* Beigās rezultātu apgriež (XOR ar `0xFFFFFFFF`), lai arī beigās pievienotas nulles mainītu CRC.
+
+$\textsf{CRC32-Make-Table}()$ $\quad$ *// $T[n]$ -- baita $n$ ietekme uz reģistru pēc $8$ soļiem*
+1. **for** $n = 0$ **to** $255$
+2. $\quad c = n$
+3. $\quad$ **for** $k = 1$ **to** $8$ $\quad$ *// viens dalīšanas solis katram bitam*
+4. $\quad\quad$ **if** $c$ ir nepāra skaitlis $\quad$ *// no reģistra izkrīt vieninieks*
+5. $\quad\quad\quad c = (c \gg 1) \oplus \mathtt{0xEDB88320}$
+6. $\quad\quad$ **else** $c = c \gg 1$
+7. $\quad T[n] = c$
+8. **return** $T$
+
+$\textsf{CRC32}(B, n, T)$ $\quad$ *// $B[1:n]$ -- baiti; $T$ -- $\textsf{CRC32-Make-Table}$ rezultāts*
+1. $c = \mathtt{0xFFFFFFFF}$
+2. **for** $i = 1$ **to** $n$
+3. $\quad c = T[(c \oplus B[i]) \wedge \mathtt{0xFF}] \oplus (c \gg 8)$ $\quad$ *// $8$ dalīšanas soļi vienā reizē*
+4. **return** $c \oplus \mathtt{0xFFFFFFFF}$
+
+Šeit $\oplus$ ir bitu XOR, $\gg$ -- bīde pa labi, $\wedge$ -- bitu UN (pēc $\wedge \mathtt{0xFF}$ paliek tikai jaunākais baits). 3.rindiņā reģistra jaunākais baits kopā ar kārtējo ziņojuma baitu nosaka tabulas elementu, kas apraksta šo $8$ bitu dalīšanas soļu ietekmi uz pārējiem reģistra bitiem. Tātad katram baitam vajag vienu XOR, vienu nolasīšanu no tabulas ($256$ vārdi, $1$ KiB) un vienu bīdi: laiks ir $O(n)$, un tas ir apmēram $8$ reizes ātrāk nekā apstrāde pa bitam. Pārbaudei: $\textsf{CRC32}$ virknei `123456789` ir `0xCBF43926`. (Vēl ātrākas realizācijas izmanto vairākas tabulas un apstrādā $4$ vai $8$ baitus vienlaikus, vai arī procesora instrukcijas: ARMv8 ir speciālas CRC-32 instrukcijas, x86 -- bezpārneses reizināšana PCLMULQDQ.)
+
+Ja $\textsf{CRC32}$ izpilda visam kadram kopā ar FCS, tad reģistrā pirms beigu XOR pareizam kadram vienmēr paliek `0xDEBB20E3` -- tas ir tas pats "maģiskais skaitlis" `0xC704DD7B`, tikai ar apgrieztiem bitiem (sk. 7.6. uzdevumu).
+
 <img
   id="ethernet_kadrs"
   alt="Ethernet kadrs un kontrolsummas"
@@ -484,6 +510,60 @@ Tāpēc nosūtītais ziņojums bija $\mathtt{110}\textcolor{red}{\mathtt{0}}\mat
 | $\mathtt{1}$ | $\mathtt{1}$ | $\mathtt{0}$ | $\textcolor{red}{\mathtt{0}}$ | $\mathtt{1}$ | $\mathtt{1}$ | $\mathtt{0}$ |
 
 $\square$
+
+**7.5. uzdevums (CRC ar roku):** Izmantojam "mazo" CRC ar ģeneratorpolinomu $G(x) = x^3 + x + 1$ (biti `1011`) un $3$ bitu kontrolsummu.
+
+* **(a)** Aprēķiniet ziņojuma `1101` kontrolsummu -- atlikumu, dalot $M(x) \cdot x^3$ ar $G(x)$ pēc moduļa $2$ -- un pārraidāmo $7$ bitu virkni.
+* **(b)** Pārbaudiet, ka saņēmējs, izdalot visus $7$ bitus ar $G(x)$, iegūst atlikumu $0$.
+* **(c)** Pamatojiet, ka jebkura kļūda, kas maina $1$ vai $2$ no šiem $7$ bitiem, tiks pamanīta. Atrodiet $3$ bitu kļūdu, kuru šis CRC nepamana.
+
+**Atbilde:**
+
+**(a)** $M(x) = x^3 + x^2 + 1$, tātad $M(x) \cdot x^3$ ir `1101000`. Dalām "stabiņā", katrā solī pieskaitot (XOR) `1011` zem vecākā vieninieka:
+
+```text
+  1101000
+⊕ 1011
+  0110000
+⊕  1011
+  0011100
+⊕   1011
+  0001010
+⊕    1011
+  0000001    atlikums 001
+```
+
+Kontrolsumma ir `001`, un pārraida `1101` `001` = `1101001`.
+
+**(b)** Dalot `1101001`: tie paši soļi kā (a) punktā, tikai pēdējā rindā ir `0001011` $\oplus$ `1011` = `0000000`. Atlikums ir $0$, jo $M(x) \cdot x^3 + R(x)$ dalās ar $G(x)$ (atlikumu pieskaitīt pēc moduļa $2$ ir tas pats, kas to atņemt).
+
+**(c)** Ja pārraidītajam polinomam $C(x)$ pieskaita kļūdu polinomu $E(x)$, saņēmējs iegūst atlikumu $(C + E) \bmod G = E \bmod G$. Kļūda paliek nepamanīta tad un tikai tad, ja $G(x)$ dala $E(x)$.
+
+* Vienā bitā: $E = x^i$. Tā kā $G$ brīvais loceklis ir $1$, $G$ nedala $x^i$.
+* Divos bitos: $E = x^i (x^d + 1)$, kur $1 \leq d \leq 6$. Pārbaudot $x^d \bmod G$ ($x^3 \equiv x + 1$, $x^4 \equiv x^2 + x$, $x^5 \equiv x^2 + x + 1$, $x^6 \equiv x^2 + 1$, $x^7 \equiv 1$), redzam, ka $x^d \equiv 1$ tikai pie $d = 7$; tātad septiņu bitu virknē $G$ nedala $E$.
+* Trijos bitos: pats $E(x) = G(x) = x^3 + x + 1$ jeb `0001011`. Pieskaitot to `1101001`, iegūst `1100010`, kas arī dalās ar $G$ -- kļūda netiek pamanīta.
+
+Šis kods ir Heminga koda $[7,4,1]$ variants: arī tā minimālais attālums ir $3$, tāpēc divas kļūdas var pamanīt (un vienu -- izlabot), bet trīs kļūdas var palikt nepamanītas. $\square$
+
+**7.6. uzdevums (CRC-32):** Aplūkojam Ethernet CRC-32.
+
+* **(a)** Pamatojiet, ka CRC-32 pamana jebkuru kļūdu virkni, kurā visi mainītie biti atrodas ne vairāk kā $32$ blakusesošās pozīcijās.
+* **(b)** Vai uzbrucējam vai troksnim, lai CRC-32 nemainītos, jāzina ziņojums? Cik bitu minimāli jāmaina Ethernet kadrā, lai CRC-32 nepamanītu izmaiņu?
+* **(c)** Kāpēc, pārbaudot pareizu kadru kopā ar FCS, vienmēr iegūst vienu un to pašu konstanti `0xC704DD7B` neatkarīgi no kadra satura?
+
+**Atbilde:**
+
+**(a)** Šādas kļūdas polinoms ir $E(x) = x^i \cdot B(x)$, kur $B(x)$ pakāpe ir mazāka par $32$ un tā brīvais loceklis ir $1$ (pirmais mainītais bits). $G(x)$ nedala $x^i$ (jo $G$ brīvais loceklis ir $1$, tam nav kopīgu reizinātāju ar $x^i$) un nedala $B(x)$ (jo $B \neq 0$ un $\deg B < 32 = \deg G$). Tātad $G$ nedala $E$, un kļūda tiek pamanīta.
+
+**(b)** Nav jāzina. CRC-32 ir afīna funkcija: vienāda garuma ziņojumiem $\textsf{CRC32}(m \oplus e) = \textsf{CRC32}(m) \oplus \textsf{CRC32}(e) \oplus \textsf{CRC32}(0\ldots0)$. Tātad tas, vai izmaiņa $e$ tiek pamanīta, atkarīgs tikai no $e$, nevis no ziņojuma $m$. Pārbaudot ar datoru visus polinomus $x^a \bmod G(x)$ līdz maksimālajam Ethernet kadra garumam ($1518$ baiti), var pārliecināties, ka jebkura $1$, $2$ vai $3$ bitu izmaiņa tiek pamanīta. Taču pietiek ar $4$ bitiem: piemēram, jebkurā $380$ baitu ziņojumā, apgriežot bitus ar numuriem $0$, $140$, $791$ un $3006$ (bitus numurē no $0$, katrā baitā sākot ar mazāko bitu), CRC-32 nemainās. Šādas izmaiņas iespējamas tikai pietiekami garos kadros (apmēram no $3000$ bitiem), bet tas nozīmē, ka CRC-32 nevar "garantēti pamanīt $4$ kļūdas" visos Ethernet kadros. Uzbrucējs savukārt var mainīt ziņojumu, kā vēlas, un pēc tam pielāgot $32$ blakusesošus bitus (piemēram, $4$ baitus), atrisinot lineāru vienādojumu sistēmu pēc moduļa $2$, lai CRC-32 atkal sakristu (pēc (a) punkta šī sistēma vienmēr ir atrisināma), -- tāpēc CRC neaizsargā pret apzinātām izmaiņām.
+
+**(c)** Bez sākuma vērtības un beigu XOR reģistrā pēc visa kadra ($M(x) \cdot x^{32} + R(x)$) būtu $0$, jo tas dalās ar $G(x)$. Sākuma vērtība `0xFFFFFFFF` ziņojumam pieskaita polinomu, kas atkarīgs tikai no kadra garuma; tas ietilpst gan $R(x)$ aprēķinā, gan pārbaudē, tāpēc savstarpēji saīsinās. Paliek tikai beigu XOR: FCS laukā ir $R(x) + F(x)$, kur $F(x) = x^{31} + \ldots + x + 1$ ir "visi vieninieki", tāpēc pārbaudes reģistrā paliek
+
+$$
+F(x) \cdot x^{32} \bmod G(x) = \mathtt{0xC704DD7B},
+$$
+
+kas nav atkarīgs no ziņojuma. Tātad "maģiskais skaitlis" nav izvēlēts patvaļīgi -- tas ir beigu XOR konstantes pēdas. Ja beigu XOR nebūtu, pārbaudē pareizam kadram iznāktu $0$. $\square$
 
 ## Izmantotā literatūra
 

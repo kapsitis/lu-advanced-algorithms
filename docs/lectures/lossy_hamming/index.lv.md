@@ -22,6 +22,10 @@ permalink: /lectures/lossy_hamming/index.lv.html
 
 ## Kļūdu detekcijas algoritmi
 
+Kļūdu detekcijai datiem pievieno īsu *kontrolsummu*, ko saņēmējs pārrēķina un salīdzina. Paritātes bits un CRC ir paredzēti nejaušām pārraides kļūdām (troksnim). Ja dati var būt mainīti apzināti, vajadzīga *kriptogrāfiska hešfunkcija* (piemēram, SHA-256), kurai uzbrucējs nevar pielāgot jaunu vērtību.
+
+### Paritātes bits
+
 **Bitu paritātes metode:** Pārraida $n$ bitu virkni $x_1,x_2,\ldots,x_n \in \lbrace 0; 1 \rbrace$. Lai konstatētu iespējamu kļūdu 1 bitā (kas var gan iestāties, gan neiestāties), pārraida $n+1$ bitus: Visus $x_1,x_2,\ldots,x_n$ un arī pēdējo bitu
 
 $$
@@ -30,21 +34,96 @@ $$
 
 Pēdējais bits glabā visu iepriekšējo bitu paritāti. Tāpēc visu $n+1$ bitu paritāte ir $0$. Ja pārraidē rodas viena kļūda, tad paritāte būs $1$, un kļūdu varēs konstatēt.
 
-**CRC kontrolsumma**
+### CRC kontrolsumma
 
-![Ethernet freims](figs/ethernet-frame.png)
+*CRC* (*cyclic redundancy check*) bitu virkni uzskata par polinoma koeficientiem pēc moduļa $2$. Sūtītājs ziņojuma polinomu $M(x)$, pareizinātu ar $x^{32}$, izdala ar fiksētu *ģeneratorpolinomu* $G(x)$ (pakāpe $32$) un ziņojumam pievieno dalījuma atlikumu -- $32$ bitus. Dalīšana "stabiņā" pēc moduļa $2$ ir tikai bīdes un XOR, tāpēc CRC ļoti ātri aprēķina gan programmatūrā, gan aparatūrā. Ethernet izmanto CRC-32 ar
 
-"Frame Check Sequence" (FCS) izmanto 32-bitu CRC (cyclical redundancy check). Tajā veic bitveida "XOR-ošanu stabiņā" ar maģisko skaitli `0xC704DD7B`.
+$$
+G(x) = x^{32} + x^{26} + x^{23} + x^{22} + x^{16} + x^{12} + x^{11} + x^{10} + x^{8} + x^{7} + x^{5} + x^{4} + x^{2} + x + 1
+$$
 
-FCS 4 baitos ieraksta CRC doto atlikumu. Viena bita pārbaudīšana nav pietiekami droša; CRC32 ir noturīgāks pret pārraides kļūdām, kas var pārmainīt vairākus blakusesošus bitus.
+(heksadecimāli `0x04C11DB7`). Saņēmējs aprēķina CRC visam kadram kopā ar kontrolsummu; pareizam kadram vienmēr iznāk viena un tā pati konstante `0xC704DD7B` (bitu apgrieztā pierakstā `0xDEBB20E3`), tā sauktais "maģiskais skaitlis".
 
-"Data link layer" (OSI Layer2) izmet tos freimus, kuri ir kļūdaini. Augstāka līmeņa transporta protokoli (TCP) palūdz kļūdainos freimus sūtīt atkārtoti.
+CRC-32 garantēti konstatē jebkuru kļūdu vienā bitā un jebkuru kļūdu virkni (*burst*), kas aptver ne vairāk kā $32$ blakusesošus bitus -- tādas rodas, piemēram, īsos traucējumos. Nejaušu bojājumu tas nepamana ar varbūtību apmēram $2^{-32}$.
 
-**MD5 hešfunkcija:** Garākiem failiem (kuri varbūt tikuši bojāti apzināti) var izmantot hešfunkcijas. Piemēram MD5 izveido 128 bitu virknīti (pieraksta kā 32 hex ciparus).
+<img
+  id="ethernet_kadrs"
+  alt="Ethernet kadrs un kontrolsummas"
+  src="{{ '/lectures/lossy_hamming/figs/ethernet-frame.svg' | relative_url }}"
+  style="width: 100%; max-width: 960px; border:none; background-color:#FFFFFF;"
+/>
 
-![MD5 hešfunkcija](figs/hashtools-1.png)
+*Ethernet II kadrs un tā datu lauka saturs (IPv4 pakete ar TCP segmentu). Zem katra lauka norādīts tā garums bitos; bitu numuri galvenēs skaitīti no $0$. Lauku platumi attēlā nav proporcionāli garumiem.*
 
-MD5 hešfunkcijas kolīzijas ir zināmas.
+Kontrolsummas ir vairākos protokolu slāņos:
+
+* **Kanāla slānis** (*data link layer*, OSI 2. slānis): Ethernet kadra pēdējā laukā FCS (*Frame Check Sequence*, $32$ biti) ir CRC-32 no mērķa adreses līdz datu lauka beigām. To aprēķina un pārbauda tīkla karte; kadru ar nepareizu FCS tā vienkārši izmet (atkārtoti nepieprasa). Tāds pats CRC-32 ir arī Wi-Fi kadros.
+* **Tīkla slānis** (IPv4): galvenes kontrolsumma ($16$ biti) sargā tikai IP galveni, jo maršrutētāji to maina (piemēram, samazina TTL). IPv6 šīs kontrolsummas vairs nav.
+* **Transporta slānis** (TCP): kontrolsumma ($16$ biti) sargā TCP galveni, datus un IP adreses. IP un TCP kontrolsummas ir $16$ bitu vārdu summa ar pārnesi (*Internet checksum*) -- daudz vājākas par CRC-32, bet tās pārbauda datus visā ceļā no sūtītāja līdz saņēmējam. Ja segments pazūd (arī tāpēc, ka kāds kadrs tika izmests), TCP to pamana pēc secības numuriem un nepienākušiem apstiprinājumiem un nosūta vēlreiz.
+
+CRC-32 izmanto arī failu formātos (ZIP, gzip, PNG); citi CRC varianti ir USB, CAN un daudzos citos sakaru protokolos.
+
+CRC neaizsargā pret apzinātām izmaiņām: CRC ir lineārs, un ikviens, kas mainījis datus, var aprēķināt arī jauno kontrolsummu.
+
+### MD5
+
+MD5 (R. Rivest, 1992) ir hešfunkcija, kas jebkura garuma ievadei aprēķina $128$ bitu vērtību (pieraksta kā $32$ heksadecimālus ciparus). Algoritms aprakstīts dokumentā [RFC 1321](https://www.rfc-editor.org/rfc/rfc1321); tā uzbūve ir līdzīga SHA-256 (sk. nākamo apakšnodaļu: $512$ bitu bloki un saspiešanas funkcija ar $64$ soļiem). Kriptogrāfiskiem mērķiem MD5 **nedrīkst** izmantot:
+
+* **Kolīzijas ar kopīgu prefiksu.** 2004.gadā Van Sjaojuņa (*Wang Xiaoyun*) grupa atrada pirmo MD5 kolīziju -- divus dažādus ziņojumus ar vienādu MD5 vērtību. Mūsdienās šādu pāri (ar jebkuru izvēlētu kopīgu sākumu) parasts dators atrod sekundēs. Uzbrucējs var sagatavot divus dokumentus ar vienādu MD5 -- nekaitīgu un kaitīgu --, panākt, lai nekaitīgo paraksta, un paraksts derēs arī kaitīgajam.
+* **Kolīzijas ar izvēlētiem prefiksiem.** 2007.gadā M. Stīvenss (*Marc Stevens*), A. Lenstra un B. de Vēgers parādīja, kā divus *patvaļīgus* dotus sākumus papildināt tā, lai MD5 sakristu. 2008.gadā ar $200$ PlayStation 3 konsolēm dažu dienu laikā izveidoja viltotu sertifikātu izdevēja (CA) sertifikātu, bet 2012.gadā ļaunatūra *Flame* ar šādu kolīziju viltoja Microsoft programmatūras parakstu. Mūsdienās tam pietiek ar dažām GPU dienām.
+* **Pirmtēls joprojām nav atrodams.** Dotai MD5 vērtībai (kas nav paša uzbrucēja veidota) atrast ievadi ar šo vērtību labākais zināmais uzbrukums prasa apmēram $2^{123}$ operāciju -- praktiski neiespējami. Kolīzijas var izveidot tikai tādiem ziņojumu pāriem, kurus uzbrucējs pats konstruē.
+* **Paroles.** MD5 ir ļoti ātra (videokarte aprēķina desmitiem miljardu vērtību sekundē), tāpēc paroļu MD5 vērtības viegli atrast ar pārlasi (sk. "Īsas ievades un vārdnīcas uzbrukumi").
+
+MD5 vēl var noderēt nejaušu bojājumu pamanīšanai, bet arī tam labāk izmantot SHA-256.
+
+### SHA-256
+
+*SHA-256* ir SHA-2 saimes hešfunkcija, ko definē ASV standarts NIST FIPS 180-4 (pirmā versija -- 2001.gadā). Ievade ir jebkura bitu virkne, kuras garums $L < 2^{64}$; izvade vienmēr ir $256$ biti ($64$ heksadecimāli cipari). Piemēram, SHA-256 vērtība virknei `abc` ir `ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad`.
+
+<img
+  id="sha256_shema"
+  alt="SHA-256 aprēķins"
+  src="{{ '/lectures/lossy_hamming/figs/sha256-diagram.svg' | relative_url }}"
+  style="width: 100%; max-width: 960px; border:none; background-color:#FFFFFF;"
+/>
+
+*SHA-256 aprēķins; numuri atbilst tālāk uzskaitītajiem soļiem. Piemēra skaitļi ir īsti.*
+
+1. **Papildināšana.** Ziņojumam pieraksta bitu $1$, tad tik daudz nuļļu, cik vajag, un beigās ziņojuma garumu $L$ kā $64$ bitu skaitli, lai kopējais garums dalītos ar $512$.
+2. **Sadalīšana blokos** $M_1, \ldots, M_N$ pa $512$ bitiem.
+3. **Saspiešanas funkciju ķēde.** Stāvoklis ir $8$ vārdi pa $32$ bitiem; sākuma vērtība $H_0$ ir fiksēta (pirmo $8$ pirmskaitļu kvadrātsakņu daļveida daļu pirmie $32$ biti). Katrs bloks to pārrēķina: $H_i = f(H_{i-1}, M_i)$. Funkcija $f$ bloka $16$ vārdus paplašina līdz $64$ vārdiem un $64$ raundos maina stāvokli ar loģiskām funkcijām, bitu rotācijām, konstantēm (pirmo $64$ pirmskaitļu kubsakņu daļveida daļas) un saskaitīšanu pēc moduļa $2^{32}$.
+4. **Rezultāts** ir pēdējais stāvoklis $H_N$.
+
+**Kriptogrāfiskas hešfunkcijas īpašības.** SHA-256 aprēķins ir deterministisks un ātrs, un tam ir šādas īpašības:
+
+* *pirmtēla noturība* (*preimage resistance*): dotai vērtībai $h$ nevar atrast $m$, kuram $\text{SHA-256}(m) = h$ -- labākā zināmā metode ir pārlase ar apmēram $2^{256}$ mēģinājumiem;
+* *otrā pirmtēla noturība*: dotam $m$ nevar atrast citu $m' \neq m$ ar tādu pašu vērtību (arī apmēram $2^{256}$ mēģinājumu);
+* *kolīziju noturība*: nevar atrast nevienu pāri $m \neq m'$ ar vienādām vērtībām (apmēram $2^{128}$ mēģinājumu, sk. tālāk);
+* *lavīnas efekts*: mainot vienu ievades bitu, katrs izvades bits mainās ar varbūtību $\frac{1}{2}$. Piemēram, `abd` vērtība `a52d159f262b2c6d…` nav nekādi līdzīga `abc` vērtībai.
+
+**Kolīziju paradokss.** Ievades virkņu ir bezgalīgi daudz (jau $257$ bitu virkņu ir $2^{257}$), bet izvades vērtību -- tikai $2^{256}$. Pēc Dirihlē principa kolīzijas **noteikti eksistē**, turklāt ļoti daudz. Tomēr neviena SHA-256 kolīzija nav zināma, jo nav zināms veids, kā to atrast ātrāk par nejaušu meklēšanu. Nejauši izvēloties ievades, pēc *dzimšanas dienu paradoksa* pirmā kolīzija gaidāma pēc apmēram $\sqrt{2^{256}} = 2^{128} \approx 3.4 \cdot 10^{38}$ mēģinājumiem. Pat visa Bitcoin tīkla jauda (apmēram $10^{21}$ SHA-256 aprēķinu sekundē) šim darbam tērētu apmēram $10^{10}$ gadu -- aptuveni Visuma vecumu. Drošība tātad nav matemātiski pierādīta; tā balstās uz to, ka ilgstoša analīze nav atradusi ātrāku metodi.
+
+**Kāpēc SHA-256 ir industrijas standarts.** Pēc vairāk nekā $20$ gadu kriptoanalīzes pret pilno SHA-256 nav zināmu praktisku uzbrukumu (uzbrukumi darbojas tikai versijām ar samazinātu raundu skaitu). Tas ir ātrs, jaunajos Intel, AMD un ARM procesoros tam ir speciālas instrukcijas, un to prasa daudzi standarti. Iepriekšējais standarts SHA-1 ir salauzts (2017.gadā publiskota pirmā SHA-1 kolīzija *SHAttered*), tāpēc sistēmas pārgāja uz SHA-256. Alternatīva ir uz citiem principiem balstītais SHA-3 (2015).
+
+Lietojumi:
+
+* **Kriptovalūtas.** Bitcoin bloka galvenē ir iepriekšējā bloka hešs, tāpēc vēsturi nevar pārrakstīt, neaprēķinot visus nākamos blokus no jauna. Darba pierādījums (*proof of work*): kalnrači meklē tādu bloka galveni, kuras dubultā SHA-256 vērtība ir mazāka par doto slieksni. Darījumus bloka galvenē apkopo Merkla koks no SHA-256 vērtībām, un adreses iegūst no publiskās atslēgas ar SHA-256 un RIPEMD-160. (Ethereum SHA-256 vietā izmanto Keccak-256.)
+* **Sertifikāti un paraksti:** TLS (HTTPS) sertifikāti, programmatūras un dokumentu paraksti paraksta nevis pašu dokumentu, bet tā SHA-256 vērtību.
+* **Datu integritāte:** lejupielādēto failu kontrolsummas (`sha256sum`), Docker attēlu identifikatori, pakotņu pārvaldnieki; versiju kontroles sistēma Git atbalsta repozitorijus ar SHA-256 (pēc noklusējuma tā joprojām lieto SHA-1).
+* **Ziņojumu autentifikācija** (HMAC-SHA256, piemēram, JWT žetonos un mākoņpakalpojumu API pieprasījumu parakstos) un atslēgu atvasināšana.
+
+**SHA-256 post-kvantu pasaulē.** Kvantu datori salauztu RSA un eliptisko līkņu parakstus (Šora algoritms), bet hešfunkcijām tie dod tikai kvadrātisku paātrinājumu: Grovera algoritms pirmtēla meklēšanu samazina no $2^{256}$ līdz apmēram $2^{128}$ kvantu operācijām, kas joprojām nav izpildāms. Teorētiskie kvantu kolīziju algoritmi prasītu milzīgu kvantu atmiņu un praktiski nav ātrāki par klasisko $2^{128}$. Tāpēc SHA-256 uzskata par drošu arī post-kvantu laikmetā; tieši no hešfunkcijām veidoti arī post-kvantu parakstu standarti (SLH-DSA jeb SPHINCS+, NIST FIPS 205, 2024). Ja vajag lielāku rezervi, izmanto SHA-384 vai SHA-512.
+
+### Īsas ievades un vārdnīcas uzbrukumi
+
+Hešfunkcija neslēpj ievadi, ja iespējamo ievažu ir maz. Paroles, PIN kodi, telefona numuri vai personas kodi ir šādas ievades: uzbrucējs vienkārši aprēķina SHA-256 visiem kandidātiem (vārdnīcai vai visiem variantiem) un salīdzina. Videokarte aprēķina desmitiem miljardu SHA-256 vērtību sekundē, tāpēc, piemēram, visus $10^8$ astoņu ciparu skaitļus pārbauda sekundes daļā. Bez papildu pasākumiem uzbrucējs var arī iepriekš aprēķināt tabulas (*rainbow tables*) visām biežākajām parolēm.
+
+Tāpēc īsas vai paredzamas ievades nehešo tieši, bet savieno (konkatenē) ar papildu datiem:
+
+* **Sāls** (*salt*): katram ierakstam savs nejaušs skaitlis (piemēram, $16$ baiti), ko glabā kopā ar rezultātu: $h = \text{SHA-256}(\textit{sāls} \,\|\, \textit{parole})$. Vienādām parolēm rodas dažādas vērtības, iepriekš aprēķinātas tabulas kļūst nederīgas, un katrs ieraksts jāuzbrūk atsevišķi.
+* **"Pipari"** (*pepper*): slepena vērtība, kas pievienota visām ievadēm, bet glabāta atsevišķi no datubāzes (piemēram, drošības modulī). Bez tās nozagtā datubāze nav izmantojama.
+* **Lēna hešošana** (*key stretching*): paroļu glabāšanai SHA-256 ir pārāk ātra. Izmanto funkcijas, kas tīši prasa daudz darba vai atmiņas: PBKDF2-HMAC-SHA256 ar simtiem tūkstošu iterāciju, bcrypt, scrypt vai Argon2 (2015.gada paroļu hešošanas konkursa uzvarētāja). Tas lietotājam nav manāms, bet pārlasi palēnina simtiem tūkstošu reižu.
+* **Slepena atslēga:** ja hešs apliecina, ka ziņojumu sūtījis atslēgas īpašnieks, izmanto HMAC, nevis vienkāršu $\text{SHA-256}(\textit{atslēga} \,\|\, \textit{ziņojums})$. Pēdējā gadījumā uzbrucējs var derīgai vērtībai pievienot ziņojuma turpinājumu, nezinot atslēgu (*length extension*), jo SHA-256 rezultāts ir pats stāvoklis $H_N$, no kura var turpināt ķēdi.
 
 ## Kļūdu korekcijas algoritmu jēdzieni
 
@@ -405,3 +484,12 @@ Tāpēc nosūtītais ziņojums bija $\mathtt{110}\textcolor{red}{\mathtt{0}}\mat
 | $\mathtt{1}$ | $\mathtt{1}$ | $\mathtt{0}$ | $\textcolor{red}{\mathtt{0}}$ | $\mathtt{1}$ | $\mathtt{1}$ | $\mathtt{0}$ |
 
 $\square$
+
+## Izmantotā literatūra
+
+* R. Rivest, *The MD5 Message-Digest Algorithm*, [RFC 1321](https://www.rfc-editor.org/rfc/rfc1321), 1992.
+* NIST, *Secure Hash Standard (SHS)*, [FIPS 180-4](https://csrc.nist.gov/pubs/fips/180-4/upd1/final), 2015.
+* R. Braden, D. Borman, C. Partridge, *Computing the Internet Checksum*, [RFC 1071](https://www.rfc-editor.org/rfc/rfc1071), 1988.
+* X. Wang, H. Yu, *How to Break MD5 and Other Hash Functions*, EUROCRYPT 2005.
+* M. Stevens, A. Sotirov, J. Appelbaum, A. Lenstra, D. Molnar, D. A. Osvik, B. de Weger, *Short Chosen-Prefix Collisions for MD5 and the Creation of a Rogue CA Certificate*, CRYPTO 2009.
+* [Cyclic redundancy check](https://en.wikipedia.org/wiki/Cyclic_redundancy_check), [Ethernet frame](https://en.wikipedia.org/wiki/Ethernet_frame), [SHA-2](https://en.wikipedia.org/wiki/SHA-2).

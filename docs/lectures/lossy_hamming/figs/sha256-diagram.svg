@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="960" height="480" role="img" aria-label="SHA-256 aprēķins">
+<title>SHA-256 aprēķins</title>
+<rect x="0" y="0" width="960" height="480" fill="#ffffff"/>
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/></marker></defs>
+<text x="20" y="28" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="start" font-weight="bold">SHA-256: jebkāda garuma ievade → 256 bitu vērtība</text>
+<rect x="20" y="58" width="150" height="50" rx="6" fill="#f4f6f8" stroke="#5a6a7a" stroke-width="1.4"/>
+<text x="95" y="79" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">ziņojums m</text>
+<text x="95" y="96" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">L biti, L &lt; 2<tspan baseline-shift="super" font-size="75%">64</tspan></text>
+<line x1="174" y1="83" x2="226" y2="83" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<circle cx="200" cy="54" r="11" fill="#4C78A8"/>
+<text x="200" y="58.5" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">1</text>
+<rect x="232" y="58" width="220" height="50" rx="0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="342" y="87" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal">m (L biti)</text>
+<rect x="452" y="58" width="26" height="50" rx="0" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
+<text x="465" y="87" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal">1</text>
+<rect x="478" y="58" width="110" height="50" rx="0" fill="#f4f6f8" stroke="#9aa5b1" stroke-width="1.4"/>
+<text x="533" y="87" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal">0 … 0</text>
+<rect x="588" y="58" width="110" height="50" rx="0" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
+<text x="643" y="87" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal">L (64 biti)</text>
+<text x="465" y="126" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#444" text-anchor="middle" font-weight="normal">papildināšana: kopējais garums dalās ar 512</text>
+<line x1="702" y1="83" x2="750" y2="83" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<circle cx="726" cy="54" r="11" fill="#4C78A8"/>
+<text x="726" y="58.5" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">2</text>
+<rect x="756" y="63" width="38" height="40" rx="3" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="775" y="88" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">M<tspan baseline-shift="sub" font-size="75%">1</tspan></text>
+<rect x="798" y="63" width="38" height="40" rx="3" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="817" y="88" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">M<tspan baseline-shift="sub" font-size="75%">2</tspan></text>
+<rect x="840" y="63" width="38" height="40" rx="3" fill="#ffffff" stroke="#ffffff" stroke-width="1.4"/>
+<text x="859" y="88" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">…</text>
+<rect x="882" y="63" width="38" height="40" rx="3" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="901" y="88" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">M<tspan baseline-shift="sub" font-size="75%">N</tspan></text>
+<text x="838" y="126" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#444" text-anchor="middle" font-weight="normal">512 bitu bloki</text>
+<circle cx="31" cy="156" r="11" fill="#4C78A8"/>
+<text x="31" y="160.5" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">3</text>
+<text x="48" y="161" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="start" font-weight="normal">katrs bloks pārrēķina 256 bitu stāvokli: H<tspan baseline-shift="sub" font-size="75%">i</tspan> = f(H<tspan baseline-shift="sub" font-size="75%">i−1</tspan>, M<tspan baseline-shift="sub" font-size="75%">i</tspan>)</text>
+<rect x="20" y="222" width="110" height="54" rx="6" fill="#ecdcea" stroke="#B279A2" stroke-width="1.4"/>
+<text x="75" y="244" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">H<tspan baseline-shift="sub" font-size="75%">0</tspan> (IV)</text>
+<text x="75" y="262" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">8 × 32 biti</text>
+<line x1="134" y1="249" x2="196" y2="249" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<rect x="200" y="226" width="56" height="46" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.6"/>
+<text x="228" y="255" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">f</text>
+<line x1="228" y1="196" x2="228" y2="224" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<text x="228" y="192" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">M<tspan baseline-shift="sub" font-size="75%">1</tspan></text>
+<line x1="260" y1="249" x2="296" y2="249" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<text x="316" y="254" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">H<tspan baseline-shift="sub" font-size="75%">1</tspan></text>
+<line x1="336" y1="249" x2="396" y2="249" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<rect x="400" y="226" width="56" height="46" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.6"/>
+<text x="428" y="255" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">f</text>
+<line x1="428" y1="196" x2="428" y2="224" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<text x="428" y="192" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">M<tspan baseline-shift="sub" font-size="75%">2</tspan></text>
+<line x1="460" y1="249" x2="496" y2="249" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<text x="516" y="254" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">H<tspan baseline-shift="sub" font-size="75%">2</tspan></text>
+<text x="560" y="254" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" fill="#444" text-anchor="middle" font-weight="normal">…</text>
+<line x1="584" y1="249" x2="636" y2="249" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<rect x="640" y="226" width="56" height="46" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.6"/>
+<text x="668" y="255" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">f</text>
+<line x1="668" y1="196" x2="668" y2="224" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<text x="668" y="192" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">M<tspan baseline-shift="sub" font-size="75%">N</tspan></text>
+<line x1="700" y1="249" x2="736" y2="249" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<rect x="740" y="222" width="200" height="54" rx="6" fill="#dcecd8" stroke="#54A24B" stroke-width="1.6"/>
+<text x="840" y="244" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">H<tspan baseline-shift="sub" font-size="75%">N</tspan> = SHA-256(m)</text>
+<text x="840" y="262" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">256 biti = 64 hex cipari</text>
+<circle cx="720" cy="216" r="11" fill="#4C78A8"/>
+<text x="720" y="220.5" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">4</text>
+<path d="M 228 272 L 228 318" stroke="#F58518" stroke-width="1.2" stroke-dasharray="5 4"/>
+<rect x="20" y="318" width="450" height="140" rx="6" fill="#fff8f0" stroke="#F58518" stroke-width="1.2"/>
+<text x="34" y="340" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="start" font-weight="bold">saspiešanas funkcija f(H, M)</text>
+<text x="34" y="364" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">1. bloku M (16 vārdi pa 32 bitiem) paplašina līdz 64 vārdiem</text>
+<text x="50" y="383" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">W<tspan baseline-shift="sub" font-size="75%">0</tspan>, …, W<tspan baseline-shift="sub" font-size="75%">63</tspan> ar bīdēm, rotācijām un XOR;</text>
+<text x="34" y="402" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">2. 64 raundi: 8 vārdu stāvokli a, …, h maina ar loģiskām</text>
+<text x="50" y="421" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">funkcijām Ch, Maj, Σ<tspan baseline-shift="sub" font-size="75%">0</tspan>, Σ<tspan baseline-shift="sub" font-size="75%">1</tspan>, konstantēm K<tspan baseline-shift="sub" font-size="75%">t</tspan> un saskaitīšanu mod 2<tspan baseline-shift="super" font-size="75%">32</tspan>;</text>
+<text x="34" y="440" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">3. rezultātu pieskaita iepriekšējam H (katru vārdu mod 2<tspan baseline-shift="super" font-size="75%">32</tspan>).</text>
+<rect x="490" y="318" width="450" height="140" rx="6" fill="#f4f6f8" stroke="#5a6a7a" stroke-width="1.2"/>
+<text x="504" y="340" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="start" font-weight="bold">piemērs: m = “abc” (L = 24 biti, N = 1)</text>
+<text x="504" y="362" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">M<tspan baseline-shift="sub" font-size="75%">1</tspan>:</text>
+<text x="534" y="362" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">61626380 00000000 … 00000000 00000018</text>
+<text x="504" y="384" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">SHA-256:</text>
+<text x="504" y="402" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="11.5" fill="#54A24B" text-anchor="start" font-weight="bold">ba7816bf 8f01cfea 414140de 5dae2223</text>
+<text x="504" y="418" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="11.5" fill="#54A24B" text-anchor="start" font-weight="bold">b00361a3 96177a9c b410ff61 f20015ad</text>
+<text x="504" y="442" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">“abd”: a52d159f 262b2c6d db724a61 … (pilnīgi cita)</text>
+</svg>

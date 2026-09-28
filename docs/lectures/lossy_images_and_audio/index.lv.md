@@ -359,6 +359,85 @@ $$
 
 kur $u, v, x, y \in \lbrace 0, 1, \ldots, 7 \rbrace$.
 
+### Skaitlisks piemērs: DCT ar $N = 4$
+
+Ar roku ērtāk rēķināt DCT garumā $N = 4$. Tad $y = C x$, kur $C_{k,n} = \alpha_k \cos\frac{\pi (2n+1) k}{8}$, $\alpha_0 = \frac{1}{2}$ un $\alpha_1 = \alpha_2 = \alpha_3 = \frac{1}{\sqrt{2}}$. Matricā $C$ ir tikai trīs dažādi skaitļi (ar precizitāti līdz zīmei):
+
+$$
+C = \left( \begin{array}{rrrr}
+a & a & a & a \\
+b & c & -c & -b \\
+a & -a & -a & a \\
+c & -b & b & -c
+\end{array} \right),
+\qquad
+\begin{array}{l}
+a = \frac{1}{2}, \\[4pt]
+b = \frac{1}{\sqrt{2}} \cos\frac{\pi}{8} = 0.65328\ldots, \\[4pt]
+c = \frac{1}{\sqrt{2}} \cos\frac{3\pi}{8} = 0.27060\ldots
+\end{array}
+$$
+
+Noderīgas sakarības: $b + c = \cos\frac{\pi}{8} = 0.92388\ldots$ un $b - c = \cos\frac{3\pi}{8} = 0.38268\ldots$ Matricas $C$ rindas ir ortonormētas ($C C^T = I$), tāpēc apgrieztā transformācija ir $x = C^T y$.
+
+**Piemērs:** Vienmērīgi augošs signāls $x = (10, 20, 30, 40)$:
+
+$$
+\begin{array}{rcl}
+y_0 & = & a\,(10 + 20 + 30 + 40) = 50, \\
+y_1 & = & b\,(10 - 40) + c\,(20 - 30) = -30\,b - 10\,c = -22.304\ldots, \\
+y_2 & = & a\,(10 - 20 - 30 + 40) = 0, \\
+y_3 & = & c\,(10 - 40) - b\,(20 - 30) = -30\,c + 10\,b = -1.585\ldots
+\end{array}
+$$
+
+$y_0 = 50$ ir DC koeficients ($2$ reizes lielāks par vidējo $25$), bet gandrīz viss pārējais ir koeficientā $y_1$ -- zemākajā frekvencē. Tā kā $C$ ir ortonormēta, kvadrātu summa nemainās (Parsevāla vienādība): $10^2 + 20^2 + 30^2 + 40^2 = 3000$ un $50^2 + 22.304^2 + 0^2 + 1.585^2 = 3000$ (ar noapaļošanas precizitāti). Gludam signālam "enerģija" koncentrējas pirmajos koeficientos, tāpēc pēdējos var kvantizēt rupji vai atmest (sk. 5.2. uzdevumu).
+
+**Divdimensiju piemērs ($2 \times 2$):** Ja $N = 2$, tad $C = \frac{1}{\sqrt{2}} \left( \begin{array}{rr} 1 & 1 \\ 1 & -1 \end{array} \right)$, un $B = C A C^T$ var uzrakstīt vispārīgi:
+
+$$
+A = \left( \begin{array}{cc} p & q \\ r & s \end{array} \right)
+\;\;\Rightarrow\;\;
+B = \frac{1}{2} \left( \begin{array}{cc}
+p + q + r + s & p - q + r - s \\
+p + q - r - s & p - q - r + s
+\end{array} \right).
+$$
+
+$B_{0,0}$ ir summa, $B_{0,1}$ -- starpība starp kreiso un labo kolonnu, $B_{1,0}$ -- starp augšējo un apakšējo rindu, $B_{1,1}$ -- "šaha galdiņa" komponente. Piemēram, $A = \left( \begin{array}{cc} 1 & 3 \\ 5 & 7 \end{array} \right)$ dod $B = \left( \begin{array}{rr} 8 & -2 \\ -4 & 0 \end{array} \right)$.
+
+**Python (bez bibliotēkām).** Formulu var pierakstīt tieši ar *list comprehension*; `dct2` vispirms transformē katru kolonnu, pēc tam katru rindu, t.i., aprēķina $C A C^T$:
+
+```python
+from math import cos, pi, sqrt
+
+def dct(x):
+    """1D DCT-II (ortonormētā): y[k] = alpha_k * sum x[n] cos(pi (2n+1) k / 2N)."""
+    N = len(x)
+    return [(sqrt(1 / N) if k == 0 else sqrt(2 / N))
+            * sum(xn * cos(pi * (2 * n + 1) * k / (2 * N)) for n, xn in enumerate(x))
+            for k in range(N)]
+
+def idct(y):
+    """Apgrieztā transformācija: x[n] = sum alpha_k y[k] cos(pi (2n+1) k / 2N)."""
+    N = len(y)
+    return [sum((sqrt(1 / N) if k == 0 else sqrt(2 / N)) * yk
+                * cos(pi * (2 * n + 1) * k / (2 * N)) for k, yk in enumerate(y))
+            for n in range(N)]
+
+def dct2(A):
+    """2D DCT: vispirms katrai kolonnai, pēc tam katrai rindai (B = C A C^T)."""
+    cols = [dct(col) for col in zip(*A)]
+    return [dct(row) for row in zip(*cols)]
+
+print([round(v, 3) + 0.0 for v in dct([10, 20, 30, 40])])   # [50.0, -22.304, 0.0, -1.585]
+print([round(v, 3) + 0.0 for v in idct(dct([10, 20, 30, 40]))])  # [10.0, 20.0, 30.0, 40.0]
+for row in dct2([[0, 0, 8, 8]] * 4):                   # vertikāla robeža 4x4 blokā
+    print([round(v, 3) + 0.0 for v in row])
+```
+
+Pēdējā piemērā visām bloka rindām ir viena un tā pati vērtību virkne $(0, 0, 8, 8)$ (vertikāla robeža). Tāpēc nenulles ir tikai rezultāta pirmā rinda $(16, -14.782, 0, 6.123)$: blokam ir tikai horizontālas frekvences, bet vertikālo frekvenču nav.
+
 ## AVIF attēlu formāts
 
 * Izņemot JPEG, ir populārs Google izveidotais formāts WebP, kas labi saspiežams un ir populārs pārlūkprogrammās.
@@ -441,12 +520,53 @@ Baricentriskās koordinātes ļauj attēlot proporcijas starp trim pozitīviem (
 
 ## Uzdevumi
 
-**5.1. uzdevums:** Izmantojam krāsu saspiešanai kvantizācijas algoritmu, kas lieto tikai pārlūkprogrammām draudzīgās krāsas: [Browser-safe color palette](https://whatis.techtarget.com/definition/216-color-browser-safe-palette).
+**5.1. uzdevums:** Izmantojam krāsu saspiešanai kvantizācijas algoritmu, kas lieto tikai pārlūkprogrammām draudzīgās krāsas: [Web Safe Color palette](https://www.rapidtables.com/web/color/Web_Safe.html) jeb 6x6x6 krāsu kubu. 
 
 * Pārlūkprogrammām draudzīgas ir tās krāsu koordinātes, kam abi hex cipariņi ir vienādi un dalās ar $3$ ($00,33,66,99,\text{CC},\text{FF}$). Ja krāsai visas 3 koordinātes ir draudzīgas, tad arī pati krāsa ir draudzīga. Teiksim, `00FF99` ir draudzīga krāsa, bet `22BB99` nav, jo "22" un "BB" koordinātes nav atļautas.
 * Katru attēlā esošo pikseli (katru no RGB koordinātēm) noapaļo līdz tuvākajai draudzīgajai no kopas ($00,33,66,99,\text{CC},\text{FF}$), lai iegūtu pārlūkprogrammai draudzīgu krāsu.
 
 Kāds ir saspiešanas koeficients šādam pārveidojumam (jaunais izmērs pret veco izmēru)?
+
+*Piezīme:* Mūsdienu pārlūkprogrammas var attēlot jebkādas RGB krāsas; šim 6x6x6 krāsu kubam ir drīzāk vēsturiska nozīme: 
+Daudzās agrīnās lietojumprogrammās krāsu pikseļa vērtību izteica ar 1 baitu (256 dažādas vērtības, kurām lietotājs varēja 
+piekārtot faktiskās krāsas, izmantojot paleti). Šajā paletē bieži $6^3 = 216$ vērtības tika rezervētas "drošajām krāsām",
+kuras (neatkarīgi no pārējā paletes aizpildījuma) attēlojās vienādi. 
+
+**5.2. uzdevums:** Dots signāls $x = (8, 8, 0, 0)$ (pakāpiens). Izmantojiet DCT ar $N = 4$ (sk. "Skaitlisks piemērs: DCT ar $N = 4$").
+
+* **(a)** Aprēķiniet $y = C x$. Izsakiet koeficientus ar $\cos\frac{\pi}{8}$ un $\cos\frac{3\pi}{8}$ un pēc tam aprēķiniet to vērtības.
+* **(b)** Pārbaudiet, ka $\sum x_n^2 = \sum y_k^2$.
+* **(c)** Vienkāršākā "saspiešana": atmetam augstāko frekvenci, t.i., aizstājam $y_3$ ar $0$. Aprēķiniet atjaunoto signālu $x' = C^T y'$, kur $y' = (y_0, y_1, y_2, 0)$. Cik liela ir kvadrātiskā kļūda $\sum (x_n - x'_n)^2$ un kāpēc tā sakrīt ar $y_3^2$?
+
+**Atbilde:**
+
+**(a)** No matricas $C$ rindām:
+
+$$
+\begin{array}{rcl}
+y_0 & = & a\,(8 + 8 + 0 + 0) = 8, \\
+y_1 & = & 8\,b + 8\,c = 8\,(b + c) = 8 \cos\frac{\pi}{8} = 7.391\ldots, \\
+y_2 & = & a\,(8 - 8 - 0 + 0) = 0, \\
+y_3 & = & 8\,c - 8\,b = -8\,(b - c) = -8 \cos\frac{3\pi}{8} = -3.061\ldots
+\end{array}
+$$
+
+**(b)** $\sum x_n^2 = 64 + 64 = 128$. $\sum y_k^2 = 64 + 64 \cos^2\frac{\pi}{8} + 64 \cos^2\frac{3\pi}{8} = 64 + 64 = 128$, jo $\cos\frac{3\pi}{8} = \sin\frac{\pi}{8}$.
+
+**(c)** $x' = C^T y'$, t.i., $x'_n = a\,y_0 + C_{1,n}\,y_1$ (jo $y_2 = 0$ un $y'_3 = 0$):
+
+$$
+\begin{array}{rcl}
+x'_0 & = & 4 + b \cdot 8 \cos\frac{\pi}{8} = 4 + 4 \cos^2\frac{\pi}{8} \cdot \sqrt{2} = 6 + 2\sqrt{2} = 8.828\ldots, \\
+x'_1 & = & 4 + c \cdot 8 \cos\frac{\pi}{8} = 6, \\
+x'_2 & = & 4 - c \cdot 8 \cos\frac{\pi}{8} = 2, \\
+x'_3 & = & 4 - b \cdot 8 \cos\frac{\pi}{8} = 2 - 2\sqrt{2} = -0.828\ldots
+\end{array}
+$$
+
+(Izmantojam $b \cos\frac{\pi}{8} = \frac{1}{\sqrt{2}} \cos^2\frac{\pi}{8} = \frac{2 + \sqrt{2}}{4\sqrt{2}}$ un $c \cos\frac{\pi}{8} = \frac{1}{\sqrt{2}} \cos\frac{3\pi}{8} \cos\frac{\pi}{8} = \frac{1}{4}$.)
+
+Atjaunotais signāls $(8.83,\; 6,\; 2,\; -0.83)$ ir "izplūdis" pakāpiens, kas pie malām pārlec pāri sākotnējām vērtībām -- tāds pats efekts JPEG attēlos rada viļņošanos ap asām malām (*ringing*). Kļūda ir $x - x' = (-0.83,\; 2,\; -2,\; 0.83)$, un $\sum (x_n - x'_n)^2 = 2 \cdot (2\sqrt{2} - 2)^2 + 2 \cdot 2^2 = 32 - 16\sqrt{2} = 9.37\ldots$ Tā sakrīt ar $y_3^2 = 64 \cos^2\frac{3\pi}{8} = 32 - 16\sqrt{2}$, jo $x - x' = C^T (y - y')$ un ortonormēta transformācija saglabā kvadrātu summu: atmesta koeficienta kvadrāts ir tieši kvadrātiskā kļūda. $\square$
 
 ## Izmantotā literatūra
 

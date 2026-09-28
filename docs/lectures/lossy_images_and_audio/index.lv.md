@@ -291,15 +291,25 @@ Baricentriskās koordinātes ļauj attēlot proporcijas starp trim pozitīviem (
 
 **Donta (D'Hondt) sistēma**
 
-![Donta metode](figs/hondt.png)
+<img
+  id="donta_metode"
+  alt="Donta metode"
+  src="{{ '/lectures/lossy_images_and_audio/figs/hondt.svg' | relative_url }}"
+  style="width: 100%; max-width: 520px; border:none; background-color:#FFFFFF;"
+/>
 
-*Donta (D'Hondt) metode 4 deputātu krēsliem un 3 partijām.*
+*Donta (D'Hondt) metode 5 deputātu krēsliem un 3 partijām. Punkts trijstūrī ir balsu sadalījums starp partijām A, B, C; apgabals rāda, kādu vietu sadalījumu K:M:N tas dod. Aplītis katrā apgabalā ir balsu attiecība, kas tieši atbilst šim vietu sadalījumam.*
 
 **Senlaga (Sainte-Laguë) sistēma**
 
-![Senlaga metode](figs/sainte-lague.png)
+<img
+  id="senlaga_metode"
+  alt="Senlaga metode"
+  src="{{ '/lectures/lossy_images_and_audio/figs/sainte-lague.svg' | relative_url }}"
+  style="width: 100%; max-width: 520px; border:none; background-color:#FFFFFF;"
+/>
 
-*Senlaga (Sainte-Laguë) metode 5 deputātu krēsliem un 3 partijām.*
+*Senlaga (Sainte-Laguë) metode 5 deputātu krēsliem un 3 partijām (apzīmējumi kā iepriekš).*
 
 ## Uzdevumi
 

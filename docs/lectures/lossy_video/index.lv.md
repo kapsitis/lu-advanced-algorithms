@@ -53,56 +53,6 @@ Codec (*coder-decoder*) ir konkrētais audio un video kanāla saspiešanas stand
 
 Vairums CD/DVD atskaņotāju, telefoni, viedie TV un mediju atskaņotāji atbalsta Xvid kodeku. Tas būs ērts vairumam lietotāju. Xvid kodeks ir ātrāks par MPEG-1 un arī mazāk noslogo procesoru.
 
-### Video saspiešana
-
-Video visvienkāršākajā izpratnē ir daudzu rastra attēlu secība. Pat iekodējot ar JPEG (katru attēlu atsevišķi) radīsies milzīgi lieli faili. Secīgi attēli stipri korelē (ja vien tieši attiecīgajā vietā netika samontēti divi gabali vai krasi mainīts kameras stāvoklis).
-
-**MPEG freimu tipi:** MPEG piemērots gan statiski saspiestiem, gan straumētiem datiem; katru attēlu iekodē vienā no šiem 3 veidiem:
-
-* I-frame (*intra-frame*) - bilde, kuru kodē kā pilnu attēlu.
-* P-frame (*predictive coded frame*) balstās uz iepriekšējo I-freimu vai P-freimu
-* B-frame (*bidirectionally predictive coded frame*) izmanto gan iepriekšējo, gan nākamo freimu, kas var būt gan I-, gan P-freims.
-
-**I-freimu kodēšana:** Līdzīgi kā JPEG (8x8 bloki), arī MPEG kodē vienādus blokus: 16x16 pikseļi. I-freimiem algoritms līdzīgs kā JPEG. I-freimi ir "pieturas punkti", uz kuriem būvē citus. [YCbCr krāsu plakne](https://en.wikipedia.org/wiki/YCbCr) - nav tas pats kas YIQ.
-
-**P-freimu kodēšana:** **Kustības vektors:** P-freima 16x16 pikseļu blokam meklē līdzīgāko iepriekšējā I-freimā vai P-freimā. Dažreiz tas var būt nobīdīts - ja video attēlota kustība vai kameras slīdēšana - *panning*.
-
-![P-freima kodēšana](figs/p-frame-encoding.png)
-
-**B-freimus atliek nosūtītajos datos:**
-
-| Playback order | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Frame type | I | B | B | P | B | B | P | B | B | I |
-| Data stream order | 0 | 2 | 3 | 1 | 5 | 6 | 4 | 8 | 9 | 7 |
-
-Ja filmas scēna strauji mainās, ir izdevīgi biežāk lietot I-freimus, ja tā ir relatīvi statiska, tad - sajauktus P-freimus un B-freimus. Kodeki parasti ir optimizēti kaut kādam "caurmēra" ritmam.
-
-### Saspiešanas datu piemēri
-
-Ja video ir $356 \times 260$ pikseļi, tad freimu izmēri un saspiešanas attiecības ir sekojošas:
-
-| Freims | Izmērs | Saspiešana |
-| --- | --- | --- |
-| I-Freims | 18 KiB | 7:1 |
-| P-Freims | 6 KiB | 20:1 |
-| B-Freims | 2.5 KiB | 50:1 |
-| Vidēji | 4.8 KiB | 27:1 |
-
-Šādu attēlu pārraidīšanai vajadzīgais tīkla savienojums:
-
-$$
-30\,\text{frame/s}\cdot 4.8\,\text{Kb/frame}\,\cdot 8 = 1.2\,\text{Mbit/s}.
-$$
-
-Kopā ar audio tas var būt 1.45 megabiti sekundē, kas aizņem T1 Interneta savienojumu (viens vītais pāris; 1.544 Mbps).
-
-### MPEG lietojumi
-
-* Satelīttelevīzijas pārraides, kas digitālu signālu no satelīta pārtaisa krāsainā TV signālā (kas var joprojām būt analogs).
-* Kabeļtelevīzija.
-* On-demand televīzija ar desmitiem tūkstošu lejupielādējamu vai straumējamu filmu.
-
 ## MP3 Saspiešana
 
 MP3 mērķis ir saspiest mūziku u.c. audiofailus, lai tos varētu pārraidīt datortīklos un glabāt mūzikas atskaņotājos. MP3 atskaņošanai publiska programmatūra parādījās ap 1994.g. Napster parādījās 1999.gadā; agrīns failu apmaiņas serviss, bet failu direktoriju glabāja centralizēti, tāpēc pret to vērsās tiesā un servisu 2001.gadā nācās slēgt.
@@ -190,6 +140,79 @@ Opus māk pārslēgties starp divām modēm, kas optimizē dažādas lietas -- v
 
 **SILK Mode:** SILK mode ir piemērotāka runas saspiešanai. SILK izmanto lineāru paredzošo kodējumu (*Linear Predictive Coding*, LPC) nevis MDCT.
 
+## H.264 kodējums
+
+*H.264* jeb *MPEG-4 Part 10 / AVC* (*Advanced Video Coding*) ir video kodeks, ko 2003.gadā kopīgi standartizēja ITU-T un ISO/IEC MPEG darba grupas. Tas ir visplašāk izmantotais video kodeks: Blu-ray diski, ciparu televīzija, straumēšana, videozvani, kameras un telefoni; gandrīz visās ierīcēs ir tā aparatūras atkodētājs. H.264 patentus licencē patentu pūls, tāpēc Google izstrādāja bezmaksas alternatīvas VP8 un VP9 (sk. nākamo nodaļu). H.264 pēcteči ir H.265/HEVC (2013) un H.266/VVC (2020).
+
+Salīdzinot ar agrākajiem MPEG-1 un MPEG-2 standartiem, pamatideja (I, P un B freimi, kustības kompensācija, atlikuma transformācija) ir tā pati, bet H.264 ievieš daudz precīzākus rīkus: $16 \times 16$ makrobloku kustības kompensācijai var sadalīt līdz $4 \times 4$ blokiem; kustības vektoru precizitāte ir $\frac{1}{4}$ pikseļa; bloku var prognozēt no vairākiem atsauces kadriem; I-freimos bloku prognozē no jau atkodētajiem kaimiņiem (intra prognoze); DCT vietā izmanto $4 \times 4$ (un $8 \times 8$) veselu skaitļu transformāciju; bloku robežas nogludina cilpas filtrs (*deblocking filter*); entropijas kodēšanai izmanto CAVLC (mainīga garuma kodi) vai CABAC (kontekstatkarīgs binārs aritmētiskais kods).
+
+### Video saspiešanas pamatideja
+
+Video visvienkāršākajā izpratnē ir daudzu rastra attēlu secība. Pat iekodējot ar JPEG (katru attēlu atsevišķi) radīsies milzīgi lieli faili. Secīgi attēli stipri korelē (ja vien tieši attiecīgajā vietā netika samontēti divi gabali vai krasi mainīts kameras stāvoklis).
+
+**MPEG freimu tipi:** MPEG piemērots gan statiski saspiestiem, gan straumētiem datiem; katru attēlu iekodē vienā no šiem 3 veidiem:
+
+* I-frame (*intra-frame*) - bilde, kuru kodē kā pilnu attēlu.
+* P-frame (*predictive coded frame*) balstās uz iepriekšējo I-freimu vai P-freimu
+* B-frame (*bidirectionally predictive coded frame*) izmanto gan iepriekšējo, gan nākamo freimu, kas var būt gan I-, gan P-freims.
+
+**I-freimu kodēšana:** Līdzīgi kā JPEG (8x8 bloki), arī MPEG kodē vienādus blokus: 16x16 pikseļi. I-freimiem algoritms līdzīgs kā JPEG. I-freimi ir "pieturas punkti", uz kuriem būvē citus. [YCbCr krāsu plakne](https://en.wikipedia.org/wiki/YCbCr) - nav tas pats kas YIQ.
+
+### P-freimi un kustības vektori
+
+**P-freimu kodēšana:** **Kustības vektors:** P-freima 16x16 pikseļu blokam meklē līdzīgāko iepriekšējā I-freimā vai P-freimā. Dažreiz tas var būt nobīdīts - ja video attēlota kustība vai kameras slīdēšana - *panning*.
+
+<img
+  id="p_freima_kodesana"
+  alt="P-freima makrobloka kodēšana ar kustības vektoru"
+  src="{{ '/lectures/lossy_video/figs/p-frame-encoding.svg' | relative_url }}"
+  style="width: 100%; max-width: 960px; border:none; background-color:#FFFFFF;"
+/>
+
+*Piemērs ar īstiem pikseļiem (Python skripts [p_frame_encoding.py]({{ '/lectures/lossy_video/figs/p_frame_encoding.py' | relative_url }})). Pašreizējā kadrā figūriņa ir nobīdījusies par $(+6, +3)$ pikseļiem un kļuvusi nedaudz gaišāka. Iekodētājs atzīmētajam $16 \times 16$ makroblokam atsauces kadrā atrod līdzīgāko apgabalu (zaļais rāmis) -- nobīde līdz tam ir kustības vektors $\mathrm{MV} = (-6, -3)$. Nosūta MV un atlikumu (pašreizējais bloks mīnus prognoze), kurā ir tikai vērtības $0$ un $4$; bez kustības kompensācijas atlikums būtu daudz lielāks (absolūto starpību summa $10\,658$ pret $720$).*
+
+### B-freimi: sūtīšanas un atskaņošanas secība
+
+**B-freimus atliek nosūtītajos datos:** B-freimu prognozē gan no iepriekšējā, gan no nākamā enkurfreima (I vai P), tāpēc nākamais enkurfreims jānosūta un jāatkodē **pirms** B-freimiem, kas atskaņošanas secībā atrodas pirms tā. Atkodētājs B-freimus parāda uzreiz, bet atkodēto enkurfreimu glabā, līdz pienāk tā kārta.
+
+<img
+  id="h264_freimu_seciba"
+  alt="H.264 freimu sūtīšanas un atskaņošanas secība"
+  src="{{ '/lectures/lossy_video/figs/h264-frame-order.svg' | relative_url }}"
+  style="width: 100%; max-width: 910px; border:none; background-color:#FFFFFF;"
+/>
+
+*GOP paraugs `IBBPBBPBBI`: augšā -- secība, kādā freimus nosūta (un atkodē), apakšā -- atskaņošanas secība. Sūtīšanas secību no parauga aprēķina Python skripts [h264_frame_order.py]({{ '/lectures/lossy_video/figs/h264_frame_order.py' | relative_url }}) (piemēram, `python h264_frame_order.py IBBBPBBBP`).*
+
+H.264 šo ideju vispārina: B-freimi var būt arī atsauces citiem B-freimiem (hierarhiskie B-freimi), un bloku var prognozēt no vairākiem iepriekšējiem kadriem, tāpēc sūtīšanas secība var būt sarežģītāka par attēlā parādīto.
+
+Ja filmas scēna strauji mainās, ir izdevīgi biežāk lietot I-freimus, ja tā ir relatīvi statiska, tad - sajauktus P-freimus un B-freimus. Kodeki parasti ir optimizēti kaut kādam "caurmēra" ritmam.
+
+### Saspiešanas datu piemēri
+
+Ja video ir $356 \times 260$ pikseļi, tad freimu izmēri un saspiešanas attiecības ir sekojošas:
+
+| Freims | Izmērs | Saspiešana |
+| --- | --- | --- |
+| I-Freims | 18 KiB | 7:1 |
+| P-Freims | 6 KiB | 20:1 |
+| B-Freims | 2.5 KiB | 50:1 |
+| Vidēji | 4.8 KiB | 27:1 |
+
+Šādu attēlu pārraidīšanai vajadzīgais tīkla savienojums:
+
+$$
+30\,\text{frame/s}\cdot 4.8\,\text{Kb/frame}\,\cdot 8 = 1.2\,\text{Mbit/s}.
+$$
+
+Kopā ar audio tas var būt 1.45 megabiti sekundē, kas aizņem T1 Interneta savienojumu (viens vītais pāris; 1.544 Mbps).
+
+### H.264 un MPEG lietojumi
+
+* Satelīttelevīzijas pārraides, kas digitālu signālu no satelīta pārtaisa krāsainā TV signālā (kas var joprojām būt analogs).
+* Kabeļtelevīzija.
+* On-demand televīzija ar desmitiem tūkstošu lejupielādējamu vai straumējamu filmu.
+
 ## VP9 kodējums
 
 *VP9* ir Google izstrādāts atvērts un bezmaksas (bez licences maksām) video kodeks. Tā pamatideja ir tāda pati kā MPEG saimes kodekiem: katru kadru sadala blokos, katru bloku *prognozē* -- no tā paša kadra jau atkodētajiem kaimiņiem (*intra*) vai no iepriekšējiem kadriem ar kustības vektoru (*inter*) --, un kodē tikai prognozes kļūdu jeb *atlikumu*: to transformē (DCT vai ADST), kvantizē un saspiež ar aritmētisko kodu.
@@ -216,7 +239,7 @@ VP9 freimam ir viena no šīm lomām:
 * **Slēptais ALTREF freims** (`show_frame = 0`) -- inter freims, ko atkodē un saglabā kā atsauci, bet **neparāda**. Kodētājs to izveido no *nākotnes* kadra (parasti temporāli filtrētu, t.i., vidējotu no vairākiem blakus kadriem un tāpēc ar mazāku troksni) un no tā prognozē vairākus nākamos kadrus.
 * **`show_existing_frame`** -- dažus baitus garš freims bez kodētiem datiem, kas vienkārši parāda kādu jau atkodētu atsauces freimu (piemēram, iepriekš slēpto ALTREF).
 
-*GOP* (*group of pictures*) ir kadru grupa no viena "enkura" (atslēgas freima vai ALTREF) līdz nākamajam. Tā kā ALTREF ir nākotnes kadrs, kas jāatkodē **pirms** kadriem, kuri no tā prognozē, *dekodēšanas secība* (kādā freimi ir failā) nesakrīt ar *rādīšanas secību*. Tas ir līdzīgi MPEG B-freimiem (sk. "Video saspiešana" augstāk), tikai VP9 nekodē atsevišķus B-freimus, bet izmanto slēptos freimus.
+*GOP* (*group of pictures*) ir kadru grupa no viena "enkura" (atslēgas freima vai ALTREF) līdz nākamajam. Tā kā ALTREF ir nākotnes kadrs, kas jāatkodē **pirms** kadriem, kuri no tā prognozē, *dekodēšanas secība* (kādā freimi ir failā) nesakrīt ar *rādīšanas secību*. Tas ir līdzīgi MPEG B-freimiem (sk. H.264 nodaļas apakšnodaļu "B-freimi: sūtīšanas un atskaņošanas secība"), tikai VP9 nekodē atsevišķus B-freimus, bet izmanto slēptos freimus.
 
 <img
   id="vp9_gop"

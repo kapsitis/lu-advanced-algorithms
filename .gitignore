@@ -56,3 +56,5 @@ _templates
 !worksheets/*/*.pdf
 crypto/rsa/
 homeworks/to-be-graded
+vp9-transcoder/*
+vp9-transcoder/

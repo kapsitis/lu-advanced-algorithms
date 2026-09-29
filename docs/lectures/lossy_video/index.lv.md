@@ -190,6 +190,148 @@ Opus māk pārslēgties starp divām modēm, kas optimizē dažādas lietas -- v
 
 **SILK Mode:** SILK mode ir piemērotāka runas saspiešanai. SILK izmanto lineāru paredzošo kodējumu (*Linear Predictive Coding*, LPC) nevis MDCT.
 
+## VP9 kodējums
+
+*VP9* ir Google izstrādāts atvērts un bezmaksas (bez licences maksām) video kodeks. Tā pamatideja ir tāda pati kā MPEG saimes kodekiem: katru kadru sadala blokos, katru bloku *prognozē* -- no tā paša kadra jau atkodētajiem kaimiņiem (*intra*) vai no iepriekšējiem kadriem ar kustības vektoru (*inter*) --, un kodē tikai prognozes kļūdu jeb *atlikumu*: to transformē (DCT vai ADST), kvantizē un saspiež ar aritmētisko kodu.
+
+**Vēsture.** VP9 ir On2 Technologies kodeku (VP3, VP6, VP8) turpinājums; Google 2010.gadā nopirka On2 un atvēra VP8 kā daļu no WebM projekta. VP9 bitu plūsmu nofiksēja 2013.gadā. Salīdzinot ar VP8 (un H.264), tas pie tādas pašas kvalitātes dod apmēram par trešdaļu līdz pusei mazākus failus; to lieto YouTube, WebRTC videozvani un pārlūkprogrammas. VP9 idejas (un daļa neizlaistā VP10) kļuva par pamatu kodekam AV1 (Alliance for Open Media, 2018), kura intra kadri ir AVIF attēlu pamatā. Atsauces realizācija ir bibliotēka *libvpx* ar programmām `vpxenc` (iekodētājs) un `vpxdec` (atkodētājs).
+
+### Konteineri: IVF, WebM, MP4
+
+Pats VP9 kodeks definē tikai *freimu* (viena kodēta kadra) bitu virkni; kadru laiku, izmērus un audio glabā konteiners.
+
+* **IVF** ir vienkāršākais konteiners, ko lieto libvpx testos un pētniecības rīkos. Faila sākumā ir $32$ baitu galvene: paraksts `DKIF`, kodeka kods (`VP90`), platums, augstums, laika bāze (piemēram, $25$ kadri sekundē) un freimu skaits. Pēc tās katram ierakstam ir $12$ baitu galvene (datu garums $4$ baitos un laika zīmogs $8$ baitos) un pati VP9 freima bitu virkne. Tā kā nekā cita nav, IVF ir ērts, lai freimus pa vienam izgrieztu, aizstātu vai analizētu.
+* **WebM** ir Matroska (MKV) apakškopa, ko izmanto pārlūkprogrammas; tajā parasti ir VP9 video un Opus audio. **MP4** konteinerā VP9 plūsmas kods ir `vp09`.
+* **YouTube** lielāko daļu video piedāvā arī VP9 formātā (WebM, DASH straumēšana, katra izšķirtspēja kā atsevišķa video plūsma bez audio). Lejupielādētu WebM (ievērojot autortiesības un pakalpojuma noteikumus) var pārlikt IVF konteinerā bez pārkodēšanas: `ffmpeg -i video.webm -c:v copy -an video.ivf` (`-c:v copy` saglabā VP9 bitus nemainītus, `-an` atmet audio).
+
+Viens IVF ieraksts var saturēt arī vairākus VP9 freimus -- to sauc par *superfreimu* (*superframe*): freimus saliek pēc kārtas un beigās pievieno indeksu ar katra freima garumu. Tā kopā glabā slēpto freimu un nākamo rādāmo freimu (sk. nākamo apakšnodaļu), lai katram konteinera ierakstam atbilstu tieši viens parādāms kadrs.
+
+### Video klipa struktūra: freimu veidi un GOP
+
+VP9 freimam ir viena no šīm lomām:
+
+* **Atslēgas freims** (*keyframe*, `frame_type = KEY_FRAME`) -- visi bloki ir *intra*; atkodētājs no tā var sākt darbu, un tas atiestata visas atsauces. Ar to sākas katrs klips (un katrs punkts, uz kuru var "pārtīt").
+* **Inter freims** -- blokus var prognozēt no līdz pat trim *atsauces freimiem* (*reference frames*): `LAST` (parasti iepriekšējais kadrs), `GOLDEN` (senāks augstas kvalitātes kadrs) un `ALTREF`. Atsauces glabā $8$ atmiņas vietās (*reference slots*); freima galvenes lauks `refresh_frame_flags` norāda, kurās vietās pēc atkodēšanas ierakstīt šo freimu.
+* **Intra-only freims** -- tikai intra bloki (kā atslēgas freimā), bet atsauces netiek atiestatītas.
+* **Slēptais ALTREF freims** (`show_frame = 0`) -- inter freims, ko atkodē un saglabā kā atsauci, bet **neparāda**. Kodētājs to izveido no *nākotnes* kadra (parasti temporāli filtrētu, t.i., vidējotu no vairākiem blakus kadriem un tāpēc ar mazāku troksni) un no tā prognozē vairākus nākamos kadrus.
+* **`show_existing_frame`** -- dažus baitus garš freims bez kodētiem datiem, kas vienkārši parāda kādu jau atkodētu atsauces freimu (piemēram, iepriekš slēpto ALTREF).
+
+*GOP* (*group of pictures*) ir kadru grupa no viena "enkura" (atslēgas freima vai ALTREF) līdz nākamajam. Tā kā ALTREF ir nākotnes kadrs, kas jāatkodē **pirms** kadriem, kuri no tā prognozē, *dekodēšanas secība* (kādā freimi ir failā) nesakrīt ar *rādīšanas secību*. Tas ir līdzīgi MPEG B-freimiem (sk. "Video saspiešana" augstāk), tikai VP9 nekodē atsevišķus B-freimus, bet izmanto slēptos freimus.
+
+<img
+  id="vp9_gop"
+  alt="VP9 dekodēšanas un rādīšanas secība"
+  src="{{ '/lectures/lossy_video/figs/vp9-gop.svg' | relative_url }}"
+  style="width: 100%; max-width: 960px; border:none; background-color:#FFFFFF;"
+/>
+
+*Faila `bouncing_ball_ARF.ivf` (sk. galeriju) pirmie $16$ kodētie freimi: $33$ IVF ierakstos ir $36$ kodēti freimi, no kuriem $3$ ir slēpti ALTREF, katrs superfreimā kopā ar nākamo rādāmo freimu.*
+
+Iekodētāja iestatījumi nosaka GOP struktūru: *low-delay* režīmā (`--lag-in-frames=0`) kodētājs neredz nākotnes kadrus, tāpēc dekodēšanas secība sakrīt ar rādīšanas secību un slēptu freimu nav (vajadzīgs videozvaniem); ar `--auto-alt-ref=1` un nākotnes kadru "skatīšanos uz priekšu" (`--lag-in-frames=25`) rodas ALTREF freimi un labāka saspiešana (video pēc pieprasījuma).
+
+### Freima uzbūve: galvenes, flīzes, superbloki, bloki
+
+Katrs freims sastāv no trim daļām:
+
+1. **Nesaspiestā galvene** (*uncompressed header*) -- parastiem bitiem: freima tips, `show_frame`, `show_existing_frame`, izmēri, atsauču izvēle, `refresh_frame_flags`, cilpas filtra un kvantizācijas parametri (`base_q_idx`), segmentācija, flīžu izkārtojums. To var nolasīt, neko neatkodējot aritmētiski.
+2. **Saspiestā galvene** (*compressed header*) -- aritmētiski kodēta: transformāciju izmēru režīms un varbūtību tabulu labojumi šim freimam.
+3. **Flīžu dati** (*tiles*) -- paši bloki. Freimu var sadalīt vairākās flīžu kolonnās (katra vismaz $256$ pikseļus plata), ko var atkodēt paralēli; katrā flīzē aritmētiskais kods sāk no jauna.
+
+Flīzi sadala *superblokos* $64 \times 64$ pikseļi, un katru superbloku rekursīvi sadala (*partition*): bloku var atstāt veselu (`PARTITION_NONE`), sadalīt divos horizontālos vai vertikālos taisnstūros (`HORZ`, `VERT`) vai četros kvadrātos (`SPLIT`), līdz $8 \times 8$, un $8 \times 8$ blokam ir arī $4 \times 4$ apakšbloki. Katram *blokam* (*block*) glabā:
+
+* prognozes veidu (intra vai inter) un *režīmu* (*mode*): intra režīmam -- prognozes virzienu, inter režīmam -- atsauces freimu un kustības vektoru;
+* transformācijas izmēru (`tx_size`) un karodziņu `skip` (ja `skip = 1`, bloka atlikums ir $0$ un koeficientus nekodē);
+* segmenta numuru (`segment_id`, sk. "Cilpas filtrs un segmentācija").
+
+Pēc tam seko atlikuma *transformācijas bloku* (`tx_size` lielumā) kvantizētie koeficienti.
+
+### YUV pikseļi un prognoze
+
+VP9 kodē *YUV* (precīzāk -- YCbCr) pikseļu datus: gaišuma plakni $Y$ un divas krāsainības plaknes $U$ un $V$ (sk. JPEG un AVIF lekcijas nodaļu par krāsu telpām un 4:2:0 izretināšanu). Pamata profils (*profile 0*) ir $8$ biti un 4:2:0, t.i., $256 \times 256$ kadrā ir $65\,536$ gaišuma un $2 \cdot 16\,384$ krāsainības vērtības. Profils 1 atļauj 4:2:2 un 4:4:4, profili 2 un 3 -- $10$ vai $12$ bitu vērtības (HDR). Iekodētājs parasti saņem jau YUV kadrus (piemēram, `.y4m` failā: teksta galvene un katram kadram secīgi $Y$, $U$, $V$ plaknes baitos), un atkodētājs izvada tieši tādas pašas plaknes. Divas atkodētas plūsmas uzskata par vienādām, ja visas YUV plaknes sakrīt baitu līmenī (to ērti pārbaudīt, salīdzinot katra kadra SHA-256).
+
+**Intra prognoze** aizpilda bloku no jau atkodētajiem pikseļiem virs tā un pa kreisi no tā: VP9 ir $10$ režīmi -- DC (vidējā vērtība), vertikālais, horizontālais, sešas diagonāles un TM ("TrueMotion", gradienta turpinājums).
+
+**Inter prognoze** ņem bloku no atsauces freima, nobīdītu par *kustības vektoru* (*motion vector*, MV). Kustības vektoru precizitāte ir $\frac{1}{8}$ pikseļa (vai $\frac{1}{4}$). Ja vektors nav vesels, starpvērtības aprēķina ar $8$ punktu *interpolācijas filtru* -- parasto (`EIGHTTAP`), gludo (`EIGHTTAP_SMOOTH`) vai aso (`EIGHTTAP_SHARP`); ja freimā filtrs ir `SWITCHABLE`, to var izvēlēties katram blokam. Veselam (*full-pel*) vektoram visi trīs filtri dod vienu un to pašu rezultātu. Bloku var prognozēt arī kā divu atsauču vidējo (*compound prediction*).
+
+Kustības vektoru pašu arī prognozē no kaimiņu blokiem: atkodētājs no kaimiņiem sastāda divus kandidātus, un bloka inter režīms izvēlas `NEARESTMV` (pirmais kandidāts), `NEARMV` (otrais), `ZEROMV` (nulles vektors) vai `NEWMV` (kodē starpību no kandidāta). Tāpēc vienādu kustību bieži var pierakstīt ar vairākiem dažādiem simboliem.
+
+### Transformācija un kvantizācija: DCT un ADST
+
+Atlikumu transformē blokos $4 \times 4$, $8 \times 8$, $16 \times 16$ vai $32 \times 32$. Izmanto DCT vai *ADST* (*asymmetric discrete sine transform*); ADST ir piemērotāka intra blokiem, kuru atlikums aug, attālinoties no prognozes malas. VP9 transformācijas tipu (`tx_type`: DCT vai ADST katrā virzienā) nekodē atsevišķi: gaišuma plaknes intra blokiem līdz $16 \times 16$ tas izriet no prognozes virziena, visiem pārējiem (inter blokiem, krāsainības plaknēm, $32 \times 32$) vienmēr ir DCT. Visas transformācijas ir definētas veselos skaitļos (ar noapaļošanu), lai iekodētājs un jebkurš atkodētājs iegūtu bitu līmenī vienādu rezultātu.
+
+Koeficientus kvantizē, dalot ar kvantizācijas soli un noapaļojot (sk. JPEG 5. soli). Soli nosaka *kvantizācijas indekss* `qindex` ($0 \ldots 255$; jo lielāks, jo rupjāk) caur standarta tabulām, atsevišķi DC un AC koeficientiem; `vpxenc` parametrs `--cq-level` izvēlas mērķa kvalitāti. Kvantizētos koeficientus nolasa noteiktā *skenēšanas secībā* (līdzīgi JPEG zig-zag) un kodē kā *žetonus* (*tokens*): `ZERO_TOKEN`, `ONE_TOKEN`, …, lielām vērtībām -- kategorijas ar papildu bitiem. *EOB* (*end of block*) žetons norāda, ka pārējie koeficienti ir nulles; lauks `eob` ir pozīcija skenēšanas secībā, kurā koeficientu kodēšana beidzas.
+
+### Aritmētiskā kodēšana un varbūtību tabulas
+
+Visu freima saturu pēc nesaspiestās galvenes kodē ar *Būla aritmētisko kodētāju* (*boolean arithmetic coder*) -- bināru aritmētisko kodu (sk. lekciju par [aritmētisko kodu]({{ '/lectures/lossless_arithmetic_and_ans/' | relative_url }})). Katram bitam ir varbūtība, ka tas ir $0$, pierakstīta kā skaitlis $1 \ldots 255$ (t.i., $p/256$); ļoti paredzams bits aizņem daudz mazāk par $1$ bitu. Simbolus ar vairākām vērtībām (režīmus, žetonus, sadalījumus) kodē kā binārā koka ceļu, katram koka mezglam ar savu varbūtību.
+
+Varbūtības atkarīgas no *konteksta*: piemēram, `skip` varbūtība atkarīga no tā, vai kaimiņu blokiem ir `skip`, bet koeficienta žetona varbūtība -- no transformācijas izmēra, plaknes, pozīcijas un kaimiņu koeficientiem. Visu varbūtību kopums ir *freima konteksts* (*frame context*, tabula `fc`). Atkodētājs glabā $4$ šādus kontekstus; freims izvēlas vienu (`frame_context_idx`), saspiestajā galvenē var to labot (*forward update*), un pēc freima atkodēšanas konteksts var pielāgoties faktiskajam simbolu skaitam (*backward adaptation*), ja to atļauj galvenes lauki `refresh_frame_context`, `error_resilient_mode` un `frame_parallel_decoding_mode`.
+
+### Kodētāja un atkodētāja stāvoklis
+
+VP9 ir stāvokli saglabājošs kodeks: freimu var atkodēt tikai tad, ja ir atkodēti visi iepriekšējie freimi, no kuriem tas atkarīgs. Atkodēšanas laikā tiek uzturētas šādas datu struktūras (iekodētājs uztur tieši tās pašas, lai prognozētu tāpat kā atkodētājs):
+
+* $8$ **atsauces kadru bufferi** (atkodētas YUV plaknes) un to piesaiste `LAST`, `GOLDEN`, `ALTREF`;
+* $4$ **freimu konteksti** (varbūtību tabulas) un simbolu skaitītāji to pielāgošanai;
+* **blokos izmantoto režīmu un kustības vektoru režģis** -- kaimiņu (virs un pa kreisi) konteksti un iepriekšējā freima kustības vektori, no kuriem prognozē jaunos vektorus;
+* **segmentācijas karte** un cilpas filtra iestatījumi, kurus var pārņemt no iepriekšējā freima.
+
+Tāpēc freima baitu nomaiņa ietekmē arī visus nākamos freimus, kuri no tā atkarīgi -- pārbaudot, vai divas plūsmas dod vienādus kadrus, jāatkodē visa plūsma no sākuma (vai no atslēgas freima).
+
+### Cilpas filtrs un segmentācija
+
+Pēc bloku atjaunošanas freimam piemēro **cilpas filtru** (*loop filter*): tas nogludina bloku robežas, ja tur ir tikai nelielas atšķirības (bloku artefakti), bet saglabā īstas malas. Filtra stiprumu nosaka freima līmenis (`filter_level` $0 \ldots 63$) un asums, kā arī bloku režīmi, atsauces un `skip`. Filtrēto kadru izmanto gan rādīšanai, gan kā atsauci nākamajiem freimiem ("cilpā"). Tāpēc atkodēto kadru salīdzina **pēc** cilpas filtra: simbola maiņa, kas nemaina atlikumu, joprojām var mainīt pikseļus caur filtra lēmumu.
+
+**Segmentācija** ļauj blokus sadalīt līdz $8$ segmentos (`segment_id`); katram segmentam var iestatīt savu kvantizācijas indeksu, cilpas filtra līmeni, fiksētu atsauces freimu vai obligātu `skip`. Kodētājs to izmanto, piemēram, adaptīvai kvantizācijai (`--aq-mode`): sarežģītiem apgabaliem viens `qindex`, gludiem -- cits.
+
+### Bezzudumu VP9: Volša-Adamāra transformācija
+
+Ja `base_q_idx = 0` un visas kvantizācijas korekcijas ir $0$, freims ir **bezzudumu** (`vpxenc --lossless=1`): atkodētie pikseļi precīzi sakrīt ar ievades YUV. Tad DCT/ADST vietā izmanto tikai $4 \times 4$ *Volša-Adamāra transformāciju* (*Walsh–Hadamard transform*, WHT), un cilpas filtru nepiemēro.
+
+WHT bāzes vektori sastāv tikai no $\pm 1$, piemēram, $4 \times 4$ gadījumā
+
+$$
+H_4 = \left( \begin{array}{rrrr}
+1 & 1 & 1 & 1 \\
+1 & 1 & -1 & -1 \\
+1 & -1 & -1 & 1 \\
+1 & -1 & 1 & -1
+\end{array} \right),
+$$
+
+tāpēc to aprēķina tikai ar saskaitīšanu, atņemšanu un bīdēm. VP9 to realizē ar veselu skaitļu soļiem, kurus var precīzi apgriezt (*lifting*): no koeficientiem atjauno tieši to pašu atlikumu, bez noapaļošanas kļūdām. DCT šādas īpašības nav -- tās veselo skaitļu versija ir tikai tuvinājums, tāpēc pat ar vissīkāko kvantizāciju dažas vienības var mainīties. Bezzudumu režīmā informācija netiek zaudēta, un saspiešana notiek tikai prognozes un aritmētiskā koda dēļ, tāpēc faili ir daudz lielāki (ja vien saturs nav ļoti vienkāršs).
+
+### Kodētāja lēmumi: Rate-Distortion Optimization
+
+Standarts nosaka tikai atkodēšanu; iekodētājs pats izlemj, kā sadalīt superblokus, kādus režīmus, kustības vektorus, transformāciju izmērus un koeficientus izvēlēties. *Rate-distortion optimization* (RDO) šos lēmumus pieņem, minimizējot
+
+$$
+J = D + \lambda \cdot R,
+$$
+
+kur $D$ ir kropļojums (piemēram, kvadrātisko kļūdu summa starp oriģinālo un atjaunoto bloku), $R$ -- bitu skaits, kas vajadzīgs šim variantam (aprēķināts no pašreizējām aritmētiskā koda varbūtībām), bet $\lambda$ -- "bitu cena", kas aug līdz ar `qindex`. Iekodētājs katram blokam izmēģina daudzus variantus un izvēlas mazāko $J$; pat kvantizētos koeficientus var mainīt par $\pm 1$, ja tas ietaupa vairāk bitu nekā pieaug kļūda (*trellis* kvantizācija). Pilna pārlase ir ļoti lēna, tāpēc `vpxenc` ātruma iestatījumi (`--good`/`--best`/`--rt`, `--cpu-used`) nosaka, cik daudz variantu atmest ar heiristikām. Divu gājienu režīmā (`--passes=2`) pirmais gājiens savāc statistiku par visu video, un otrajā to izmanto bitu sadalīšanai starp kadriem un ALTREF izvietošanai.
+
+Tā kā RDO izvēlas lētāko pierakstu, tipiskā plūsmā katram blokam ir "dabiskā" simbolu izvēle. Taču bieži vienu un to pašu atkodēto rezultātu var iegūt arī ar citiem simboliem: piemēram, `skip = 0` blokam ar nulles atlikumu, vēlāku `eob`, cita interpolācijas filtra izvēle veselam kustības vektoram vai `NEWMV` vietā `NEARESTMV`, ja tie dod to pašu vektoru. Šādas "pikseļus nemainošas" simbolu izmaiņas var izmantot steganogrāfijai un ūdenszīmēm (sk. "Kodeku lietojumi"), bet pārrakstīšana uz RDO dabisko izvēli -- to noņemšanai.
+
+### Piemēru galerija
+
+Šie IVF faili ($256 \times 256$ pikseļi, ja nav norādīts citādi, $33$ kadri, $25$ kadri sekundē, profils 0) ir sintētiski testa video, kas kodēti ar `vpxenc`. *LD* (*low delay*) failos dekodēšanas secība sakrīt ar rādīšanas secību; *ARF* failos ir slēpti ALTREF freimi superfreimos. Nesaspiestā veidā viens šāds klips ($33$ kadri 4:2:0) aizņem $3.2$ MB. Failus var atskaņot, piemēram, ar `ffplay` vai VLC, vai pārvērst YUV ar `vpxdec --i420 -o kadri.yuv fails.ivf`.
+
+1. [white_static_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/white_static_LD.ivf' | relative_url }}) (1 KB) -- nemainīgs balts kadrs. Pēc atslēgas freima visi bloki ir `skip` ar `ZEROMV`, tāpēc katrs nākamais freims aizņem tikai dažus baitus.
+2. [bouncing_ball_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/bouncing_ball_LD.ivf' | relative_url }}) (2 KB) -- vienkrāsaina bumba pa $2$ pikseļiem kadrā pārvietojas pa vienkrāsainu fonu. Bumbas iekšpuse tiek prognozēta ar veselu kustības vektoru, fons -- ar `skip`.
+3. [bouncing_ball_ARF.ivf]({{ '/lectures/lossy_video/vp9-examples/bouncing_ball_ARF.ivf' | relative_url }}) (2 KB) -- tas pats saturs divu gājienu režīmā ar ALTREF: $36$ kodēti freimi, no tiem $3$ slēpti, superfreimos (sk. shēmu "Video klipa struktūra").
+4. [integer_pan_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/integer_pan_LD.ivf' | relative_url }}) (6 KB) -- sīka trīskrāsu rūtiņu tekstūra pārvietojas par veselu pikseļu skaitu. Viss kadrs ir labi prognozējams ar vienu kustības vektoru, tāpēc atlikuma gandrīz nav, lai gan attēls ir detalizēts.
+5. [screen_content_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/screen_content_LD.ivf' | relative_url }}) (7 KB) -- ekrāna saturs: vienkrāsaini paneļi un ritinošs "teksts". Lieli nemainīgi apgabali un asas malas.
+6. [saturation_field_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/saturation_field_LD.ivf' | relative_url }}) (8 KB) -- melns un balts lauks ($Y = 0$ un $Y = 255$) ar kustīgu robežu. Atjaunotās vērtības tiek apgrieztas līdz intervālam $[0; 255]$.
+7. [lowq_gradient_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/lowq_gradient_LD.ivf' | relative_url }}) (33 KB) -- lēni mainīgs gluds krāsu gradients ar zemu `qindex` (augsta kvalitāte): daudz mazu AC koeficientu un kustības vektori ar daļpikseļu precizitāti.
+8. [midband_noise_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/midband_noise_LD.ivf' | relative_url }}) (1 MB) -- katrā kadrā jauns nejaušs troksnis. Nekas nav prognozējams, tāpēc fails ir tikai apmēram $3$ reizes mazāks par nesaspiesto video.
+9. [lossless_wht_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/lossless_wht_LD.ivf' | relative_url }}) (2 KB) -- bumbas saturs bezzudumu režīmā (`qindex` $0$, Volša-Adamāra transformācija, bez cilpas filtra); atkodētais YUV precīzi sakrīt ar ievadi.
+10. [clone_segment_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/clone_segment_LD.ivf' | relative_url }}) (2 KB) -- bumbas saturs, kodēts ar segmentāciju (`--aq-mode=1`): freimu galvenēs ir segmentu karte un vairāki segmenti.
+11. [yuv444_gradient_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/yuv444_gradient_LD.ivf' | relative_url }}) (68 KB) -- krāsains gradients profilā 1 ar pilnas izšķirtspējas krāsainību (4:4:4); $U$ un $V$ plaknēs ir tikpat daudz vērtību kā $Y$ plaknē.
+12. [hbd_gradient10_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/hbd_gradient10_LD.ivf' | relative_url }}) (23 KB) -- gradients profilā 2 ar $10$ bitu vērtībām ($0 \ldots 1023$).
+13. [tiled_multicolumn_LD.ivf]({{ '/lectures/lossy_video/vp9-examples/tiled_multicolumn_LD.ivf' | relative_url }}) (24 KB) -- $512 \times 256$ kadri, sadalīti divās flīžu kolonnās, kuras var atkodēt paralēli.
+14. [natural_clip_foreman_ARF.ivf]({{ '/lectures/lossy_video/vp9-examples/natural_clip_foreman_ARF.ivf' | relative_url }}) (74 KB) -- reāls video (klasiskā testa secība *foreman*, izgriezums $256 \times 256$) ar kameras kustību, jauktiem intra un inter blokiem, dažādiem transformāciju izmēriem un slēptiem ALTREF freimiem.
+
 ## Kodeku lietojumi
 
 ### Steganogrāfija

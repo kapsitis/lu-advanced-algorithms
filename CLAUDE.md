@@ -10,6 +10,10 @@ Only the pages listed in `docs/_data/nav.yml` are published and translated:
 
 - `docs/index.lv.md`, `docs/index.en.md` (home page)
 - `docs/lectures/lossless_*/index.lv.md`, `docs/lectures/lossless_*/index.en.md`
+- extra page pairs next to them: `lossless_final_problemsets/solutions.{lv,en}.md` and
+  `lossy_images_and_audio/jpeg_lab/index.{lv,en}.md` (the English versions were written first,
+  and the Latvian ones were translated from them once, in September 2026; from then on the Latvian
+  files are the master copies, as everywhere else)
 
 Do **not** translate `README.md` files, `*.rst` files, `slides.md` files, or code
 (including Latvian comments in `.py` scripts). They are not ready for publishing.
@@ -46,9 +50,11 @@ Each published page exists as two files in the **same directory**:
 
 ### How the language switch works (`docs/_layouts/default.html`)
 
-- The layout finds the page's twin: the page in `site.pages` with the same `dir` and the other
-  `lang`. The EN/LV buttons link to the twin with `?lang=xx`; nav links use the page in the
-  item's directory that has the current `lang`.
+- The layout finds the page's twin: the page in `site.pages` with the same `dir`, the same base
+  name and the other `lang` (`solutions.en.md` <-> `solutions.lv.md`). So a directory can hold
+  several page pairs, but each pair must be named `<base>.lv.md` / `<base>.en.md`, with permalinks
+  `<dir>/<base>.lv.html` / `<dir>/<base>.html` (or `<dir>/` for `index`). The EN/LV buttons link to
+  the twin with `?lang=xx`; nav links use `index.<lang>.md` in the item's directory.
 - A small inline script remembers the choice in `localStorage` (`lu-advanced-algorithms.lang`):
   opening a Latvian page remembers `lv`. Opening an English (directory) URL while `lv` is
   remembered redirects to the Latvian twin, and `?lang=en` switches back.

@@ -10,11 +10,11 @@
       url: /lectures/lossless_entropy_and_huffman/
     - title: { en: "2. Arithmetic Coding and ANS", lv: "2. Aritmētiskā saspiešana un ANS" }
       url: /lectures/lossless_arithmetic_and_ans/
-    - title: { en: "3. Lempel–Ziv Algorithms", lv: "3. Lempela-Ziva algoritmi" }
+    - title: { en: "3. Lempel-Ziv Algorithms", lv: "3. Lempela-Ziva algoritmi" }
       url: /lectures/lossless_lempel_ziv/
-    - title: { en: "4. Burrows–Wheeler Transform", lv: "4. Berouza-Vīlera transformācija" }
+    - title: { en: "4. Burrows-Wheeler Transform", lv: "4. Berouza-Vīlera transformācija" }
       url: /lectures/lossless_burrows_wheeler/
-    - title: { en: "Lossless Compression: Final Problem Set", lv: Bezzudumu saspiešana - Beigu uzdevumi }
+    - title: { en: "Lossless Compression: Final Problem Set", lv: "Bezzudumu saspiešana - Beigu uzdevumi" }
       url: /lectures/lossless_final_problemsets/
     - title: { en: "5. Lossy Compression: Images and Audio", lv: "5. Zudumradošā saspiešana: attēli un audio" }
       url: /lectures/lossy_images_and_audio/
@@ -22,5 +22,5 @@
       url: /lectures/lossy_video/
     - title: { en: "7. Error Correction: Hamming Codes", lv: "7. Kļūdu korekcija: Heminga kodi" }
       url: /lectures/lossy_hamming/
-    - title: { en: "8. Error Correction: Reed–Solomon Codes", lv: "8. Kļūdu korekcija: Rīda-Solomona kodi" }
+    - title: { en: "8. Error Correction: Reed-Solomon Codes", lv: "8. Kļūdu korekcija: Rīda-Solomona kodi" }
       url: /lectures/lossy_reed_solomon/

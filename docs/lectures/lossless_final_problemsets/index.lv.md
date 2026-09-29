@@ -3,6 +3,15 @@ layout: default
 title: "Bezzudumu saspiešana: uzdevumu krājums"
 lang: lv
 permalink: /lectures/lossless_final_problemsets/index.lv.html
+
+docx_header: "Bezzudumu saspiešana. Beigu uzdevumi"
+docx_footer: "2026. gada rudens specseminārs: Algoritmi telekomunikācijās un drošības risinājumos"
+docx_font: "Calibri"
+docx_fontsize: 10
+docx_heading_font: "Calibri Light"
+docx_heading_color: "2F5496"
+docx_heading1_size: 14
+geometry: "a4paper, top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm"
 ---
 # Bezzudumu saspiešana: Beigu uzdevumi
 

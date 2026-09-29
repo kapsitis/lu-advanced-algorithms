@@ -221,3 +221,24 @@ Voronoja diagramma,Voronoi diagram,name,
 Donta metode,D'Hondt method,name,
 Senlaga metode,Sainte-Laguë method,name,
 Nasirs Ahmeds,Nasir Ahmed,name,Proposed the DCT (1972)
+kauss (svaru),pan (of a balance scale),standard,
+apakškoks,subtree,standard,
+diādisks intervāls,dyadic interval,course,"Interval [k/2^n; (k+1)/2^n); no established Latvian term"
+vadošās nulles,leading zeros,standard,
+LF attēlojums,LF mapping (Last-to-First),course,Inverse BWT; the English name is kept
+nereducējama (Markova ķēde),irreducible (Markov chain),standard,
+aperiodiska (Markova ķēde),aperiodic (Markov chain),standard,
+laboratorijas darbs; datorlaboratorijas darbs,lab; computer lab,course,
+palaidiens,run,course,One execution of the lab program
+kļūdu attēls,error image,course,Output of --difference-png in the JPEG lab
+testa tabula,test chart,course,Synthetic test image (test-chart.png)
+bloku artefakti,blocking artifacts,standard,
+bloku robežu gludināšana,deblocking,course,No established Latvian term; English term given in brackets
+viļņošanās (ap malām),ringing,course,English term given in brackets
+trokšņa aizpildīšana,noise filling,course,English term given in brackets
+graudainība,film grain,course,
+vilnītis,wavelet,course,"Chosen for this course; other sources also use ""vilnis"""
+īpašvektors,eigenvector,standard,
+Hārtlija transformācija,Hartley transform,name,
+Volša-Adamāra transformācija,Walsh–Hadamard transform,name,
+Hāra vilnītis,Haar wavelet,name,

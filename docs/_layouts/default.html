@@ -1,11 +1,15 @@
 {%- comment -%}
   Bilingual pages: docs/**/index.lv.md (Latvian master) and index.en.md (English),
   both in the same directory. English is served at the directory URL, Latvian at
-  index.lv.html. The "twin" is the page in the same directory with the other `lang`.
+  index.lv.html. A directory may hold more such pairs (solutions.lv.md, solutions.en.md).
+  The "twin" is the page in the same directory with the same base name and the other
+  `lang`, e.g. solutions.en.md <-> solutions.lv.md.
 {%- endcomment -%}
 {%- assign page_lang = page.lang | default: "en" -%}
 {%- if page_lang == "lv" -%}{%- assign other_lang = "en" -%}{%- else -%}{%- assign other_lang = "lv" -%}{%- endif -%}
-{%- assign twin = site.pages | where: "dir", page.dir | where: "lang", other_lang | first -%}
+{%- assign page_base = page.name | split: "." | first -%}
+{%- assign twin_name = page_base | append: "." | append: other_lang | append: ".md" -%}
+{%- assign twin = site.pages | where: "dir", page.dir | where: "name", twin_name | where: "lang", other_lang | first -%}
 <!doctype html>
 <html lang="{{ page_lang }}">
 <head>
@@ -100,14 +104,15 @@
 </head>
 <body>
 
-{%- comment -%} Nav link in the current language: the page with that `lang` in the item's directory, else the item URL itself. {%- endcomment -%}
+{%- comment -%} Nav link in the current language: index.<lang>.md in the item's directory, else the item URL itself. {%- endcomment -%}
+{%- assign index_name = "index." | append: page_lang | append: ".md" -%}
 <nav class="nav">
   <ul class="nav__list">
     {% for item in site.data.nav %}
       {%- assign item_title = item.title[page_lang] | default: item.title.lv | default: item.title -%}
       <li class="nav__item {% if item.children %}has-children{% endif %}">
         {% if item.url %}
-          {%- assign target = site.pages | where: "dir", item.url | where: "lang", page_lang | first -%}
+          {%- assign target = site.pages | where: "dir", item.url | where: "name", index_name | first -%}
           <a href="{% if target %}{{ target.url | relative_url }}{% else %}{{ item.url | relative_url }}{% endif %}">{{ item_title }}</a>
         {% else %}
           <span class="nav__label">{{ item_title }}</span>
@@ -116,7 +121,7 @@
           <ul class="nav__submenu">
             {% for child in item.children %}
               {%- assign child_title = child.title[page_lang] | default: child.title.lv | default: child.title -%}
-              {%- assign target = site.pages | where: "dir", child.url | where: "lang", page_lang | first -%}
+              {%- assign target = site.pages | where: "dir", child.url | where: "name", index_name | first -%}
               <li><a href="{% if target %}{{ target.url | relative_url }}{% else %}{{ child.url | relative_url }}{% endif %}">{{ child_title }}</a></li>
             {% endfor %}
           </ul>

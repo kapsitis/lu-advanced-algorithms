@@ -1,0 +1,36 @@
+{%- comment -%}
+Inline "[web], [pdf], [docx]" links for a page, given its permalink:
+
+  {% include doc_links.html url="/matf78/26_27/78STRUCT_solution_structure/problems/" %}
+
+[web] points to the permalink. [pdf]/[docx] point to the files named like
+scripts/convert_directory.py does it: the source .md path joined with '-',
+with school years "26_27" expanded to "2026_27", placed next to the .md, e.g.
+  /matf78/26_27/78STRUCT_solution_structure/matf78-2026_27-78STRUCT_solution_structure-problems.pdf
+The source path is looked up via the permalink (so class1.md with permalink
+.../handout_class1/ still yields ...-class1.pdf); if no page has that
+permalink, the permalink itself is used as the path.
+{%- endcomment -%}
+{%- assign doc = site.pages | where: "url", include.url | first -%}
+{%- if doc -%}
+  {%- assign src = doc.path | remove: ".md" -%}
+{%- else -%}
+  {%- assign src = include.url -%}
+{%- endif -%}
+{%- assign parts = src | split: "/" -%}
+{%- assign dir = "" -%}
+{%- assign full = "" -%}
+{%- assign stem = "" -%}
+{%- for part in parts -%}
+  {%- if part == "" -%}{%- continue -%}{%- endif -%}
+  {%- assign dir = full -%}
+  {%- assign full = full | append: "/" | append: part -%}
+  {%- assign piece = part -%}
+  {%- assign third = part | slice: 2 -%}
+  {%- if part.size == 5 and third == "_" -%}{%- assign piece = part | prepend: "20" -%}{%- endif -%}
+  {%- if stem != "" -%}{%- assign stem = stem | append: "-" -%}{%- endif -%}
+  {%- assign stem = stem | append: piece -%}
+{%- endfor -%}
+{%- assign base = dir | append: "/" | append: stem -%}
+[web]({{ include.url | relative_url }}), [pdf]({{ base | append: ".pdf" | relative_url }}), [docx]({{ base | append: ".docx" | relative_url }})
+{%- comment -%} no trailing newline, so the include can sit inside a list item {%- endcomment -%}

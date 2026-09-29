@@ -3,11 +3,20 @@ layout: default
 title: "Lab: Breaking JPEG on Purpose"
 lang: en
 permalink: /lectures/lossy_images_and_audio/jpeg_lab/
+
+docx_header: "Lab: Breaking JPEG on Purpose"
+docx_footer: "LU Advanced Algorithms: 5. Lossy Compression: Images and Audio"
+docx_font: "Calibri"
+docx_fontsize: 10
+docx_heading_font: "Calibri Light"
+docx_heading_color: "2F5496"
+docx_heading1_size: 14
+geometry: "a4paper, top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm"
 ---
 # Lab: Breaking JPEG on Purpose
 
 This is a computer lab for the lecture
-[5. Lossy Compression: Images and Audio]({{ '/lectures/lossy_images_and_audio/' | relative_url }}).
+[5. Lossy Compression: Images and Audio](../).
 Each JPEG stage exists for a reason. In this lab you change or remove one stage at a time,
 look at the decoded image, and explain what went wrong.
 

@@ -15,9 +15,14 @@ tāpēc katrs apgabals ir izliekts daudzstūris; to iegūst, apgriežot trijstū
 pusplaknēm.  Punkts katrā apgabalā rāda balsu attiecību K:M:N, kas tieši
 atbilst piešķirtajām vietām.
 
-    python apportionment.py
+Uzraksti ir latviski (hondt.svg, sainte-lague.svg) un angliski
+(hondt.en.svg, sainte-lague.en.svg):
+
+    python apportionment.py              # abas valodas
+    python apportionment.py --lang en    # tikai angļu
 """
 
+import argparse
 import os
 
 SEATS = 5
@@ -27,9 +32,12 @@ INK = "#222"
 PARTY_RGB = [(76, 120, 168), (245, 133, 24), (84, 162, 75)]
 
 METHODS = {
-    "hondt": ("Donta (D'Hondt) metode", lambda k: k + 1),
-    "sainte-lague": ("Senlaga (Sainte-Laguë) metode", lambda k: 2 * k + 1),
+    "hondt": ({"lv": "Donta (D'Hondt) metode", "en": "D'Hondt method"},
+              lambda k: k + 1),
+    "sainte-lague": ({"lv": "Senlaga (Sainte-Laguë) metode",
+                      "en": "Sainte-Laguë method"}, lambda k: 2 * k + 1),
 }
+SUBTITLE = {"lv": "%d vietas, 3 partijas", "en": "%d seats, 3 parties"}
 
 # Trijstūra virsotnes: A augšā, B apakšā pa kreisi, C apakšā pa labi.
 SIDE = 400
@@ -115,14 +123,15 @@ def label_pos(s, x, y):
     return x, y + 18, "middle"
 
 
-def build(key):
-    title, d = METHODS[key]
+def build(key, lang="lv"):
+    titles, d = METHODS[key]
+    title = titles[lang]
     allocs = [(k, m, SEATS - k - m) for k in range(SEATS, -1, -1)
               for m in range(SEATS - k, -1, -1)]
     s = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
          'width="%d" height="%d" role="img" aria-label="%s">\n<title>%s: '
-         '%d vietas, 3 partijas</title>\n'
-         % (W, H, W, H, title, title, SEATS))
+         '%s</title>\n'
+         % (W, H, W, H, title, title, SUBTITLE[lang] % SEATS))
     s += '<rect x="0" y="0" width="%d" height="%d" fill="#ffffff"/>\n' % (W, H)
 
     for a in allocs:
@@ -150,12 +159,17 @@ def build(key):
 
 
 def main():
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--lang", choices=["lv", "en", "all"], default="all",
+                    help="uzrakstu valoda (noklusēti abas)")
+    langs = {"lv": ["lv"], "en": ["en"], "all": ["lv", "en"]}[ap.parse_args().lang]
     here = os.path.dirname(os.path.abspath(__file__))
     for key in METHODS:
-        out = os.path.join(here, key + ".svg")
-        with open(out, "w", encoding="utf-8", newline="\n") as f:
-            f.write(build(key))
-        print("Wrote", out)
+        for lang in langs:
+            out = os.path.join(here, key + (".en" if lang == "en" else "") + ".svg")
+            with open(out, "w", encoding="utf-8", newline="\n") as f:
+                f.write(build(key, lang))
+            print("Wrote", out)
 
 
 if __name__ == "__main__":

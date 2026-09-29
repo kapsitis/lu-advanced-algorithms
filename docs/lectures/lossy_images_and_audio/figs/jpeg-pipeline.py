@@ -6,9 +6,13 @@ Shēmā soļi numurēti tāpat kā lekcijā (index.lv.md, "JPEG iekodēšana").
 DCT-II (B = C A C^T), kvantizē ar standarta gaišuma tabulu un nolasa zig-zag
 secībā.
 
-    python jpeg-pipeline.py
+Uzraksti ir latviski (jpeg-pipeline.svg) un angliski (jpeg-pipeline.en.svg):
+
+    python jpeg-pipeline.py              # abas valodas
+    python jpeg-pipeline.py --lang en    # tikai angļu
 """
 
+import argparse
 import os
 
 import numpy as np
@@ -146,7 +150,10 @@ def matrix(x, y, cell, fills=None, numbers=None, highlight=None, overlay=""):
     return s
 
 
-def build():
+def build(lang="lv"):
+    def t(lv, en):
+        return en if lang == "en" else lv
+
     W, H = 980, 700
     coef = dct2(BLOCK - 128.0)
     quant = np.round(coef / QTABLE).astype(int)
@@ -154,21 +161,24 @@ def build():
     zz = [quant[i][j] for i, j in order]
 
     s = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
-         'width="%d" height="%d" role="img" aria-label="JPEG kodēšanas soļi">\n'
-         '<title>JPEG kodēšanas soļi</title>\n' % (W, H, W, H))
+         'width="%d" height="%d" role="img" aria-label="%s">\n'
+         '<title>%s</title>\n'
+         % (W, H, W, H, t("JPEG kodēšanas soļi", "JPEG encoding steps"),
+            t("JPEG kodēšanas soļi", "JPEG encoding steps")))
     s += rect(0, 0, W, H, "#ffffff", "none", 0)
     s += ('<defs>\n  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" '
           'markerWidth="6" markerHeight="6" orient="auto-start-reverse">\n'
           '    <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>\n'
           '  </marker>\n</defs>\n')
-    s += txt(20, 28, "JPEG kodēšana: 1.–7. solis", 15, INK, "start",
+    s += txt(20, 28, t("JPEG kodēšana: 1.–7. solis", "JPEG encoding: steps 1–7"),
+             15, INK, "start",
              weight="bold")
 
     # --- 1. rinda: krāsu telpa, izretināšana, bloki -------------------------
     s += stack(20, 64, 104, 16, [("#dbe6f3", BLUE, "B"),
                                  ("#dcecd8", GREEN, "G"),
                                  ("#fbdcdc", RED, "R")])
-    s += txt(88, 222, "RGB attēls", 12)
+    s += txt(88, 222, t("RGB attēls", "RGB image"), 12)
 
     s += arrow(160, 136, 236, 136)
     s += badge(198, 114, 1)
@@ -177,7 +187,8 @@ def build():
     s += stack(248, 64, 104, 16, [("#ecdcea", PURPLE, "Cr"),
                                   ("#fde5cc", ORANGE, "Cb"),
                                   ("#e9ecef", "#5a6a7a", "Y")])
-    s += txt(316, 222, "Y (gaišums), Cb, Cr (krāsa)", 12)
+    s += txt(316, 222, t("Y (gaišums), Cb, Cr (krāsa)",
+                         "Y (luma), Cb, Cr (chroma)"), 12)
 
     s += arrow(386, 136, 462, 136)
     s += badge(424, 114, 2)
@@ -186,11 +197,12 @@ def build():
     s += plane(474, 72, 116, "#e9ecef", "#5a6a7a", "Y")
     s += plane(602, 72, 56, "#fde5cc", ORANGE, "Cb", cells=4)
     s += plane(602, 132, 56, "#ecdcea", PURPLE, "Cr", cells=4)
-    s += txt(566, 222, "Cb, Cr: vidējais katrā 2×2", 12)
+    s += txt(566, 222, t("Cb, Cr: vidējais katrā 2×2",
+                         "Cb, Cr: average of each 2×2"), 12)
 
     s += arrow(670, 136, 734, 136)
     s += badge(702, 114, 3)
-    s += txt(702, 158, "8×8 bloki", 12)
+    s += txt(702, 158, t("8×8 bloki", "8×8 blocks"), 12)
 
     gx, gy, bs = 746, 66, 26
     s += rect(gx, gy, 8 * bs, 5 * bs, "#e9ecef", "#5a6a7a", 1.4)
@@ -200,7 +212,8 @@ def build():
         s += line(gx, gy + i * bs, gx + 8 * bs, gy + i * bs, "#5a6a7a", 0.8)
     hx, hy = gx + 3 * bs, gy + 1 * bs
     s += rect(hx, hy, bs, bs, "#fde5cc", ORANGE, 2.2)
-    s += txt(gx + 4 * bs, 56, "Y plakne, sadalīta 8×8 blokos", 12)
+    s += txt(gx + 4 * bs, 56, t("Y plakne, sadalīta 8×8 blokos",
+                                 "Y plane, split into 8×8 blocks"), 12)
 
     # --- 2. rinda (no labās uz kreiso): DCT, kvantizācija, zig-zag ----------
     px, py, pc = 790, 290, 19
@@ -209,7 +222,8 @@ def build():
     s += line(hx + bs, hy + bs, px + 8 * pc, py, ORANGE, 1.2, dash)
     grays = [["rgb(%d,%d,%d)" % (v, v, v) for v in row] for row in BLOCK]
     s += matrix(px, py, pc, fills=grays)
-    s += txt(px + 4 * pc, py + 8 * pc + 20, "viens 8×8 bloks (pikseļi)", 12)
+    s += txt(px + 4 * pc, py + 8 * pc + 20, t("viens 8×8 bloks (pikseļi)",
+                                              "one 8×8 block (pixels)"), 12)
 
     s += arrow(782, 366, 716, 366)
     s += badge(749, 344, 4)
@@ -220,14 +234,17 @@ def build():
     heat = [["rgba(76,120,168,%.2f)" % (0.08 + 0.92 * m) for m in row]
             for row in mag]
     s += matrix(cx, cy, cc, fills=heat)
-    s += txt(cx + 4 * cc, cy + 8 * cc + 20, "DCT koeficienti", 12)
+    s += txt(cx + 4 * cc, cy + 8 * cc + 20,
+             t("DCT koeficienti", "DCT coefficients"), 12)
     s += txt(cx + 4 * cc, cy + 8 * cc + 36,
-             "(zemās frekvences augšā pa kreisi)", 11, "#555")
+             t("(zemās frekvences augšā pa kreisi)",
+               "(low frequencies at top left)"), 11, "#555")
 
     s += arrow(548, 366, 448, 366)
     s += badge(498, 344, 5)
-    s += txt(498, 388, "kvantizācija", 12)
-    s += txt(498, 404, "÷ Q" + sub("u,v") + ", noapaļo", 11, "#555", raw=True)
+    s += txt(498, 388, t("kvantizācija", "quantization"), 12)
+    s += txt(498, 404, "÷ Q" + sub("u,v") + t(", noapaļo", ", round"), 11,
+             "#555", raw=True)
 
     qx, qy, qc = 240, 266, 25
     pts = " ".join("%g,%g" % (qx + (j + 0.5) * qc, qy + (i + 0.5) * qc)
@@ -236,14 +253,16 @@ def build():
            'stroke-opacity="0.45" stroke-linejoin="round"/>\n' % (pts, RED))
     s += matrix(qx, qy, qc, numbers=quant, highlight=(0, 0, ORANGE),
                 overlay=zig)
-    s += txt(qx + 4 * qc, qy + 8 * qc + 20, "kvantizēts bloks;", 12)
-    s += txt(qx + 4 * qc, qy + 8 * qc + 36, "sarkanā līnija — zig-zag secība",
+    s += txt(qx + 4 * qc, qy + 8 * qc + 20,
+             t("kvantizēts bloks;", "quantized block;"), 12)
+    s += txt(qx + 4 * qc, qy + 8 * qc + 36,
+             t("sarkanā līnija — zig-zag secība", "red line — zig-zag order"),
              11, "#555")
 
     s += path_arrow([(232, 366), (110, 366), (110, 538)])
     s += badge(171, 344, 6)
-    s += txt(171, 388, "DC un AC", 12)
-    s += txt(171, 404, "atdala", 12)
+    s += txt(171, 388, t("DC un AC", "separate"), 12)
+    s += txt(171, 404, t("atdala", "DC and AC"), 12)
 
     # --- 3. rinda: DC starpības, AC virkne, entropijas kodēšana, fails ------
     dc = zz[0]
@@ -252,17 +271,21 @@ def build():
     shown = " ".join(str(v).replace("-", "−") for v in ac[:14])
 
     s += rect(20, 546, 400, 52, "#fff4e8", ORANGE, 1.4, 6)
-    s += txt(32, 566, "DC = %s (atbilst bloka vidējam gaišumam)"
+    s += txt(32, 566, t("DC = %s (atbilst bloka vidējam gaišumam)",
+                        "DC = %s (reflects the average luma of the block)")
              % str(dc).replace("-", "−"), 12, INK, "start", weight="bold")
-    s += txt(32, 586, "kodē starpību ar iepriekšējā bloka DC: "
-             "DC" + sub("k") + " − DC" + sub("k−1"), 12, INK, "start",
+    s += txt(32, 586, t("kodē starpību ar iepriekšējā bloka DC: ",
+                        "encode the difference from the previous DC: ")
+             + "DC" + sub("k") + " − DC" + sub("k−1"), 12, INK, "start",
              raw=True)
 
     s += rect(20, 610, 400, 72, "#eef3f9", BLUE, 1.4, 6)
-    s += txt(32, 630, "AC (63 koeficienti) zig-zag secībā:", 12, INK, "start",
-             weight="bold")
+    s += txt(32, 630, t("AC (63 koeficienti) zig-zag secībā:",
+                        "AC (63 coefficients) in zig-zag order:"), 12, INK,
+             "start", weight="bold")
     s += txt(32, 650, shown + " …", 12, INK, "start", family=MONO)
-    s += txt(32, 670, "pēc %d. vietas tikai nulles → RLE, beigās EOB"
+    s += txt(32, 670, t("pēc %d. vietas tikai nulles → RLE, beigās EOB",
+                        "only zeros after position %d → RLE, then EOB")
              % last, 12, INK, "start")
 
     s += line(420, 572, 440, 572, "#444", 1.6)
@@ -270,31 +293,46 @@ def build():
     s += line(440, 572, 440, 646, "#444", 1.6)
     s += arrow(440, 609, 548, 609)
     s += badge(494, 587, 7)
-    s += txt(494, 631, "Hafmana vai", 12)
-    s += txt(494, 647, "aritmētiskā", 12)
-    s += txt(494, 663, "kodēšana", 12)
+    s += txt(494, 631, t("Hafmana vai", "Huffman or"), 12)
+    s += txt(494, 647, t("aritmētiskā", "arithmetic"), 12)
+    s += txt(494, 663, t("kodēšana", "coding"), 12)
 
     s += txt(552, 613, "1100 0101 0100…", 11.5, INK, "start", family=MONO)
     s += arrow(662, 609, 684, 609)
     fx, fy = 690, 589
-    segs = [("SOI", 34), ("galvene, tabulas", 104), ("saspiestie dati", 100),
+    segs = [("SOI", 34), (t("galvene, tabulas", "header, tables"), 104),
+            (t("saspiestie dati", "coded data"), 100),
             ("EOI", 34)]
     for label, w in segs:
         s += rect(fx, fy, w, 40, "#f4f6f8", "#5a6a7a", 1.4)
         s += txt(fx + w / 2, fy + 25, label, 11.5)
         fx += w
-    s += txt(690 + 136, fy + 60, "JPEG (JFIF) fails", 12)
+    s += txt(690 + 136, fy + 60, t("JPEG (JFIF) fails", "JPEG (JFIF) file"), 12)
 
     s += "</svg>\n"
     return s
 
 
+def write_svgs(stem, build, description=None):
+    """Ieraksta <stem>.svg (latviski) un/vai <stem>.en.svg (angliski).
+
+    build(lang) atgriež SVG tekstu; valodu izvēlas ar komandrindas parametru
+    --lang lv|en|all (noklusēti all).
+    """
+    ap = argparse.ArgumentParser(description=description)
+    ap.add_argument("--lang", choices=["lv", "en", "all"], default="all",
+                    help="uzrakstu valoda (noklusēti abas)")
+    langs = {"lv": ["lv"], "en": ["en"], "all": ["lv", "en"]}[ap.parse_args().lang]
+    here = os.path.dirname(os.path.abspath(__file__))
+    for lang in langs:
+        out = os.path.join(here, stem + (".en" if lang == "en" else "") + ".svg")
+        with open(out, "w", encoding="utf-8", newline="\n") as f:
+            f.write(build(lang))
+        print("Wrote", out)
+
+
 def main():
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       "jpeg-pipeline.svg")
-    with open(out, "w", encoding="utf-8", newline="\n") as f:
-        f.write(build())
-    print("Wrote", out)
+    write_svgs("jpeg-pipeline", build, __doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

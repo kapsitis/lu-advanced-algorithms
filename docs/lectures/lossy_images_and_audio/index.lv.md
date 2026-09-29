@@ -14,6 +14,9 @@ Apskatām sekojošas sadaļas:
 * Diskrētā kosinusu transformācija
 * Citi attēlu formāti; kvantizācija citās jomās
 
+* **Laboratorijas darbs:** {% include doc_links.html url="/lectures/lossy_images_and_audio/jpeg_lab/" %}
+{: .small}
+
 ## Krāsas un kvantizācija
 
 **Piemērs:** Melnbalti attēli.
@@ -621,7 +624,7 @@ Baricentriskās koordinātes ļauj attēlot proporcijas starp trim pozitīviem (
 
 ## Uzdevumi
 
-**Datorlaboratorija:** [Lab: Breaking JPEG on Purpose]({{ '/lectures/lossy_images_and_audio/jpeg_lab/' | relative_url }}) (angļu valodā) -- ar Python programmu soli pa solim saspiežam attēlu "gandrīz kā JPEG", mainot krāsu telpu, bloku izmēru, kvantizāciju un transformāciju, un skaidrojam, kas notiek ar attēlu.
+**Laboratorijas darbs:** [Lab: Breaking JPEG on Purpose]({{ '/lectures/lossy_images_and_audio/jpeg_lab/' | relative_url }}) (angļu valodā) -- ar Python programmu soli pa solim saspiežam attēlu "gandrīz kā JPEG", mainot krāsu telpu, bloku izmēru, kvantizāciju un transformāciju, un skaidrojam, kas notiek ar attēlu.
 
 **5.1. uzdevums:** Izmantojam krāsu saspiešanai kvantizācijas algoritmu, kas lieto tikai pārlūkprogrammām draudzīgās krāsas: [Web Safe Color palette](https://www.rapidtables.com/web/color/Web_Safe.html) jeb 6x6x6 krāsu kubu. 
 

@@ -6,7 +6,11 @@ Pelēkais režģis ir gaišuma (Y) paraugi -- tie ir visiem pikseļiem.  Krāsai
 taisnstūri rāda, kurus pikseļus aptver viens krāsainības paraugs (tas pats
 izvietojums ir gan Cb, gan Cr plaknē).
 
-    python chroma-subsampling.py
+Uzraksti ir latviski (chroma-subsampling.svg) un angliski
+(chroma-subsampling.en.svg):
+
+    python chroma-subsampling.py              # abas valodas
+    python chroma-subsampling.py --lang en    # tikai angļu
 """
 
 import importlib.util
@@ -18,14 +22,17 @@ _spec = importlib.util.spec_from_file_location(
 J = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(J)
 
-# (nosaukums, krāsainības parauga platums un augstums pikseļos, paskaidrojums)
+# (nosaukums, krāsainības parauga platums un augstums pikseļos, paskaidrojums
+# {valoda: teksts}, vērtību skaits uz pikseli)
 SCHEMES = [
-    ("4:4:4", 1, 1, "bez izretināšanas", "3 vērtības/pikselī"),
-    ("4:2:2", 2, 1, "½ horizontāli", "2 vērtības/pikselī"),
-    ("4:2:0", 2, 2, "½ horizontāli un vertikāli", "1.5 vērtības/pikselī"),
-    ("4:1:1", 4, 1, "¼ horizontāli", "1.5 vērtības/pikselī"),
-    ("4:4:0", 1, 2, "½ vertikāli", "2 vērtības/pikselī"),
+    ("4:4:4", 1, 1, {"lv": "bez izretināšanas", "en": "no subsampling"}, "3"),
+    ("4:2:2", 2, 1, {"lv": "½ horizontāli", "en": "½ horizontally"}, "2"),
+    ("4:2:0", 2, 2, {"lv": "½ horizontāli un vertikāli",
+                     "en": "½ horizontally and vertically"}, "1.5"),
+    ("4:1:1", 4, 1, {"lv": "¼ horizontāli", "en": "¼ horizontally"}, "1.5"),
+    ("4:4:0", 1, 2, {"lv": "½ vertikāli", "en": "½ vertically"}, "2"),
 ]
+PER_PIXEL = {"lv": "%s vērtības/pikselī", "en": "%s values/pixel"}
 FILL, STROKE = "#dcecd8", J.GREEN      # viens krāsainības paraugs
 
 
@@ -55,23 +62,26 @@ def panel(x, y, name, cw, ch, note1, note2):
     return s
 
 
-def build():
+def build(lang="lv"):
+    en = lang == "en"
     W, H = 960, 170
     s = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
-         'width="%d" height="%d" role="img" aria-label="Krāsainības izretināšana">\n'
-         '<title>Krāsainības izretināšanas shēmas J:a:b</title>\n' % (W, H, W, H))
+         'width="%d" height="%d" role="img" aria-label="%s">\n'
+         '<title>%s</title>\n'
+         % (W, H, W, H,
+            "Chroma subsampling" if en else "Krāsainības izretināšana",
+            "Chroma subsampling schemes J:a:b" if en
+            else "Krāsainības izretināšanas shēmas J:a:b"))
     s += J.rect(0, 0, W, H, "#ffffff", "none", 0)
     for i, (name, cw, ch, n1, n2) in enumerate(SCHEMES):
-        s += panel(28 + i * 190, 38, name, cw, ch, n1, n2)
+        s += panel(28 + i * 190, 38, name, cw, ch, n1[lang],
+                   PER_PIXEL[lang] % n2)
     s += "</svg>\n"
     return s
 
 
 def main():
-    out = os.path.join(HERE, "chroma-subsampling.svg")
-    with open(out, "w", encoding="utf-8", newline="\n") as f:
-        f.write(build())
-    print("Wrote", out)
+    J.write_svgs("chroma-subsampling", build, __doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

@@ -204,3 +204,20 @@ Jans Kolē,Yann Collet,name,
 Jorma Rissanens,Jorma Rissanen,name,
 Jagelonu universitāte,Jagiellonian University,name,
 Tehnions,Technion (Israel Institute of Technology),name,
+gaišums,luma,course,"Y component of YIQ/YUV/YCbCr; ""luminance"" is reserved for the linear-light quantity"
+krāsainība,chroma,course,"Cb/Cr (I/Q, U/V) components; figure labels also say ""krāsa"""
+krāsainības izretināšana,chroma subsampling,course,No established Latvian term for subsampling
+atsauces apgabals (J:a:b),reference region,course,The J x 2 pixel region behind the J:a:b notation
+kvantizācija; kvantēšana,quantization,standard,Latvian text uses both variants
+krāsu telpa,color space,standard,
+diskrētā kosinusu transformācija,discrete cosine transform (DCT),standard,
+līmeņa nobīde,level shift,standard,JPEG: subtract 128 before the DCT
+atlikums (prognozes),residual,standard,Block minus its prediction (AV1)
+prognoze,prediction,standard,
+cilpas filtri,in-loop filters,course,AV1 deblocking / CDEF / loop restoration
+superbloks,superblock,standard,AV1
+Parsevāla vienādība,Parseval's identity,name,
+Voronoja diagramma,Voronoi diagram,name,
+Donta metode,D'Hondt method,name,
+Senlaga metode,Sainte-Laguë method,name,
+Nasirs Ahmeds,Nasir Ahmed,name,Proposed the DCT (1972)

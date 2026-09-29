@@ -77,3 +77,6 @@ a.nav__lang-btn:hover { background:#f0f4ff; }
 .nav__lang-btn.is-active { background:#2F5597; color:#fff; }
 .nav__lang-btn.is-disabled { border-color:#bbb; color:#bbb; }
 
+
+/* Smaller text; use in Markdown via kramdown IAL, e.g. "{: .small}" after a block */
+.small { font-size:80%; }

@@ -6,7 +6,10 @@ Soļi numurēti tāpat kā lekcijā (index.lv.md, "AVIF attēlu formāts").
 Zīmēšanas palīgfunkcijas un krāsas ņemtas no jpeg-pipeline.py, lai abas
 shēmas izskatītos vienādi.
 
-    python avif-pipeline.py
+Uzraksti ir latviski (avif-pipeline.svg) un angliski (avif-pipeline.en.svg):
+
+    python avif-pipeline.py              # abas valodas
+    python avif-pipeline.py --lang en    # tikai angļu
 """
 
 import importlib.util
@@ -63,24 +66,29 @@ def residual_heat():
     return [["rgba(76,120,168,%.2f)" % (0.06 + 0.94 * t) for t in row] for row in m]
 
 
-def build():
+def build(lang="lv"):
+    def t(lv, en):
+        return en if lang == "en" else lv
+
     W, H = 980, 700
+    title = t("AVIF kodēšanas soļi", "AVIF encoding steps")
     s = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
-         'width="%d" height="%d" role="img" aria-label="AVIF kodēšanas soļi">\n'
-         '<title>AVIF kodēšanas soļi</title>\n' % (W, H, W, H))
+         'width="%d" height="%d" role="img" aria-label="%s">\n'
+         '<title>%s</title>\n' % (W, H, W, H, title, title))
     s += rect(0, 0, W, H, "#ffffff", "none", 0)
     s += ('<defs>\n  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" '
           'markerWidth="6" markerHeight="6" orient="auto-start-reverse">\n'
           '    <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>\n'
           '  </marker>\n</defs>\n')
-    s += txt(20, 28, "AVIF kodēšana (viens AV1 intra kadrs): 1.–9. solis",
+    s += txt(20, 28, t("AVIF kodēšana (viens AV1 intra kadrs): 1.–9. solis",
+                       "AVIF encoding (one AV1 intra frame): steps 1–9"),
              15, INK, "start", weight="bold")
 
     # --- 1. rinda: krāsu telpa, izretināšana, superbloki --------------------
     s += J.stack(20, 64, 104, 16, [("#dbe6f3", BLUE, "B"),
                                    ("#dcecd8", GREEN, "G"),
                                    ("#fbdcdc", RED, "R")])
-    s += txt(88, 222, "RGB fotogrāfija", 12)
+    s += txt(88, 222, t("RGB fotogrāfija", "RGB photo"), 12)
 
     s += arrow(160, 136, 236, 136)
     s += badge(198, 114, 1)
@@ -94,16 +102,17 @@ def build():
     s += arrow(386, 136, 462, 136)
     s += badge(424, 114, 2)
     s += txt(424, 158, "4:2:0", 12)
-    s += txt(424, 174, "(vai 4:4:4)", 10.5, "#555")
+    s += txt(424, 174, t("(vai 4:4:4)", "(or 4:4:4)"), 10.5, "#555")
 
     s += J.plane(474, 72, 116, "#e9ecef", "#5a6a7a", "Y")
     s += J.plane(602, 72, 56, "#fde5cc", ORANGE, "Cb", cells=4)
     s += J.plane(602, 132, 56, "#ecdcea", PURPLE, "Cr", cells=4)
-    s += txt(566, 222, "Cb, Cr: puse no izšķirtspējas", 12)
+    s += txt(566, 222, t("Cb, Cr: puse no izšķirtspējas",
+                         "Cb, Cr: half resolution"), 12)
 
     s += arrow(670, 136, 734, 136)
     s += badge(702, 114, 3)
-    s += txt(702, 158, "superbloki", 12)
+    s += txt(702, 158, t("superbloki", "superblocks"), 12)
 
     gx, gy, sb = 746, 80, 52
     s += rect(gx, gy, 4 * sb, 2 * sb, "#e9ecef", "#5a6a7a", 1.4)
@@ -112,7 +121,8 @@ def build():
     s += line(gx, gy + sb, gx + 4 * sb, gy + sb, "#5a6a7a", 1)
     hx, hy = gx + sb, gy
     s += rect(hx, hy, sb, sb, "#fde5cc", ORANGE, 2.2)
-    s += txt(gx + 2 * sb, 66, "Y plakne: 64×64 superbloki", 12)
+    s += txt(gx + 2 * sb, 66, t("Y plakne: 64×64 superbloki",
+                                 "Y plane: 64×64 superblocks"), 12)
 
     # --- 2. rinda (no labās uz kreiso): sadalījums, prognoze, transformācija --
     px, py, ps = 790, 290, 160
@@ -122,14 +132,16 @@ def build():
     s += rect(px + 40, py + 40, 40, 40, "#fde5cc", ORANGE, 2.2)  # kodējamais bloks
     s += partition(px, py, ps)
     s += rect(px, py, ps, ps, "none", INK, 1.6)
-    s += txt(px + ps / 2, py + ps + 20, "rekursīvs sadalījums blokos", 12)
-    s += txt(px + ps / 2, py + ps + 36, "(no 128×128 līdz 4×4, arī taisnstūri)",
+    s += txt(px + ps / 2, py + ps + 20, t("rekursīvs sadalījums blokos",
+                                        "recursive block partitioning"), 12)
+    s += txt(px + ps / 2, py + ps + 36, t("(no 128×128 līdz 4×4, arī taisnstūri)",
+               "(128×128 to 4×4, also rectangles)"),
              10.5, "#555")
 
     s += arrow(782, 366, 716, 366)
     s += badge(749, 344, 4)
     s += txt(749, 388, "intra", 12)
-    s += txt(749, 404, "prognoze", 12)
+    s += txt(749, 404, t("prognoze", "prediction"), 12)
 
     # prognoze: kaimiņu pikseļi (augšā un pa kreisi) un virziens
     bx, by, c = 564, 298, 18
@@ -142,32 +154,37 @@ def build():
         s += ('<line x1="%g" y1="%g" x2="%g" y2="%g" stroke="%s" stroke-width="1.8" '
               'marker-end="url(#arw)"/>\n'
               % (x0 - 2, by + 4, x0 - 4 * c, by + 4 * c + 2, ORANGE))
-    s += txt(bx + 4 * c - c / 2, by + 8 * c + 22, "prognoze no jau kodētiem", 12)
-    s += txt(bx + 4 * c - c / 2, by + 8 * c + 38, "kaimiņu pikseļiem;", 12)
-    s += txt(bx + 4 * c - c / 2, by + 8 * c + 54, "atlikums = bloks − prognoze",
+    s += txt(bx + 4 * c - c / 2, by + 8 * c + 22, t("prognoze no jau kodētiem",
+                                             "prediction from coded"), 12)
+    s += txt(bx + 4 * c - c / 2, by + 8 * c + 38, t("kaimiņu pikseļiem;",
+                                             "neighboring pixels;"), 12)
+    s += txt(bx + 4 * c - c / 2, by + 8 * c + 54, t("atlikums = bloks − prognoze",
+               "residual = block − prediction"),
              10.5, "#555")
 
     s += arrow(530, 366, 448, 366)
     s += badge(489, 344, 5)
-    s += txt(489, 388, "transformācija", 12)
+    s += txt(489, 388, t("transformācija", "transform"), 12)
     s += txt(489, 404, "DCT, ADST, …", 10.5, "#555")
 
     cx, cy, cc = 270, 290, 19
     s += J.matrix(cx, cy, cc, fills=residual_heat())
-    s += txt(cx + 4 * cc, cy + 8 * cc + 20, "atlikuma koeficienti", 12)
-    s += txt(cx + 4 * cc, cy + 8 * cc + 36, "(bloks 4×4 … 64×64)",
-             10.5, "#555")
+    s += txt(cx + 4 * cc, cy + 8 * cc + 20, t("atlikuma koeficienti",
+                                             "residual coefficients"), 12)
+    s += txt(cx + 4 * cc, cy + 8 * cc + 36,
+             t("(bloks 4×4 … 64×64)", "(block 4×4 … 64×64)"), 10.5, "#555")
 
     s += path_arrow([(262, 366), (110, 366), (110, 540)])
     s += badge(171, 344, 6)
-    s += txt(171, 388, "kvantizācija", 12)
+    s += txt(171, 388, t("kvantizācija", "quantization"), 12)
     s += txt(171, 404, "(qindex)", 10.5, "#555")
 
     # --- rekonstrukcijas cilpa: nākamie bloki prognozē no atkodētā ----------
     s += ('<path d="M 440 548 L 440 520 L 538 520 L 538 440 L 552 440" '
           'stroke="%s" stroke-width="1.4" fill="none"%s marker-end="url(#arw)"/>\n'
           % ("#777", DASH))
-    s += txt(450, 536, "rekonstruētie pikseļi", 10.5, "#555", "start")
+    s += txt(450, 536, t("rekonstruētie pikseļi", "reconstructed pixels"),
+             10.5, "#555", "start")
 
     # --- 3. rinda: kvantizētie dati, filtri, entropijas kods, konteiners -----
     by3, bh = 548, 100
@@ -183,36 +200,42 @@ def build():
             out += txt(x + 12, by3 + 46 + 16 * i, l, 11, "#333", "start")
         return out
 
-    s += box(20, 200, "kvantizēti dati",
-             ["koeficienti + bloku", "sadalījums, prognozes", "režīmi, transformāciju",
-              "tipi"], fill="#eef3f9", stroke=BLUE)
+    s += box(20, 200, t("kvantizēti dati", "quantized data"),
+             t(["koeficienti + bloku", "sadalījums, prognozes",
+                "režīmi, transformāciju", "tipi"],
+               ["coefficients + block", "partitioning, prediction",
+                "modes, transform", "types"]), fill="#eef3f9", stroke=BLUE)
     s += arrow(222, 598, 246, 598)
-    s += box(250, 200, "cilpas filtri",
-             ["atjauno attēlu kā", "atkodētājs; izvēlas",
-              "deblocking, CDEF un", "loop restoration"], n=7)
+    s += box(250, 200, t("cilpas filtri", "in-loop filters"),
+             t(["atjauno attēlu kā", "atkodētājs; izvēlas",
+                "deblocking, CDEF un", "loop restoration"],
+               ["reconstruct the image", "like the decoder; choose",
+                "deblocking, CDEF and", "loop restoration"]), n=7)
     s += arrow(452, 598, 476, 598)
-    s += box(480, 200, "entropijas kods",
-             ["adaptīvs aritmētiskais", "kods ar kontekstiem",
-              "→ AV1 bitu plūsma", "(OBU)"], n=8)
+    s += box(480, 200, t("entropijas kods", "entropy coding"),
+             t(["adaptīvs aritmētiskais", "kods ar kontekstiem",
+                "→ AV1 bitu plūsma", "(OBU)"],
+               ["adaptive arithmetic", "coding with contexts",
+                "→ AV1 bitstream", "(OBUs)"]), n=8)
     s += arrow(682, 598, 706, 598)
-    s += box(710, 250, "AVIF (HEIF) fails", [], n=9)
+    s += box(710, 250, t("AVIF (HEIF) fails", "AVIF (HEIF) file"), [], n=9)
     fx, fy = 722, by3 + 38
     for label, w in [("ftyp", 44), ("meta", 90), ("mdat", 92)]:
         s += rect(fx, fy, w, 26, "#ffffff", "#5a6a7a", 1.2)
         s += txt(fx + w / 2, fy + 17, label, 11)
         fx += w
-    s += txt(722, by3 + 82, "meta: izmēri, av1C, krāsu telpa", 10.5, "#333", "start")
-    s += txt(722, by3 + 95, "mdat: AV1 kadra dati", 10.5, "#333", "start")
+    s += txt(722, by3 + 82, t("meta: izmēri, av1C, krāsu telpa",
+                              "meta: size, av1C, color space"),
+             10.5, "#333", "start")
+    s += txt(722, by3 + 95, t("mdat: AV1 kadra dati", "mdat: AV1 frame data"),
+             10.5, "#333", "start")
 
     s += "</svg>\n"
     return s
 
 
 def main():
-    out = os.path.join(HERE, "avif-pipeline.svg")
-    with open(out, "w", encoding="utf-8", newline="\n") as f:
-        f.write(build())
-    print("Wrote", out)
+    J.write_svgs("avif-pipeline", build, __doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

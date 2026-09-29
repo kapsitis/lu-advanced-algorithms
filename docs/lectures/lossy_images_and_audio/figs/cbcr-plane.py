@@ -8,9 +8,13 @@ Katram (Cb, Cr) no 0..255 krāsu aprēķina ar JFIF formulām
 un apgriež līdz 0..255.  Krāsu laukums ir iegults kā PNG attēls, asis un
 uzraksti -- SVG teksts.
 
-    python cbcr-plane.py
+Uzraksti ir latviski (cbcr-plane.svg) un angliski (cbcr-plane.en.svg):
+
+    python cbcr-plane.py              # abas valodas
+    python cbcr-plane.py --lang en    # tikai angļu
 """
 
+import argparse
 import base64
 import io
 import os
@@ -39,13 +43,15 @@ def txt(x, y, s, size=12, anchor="middle", weight="normal", fill="#222"):
             % (x, y, FONT, size, fill, anchor, weight, s))
 
 
-def build():
+def build(lang="lv"):
+    title = ("CbCr plane for Y = 128" if lang == "en"
+             else "CbCr plakne, ja Y = 128")
     X0, Y0, S = 56, 20, 256
     W, H = X0 + S + 24, Y0 + S + 52
     s = ('<svg xmlns="http://www.w3.org/2000/svg" '
          'xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 %d %d" '
-         'width="%d" height="%d" role="img" aria-label="CbCr plakne, ja Y = 128">\n'
-         '<title>CbCr plakne, ja Y = 128</title>\n' % (W, H, W, H))
+         'width="%d" height="%d" role="img" aria-label="%s">\n'
+         '<title>%s</title>\n' % (W, H, W, H, title, title))
     s += '<rect x="0" y="0" width="%d" height="%d" fill="#ffffff"/>\n' % (W, H)
     s += ('<image x="%d" y="%d" width="%d" height="%d" '
           'preserveAspectRatio="none" style="image-rendering:pixelated" '
@@ -77,10 +83,16 @@ def build():
 
 
 def main():
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cbcr-plane.svg")
-    with open(out, "w", encoding="utf-8", newline="\n") as f:
-        f.write(build())
-    print("Wrote", out)
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--lang", choices=["lv", "en", "all"], default="all",
+                    help="uzrakstu valoda (noklusēti abas)")
+    langs = {"lv": ["lv"], "en": ["en"], "all": ["lv", "en"]}[ap.parse_args().lang]
+    here = os.path.dirname(os.path.abspath(__file__))
+    for lang in langs:
+        out = os.path.join(here, "cbcr-plane" + (".en" if lang == "en" else "") + ".svg")
+        with open(out, "w", encoding="utf-8", newline="\n") as f:
+            f.write(build(lang))
+        print("Wrote", out)
 
 
 if __name__ == "__main__":

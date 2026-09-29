@@ -7,7 +7,10 @@ kur alpha_0 = sqrt(1/8), alpha_k = sqrt(2/8).  Signāls x = sum_k y_k c_k,
 tātad koeficients y_k ir k-tā vektora "daudzums" signālā.
 Punkti -- vektora elementi; plānā līnija -- kosinusoīda, no kuras tie ņemti.
 
-    python dct-basis.py
+Uzraksti ir latviski (dct-basis.svg) un angliski (dct-basis.en.svg):
+
+    python dct-basis.py              # abas valodas
+    python dct-basis.py --lang en    # tikai angļu
 """
 
 import importlib.util
@@ -55,11 +58,14 @@ def panel(x, y, k):
     return s
 
 
-def build():
+def build(lang="lv"):
+    name = "DCT basis vectors" if lang == "en" else "DCT bāzes vektori"
+    title = ("DCT-II basis vectors, N = 8" if lang == "en"
+             else "DCT-II bāzes vektori, N = 8")
     W, H = 900, 320
     s = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
-         'width="%d" height="%d" role="img" aria-label="DCT bāzes vektori">\n'
-         '<title>DCT-II bāzes vektori, N = 8</title>\n' % (W, H, W, H))
+         'width="%d" height="%d" role="img" aria-label="%s">\n'
+         '<title>%s</title>\n' % (W, H, W, H, name, title))
     s += J.rect(0, 0, W, H, "#ffffff", "none", 0)
     for k in range(N):
         s += panel(20 + (k % 4) * 220, 30 + (k // 4) * 150, k)
@@ -68,10 +74,7 @@ def build():
 
 
 def main():
-    out = os.path.join(HERE, "dct-basis.svg")
-    with open(out, "w", encoding="utf-8", newline="\n") as f:
-        f.write(build())
-    print("Wrote", out)
+    J.write_svgs("dct-basis", build, __doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

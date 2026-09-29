@@ -621,6 +621,8 @@ Baricentriskās koordinātes ļauj attēlot proporcijas starp trim pozitīviem (
 
 ## Uzdevumi
 
+**Datorlaboratorija:** [Lab: Breaking JPEG on Purpose]({{ '/lectures/lossy_images_and_audio/jpeg_lab/' | relative_url }}) (angļu valodā) -- ar Python programmu soli pa solim saspiežam attēlu "gandrīz kā JPEG", mainot krāsu telpu, bloku izmēru, kvantizāciju un transformāciju, un skaidrojam, kas notiek ar attēlu.
+
 **5.1. uzdevums:** Izmantojam krāsu saspiešanai kvantizācijas algoritmu, kas lieto tikai pārlūkprogrammām draudzīgās krāsas: [Web Safe Color palette](https://www.rapidtables.com/web/color/Web_Safe.html) jeb 6x6x6 krāsu kubu. 
 
 * Pārlūkprogrammām draudzīgas ir tās krāsu koordinātes, kam abi hex cipariņi ir vienādi un dalās ar $3$ ($00,33,66,99,\text{CC},\text{FF}$). Ja krāsai visas 3 koordinātes ir draudzīgas, tad arī pati krāsa ir draudzīga. Teiksim, `00FF99` ir draudzīga krāsa, bet `22BB99` nav, jo "22" un "BB" koordinātes nav atļautas.

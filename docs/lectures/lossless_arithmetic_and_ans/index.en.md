@@ -2,7 +2,7 @@
 layout: default
 title: "Lossless Compression: Arithmetic Coding and ANS"
 lang: en
-permalink: /lectures/lossless_arithmetic_and_ans/
+permalink: /lectures/lossless_arithmetic_and_ans/en/
 ---
 # 2. Lossless Compression: Arithmetic Coding
 

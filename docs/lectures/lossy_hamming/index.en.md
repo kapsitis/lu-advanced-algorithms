@@ -2,7 +2,7 @@
 layout: default
 title: "Error Correction: Hamming Codes"
 lang: en
-permalink: /lectures/lossy_hamming/
+permalink: /lectures/lossy_hamming/en/
 ---
 # 7. Error Correction: Hamming Codes
 

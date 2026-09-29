@@ -2,7 +2,7 @@
 layout: default
 title: "Bezzudumu saspiešana: Beigu uzdevumu atrisinājumi"
 lang: lv
-permalink: /lectures/lossless_final_problemsets/solutions.lv.html
+permalink: /lectures/lossless_final_problemsets/solutions/lv/
 
 docx_header: "Bezzudumu saspiešana. Beigu uzdevumi -- atrisinājumi"
 docx_footer: "2026. gada rudens specseminārs: Algoritmi telekomunikācijās un drošības risinājumos"

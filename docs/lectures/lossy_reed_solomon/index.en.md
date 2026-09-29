@@ -2,7 +2,7 @@
 layout: default
 title: "Error Correction: Reed–Solomon Codes"
 lang: en
-permalink: /lectures/lossy_reed_solomon/
+permalink: /lectures/lossy_reed_solomon/en/
 ---
 # 8. Error Correction: Reed–Solomon Codes
 

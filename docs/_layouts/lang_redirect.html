@@ -1,0 +1,41 @@
+{%- comment -%}
+  Stub for a language-neutral URL: docs/<dir>/index.html (served at <dir>/) or
+  docs/<dir>/solutions.html with permalink <dir>/solutions/. It forwards to
+  <base>.lv.md or <base>.en.md in the same source directory (<dir>/lv/ or <dir>/en/):
+  the language remembered from the last opened page, else the browser language
+  if it is Latvian, else English (also without JavaScript).
+{%- endcomment -%}
+{%- assign base = page.name | split: "." | first -%}
+{%- assign src_dir = page.path | remove: page.name -%}
+{%- assign lv_path = src_dir | append: base | append: ".lv.md" -%}
+{%- assign en_path = src_dir | append: base | append: ".en.md" -%}
+{%- assign lv_page = site.pages | where: "path", lv_path | first -%}
+{%- assign en_page = site.pages | where: "path", en_path | first -%}
+{%- if en_page -%}{%- assign fallback = en_page -%}{%- else -%}{%- assign fallback = lv_page -%}{%- endif -%}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{ fallback.title | default: site.title }}</title>
+<link rel="canonical" href="{{ fallback.url | absolute_url }}">
+<script>
+  (function () {
+    var urls = {
+      lv: {% if lv_page %}"{{ lv_page.url | relative_url }}"{% else %}null{% endif %},
+      en: {% if en_page %}"{{ en_page.url | relative_url }}"{% else %}null{% endif %}
+    };
+    var lang = null;
+    try { lang = window.localStorage.getItem("lu-advanced-algorithms.lang"); } catch (e) {}
+    if (!urls[lang]) {
+      var langs = navigator.languages || [navigator.language || ""];
+      lang = String(langs[0] || "").toLowerCase().indexOf("lv") === 0 ? "lv" : "en";
+    }
+    location.replace((urls[lang] || urls.en || urls.lv) + location.search + location.hash);
+  })();
+</script>
+<noscript><meta http-equiv="refresh" content="0; url={{ fallback.url | relative_url }}"></noscript>
+</head>
+<body>
+<p><a href="{{ fallback.url | relative_url }}">{{ fallback.title | default: site.title }}</a></p>
+</body>
+</html>

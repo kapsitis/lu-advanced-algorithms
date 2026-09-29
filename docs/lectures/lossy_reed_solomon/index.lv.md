@@ -2,7 +2,7 @@
 layout: default
 title: "Kļūdu korekcija: Rīda-Solomona kodi"
 lang: lv
-permalink: /lectures/lossy_reed_solomon/index.lv.html
+permalink: /lectures/lossy_reed_solomon/lv/
 ---
 # 8. Kļūdu korekcija: Rīda-Solomona kodi
 

@@ -2,7 +2,7 @@
 layout: default
 title: Home
 lang: en
-permalink: /
+permalink: /en/
 ---
 # Algorithms in Telecommunications and Security Solutions
 

@@ -2,7 +2,7 @@
 layout: default
 title: "Video Compression"
 lang: en
-permalink: /lectures/lossy_video/
+permalink: /lectures/lossy_video/en/
 ---
 # 6. Video Compression
 

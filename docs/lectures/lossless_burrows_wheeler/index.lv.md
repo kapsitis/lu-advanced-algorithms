@@ -2,7 +2,7 @@
 layout: default
 title: "Berouza-Vīlera transformācija"
 lang: lv
-permalink: /lectures/lossless_burrows_wheeler/index.lv.html
+permalink: /lectures/lossless_burrows_wheeler/lv/
 ---
 # 4. Berouza-Vīlera transformācija
 

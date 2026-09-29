@@ -2,7 +2,7 @@
 layout: default
 title: "Laboratorijas darbs: Apzināti sabojājam JPEG"
 lang: lv
-permalink: /lectures/lossy_images_and_audio/jpeg_lab/index.lv.html
+permalink: /lectures/lossy_images_and_audio/jpeg_lab/lv/
 
 docx_header: "Laboratorijas darbs: Apzināti sabojājam JPEG"
 docx_footer: "LU Algoritmi telekomunikācijās un drošības risinājumos: 5. Zudumradošā saspiešana: attēli un audio"

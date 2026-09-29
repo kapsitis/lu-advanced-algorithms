@@ -2,7 +2,7 @@
 layout: default
 title: "Lab: Breaking JPEG on Purpose"
 lang: en
-permalink: /lectures/lossy_images_and_audio/jpeg_lab/
+permalink: /lectures/lossy_images_and_audio/jpeg_lab/en/
 
 docx_header: "Lab: Breaking JPEG on Purpose"
 docx_footer: "LU Advanced Algorithms: 5. Lossy Compression: Images and Audio"

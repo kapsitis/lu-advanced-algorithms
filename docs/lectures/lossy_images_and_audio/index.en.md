@@ -2,7 +2,7 @@
 layout: default
 title: "Lossy Compression: Images and Audio"
 lang: en
-permalink: /lectures/lossy_images_and_audio/
+permalink: /lectures/lossy_images_and_audio/en/
 ---
 # 5. Lossy Compression: Images and Audio
 

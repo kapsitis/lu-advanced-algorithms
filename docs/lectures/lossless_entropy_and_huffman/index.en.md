@@ -2,7 +2,7 @@
 layout: default
 title: "Lossless Compression: Huffman Code"
 lang: en
-permalink: /lectures/lossless_entropy_and_huffman/
+permalink: /lectures/lossless_entropy_and_huffman/en/
 ---
 # 1. Lossless Compression: Huffman Code
 

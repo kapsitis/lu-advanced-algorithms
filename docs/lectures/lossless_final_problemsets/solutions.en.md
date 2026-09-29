@@ -2,7 +2,7 @@
 layout: default
 title: "Lossless Compression: Problem Set Solutions"
 lang: en
-permalink: /lectures/lossless_final_problemsets/solutions.html
+permalink: /lectures/lossless_final_problemsets/solutions/en/
 
 docx_header: "Lossless Compression. Sample Problems -- Solutions"
 docx_footer: "Fall 2026 Seminar: Algorithms in Telecommunications and Security"

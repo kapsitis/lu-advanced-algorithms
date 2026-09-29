@@ -2,7 +2,7 @@
 layout: default
 title: "Video saspiešana"
 lang: lv
-permalink: /lectures/lossy_video/index.lv.html
+permalink: /lectures/lossy_video/lv/
 ---
 # 6. Video saspiešana
 

@@ -25,15 +25,18 @@ Each published page exists as two files in the **same directory**:
 
 | File | Language | Role | URL |
 | --- | --- | --- | --- |
-| `index.lv.md` | Latvian | **master copy**, edited by humans | `<dir>/index.lv.html` |
-| `index.en.md` | English | derived translation | `<dir>/` (default landing) |
+| `index.lv.md` | Latvian | **master copy**, edited by humans | `<dir>/lv/` |
+| `index.en.md` | English | derived translation | `<dir>/en/` |
+| `index.html` | — | stub (`layout: lang_redirect`), no content | `<dir>/` (redirects) |
 
 - Humans edit the Latvian files. The English file is **derived** from the Latvian file and
   must follow it section by section. Never make content changes only in the English file.
 - If you notice an error in the content (math, pseudocode, numbers, facts), do not silently
   fix it in English: report it so it can be fixed in the Latvian master first, then
   propagate. Obvious spelling typos may be corrected in the English version.
-- Both files sit in one directory so relative links such as `figs/foo.png` work for both.
+- Both files sit in one directory so relative links such as `figs/foo.png` work for both
+  (the layout prepends `../` to relative `src`/`href` in the rendered page, because it is
+  served one folder below its source directory).
   Keep image paths, math, code blocks, tables and HTML anchors (`<a id="Ble13">`) identical;
   translate only prose, headings, alt texts, captions and comments inside code/pseudocode.
 - Front matter (both files need `lang`, and the permalinks must follow this pattern):
@@ -41,24 +44,32 @@ Each published page exists as two files in the **same directory**:
   ```yaml
   # index.lv.md                                  # index.en.md
   lang: lv                                       lang: en
-  permalink: /lectures/<topic>/index.lv.html     permalink: /lectures/<topic>/
+  permalink: /lectures/<topic>/lv/               permalink: /lectures/<topic>/en/
   ```
-  (Home page: `/index.lv.html` and `/`.)
+  (Home page: `/lv/` and `/en/`.) The language-neutral URL `/lectures/<topic>/` is served by
+  the stub `docs/lectures/<topic>/index.html` containing only `layout: lang_redirect` front
+  matter; it redirects to the language remembered from the last opened page, else to Latvian
+  if the browser prefers Latvian, else to English. `docs/404.html` forwards the old
+  `.../index.lv.html` / `.../solutions.html` style addresses.
 - Internal links in content use the language-neutral directory URL, e.g.
   `{{ '/lectures/lossless_lempel_ziv/' | relative_url }}`, in both languages.
-- A new page needs both files plus a nav entry with both titles:
+- A new page needs both files, the `index.html` stub, plus a nav entry with both titles:
   `title: { en: ..., lv: ... }` and `url: /lectures/<topic>/`.
 
 ### How the language switch works (`docs/_layouts/default.html`)
 
 - The layout finds the page's twin: the page in `site.pages` with the same `dir`, the same base
-  name and the other `lang` (`solutions.en.md` <-> `solutions.lv.md`). So a directory can hold
-  several page pairs, but each pair must be named `<base>.lv.md` / `<base>.en.md`, with permalinks
-  `<dir>/<base>.lv.html` / `<dir>/<base>.html` (or `<dir>/` for `index`). The EN/LV buttons link to
-  the twin with `?lang=xx`; nav links use `index.<lang>.md` in the item's directory.
-- A small inline script remembers the choice in `localStorage` (`lu-advanced-algorithms.lang`):
-  opening a Latvian page remembers `lv`. Opening an English (directory) URL while `lv` is
-  remembered redirects to the Latvian twin, and `?lang=en` switches back.
+  name and the other `lang` (`solutions.en.md` <-> `solutions.lv.md`), found by source `path`.
+  So a directory can hold several page pairs, but each pair must be named `<base>.lv.md` /
+  `<base>.en.md`, with permalinks `<dir>/<base>/lv/` / `<dir>/<base>/en/` (or `<dir>/lv/`,
+  `<dir>/en/` for `index`), plus a stub `<base>.html` with `layout: lang_redirect` and
+  `permalink: <dir>/<base>/`. The EN/LV buttons link to the twin; nav links use
+  `index.<lang>.md` in the item's directory.
+- A small inline script remembers the language of every opened page in `localStorage`
+  (`lu-advanced-algorithms.lang`); the `lang_redirect` stubs use it. So internal links written
+  with the language-neutral URL keep the reader's language.
+- `{% include doc_links.html url="/lectures/<topic>/..." %}` also accepts the language-neutral
+  URL and links to the version (and its `.pdf`/`.docx`) in the current page's language.
 
 ## Updating the English translation
 

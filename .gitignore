@@ -54,6 +54,8 @@ _templates
 
 !exams/*/*.pdf
 !worksheets/*/*.pdf
+# PDFs made by convert_directory.py for the website
+!docs/lectures/**/lectures-*.pdf
 crypto/rsa/
 homeworks/to-be-graded
 vp9-transcoder/*

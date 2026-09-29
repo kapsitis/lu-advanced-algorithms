@@ -1,7 +1,7 @@
 # Site navigation. Every title has an English (en) and a Latvian (lv) text.
-# `url` is the language-neutral directory URL of a page (the English version
-# lives there). The layout swaps in the Latvian page (index.lv.html) from the
-# same directory automatically when the current page is Latvian.
+# `url` is the language-neutral directory URL of a page (a stub that redirects to
+# <url>lv/ or <url>en/). The layout links to the page in the current language
+# (index.lv.md -> <url>lv/, index.en.md -> <url>en/) from that directory.
 - title: { en: Home, lv: Sākums }
   url: /
 - title: { en: Lectures, lv: Lekciju materiāli }

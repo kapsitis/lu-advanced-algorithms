@@ -2,7 +2,7 @@
 layout: default
 title: "Bezzudumu saspiešana: Aritmētiskais kods un ANS"
 lang: lv
-permalink: /lectures/lossless_arithmetic_and_ans/index.lv.html
+permalink: /lectures/lossless_arithmetic_and_ans/lv/
 ---
 # 2. Bezzudumu saspiešana: Aritmētiskais kods
 

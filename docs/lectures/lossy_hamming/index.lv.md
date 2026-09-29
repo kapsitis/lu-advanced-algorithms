@@ -2,7 +2,7 @@
 layout: default
 title: "Kļūdu korekcija: Heminga kodi"
 lang: lv
-permalink: /lectures/lossy_hamming/index.lv.html
+permalink: /lectures/lossy_hamming/lv/
 ---
 # 7. Kļūdu korekcija: Heminga kodi
 

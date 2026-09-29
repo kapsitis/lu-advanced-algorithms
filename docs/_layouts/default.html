@@ -1,15 +1,34 @@
 {%- comment -%}
   Bilingual pages: docs/**/index.lv.md (Latvian master) and index.en.md (English),
-  both in the same directory. English is served at the directory URL, Latvian at
-  index.lv.html. A directory may hold more such pairs (solutions.lv.md, solutions.en.md).
-  The "twin" is the page in the same directory with the same base name and the other
-  `lang`, e.g. solutions.en.md <-> solutions.lv.md.
+  both in the same directory, served at <dir>/lv/ and <dir>/en/. A directory may hold
+  more such pairs (solutions.lv.md, solutions.en.md -> <dir>/solutions/lv/, .../en/).
+  The language-neutral URL (<dir>/, <dir>/solutions/) is a stub page with the
+  lang_redirect layout that forwards to one of the two versions.
+  The "twin" is the page with the same source path and the other language suffix,
+  e.g. solutions.en.md <-> solutions.lv.md.
 {%- endcomment -%}
 {%- assign page_lang = page.lang | default: "en" -%}
 {%- if page_lang == "lv" -%}{%- assign other_lang = "en" -%}{%- else -%}{%- assign other_lang = "lv" -%}{%- endif -%}
-{%- assign page_base = page.name | split: "." | first -%}
-{%- assign twin_name = page_base | append: "." | append: other_lang | append: ".md" -%}
-{%- assign twin = site.pages | where: "dir", page.dir | where: "name", twin_name | where: "lang", other_lang | first -%}
+{%- assign lang_suffix = "." | append: page_lang | append: ".md" -%}
+{%- assign twin_suffix = "." | append: other_lang | append: ".md" -%}
+{%- assign twin_path = page.path | replace: lang_suffix, twin_suffix -%}
+{%- assign twin = nil -%}
+{%- if twin_path != page.path -%}{%- assign twin = site.pages | where: "path", twin_path | first -%}{%- endif -%}
+{%- comment -%}
+  A page at <dir>/lv/ is served one or more folders below its source directory, so
+  relative links in its content (figs/foo.png, ../) get that many "../" prepended.
+{%- endcomment -%}
+{%- assign url_depth = 0 -%}
+{%- assign url_parts = page.url | split: "/" -%}
+{%- for part in url_parts -%}{%- if part != "" -%}{%- assign url_depth = url_depth | plus: 1 -%}{%- endif -%}{%- endfor -%}
+{%- assign last_char = page.url | slice: -1 -%}
+{%- if last_char != "/" -%}{%- assign url_depth = url_depth | minus: 1 -%}{%- endif -%}
+{%- assign src_depth = page.path | split: "/" | size | minus: 1 -%}
+{%- assign up = "" -%}
+{%- if url_depth > src_depth -%}
+  {%- assign extra = url_depth | minus: src_depth -%}
+  {%- for i in (1..extra) -%}{%- assign up = up | append: "../" -%}{%- endfor -%}
+{%- endif -%}
 <!doctype html>
 <html lang="{{ page_lang }}">
 <head>
@@ -22,41 +41,9 @@
 <link rel="alternate" hreflang="{{ other_lang }}" href="{{ twin.url | absolute_url }}">
 {%- endif %}
 <script>
-  // Language preference (per browser, localStorage; silently ignored if unavailable).
-  //  - A language button link carries ?lang=xx: remember xx (and go to that version).
-  //  - Opening a Latvian page remembers "lv".
-  //  - Opening an English page (the language-neutral directory URL) while "lv" is
-  //    remembered redirects to the Latvian twin, so plain internal links keep the language.
-  (function () {
-    var KEY = "lu-advanced-algorithms.lang";
-    var pageLang = "{{ page_lang }}";
-    var twinUrl = {% if twin %}"{{ twin.url | relative_url }}"{% else %}null{% endif %};
-    function load() { try { return window.localStorage.getItem(KEY); } catch (e) { return null; } }
-    function save(v) { try { window.localStorage.setItem(KEY, v); } catch (e) {} }
-
-    var chosen = null;
-    try {
-      var params = new URLSearchParams(window.location.search);
-      chosen = params.get("lang");
-      if (chosen !== null) {
-        params.delete("lang");
-        var qs = params.toString();
-        history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
-      }
-    } catch (e) {}
-
-    if (chosen === "en" || chosen === "lv") {
-      save(chosen);
-    } else if (pageLang === "lv") {
-      save("lv");
-      return;
-    } else {
-      chosen = load();
-    }
-    if (chosen && chosen !== pageLang && twinUrl) {
-      location.replace(twinUrl + location.hash);
-    }
-  })();
+  // Remember the language of the opened page (per browser, localStorage; silently
+  // ignored if unavailable). Language-neutral URLs (lang_redirect stubs) use it.
+  try { window.localStorage.setItem("lu-advanced-algorithms.lang", "{{ page_lang }}"); } catch (e) {}
 </script>
 <script>
     window.MathJax = {
@@ -112,7 +99,8 @@
       {%- assign item_title = item.title[page_lang] | default: item.title.lv | default: item.title -%}
       <li class="nav__item {% if item.children %}has-children{% endif %}">
         {% if item.url %}
-          {%- assign target = site.pages | where: "dir", item.url | where: "name", index_name | first -%}
+          {%- assign target_path = item.url | remove_first: "/" | append: index_name -%}
+          {%- assign target = site.pages | where: "path", target_path | first -%}
           <a href="{% if target %}{{ target.url | relative_url }}{% else %}{{ item.url | relative_url }}{% endif %}">{{ item_title }}</a>
         {% else %}
           <span class="nav__label">{{ item_title }}</span>
@@ -121,7 +109,8 @@
           <ul class="nav__submenu">
             {% for child in item.children %}
               {%- assign child_title = child.title[page_lang] | default: child.title.lv | default: child.title -%}
-              {%- assign target = site.pages | where: "dir", child.url | where: "name", index_name | first -%}
+              {%- assign target_path = child.url | remove_first: "/" | append: index_name -%}
+              {%- assign target = site.pages | where: "path", target_path | first -%}
               <li><a href="{% if target %}{{ target.url | relative_url }}{% else %}{{ child.url | relative_url }}{% endif %}">{{ child_title }}</a></li>
             {% endfor %}
           </ul>
@@ -135,7 +124,7 @@
         {%- if code == page_lang %}
       <span class="nav__lang-btn is-active" lang="{{ code }}" title="{{ code_label }}" aria-current="true">{{ code | upcase }}</span>
         {%- elsif twin %}
-      <a class="nav__lang-btn" href="{{ twin.url | relative_url }}?lang={{ code }}" hreflang="{{ code }}" lang="{{ code }}" title="{{ code_label }}">{{ code | upcase }}</a>
+      <a class="nav__lang-btn" href="{{ twin.url | relative_url }}" hreflang="{{ code }}" lang="{{ code }}" title="{{ code_label }}">{{ code | upcase }}</a>
         {%- else %}
       <span class="nav__lang-btn is-disabled" lang="{{ code }}" title="{{ code_label }}: not available" aria-disabled="true">{{ code | upcase }}</span>
         {%- endif -%}
@@ -144,6 +133,21 @@
   </ul>
 </nav>
 
+{%- if up == "" -%}
 {{ content }}
+{%- else -%}
+{%- comment -%} Prefix every src/href with "up", then undo it for absolute URLs, anchors etc. {%- endcomment -%}
+{%- assign src_up = 'src="' | append: up -%}
+{%- assign href_up = 'href="' | append: up -%}
+{%- assign fixed = content | replace: 'src="', src_up | replace: 'href="', href_up -%}
+{%- assign keep = '/|#|?|"|http:|https:|mailto:|data:|javascript:|tel:' | split: "|" -%}
+{%- for k in keep -%}
+  {%- assign from = src_up | append: k -%}{%- assign to = 'src="' | append: k -%}
+  {%- assign fixed = fixed | replace: from, to -%}
+  {%- assign from = href_up | append: k -%}{%- assign to = 'href="' | append: k -%}
+  {%- assign fixed = fixed | replace: from, to -%}
+{%- endfor -%}
+{{ fixed }}
+{%- endif %}
 </body>
 </html>

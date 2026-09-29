@@ -2,7 +2,7 @@
 layout: default
 title: "Bezzudumu saspiešana: Hafmana kods"
 lang: lv
-permalink: /lectures/lossless_entropy_and_huffman/index.lv.html
+permalink: /lectures/lossless_entropy_and_huffman/lv/
 ---
 # 1. Bezzudumu saspiešana: Hafmana kods
 

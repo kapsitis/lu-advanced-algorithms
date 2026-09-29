@@ -2,7 +2,7 @@
 layout: default
 title: Sākumlapa
 lang: lv
-permalink: /index.lv.html
+permalink: /lv/
 ---
 # Algoritmi telekomunikācijās un drošības risinājumos
 

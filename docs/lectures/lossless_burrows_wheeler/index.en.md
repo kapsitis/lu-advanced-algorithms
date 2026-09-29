@@ -2,7 +2,7 @@
 layout: default
 title: "Burrows–Wheeler Transform"
 lang: en
-permalink: /lectures/lossless_burrows_wheeler/
+permalink: /lectures/lossless_burrows_wheeler/en/
 ---
 # 4. Burrows–Wheeler Transform
 

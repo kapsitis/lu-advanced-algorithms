@@ -2,7 +2,7 @@
 layout: default
 title: "Lossless Compression: Lempel–Ziv Algorithms"
 lang: en
-permalink: /lectures/lossless_lempel_ziv/
+permalink: /lectures/lossless_lempel_ziv/en/
 ---
 # 3. Lossless Compression: Lempel–Ziv Algorithms
 

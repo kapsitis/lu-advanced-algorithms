@@ -1,0 +1,36 @@
+---
+layout: null
+permalink: /404.html
+---
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 | {{ site.title }}</title>
+<link rel="stylesheet" href="{{ '/style/main.css' | relative_url }}">
+<script>
+  // Old page addresses (before the <dir>/lv/, <dir>/en/ scheme):
+  //   <dir>/index.lv.html -> <dir>/lv/       <dir>/solutions.lv.html -> <dir>/solutions/lv/
+  //   <dir>/index.en.html -> <dir>/en/       <dir>/solutions.html    -> <dir>/solutions/en/
+  (function () {
+    var p = location.pathname, m, target = null;
+    if ((m = p.match(/^(.*\/)index\.(lv|en)\.html$/))) {
+      target = m[1] + m[2] + "/";
+    } else if ((m = p.match(/^(.*\/)([^\/.]+)\.(lv|en)\.html$/))) {
+      target = m[1] + m[2] + "/" + m[3] + "/";
+    } else if ((m = p.match(/^(.*\/)([^\/.]+)\.html$/)) && m[2] !== "index" && m[2] !== "404") {
+      target = m[1] + m[2] + "/en/";
+    }
+    if (target) location.replace(target + location.search + location.hash);
+  })();
+</script>
+</head>
+<body>
+<main style="padding:1rem">
+<h1>404</h1>
+<p>Lapa nav atrasta. / Page not found.</p>
+<p><a href="{{ '/' | relative_url }}">{{ site.title }}</a></p>
+</main>
+</body>
+</html>

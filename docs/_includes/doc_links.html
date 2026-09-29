@@ -9,9 +9,18 @@ with school years "26_27" expanded to "2026_27", placed next to the .md, e.g.
   /matf78/26_27/78STRUCT_solution_structure/matf78-2026_27-78STRUCT_solution_structure-problems.pdf
 The source path is looked up via the permalink (so class1.md with permalink
 .../handout_class1/ still yields ...-class1.pdf); if no page has that
-permalink, the permalink itself is used as the path.
+permalink, the permalink itself is used as the path. A language-neutral URL
+(a lang_redirect stub, e.g. /lectures/lossy_images_and_audio/jpeg_lab/) is
+replaced by the version in the current page's language (.../jpeg_lab/lv/,
+source index.lv.md -> ...-jpeg_lab-index.lv.pdf).
 {%- endcomment -%}
-{%- assign doc = site.pages | where: "url", include.url | first -%}
+{%- assign web_url = include.url -%}
+{%- assign doc = site.pages | where: "url", web_url | first -%}
+{%- if doc.layout == "lang_redirect" -%}
+  {%- comment -%} Language-neutral URL: use the version in the current page's language. {%- endcomment -%}
+  {%- assign web_url = web_url | append: page.lang | append: "/" -%}
+  {%- assign doc = site.pages | where: "url", web_url | first -%}
+{%- endif -%}
 {%- if doc -%}
   {%- assign src = doc.path | remove: ".md" -%}
 {%- else -%}
@@ -32,5 +41,5 @@ permalink, the permalink itself is used as the path.
   {%- assign stem = stem | append: piece -%}
 {%- endfor -%}
 {%- assign base = dir | append: "/" | append: stem -%}
-[web]({{ include.url | relative_url }}), [pdf]({{ base | append: ".pdf" | relative_url }}), [docx]({{ base | append: ".docx" | relative_url }})
+[web]({{ web_url | relative_url }}), [pdf]({{ base | append: ".pdf" | relative_url }}), [docx]({{ base | append: ".docx" | relative_url }})
 {%- comment -%} no trailing newline, so the include can sit inside a list item {%- endcomment -%}

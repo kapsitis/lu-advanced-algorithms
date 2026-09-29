@@ -2,7 +2,7 @@
 layout: default
 title: "Zudumradošā saspiešana: Attēli un audio"
 lang: lv
-permalink: /lectures/lossy_images_and_audio/index.lv.html
+permalink: /lectures/lossy_images_and_audio/lv/
 ---
 # 5. Zudumradošā saspiešana: Attēli un audio
 
@@ -14,7 +14,7 @@ Apskatām sekojošas sadaļas:
 * Diskrētā kosinusu transformācija
 * Citi attēlu formāti; kvantizācija citās jomās
 
-* **Laboratorijas darbs:** {% include doc_links.html url="/lectures/lossy_images_and_audio/jpeg_lab/index.lv.html" %}
+* **Laboratorijas darbs:** {% include doc_links.html url="/lectures/lossy_images_and_audio/jpeg_lab/" %}
 {: .small}
 
 ## Krāsas un kvantizācija

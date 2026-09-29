@@ -53,17 +53,15 @@ Codec (*coder-decoder*) ir konkrētais audio un video kanāla saspiešanas stand
 
 Vairums CD/DVD atskaņotāju, telefoni, viedie TV un mediju atskaņotāji atbalsta Xvid kodeku. Tas būs ērts vairumam lietotāju. Xvid kodeks ir ātrāks par MPEG-1 un arī mazāk noslogo procesoru.
 
-## MP3 Saspiešana
+## Audio kodējumi
 
-MP3 mērķis ir saspiest mūziku u.c. audiofailus, lai tos varētu pārraidīt datortīklos un glabāt mūzikas atskaņotājos. MP3 atskaņošanai publiska programmatūra parādījās ap 1994.g. Napster parādījās 1999.gadā; agrīns failu apmaiņas serviss, bet failu direktoriju glabāja centralizēti, tāpēc pret to vērsās tiesā un servisu 2001.gadā nācās slēgt.
+Audio kodeki saspiež skaņu, izmantojot to, ka cilvēka dzirde nav ideāla: tā neuztver pārāk augstas frekvences, klusas skaņas blakus skaļām un īsus trokšņus tūlīt pirms vai pēc skaļas skaņas. Vispirms aplūkojam kopīgos jēdzienus, tad divus kodekus: vēsturiski svarīgo MP3 un mūsdienu Opus.
 
-Līdz pat 2017.g. Fraunhofer Institute for Integrated Circuits (svarīgāko patentu turētāji) uzlika tam ierobežojošas licences; ievāca maksu no softa ražotājiem.
+### Audio saspiešanas pamati
 
-Mūsdienās MP3 ir "mantots" (*legacy*) jeb "miris" formāts, bet tam joprojām plašs rīku atbalsts.
+#### Paraugu ņemšana un Naikvista teorēma
 
-### Parauga ātrums (sample rate)
-
-*Sample rate* mēra hercos (1 Hz = $1\ \mathrm{s}^{-1}$) - cik reizes sekundē kaut kas notiek (piemēram, cik bieži nomēra skaņu kā membrānas stāvokli). CD-ROM kvalitātes ierakstam parasti vajag ap 44.1 kHz (CD). (Ir arī standarti, kas izmanto 48 kHz, 88.2 kHz, vai 96 kHz.)
+Skaņa ir gaisa spiediena svārstības. Mikrofons tās pārvērš elektriskā signālā, un to regulāri nomēra -- ņem *paraugus* (*samples*). *Paraugu ņemšanas frekvenci* (*sample rate*) mēra hercos ($1\ \mathrm{Hz} = 1\ \mathrm{s}^{-1}$) -- cik reizes sekundē nomēra signālu. Kompaktdiska kvalitātes ierakstam izmanto $44.1$ kHz (CD); ir arī standarti ar $48$ kHz (video, Opus), $88.2$ kHz vai $96$ kHz.
 
 **Naikvista-Šenona teorēma:** Ja funkcijai $x(t)$ (pēc Furjē transformācijas pielietošanas) nav frekvenču, kas pārsniegtu $B$ hercus, tad to var pilnībā atjaunot, ja zināmas tās vērtības ik pēc laika intervāliem ${\displaystyle \Delta t = \frac{1}{2B}}$. (*Nyquist-Shannon Sampling theorem*)
 
@@ -75,57 +73,103 @@ Mūsdienās MP3 ir "mantots" (*legacy*) jeb "miris" formāts, bet tam joprojām 
 
 [Lecture10 in 2.161](https://ocw.mit.edu/courses/mechanical-engineering/2-161-signal-processing-continuous-and-discrete-fall-2008/lecture-notes/lecture_10.pdf).
 
-Pretpiemērs augstām frekvencēm (divu sinusu starpība):
+**Intuīcija.** Paraugu ņemšanas frekvencei jābūt **vairāk nekā divreiz** lielākai par augstāko signāla frekvenci. Ja paraugus ņem retāk, augstu frekvenci nevar atšķirt no zemas: tie paši paraugi atbilst arī citai, zemākai sinusoīdai (*aliasing*). Tāpēc pirms paraugu ņemšanas signālu filtrē, atmetot frekvences virs $f_s / 2$. Cilvēks dzird līdz apmēram $20$ kHz, tāpēc $44.1$ kHz un $48$ kHz ir pietiekami.
 
-![Divu sinusu starpība](figs/sinus-functions.png)
+<img
+  id="paraugu_nemsana"
+  alt="Sinusoīdas paraugu ņemšana bieži un reti"
+  src="{{ '/lectures/lossy_video/figs/sampling.svg' | relative_url }}"
+  style="width: 100%; max-width: 900px; border:none; background-color:#FFFFFF;"
+/>
 
-### Bitrate (Bitu pārraides ātrums)
+*7 Hz sinusoīda un tās paraugi pie trim paraugu ņemšanas frekvencēm. Pie $8$ Hz tie paši punkti atbilst arī 1 Hz sinusoīdai, jo $\sin\left(2\pi \cdot 7 \cdot \frac{n}{8}\right) = -\sin\left(2\pi \cdot \frac{n}{8}\right)$.*
 
-Svarīgākais saspiešanas parametrs.
+#### Bitu ātrums, CBR un VBR
 
-* MP3 (MPEG layer 3 standarts) atļauj bitu ātrumus no 8 kbit/s līdz 320 kbit/s. Noklusējums ir 128 kbit/s.
-* Salīdzinājumam, [audio CD-ROM](https://en.wikipedia.org/wiki/Compact_Disc_Digital_Audio#Bit_rate) satur 2048 baitus sektorā (un atskaņo 75 sektorus sekundē). Tātad = 153,600 baiti sekundē jeb 1200 kbit/s.
+*Bitu ātrums* (*bitrate*) -- cik bitu sekundē aizņem saspiestā skaņa -- ir svarīgākais saspiešanas parametrs. Nesaspiests kompaktdiska ieraksts ir $44\,100$ paraugi sekundē $\times$ $16$ biti $\times$ $2$ kanāli $= 1411.2$ kbit/s. MP3 parasti izmanto $128$--$320$ kbit/s (apmēram $5$--$10$ reizes mazāk), Opus mūzikai -- $64$--$128$ kbit/s, runai -- $16$--$32$ kbit/s.
 
-Tipiski MP3 faili ir $10 \times$ mazāki par audio kompaktdiska failiem.
+* **Konstants bitu ātrums** (*constant bitrate*, CBR): katra sekunde aizņem vienādi daudz bitu. To viegli pārraidīt pa fiksēta ātruma kanālu, bet vienkāršām vietām (klusumam) tiek iztērēts par daudz bitu, sarežģītām -- par maz.
+* **Mainīgs bitu ātrums** (*variable bitrate*, VBR): kodētājs tur fiksētu *kvalitāti* (piemēram, LAME parametrs `-V 0` ... `-V 9`), un bitu skaits mainās atkarībā no signāla sarežģītības -- to, cik instrumentu spēlē, vai ir troksnis un pārejas. Pie tāda paša vidējā bitu ātruma kvalitāte ir labāka, bet faila izmērs iepriekš nav precīzi zināms, un vecākiem atskaņotājiem bija grūti noteikt skaņdarba garumu.
+* **Ierobežots VBR** (*constrained VBR*) ir kompromiss: bitu ātrums mainās, bet īsos laika intervālos nepārsniedz noteiktu robežu. To izmanto straumēšanā un videozvanos.
 
-### *Constant bitrate* (CBR) un *Variable bitrate* (VBR)
-
-* Mūzikas sarežģītība var būt atkarīga no tā, cik daudzi instrumenti spēlē. VBR to risina, ļaujot bitu ātrumam mainīties atkarībā no signāla. Mūzikas gabalu sadala vairākos *freimos* (*frames*) un iekodē ar atšķirīgiem bitu ātrumiem.
-* Ieraksta kvalitāti VBR gadījumā nosaka lietotāja izraudzīts parametrs (maksimāli atļautais bitu ātrums).
-* VBR var radīt dažiem atskaņotājiem (dekoderiem) grūtības pateikt, cik ilgi gabals skanēs.
-* VBR nav piemērots straumēšanai.
-
-### Dzirdamās skaņas frekvences
+#### Dzirdamās frekvences, kritiskās joslas un filtrubankas
 
 * Cilvēka ausis var uztvert no $20$ līdz $20\,000$ hercu skaņas frekvenci. Pusmūža cilvēki - no $16\,000$ herciem (*dog whistle* uz dzirdamības diapazona robežas).
 * Pirmās oktāvas "la" (jeb **A4**) izmanto toņdakšu, ko sauc **Stuttgart pitch**, kam ir 440 Hz (nosvārsta gaisu 440 reizes sekundē). Ja frekvence palielinās divkārt, skaņa par oktāvu augstāka.
 * "Labi temperēta" skaņu skala saliek $12$ pustoņus ar vienādām blakusesošo pustoņu frekvenču attiecībām.
 * Piemēram, "do" (C) un "do diēzs" (Cis) frekvenču attiecība ir $1$ pret $\sqrt[12]{2}$.
 
-**Analizējošās filtrubankas (filterbanks):** Atdarina cilvēka ausī esošās struktūras, no kurām katra uztver skaņas kaut kādā šaurā frekvenču diapazonā. Šo diapazonu ir ap $24$.
+Iekšējā ausī (gliemezī) katra vieta reaģē uz savu frekvenču apgabalu, tāpēc dzirde darbojas kā filtru komplekts. Apgabalus, kuros skaņas savstarpēji ietekmē viena otras uztveri, sauc par *kritiskajām joslām*; to ir apmēram $24$. Zemās frekvencēs kritiskās joslas ir šauras (apmēram $100$ Hz), augstās -- platas (vairāki kHz): auss zemās frekvences izšķir daudz smalkāk. Šo skalu sauc par Bark skalu.
 
-![Filtrubankas](figs/filter-banks.png)
+**Analizējošās filtrubankas** (*filterbanks*) atdarina šo dzirdes uzbūvi: kodētājs skaņas signālu sadala daudzās frekvenču joslās (parasti ar MDCT -- modificēto diskrēto kosinusu transformāciju, sk. DCT attēlu lekcijā) un katru joslu kvantizē atsevišķi -- tik rupji, cik atļauj dzirde.
 
-Skaņu plūsmā ir dažas situācijas, kad viens tonis nomaskē otru (MP3 paredz, ka otru toni nevarēs dzirdēt; tāpēc tas tiek nomaskēts). Divi gadījumi - tuva frekvence, laika sakritība.
+<img
+  id="audio_joslas"
+  alt="MP3, auss kritiskās joslas un Opus joslas"
+  src="{{ '/lectures/lossy_video/figs/audio-bands.svg' | relative_url }}"
+  style="width: 100%; max-width: 960px; border:none; background-color:#FFFFFF;"
+/>
 
-**Skaņas maskēšana:** Tuvo frekvenču maskēšana (*frequency masking*):
+*MP3 filtrubankas $32$ vienāda platuma joslas, auss $24$ kritiskās joslas un Opus (CELT) $21$ josla uz vienas frekvenču ass.*
 
-![Tuvo frekvenču maskēšana](figs/frequency-masking.png)
+#### Frekvenču maskēšana
 
-Temporālā maskēšana (*temporal masking*):
+Skaļa skaņa padara nedzirdamas klusākas skaņas ar tuvu frekvenci (*frequency masking*). Katrai frekvencei var aprēķināt *maskēšanas slieksni* -- līmeni, zem kura skaņa nav dzirdama. Iekodētājs kvantizē signālu tā, lai kvantizācijas troksnis katrā joslā paliktu zem šī sliekšņa: kur slieksnis ir augsts, bitu var tērēt maz. Maskēšana ir asimetriska: tā daudz tālāk sniedzas uz augstajām frekvencēm nekā uz zemajām.
 
-![Temporālā maskēšana](figs/temporal-masking.png)
+<img
+  id="frekvencu_maskesana"
+  alt="Frekvenču maskēšana"
+  src="{{ '/lectures/lossy_video/figs/frequency-masking.svg' | relative_url }}"
+  style="width: 100%; max-width: 900px; border:none; background-color:#FFFFFF;"
+/>
 
-<!-- https://www.soundonsound.com/sound-advice/q-can-you-help-me-mp3-file-conversion -->
+*Dzirdamības slieksnis klusumā un $1$ kHz, $70$ dB toņa maskēšanas slieksnis (vienkāršots Bark skalas modelis). Tonis A ir skaļāks par B, taču nav dzirdams, jo atrodas tuvu maskējošajam tonim.*
 
-### Stereo skaņa
+#### Temporālā maskēšana
+
+Maskēšana darbojas arī laikā (*temporal masking*): skaļa skaņa nomaskē klusas skaņas, kas skan apmēram $100$--$200$ ms pēc tās (*pēcmaskēšana*), un -- daudz īsāku laiku, apmēram $5$--$20$ ms -- arī pirms tās (*priekšmaskēšana*). Tas ir svarīgi transformāciju kodekiem: kvantizācijas troksnis izplūst pa visu MDCT logu. Ja logs ir garāks par priekšmaskēšanu un pēc klusuma tajā sākas ass sitiens, troksni var sadzirdēt pirms paša sitiena -- to sauc par *pirmsatbalsi* (*pre-echo*). Tāpēc kodeki pārejās pārslēdzas uz īsiem logiem.
+
+<img
+  id="temporala_maskesana"
+  alt="Temporālā maskēšana"
+  src="{{ '/lectures/lossy_video/figs/temporal-masking.svg' | relative_url }}"
+  style="width: 100%; max-width: 900px; border:none; background-color:#FFFFFF;"
+/>
+
+*Priekšmaskēšana un pēcmaskēšana (shematiski) un MP3 garā MDCT loga garums.*
+
+Attēlus ģenerē Python skripti [sampling.py]({{ '/lectures/lossy_video/figs/sampling.py' | relative_url }}), [audio_bands.py]({{ '/lectures/lossy_video/figs/audio_bands.py' | relative_url }}) un [masking.py]({{ '/lectures/lossy_video/figs/masking.py' | relative_url }}).
+
+#### Stereo skaņa
 
 * *Joint Stereo* pārraida kreisās un labās auss skaņu divos kanālos: Vienā kanālā summu, otrā kanālā - starpību.
 * Tā kā abām ausīm ir ļoti līdzīga skaņa, tad summa ir vidējota skaņa, bet starpība ir neliela un to var labi saspiest.
+* *Intensitātes stereo* augstām frekvencēm pārraida tikai vienu kanālu un katras joslas skaļuma attiecību starp kreiso un labo pusi, jo virzienu augstās frekvencēs auss nosaka galvenokārt pēc skaļuma.
 * Cilvēka telpiskā skaņas uztvere (*immersive sound*) ir ļoti niansēta: skaņas virzienu/azimutu var sadzirdēt ar 1 grāda precizitāti; augstumu virs horizonta - ar apmēram 10 grādu precizitāti.
 * Joprojām grūti risināms jautājums, kā novietot skaļruņus un mainīt austiņās dzirdamās lietas, ja cilvēks pārvietojas telpā. Bet MP3 šo nerisina.
 
-## Opus kodeks
+### MP3
+
+*MP3* (*MPEG-1 Audio Layer III*) ir pirmais audio kodeks, kas masveidā izplatījās datoros un internetā, un tas parādīja, ka psihoakustisks kodeks var saspiest mūziku apmēram $10$ reizes, klausītājam gandrīz nemanot atšķirību.
+
+**Vēsture.** MP3 izstrādāja vācu Fraunhofer IIS institūts (K. Brandenburgs u.c.) sadarbībā ar citām organizācijām, balstoties uz 1980. gadu pētījumiem par dzirdes uztveri. To standartizēja kā MPEG-1 daļu (ISO/IEC 11172-3, 1993), un 1995.gadā tika izvēlēts faila paplašinājums `.mp3`. Publiska MP3 atskaņošanas programmatūra parādījās ap 1994.gadu, 1997.gadā -- populārais atskaņotājs Winamp. Napster parādījās 1999.gadā; agrīns failu apmaiņas serviss, bet failu direktoriju glabāja centralizēti, tāpēc pret to vērsās tiesā un servisu 2001.gadā nācās slēgt. Tomēr mūzikas izplatīšana MP3 formātā turpinājās (BitTorrent, kā arī legāli pārnēsājami atskaņotāji, piemēram, iPod no 2001.gada un tiešsaistes mūzikas veikali) un pilnībā mainīja mūzikas industriju.
+
+**Īpatnības.**
+
+* *Hibrīdā filtrubanka*: signālu vispirms sadala $32$ vienāda platuma joslās (polifāzes filtrubanka), tad katru joslu ar MDCT vēl sadala $18$ frekvenču līnijās -- kopā $576$ līnijas. Pārejās izmanto īsos logus ($6$ līnijas), lai mazinātu pirmsatbalsi.
+* *Psihoakustiskais modelis*: iekodētājs katrai joslai aprēķina maskēšanas slieksni un signāla un maskas attiecību un pēc tās sadala bitus. Standarts nosaka tikai atkodēšanu, tāpēc kvalitāte ļoti atkarīga no iekodētāja (vislabākā ilgstoši bija brīvā programma LAME).
+* *Kvantizācija un Hafmana kods*: MDCT koeficientus kvantizē nevienmērīgi (ar pakāpi $\frac{3}{4}$) un kodē ar vienu no $32$ fiksētām Hafmana tabulām (sk. lekciju par [Hafmana kodu]({{ '/lectures/lossless_entropy_and_huffman/' | relative_url }})).
+* *Bitu rezervuārs*: CBR režīmā kadrs var izmantot iepriekšējo kadru neiztērētos bitus -- tas ir neliels VBR elements CBR plūsmā.
+* *Kadri* pa $1152$ paraugiem, bitu ātrumi $32$--$320$ kbit/s; *joint stereo* (M/S un intensitātes stereo).
+* Ierobežojumi: pie zemiem bitu ātrumiem jānogriež augstās frekvences (pie $64$ kbit/s -- virs apmēram $11$ kHz), pirmsatbalss, kodētāja aizture (starp dziesmām bez pauzes rodas klusums, ja to speciāli nekompensē).
+
+**Licencēšana.** MP3 bija aizsargāts ar daudziem patentiem; Fraunhofer IIS un Thomson (vēlāk Technicolor) pārdeva licences un ievāca maksu no programmatūras un ierīču ražotājiem, īpaši par iekodētājiem. Tāpēc atvērtā pirmkoda projekti nevarēja brīvi izplatīt MP3 iekodētājus: LAME tika izplatīts tikai kā pirmkods ("LAME Ain't an MP3 Encoder"), un daudzas Linux distribūcijas MP3 atbalstu neiekļāva līdz pat 2017.gadam. Neskaidrā patentu situācija bija viens no iemesliem, kāpēc Xiph.Org izstrādāja bezmaksas kodekus Vorbis un vēlāk Opus. Pēdējie patenti beidzās ap 2017.gadu, un Technicolor licencēšanas programmu izbeidza; kopš tā laika MP3 var brīvi lietot.
+
+Mūsdienās MP3 ir "mantots" (*legacy*) formāts: jaunākie kodeki (AAC, Opus) pie tāda paša bitu ātruma dod labāku kvalitāti, bet MP3 joprojām atbalsta gandrīz jebkura ierīce.
+
+### Opus
+
+*Opus* ir atvērts un bezmaksas audio kodeks, ko 2012.gadā standartizēja IETF ([RFC 6716](https://www.rfc-editor.org/rfc/rfc6716)). Tas apvieno divus kodekus: Skype runas kodeku SILK un Xiph.Org mūzikas kodeku CELT. Opus ir obligāts WebRTC (videozvani pārlūkprogrammās) un plaši izmantots: Discord, WhatsApp, YouTube (WebM audio), spēļu balss čati.
 
 Failu nosaukumos var parādīties, bet to bieži aizstāj konteinera faila paplašinājums.
 
@@ -134,11 +178,60 @@ Failu nosaukumos var parādīties, bet to bieži aizstāj konteinera faila papla
 * `audiofile.webm` (WebM konteiners straumēšanai vai Web lietojumiem)
 * `audiofile.mka` (Matreska vai MKV konteiners; paplašinājums `*.mka` nozīmē tikai audio)
 
-Opus māk pārslēgties starp divām modēm, kas optimizē dažādas lietas -- vai nu augsta skaņas kvalitāte vai arī spēja pielāgoties dažādas caurlaidības transporta kanāliem un zema aizture (*latency*).
+Opus māk pārslēgties starp režīmiem, kas optimizē dažādas lietas -- vai nu augsta skaņas kvalitāte vai arī spēja pielāgoties dažādas caurlaidības transporta kanāliem un zema aizture (*latency*).
 
-**CELT Mode:** Parasti izmanto mūzikas saspiešanai. Tas nozīmē CELT (Constrained Energy Lapped Transform). Tas izmanto Izmainīto Diskrēto Kosinusu pārveidojumu (*Modified Discrete Cosine Transform*, MDCT).
+**SILK Mode:** SILK mode ir piemērotāka runas saspiešanai. SILK izmanto lineāru paredzošo kodējumu (*Linear Predictive Coding*, LPC) nevis MDCT: runas signālu modelē kā balss saišu ierosmi, kas iet caur balss trakta filtru, un pārraida filtra parametrus un ierosmi. Frekvenču josla līdz $8$ kHz.
 
-**SILK Mode:** SILK mode ir piemērotāka runas saspiešanai. SILK izmanto lineāru paredzošo kodējumu (*Linear Predictive Coding*, LPC) nevis MDCT.
+**CELT Mode:** Parasti izmanto mūzikas saspiešanai. Tas nozīmē CELT (Constrained Energy Lapped Transform). Tas izmanto Izmainīto Diskrēto Kosinusu pārveidojumu (*Modified Discrete Cosine Transform*, MDCT) ar ļoti īsiem kadriem ($2.5$--$20$ ms), tāpēc aizture ir maza.
+
+**Hibrīdais režīms:** zemās frekvences (līdz $8$ kHz) kodē SILK, augstās -- CELT. Iekodētājs režīmu un bitu ātrumu var mainīt katrā kadrā.
+
+**CELT uzbūve un psihoakustika.** CELT MDCT koeficientus sagrupē $21$ joslā, kas tuvina auss kritiskās joslas (sk. attēlu augstāk). Katrai joslai atsevišķi un precīzi kodē tās *enerģiju* (skaļumu) -- no tā cēlies vārds "constrained energy": pat pie ļoti zema bitu ātruma spektra aploce (katras joslas skaļums) paliek pareiza. Joslas *formu* (normētu koeficientu vektoru) kodē ar piramīdas vektoru kvantizatoru (*PVQ*). Ja joslai atliek ļoti maz bitu, to aizpilda ar "salocītu" zemāku frekvenču spektru, nevis atstāj tukšu -- tāpēc Opus pat pie zema bitu ātruma saglabā augstās frekvences. Pārejās kadru sadala vairākos īsos MDCT, lai mazinātu pirmsatbalsi. Opus psihoakustika lielākoties ir iebūvēta pašā formātā (joslas, enerģijas saglabāšana), nevis atsevišķā maskēšanas modelī kā MP3.
+
+**Entropijas kodēšana:** visus simbolus kodē ar *intervālu kodu* (*range coder*) -- aritmētiskā koda variantu (sk. lekciju par [aritmētisko kodu]({{ '/lectures/lossless_arithmetic_and_ans/' | relative_url }})).
+
+**Bitu ātruma režīmi:** VBR (noklusējums), ierobežots VBR un stingrs CBR (`opusenc --vbr/--cvbr/--hard-cbr`, `ffmpeg -vbr on/constrained/off`); bitu ātrumi $6$--$510$ kbit/s. Tīkla lietojumiem ir iebūvēta pazaudētu pakešu slēpšana, papildu kļūdu labošana (FEC) un klusuma nepārraidīšana (DTX).
+
+#### MP3 un Opus salīdzinājums
+
+Salīdzinājumam izmantojam $8$ sekunžu sintētisku mūzikas paraugu ($48$ kHz, stereo), ko izveido Python skripts [audio_examples.py]({{ '/lectures/lossy_video/figs/audio_examples.py' | relative_url }}): $0$--$3$ s -- akordi (toņu signāls ar harmonikām); $3$--$5.5$ s -- tie paši akordi, "hi-hat" troksnis un asi klikšķi; $5.5$--$7$ s -- kluss $1$ kHz tonis ar vienu izolētu klikšķi; $7$--$8$ s -- klusums. Skripts to nokodē ar `ffmpeg` (`libmp3lame` un `libopus`) un analizē atkodētos failus.
+
+| Fails | Kodeks | Režīms | Izmērs | Vidējais bitu ātrums | Atskaņot |
+| --- | --- | --- | --- | --- | --- |
+| [sample_ref.flac]({{ '/lectures/lossy_video/audio-examples/sample_ref.flac' | relative_url }}) | FLAC | bezzudumu atsauce | 494 KB | -- | <audio controls preload="none" src="{{ '/lectures/lossy_video/audio-examples/sample_ref.flac' | relative_url }}"></audio> |
+| [sample_mp3_cbr128.mp3]({{ '/lectures/lossy_video/audio-examples/sample_mp3_cbr128.mp3' | relative_url }}) | MP3 | 128 kbit/s CBR | 129 KB | 129 kbit/s | <audio controls preload="none" src="{{ '/lectures/lossy_video/audio-examples/sample_mp3_cbr128.mp3' | relative_url }}"></audio> |
+| [sample_mp3_vbr_v5.mp3]({{ '/lectures/lossy_video/audio-examples/sample_mp3_vbr_v5.mp3' | relative_url }}) | MP3 | VBR (`-q:a 5`) | 97 KB | 97 kbit/s | <audio controls preload="none" src="{{ '/lectures/lossy_video/audio-examples/sample_mp3_vbr_v5.mp3' | relative_url }}"></audio> |
+| [sample_mp3_cbr64.mp3]({{ '/lectures/lossy_video/audio-examples/sample_mp3_cbr64.mp3' | relative_url }}) | MP3 | 64 kbit/s CBR | 65 KB | 64 kbit/s | <audio controls preload="none" src="{{ '/lectures/lossy_video/audio-examples/sample_mp3_cbr64.mp3' | relative_url }}"></audio> |
+| [sample_opus_vbr64.opus]({{ '/lectures/lossy_video/audio-examples/sample_opus_vbr64.opus' | relative_url }}) | Opus | 64 kbit/s VBR | 90 KB | 89 kbit/s | <audio controls preload="none" src="{{ '/lectures/lossy_video/audio-examples/sample_opus_vbr64.opus' | relative_url }}"></audio> |
+| [sample_opus_cbr64.opus]({{ '/lectures/lossy_video/audio-examples/sample_opus_cbr64.opus' | relative_url }}) | Opus | 64 kbit/s CBR | 65 KB | 64 kbit/s | <audio controls preload="none" src="{{ '/lectures/lossy_video/audio-examples/sample_opus_cbr64.opus' | relative_url }}"></audio> |
+| [sample_opus_vbr32.opus]({{ '/lectures/lossy_video/audio-examples/sample_opus_vbr32.opus' | relative_url }}) | Opus | 32 kbit/s VBR | 50 KB | 49 kbit/s | <audio controls preload="none" src="{{ '/lectures/lossy_video/audio-examples/sample_opus_vbr32.opus' | relative_url }}"></audio> |
+
+**Bitu ātrums laika gaitā.** CBR failos bitu ātrums ir vienāds visā ierakstā -- arī klusumā. VBR bitus pārdala: MP3 VBR trokšņainajā daļā izmanto līdz $200$ kbit/s, bet klusā toņa daļā apmēram $30$ kbit/s; Opus VBR klusumā gandrīz nekā nepārraida. VBR "mērķa" bitu ātrums ir tipiskas mūzikas vidējais -- šim sarežģītajam paraugam (daudz harmoniku, troksnis, pārejas) Opus VBR iztērēja vairāk bitu, nekā norādīts.
+
+<img
+  id="audio_bitu_atrums"
+  alt="Bitu ātrums laika gaitā"
+  src="{{ '/lectures/lossy_video/figs/audio-bitrate.svg' | relative_url }}"
+  style="width: 100%; max-width: 900px; border:none; background-color:#FFFFFF;"
+/>
+
+**Frekvenču josla.** Pie mazāka bitu ātruma MP3 nogriež augstās frekvences: $64$ kbit/s failā nav nekā virs apmēram $11$ kHz. Opus joslu aizpildīšanas dēļ pat pie $32$ kbit/s saglabā frekvences līdz $20$ kHz (to precīzās vērtības gan nav saglabātas -- saglabāta ir katras joslas enerģija).
+
+<img
+  id="audio_spektrs"
+  alt="Vidējais spektrs trokšņainajā daļā"
+  src="{{ '/lectures/lossy_video/figs/audio-spectrum.svg' | relative_url }}"
+  style="width: 100%; max-width: 900px; border:none; background-color:#FFFFFF;"
+/>
+
+**Pirmsatbalss.** Ap izolēto klikšķi ($6.25$ s) attēlā parādīta kodēšanas kļūda (atkodētais signāls mīnus oriģināls). Visiem kodekiem kļūda sākas jau pirms klikšķa, jo kvantizācijas troksnis izplūst pa transformācijas logu; zemākā bitu ātrumā tā ir lielāka. Šeit pirmsatbalss ilgst ne vairāk kā apmēram $10$ ms -- priekšmaskēšanas robežās --, tāpēc parasti nav dzirdama; ar garākiem logiem un bez īsajiem logiem tā būtu daudz pamanāmāka.
+
+<img
+  id="audio_pirmsatbalss"
+  alt="Pirmsatbalss ap klikšķi"
+  src="{{ '/lectures/lossy_video/figs/audio-preecho.svg' | relative_url }}"
+  style="width: 100%; max-width: 900px; border:none; background-color:#FFFFFF;"
+/>
 
 ## H.264 kodējums
 

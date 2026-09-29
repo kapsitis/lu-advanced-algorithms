@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 330" width="960" height="330" role="img" aria-label="Frekvenču joslas">
+<title>Frekvenču joslas</title>
+<rect x="0" y="0" width="960" height="330" fill="#ffffff"/>
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/></marker></defs>
+<line x1="250.0" y1="40" x2="250.0" y2="260" stroke="#e3e7ec"/>
+<text x="250.0" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">0</text>
+<line x1="312.6" y1="40" x2="312.6" y2="260" stroke="#e3e7ec"/>
+<text x="312.6" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">2</text>
+<line x1="375.2" y1="40" x2="375.2" y2="260" stroke="#e3e7ec"/>
+<text x="375.2" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">4</text>
+<line x1="437.8" y1="40" x2="437.8" y2="260" stroke="#e3e7ec"/>
+<text x="437.8" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">6</text>
+<line x1="500.3" y1="40" x2="500.3" y2="260" stroke="#e3e7ec"/>
+<text x="500.3" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">8</text>
+<line x1="562.9" y1="40" x2="562.9" y2="260" stroke="#e3e7ec"/>
+<text x="562.9" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">10</text>
+<line x1="625.5" y1="40" x2="625.5" y2="260" stroke="#e3e7ec"/>
+<text x="625.5" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">12</text>
+<line x1="688.1" y1="40" x2="688.1" y2="260" stroke="#e3e7ec"/>
+<text x="688.1" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">14</text>
+<line x1="750.7" y1="40" x2="750.7" y2="260" stroke="#e3e7ec"/>
+<text x="750.7" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">16</text>
+<line x1="813.3" y1="40" x2="813.3" y2="260" stroke="#e3e7ec"/>
+<text x="813.3" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">18</text>
+<line x1="875.9" y1="40" x2="875.9" y2="260" stroke="#e3e7ec"/>
+<text x="875.9" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">20</text>
+<line x1="938.4" y1="40" x2="938.4" y2="260" stroke="#e3e7ec"/>
+<text x="938.4" y="278.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">22</text>
+<text x="595.0" y="300.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="normal">frekvence, kHz</text>
+<rect x="250.0" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="271.6" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="293.1" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="314.7" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="336.2" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="357.8" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="379.4" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="400.9" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="422.5" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="444.1" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="465.6" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="487.2" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="508.8" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="530.3" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="551.9" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="573.4" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="595.0" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="616.6" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="638.1" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="659.7" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="681.2" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="702.8" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="724.4" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="745.9" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="767.5" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="789.1" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="810.6" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="832.2" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="853.8" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="875.3" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="896.9" y="55.0" width="21.6" height="46.0" fill="#dbe6f3" stroke="#4C78A8" stroke-width="0.8"/>
+<rect x="918.4" y="55.0" width="21.6" height="46.0" fill="#c3d5ea" stroke="#4C78A8" stroke-width="0.8"/>
+<text x="236.0" y="75.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">MP3 filtrubanka</text>
+<text x="236.0" y="92.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#555" text-anchor="end" font-weight="normal">32 vienādas joslas</text>
+<rect x="250.0" y="125.0" width="3.1" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="253.1" y="125.0" width="3.1" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="256.3" y="125.0" width="3.1" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="259.4" y="125.0" width="3.1" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="262.5" y="125.0" width="3.4" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="266.0" y="125.0" width="3.8" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="269.7" y="125.0" width="4.4" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="274.1" y="125.0" width="4.7" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="278.8" y="125.0" width="5.0" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="283.8" y="125.0" width="5.9" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="289.7" y="125.0" width="6.6" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="296.3" y="125.0" width="7.5" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="303.8" y="125.0" width="8.8" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="312.6" y="125.0" width="10.0" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="322.6" y="125.0" width="11.9" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="334.5" y="125.0" width="14.1" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="348.6" y="125.0" width="17.2" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="365.8" y="125.0" width="21.9" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="387.7" y="125.0" width="28.2" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="415.9" y="125.0" width="34.4" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="450.3" y="125.0" width="40.7" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="491.0" y="125.0" width="56.3" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="547.3" y="125.0" width="78.2" height="46.0" fill="#dcecd8" stroke="#54A24B" stroke-width="0.8"/>
+<rect x="625.5" y="125.0" width="109.5" height="46.0" fill="#c4dfbd" stroke="#54A24B" stroke-width="0.8"/>
+<text x="236.0" y="145.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">auss kritiskās joslas</text>
+<text x="236.0" y="162.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#555" text-anchor="end" font-weight="normal">24 Bark joslas</text>
+<rect x="250.0" y="195.0" width="6.3" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="256.3" y="195.0" width="6.3" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="262.5" y="195.0" width="6.3" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="268.8" y="195.0" width="6.3" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="275.0" y="195.0" width="6.3" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="281.3" y="195.0" width="6.3" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="287.6" y="195.0" width="6.3" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="293.8" y="195.0" width="6.3" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="300.1" y="195.0" width="12.5" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="312.6" y="195.0" width="12.5" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="325.1" y="195.0" width="12.5" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="337.6" y="195.0" width="12.5" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="350.1" y="195.0" width="25.0" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="375.2" y="195.0" width="25.0" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="400.2" y="195.0" width="25.0" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="425.2" y="195.0" width="37.6" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="462.8" y="195.0" width="37.6" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="500.3" y="195.0" width="50.1" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="550.4" y="195.0" width="75.1" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<rect x="625.5" y="195.0" width="112.7" height="46.0" fill="#fbd0a3" stroke="#F58518" stroke-width="0.8"/>
+<rect x="738.2" y="195.0" width="137.7" height="46.0" fill="#fde5cc" stroke="#F58518" stroke-width="0.8"/>
+<text x="236.0" y="215.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#222" text-anchor="end" font-weight="bold">Opus (CELT)</text>
+<text x="236.0" y="232.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#555" text-anchor="end" font-weight="normal">21 josla</text>
+<text x="20.0" y="322.0" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">MP3 joslas ir vienlīdz platas (689 Hz), bet auss zemās frekvences izšķir daudz smalkāk; Opus joslas tuvina auss kritiskās joslas.</text>
+</svg>

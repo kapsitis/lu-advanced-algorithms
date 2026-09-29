@@ -6,13 +6,39 @@ permalink: /lectures/lossy_video/index.lv.html
 ---
 # 6. Video saspiešana
 
+## Ievads
+
 Video satura saspiešanai nepieciešami divi kodeki -- audio un video. Daži kodeki ir pietiekami plaši sastopami kā standarti, ietver mūsdienīgas idejas (labu līdzsvaru starp saspiešanas ātrumu, faila izmēru un kvalitāti), ir atskaņojami Web pārlūkos un dažādās citās vidēs un arī rediģējami ar Open Source programmatūru.
 
-Mūsu kursā tie būs **AV1** video saturam un **Opus** audio saturam. Agrākajās desmitgadēs bija citi populāri standarti - H.264 (video) un MP3 (audio); jau tajos parādījās visas svarīgākās saspiešanas idejas un tie izplatījās pateicoties Napster un BitTorrent failu apmaiņas kustībām.
+Šajā lekcijā aplūkojam audio kodekus **MP3** un **Opus** un video kodekus **H.264** un **VP9** (kā arī to pēcteci AV1). H.264 un MP3 bija populārākie standarti agrākajās desmitgadēs; jau tajos parādījās visas svarīgākās saspiešanas idejas, un tie izplatījās, pateicoties Napster un BitTorrent failu apmaiņas kustībām. VP9 (un AV1) un Opus ir atvērti, bezmaksas mūsdienu kodeki, ko izmanto pārlūkprogrammas un videozvani.
 
-Filmas parasti atskaņo no viena konteinera faila, kurā audio un video plūsmas tiek *multipleksētas*. Tipiski konteineru standarti, kurus apskatīsim ir **MKV (Matroska)** atskaņošanai, piemēram, ar VLC. Un arī **WebM** -- atskaņošanai pārlūkprogrammās.
+### Faili, konteineri un kodeki
 
-## Redzes sajūta, HVS modelis
+Runājot par mediju failiem, jāatšķir trīs lietas:
+
+* **Faila paplašinājums** (`.mp4`, `.webm`, `.mp3`, …) ir tikai daļa no faila nosaukuma -- norāde, kāda veida saturs tajā *varētu* būt. Programmas pēc tā izvēlas atskaņotāju, bet paplašinājums var arī maldināt.
+* **Konteiners** (*container*) ir faila formāts, kas vienā failā vai straumē apvieno (*multipleksē*) vairākas *plūsmas* (*streams*) -- video, vienu vai vairākus audio celiņus, subtitrus -- un pievieno tām laika zīmogus, lai tās atskaņotu sinhroni, metadatus (nosaukums, valoda) un indeksu, lai varētu ātri pārlēkt uz jebkuru vietu. Konteiners pats datus nesaspiež.
+* **Kodeks** (*codec*, *coder–decoder*) ir vienas plūsmas saspiešanas algoritms un formāts: iekodētājs (*encoder*) pārvērš nesaspiestus kadrus vai skaņas paraugus bitu virknē, atkodētājs (*decoder*) -- atpakaļ.
+
+Vienu un to pašu kodeku var ievietot dažādos konteineros, un vienā konteinerā var būt dažādi kodeki. Tāpēc no paplašinājuma vien nevar zināt, vai ierīce failu atskaņos -- jāzina, kādi kodeki ir iekšā. To var noskaidrot, piemēram, ar `ffprobe fails.mp4` (vai programmu MediaInfo).
+
+| Konteiners | Paplašinājums | Tipiski video kodeki | Tipiski audio kodeki | Kur lieto |
+| --- | --- | --- | --- | --- |
+| MP4 (MPEG-4 Part 14) | `.mp4`, `.m4a` | H.264, H.265, AV1 | AAC, Opus | gandrīz visur: telefoni, straumēšana, sociālie tīkli |
+| WebM (Matroska apakškopa) | `.webm` | VP8, VP9, AV1 | Opus, Vorbis | pārlūkprogrammas (HTML5 video), YouTube |
+| Matroska (MKV) | `.mkv`, `.mka` | jebkurš | jebkurš | filmas ar vairākiem audio celiņiem, subtitriem, nodaļām |
+| Ogg | `.ogg`, `.opus` | (reti) | Opus, Vorbis, FLAC | audio faili |
+| IVF | `.ivf` | VP8, VP9, AV1 | -- | vienkāršākais video konteiners: tikai viena video plūsma bez audio; kodeku testiem un pētniecībai (sk. "VP9 kodējums") |
+
+Agrāk bija populāri arī AVI (Microsoft, `.avi`; bieži ar DivX vai Xvid kodeku), MOV (Apple QuickTime, `.mov`), FLV (Flash Video) un 3GP (3G mobilie tālruņi). Daži formāti ir gan kodeks, gan faila formāts: `.mp3` failā ir vienkārši MP3 kadri pēc kārtas (un, iespējams, ID3 metadati), bez īsta konteinera.
+
+**Pārpakošana un pārkodēšana.** Ja maina tikai konteineru (*remux*), plūsmu bitus var nokopēt nemainītus (`ffmpeg -i ievade.webm -c copy izvade.mkv`): tas ir ātri un kvalitāti nemaina. Ja jāmaina kodeks (*transcode*), plūsma jāatkodē un jāiekodē no jauna: tas ir lēni, un zudumradošam kodekam katra atkārtota iekodēšana kvalitāti pasliktina (*generation loss*).
+
+### Redzes un dzirdes modeļi: uz kā rēķina ietaupa
+
+Saspiešana ietaupa bitus divos veidos. Pirmkārt, tā novērš *statistisku liekumu* (*redundancy*): blakus esošie pikseļi un secīgi kadri ir līdzīgi, tāpēc tos var prognozēt un kodēt tikai starpību -- to dara arī bezzudumu metodes. Otrkārt, zudumradoša saspiešana atmet *uztverei nesvarīgo* (*irrelevance*): informāciju, kuras trūkumu cilvēks nepamanīs. Kas tieši ir nesvarīgs, nosaka redzes un dzirdes modeļi.
+
+#### Redze (HVS modelis)
 
 *Human Visual System* (HVS) Model - attēlu un audio apstrādei izveidots vidējots cilvēka redzes modelis.
 
@@ -20,38 +46,22 @@ Redzes uztveri veido nūjiņas un konusiņi; modelis pieņem, ka nūjiņu izšķ
 
 Krāsu televīzijas rītausmā bija teiciens: "Chrominance is at half resolution of luminance".
 
-### Mirgošanas frekvence
+Video kodeki izmanto šādas redzes īpašības:
+
+* **krāsainība ar zemāku izšķirtspēju** -- 4:2:0 izretināšana (sk. JPEG lekciju) krāsu datus samazina $4$ reizes;
+* **augstas telpiskās frekvences** (sīkas detaļas, troksnis) redze uztver vājāk, tāpēc atbilstošos DCT koeficientus kvantizē rupjāk;
+* **faktūrās un kustībā** kļūdas pamana mazāk nekā gludos apgabalos (debesis, āda), tāpēc iekodētājs gludos apgabalos var tērēt vairāk bitu (adaptīvā kvantizācija);
+* **kadru ātrums**: $24$--$30$ kadri sekundē jau rada nepārtrauktas kustības iespaidu (sk. tālāk).
+
+#### Mirgošanas frekvence
 
 Mirgošana (*flicker*) ir efekts, ko rada kadru pārslēgšana. Filmu ieraksts: 24 kadri sekundē (un leģendas par 25.kadru). Lai mazinātu mirgošanas sajūtu, kadrus atkārto (parasti bez izmaiņām), lai mirgotu 48 vai 72 reizes sekundē.
 
 Televīzijas ierakstos ir 25 vai 30 kadri sekundē; mirgošana mēdz būt divreiz biežāk (50 Hz vai 60 Hz), kas izmanto "interlacing" -- pārzīmē tikai daļu no pikseļu rindām. Katodstaru lampas mirgo ar 50 Hz vai 60 Hz frekvenci (regulāri maina gaismas intensitāti); šādu mirgošanu cilvēks var pamanīt.
 
-## Konteineri un kodeki
+#### Dzirde
 
-Filma pie patērētāja nonāk kā fails vai kā straumējams video. Šie ir konteineru formāti, ko atbalsta YouTube:
-
-* MP4 (daļa no MPEG-4 standarta); paplašinājums `*.mp4`
-* AVI (Audio Video Interleaved/Microsoft); paplašinājums `*.avi`
-* WMV (Windows Media Video priekš WM Player); paplašinājums `*.wmv`
-* WebM (BSD licencēts konteiners/Google)
-* MOV (QuickTime/Apple); paplašinājums `*.mov`
-* FLV (Flash Video)
-* 3GP (3G mobilo sakaru video)
-
-Google piedāvā vienkāršus konteinerus **WebP** (attēliem) un **WebM** (filmām). Nopietnai videomateriāla pasniegšanai (daudzi kanāli, subtitri vairākās valodās, navigācija pa filmu utt.) ir piemērotāks **MKV** jeb Matrjoškas konteiners.
-
-**WebP:** WebP nodrošina nedaudz labāku saspiešanu kā JPEG vai MPEG-4. **WebP**, kam ir gan bezzudumu, gan zudumradošās saspiešanas funkcijas, panāk mazākus attēlu izmērus, salīdzinot attiecīgi ar PNG un JPEG (gan tipiskiem failiem Internetā, gan ļoti optimāli saspiestiem ar `pngcrush` u.c.)
-
-**WebM:** Video formāts **WebM** ir draudzīgi licencēts, patīk Vikipēdijai. Lietojams ar pārlūkprogrammās iebūvēto HTML5 video atskaņotāju kā arī ar daudziem citiem.
-
-### Kodeki
-
-Codec (*coder-decoder*) ir konkrētais audio un video kanāla saspiešanas standarts. Katram konteineru formātam lietojami daži populāri kodeki:
-
-* DivX, Xvid (AVI konteinerā)
-* MPEG (MP4 konteinerā) izmanto dažādās aplikācijās un arī dzelžos. Tas ilgstoši bijis industrijas standarts.
-
-Vairums CD/DVD atskaņotāju, telefoni, viedie TV un mediju atskaņotāji atbalsta Xvid kodeku. Tas būs ērts vairumam lietotāju. Xvid kodeks ir ātrāks par MPEG-1 un arī mazāk noslogo procesoru.
+Audio kodeki izmanto to, ka cilvēks dzird tikai frekvences apmēram no $20$ Hz līdz $20$ kHz, ka skaļa skaņa nomaskē klusākas skaņas ar tuvu frekvenci (*frekvenču maskēšana*) un tūlīt pirms vai pēc tās (*temporālā maskēšana*), un ka abās ausīs parasti skan ļoti līdzīgs signāls (*stereo*). Šīs īpašības sīkāk aplūkotas nodaļā "Audio kodējumi".
 
 ## Audio kodējumi
 
@@ -295,7 +305,7 @@ Ja video ir $356 \times 260$ pikseļi, tad freimu izmēri un saspiešanas attiec
 Šādu attēlu pārraidīšanai vajadzīgais tīkla savienojums:
 
 $$
-30\,\text{frame/s}\cdot 4.8\,\text{Kb/frame}\,\cdot 8 = 1.2\,\text{Mbit/s}.
+30\,\text{kadri/s}\cdot 4.8\,\text{KiB/kadrs}\cdot 1024 \cdot 8 \approx 1.18\,\text{Mbit/s}.
 $$
 
 Kopā ar audio tas var būt 1.45 megabiti sekundē, kas aizņem T1 Interneta savienojumu (viens vītais pāris; 1.544 Mbps).
@@ -450,46 +460,160 @@ Tā kā RDO izvēlas lētāko pierakstu, tipiskā plūsmā katram blokam ir "dab
 
 ## Kodeku lietojumi
 
-### Steganogrāfija
+### Steganogrāfija un ūdenszīmes
 
-Steganogrāfija nodarbojas ar datu noslēpšanu cita veida failos -- piemēram, teksta failos, audio vai video failos kā arī attēlos. Var izmantot gan mediju faila saturisko daļu (redzamie pikseļi, skaņas u.c.), gan hederus (*metadatus*).
+Abas tehnoloģijas mediju failā ievieto papildu informāciju, kuru skatītājs vai klausītājs nepamana, bet tām ir pretēji mērķi:
 
-Ekstrēms piemērs - informācijas slēpšana DNS protokolā: [Michal Drzymala, et al. Network Steganography in the DNS Protocol](http://www.czasopisma.pan.pl/Content/101654/PDF/47.pdf?handler=pdf)
-
-Aizsardzība pret steganogrāfiju var būt divējāda:
-
-* Steganalīze (*steganalysis*) reizēm var atrast modificētā materiāla oriģinālu (kurā vēl nav slepenā ziņojuma) un salīdzināt ar pārsūtīto ziņojumu. Vai arī meklēt citas neraksturīgas izmaiņas mediju failos, sabojātas ūdenszīmes u.c.
-* Steganogrāfija mēdz nebūt noturīga pret nelielām faila izmaiņām, ko tipisks lietotājs (filmas vai attēla skatītājs nepamanītu). Zudumradošie kodeki var netīšām steganogrāfisko ziņojumu sabojāt pat nepamanot tā klātbūtni.
-
-### Ūdenszīmju tehnoloģijas
-
-*Ūdenszīmju tehnoloģijas* (*Watermark techniques*) pievieno failam kādu papildu informāciju. Tās var izmantot autortiesību aizsardzībai, individuālu kopiju marķēšanai, sekojot medija vai tā fragmentu izplatīšanai vai mediju satura aizsardzībai pret izmainīšanu.
-
-Informatīvākās ūdenszīmes var noskaidrot, kurš aizsargātā medija eksemplārs nopludināts. Ūdenszīmju ievietošana ir radniecīgs uzdevums steganogrāfijai.
+* **Steganogrāfija** (*steganography*) slēpj pašu ziņojuma **esamību**: novērotājam nav jāuzzina, ka parastajā attēlā, dziesmā vai video ir slepens ziņojums. Svarīgākais ir nepamanāmība un ietilpība; noturība pret faila izmaiņām nav obligāta -- sūtītājs un saņēmējs parasti var vienoties par nemainītu faila pārsūtīšanu.
+* **Ūdenszīme** (*watermark*) nav slepena -- var būt pat zināms, ka tā ir --, bet tai jābūt piesaistītai saturam: tā jāspēj nolasīt arī pēc tam, kad failu pārkodē, samazina, apgriež vai kāds mēģina ūdenszīmi izdzēst. To izmanto autortiesību norādīšanai, lai noskaidrotu, kurš eksemplārs nopludināts, vai lai pārbaudītu, ka saturs nav mainīts.
 
 ![Ūdenszīmes ievietošana](figs/embedding-watermark.png)
 
-Ūdenszīmes ievieto jau gatavā mediju failā vai nu radīšanas brīdī, vai vēlāk - izveidojot speciālu kopiju lietotājam. Tās var pievienot arī, mediju failam šķērsojot organizācijas drošības perimetru.
+*Ūdenszīmes ievietošana: no oriģinālā attēla (Original Image) un ūdenszīmes (Watermark) ievietošanas procedūra izveido attēlu ar ūdenszīmi.*
 
-* Izšķir *redzamas ūdenszīmes* (*visible watermarks*) -- Visām PDF faila lappusēm uzkrāsot kādu attēlu vai visu bibliotēkai piederošu grāmatu 17.lpp. iespiest zīmogu.
-* Ir arī *neredzamas ūdenszīmes* (*invisible watermarks*). Tās palīdz atzīmēt faila izcelsmi, saņēmēju. Reizēm arī šīs informācijas *nenoliedzamību* (*nonrepudiation*).
+**Kur slēpt datus.** Datus var ievietot mediju faila saturā (pikseļos, skaņas paraugos), saspiestās plūsmas simbolos vai metadatos (galvenēs). Ekstrēms piemērs ir informācijas slēpšana tīkla protokolos: [Michal Drzymala, et al. Network Steganography in the DNS Protocol](http://www.czasopisma.pan.pl/Content/101654/PDF/47.pdf?handler=pdf).
 
-<!-- -->
+* *Telpiskās* metodes maina pikseļus vai paraugus tieši, piemēram, mazāk nozīmīgos bitus (*LSB*). Tās ir vienkāršas un ar lielu ietilpību, bet pirmā zudumradošā saspiešana tās izdzēš.
+* *Spektrālās* metodes maina koeficientus pēc transformācijas (DCT, DFT vai vilnīšu (*wavelet*) transformācijas). Augstāko frekvenču koeficientus kvantizācija nodzēš pirmos, tāpēc tur ievieto tikai trauslas zīmes; noturīgas ūdenszīmes parasti ievieto *vidējās* frekvencēs -- tās ir pietiekami svarīgas, lai saspiešana tās saglabātu, bet ne tik pamanāmas kā zemās frekvences.
+* *Saspiestās plūsmas* metodes maina kodēšanas lēmumus, nevis pikseļus: piemēram, JPEG kvantizētos DCT koeficientus vai video kodeka simbolus -- kustības vektorus, prognozes režīmus, `skip` karodziņu. Nodaļā "VP9 kodējums" (sk. "Kodētāja lēmumi: Rate-Distortion Optimization") aprakstīts, ka vienu un to pašu atkodēto kadru bieži var iegūt ar dažādiem simboliem; šādas izvēles var nest slēptus bitus, nemainot nevienu pikseli.
 
-* Izšķir *trauslas ūdenszīmes* (*fragile*), ko viegli sabojāt pat nelieliem medija pārveidojumiem - var palīdzēt atklāt, ja fails ticis mainīts.
-* Un *noturīgas ūdenszīmes* (*robust*), kas labi saglabājas arī pēc mediju faila manipulēšanas vai pat apzināta mēģinājuma no tā izdzēst ūdenszīmi.
+**Ūdenszīmju veidi.**
 
-Bieži vajag gan trauslas, gan noturīgas - lai noskaidrotu faila patieso izcelsmi un vēl arī - vai tas nav ticis mainīts pa ceļam līdz saņēmējam.
+* *Redzamas* (*visible*) ūdenszīmes -- logotips video stūrī, vai visām PDF faila lappusēm uzkrāsots kāds attēls, vai zīmogs visu bibliotēkai piederošo grāmatu 17.lpp.; *neredzamas* (*invisible*) -- tās atzīmē faila izcelsmi vai saņēmēju, reizēm arī nodrošina šīs informācijas *nenoliedzamību* (*nonrepudiation*).
+* *Trauslas* (*fragile*) ūdenszīmes sabojājas jau pie nelielām izmaiņām -- tās palīdz atklāt, ka fails ticis mainīts; *noturīgas* (*robust*) saglabājas arī pēc pārkodēšanas, mērogošanas, apgriešanas un apzinātiem mēģinājumiem tās izdzēst. Bieži vajag abas: lai noskaidrotu faila patieso izcelsmi un vēl arī -- vai tas nav ticis mainīts pa ceļam līdz saņēmējam.
+* *Individuālās* (*forensic*) ūdenszīmes katram lietotājam izveido atšķirīgu kopiju. Straumēšanas servisi to dara efektīvi, iepriekš sagatavojot katram video segmentam divus variantus ar dažādu zīmi (*A/B watermarking*): lietotāja saņemtā variantu virkne kodē viņa identifikatoru. Ja filma nonāk pirātu vietnē (arī nofilmēta no ekrāna), pēc ūdenszīmes var noskaidrot, no kura konta tā nopludināta.
 
-* Izšķir *telpiskas ūdenszīmes* (*spatial*), kas parādās noteiktā medija vietā. Noteiktos pikseļos var kvalitatīvi noglabāt datus, bet tie parasti nav noturīgi.
-* Un *spektrālas ūdenszīmes* (*spectral*) kas izmaina mediju faila spektrālā pārveidojumā (DCT, DFT vai DWT - t.i. kosinusu, Furjē vai vilnīšu/wavelet pārveidojumā) esošos koeficientus - piemēram, tos, kas atbilst augstākajām frekvencēm, jo cilvēki šīs frekvences grūtāk atšķir.
+Ūdenszīmēm svarīga arī *ietilpība* (*capacity*) -- cik bitu var ievietot -- un zemas skaitļošanas izmaksas: individuālās ūdenszīmes jāievieto katrai kopijai atsevišķi, un noteikšanai jādarbojas arī uz lieliem video apjomiem.
 
-Spektrālas ūdenszīmes mēdz būt noturīgākas. Ūdenszīmēm vēl arī būtiska ietilpība (*capacity*) - cik daudz datu ūdenszīmē var ievietot. Un zema sarežģītība (*low complexity*), ja digitāla satura izmantošanas pārkāpumu jāvar pamatot vispārsaprotamā veidā.
+**Uzbrukumi un aizsardzība.**
 
-Lai uzbruktu ūdenszīmēm, attēlus (piemēram JPEG vai citu zudumradošu formātu attēlus) var saspiest vai pārveidot -- permutēt pikseļus, apgriezt, mērogot, ģeometriski deformēt.
+* *Steganalīze* (*steganalysis*) mēģina noteikt, vai failā ir slēpts ziņojums, parasti bez oriģināla: tā meklē statistiskas novirzes (piemēram, mazāk nozīmīgo bitu vai DCT koeficientu histogrammās, kas slēpšanas dēļ kļūst neraksturīgas) vai izmanto mašīnmācīšanos, kas apmācīta uz tīriem un modificētiem failiem.
+* *Aktīvais uzraugs* (*active warden*) visus caurejošos failus nedaudz pārveido -- pārkodē, samazina vai pārraksta saspiestās plūsmas simbolus "kanoniskā" formā (kādu izvēlētos parasts iekodētājs). Tas iznīcina steganogrāfiju (un trauslas ūdenszīmes), nepasliktinot saturu skatītājam.
+* Lai uzbruktu noturīgām ūdenszīmēm, attēlus (piemēram JPEG vai citu zudumradošu formātu attēlus) var saspiest vai pārveidot -- permutēt pikseļus, apgriezt, mērogot, ģeometriski deformēt, vai apvienot vairākas atšķirīgas kopijas (*collusion*), vidējojot tās.
+
+### Digitālo tiesību pārvaldība (DRM)
+
+*Digitālo tiesību pārvaldība* (*Digital Rights Management*, DRM) ļauj maksas satura (filmu, seriālu, sporta pārraižu) izplatītājiem noteikt, kurš, cik ilgi un kādā ierīcē saturu drīkst atskaņot. Pamatideja: saspiesto video un audio plūsmu **šifrē**, un atšifrēšanas atslēgu izsniedz tikai licencētai ierīcei. Šifrēšana notiek pēc saspiešanas (šifrētus datus vairs nevar saspiest), un atšifrē tieši pirms atkodēšanas.
+
+**Kopējā šifrēšana (CENC).** Standarts ISO/IEC 23001-7 *Common Encryption* (CENC) nosaka, kā šifrēt MP4 (ISO bāzes mediju faila formāta) failus ar AES-128. Šifrē tikai video un audio kadru datus, bet konteinera struktūru un kodeka galvenes atstāj atklātas, lai atskaņotājs failu varētu parsēt un pārlēkt uz jebkuru vietu. Ir divas shēmas: `cenc` (AES-CTR režīms) un `cbcs` (AES-CBC, šifrējot tikai daļu bloku, piemēram, $1$ no katriem $10$). Galvenais ir tas, ka **viens un tas pats šifrētais fails** der vairākām DRM sistēmām: failā ir atslēgas identifikators (KID), un katrai DRM sistēmai -- sava `pssh` kaste ar informāciju, kā iegūt licenci. Parasti saturu sagatavo fragmentētos MP4 failos (CMAF, ISO/IEC 23000-19) un straumē ar MPEG-DASH (ISO/IEC 23009-1) vai Apple HLS (RFC 8216).
+
+**DRM sistēmas.**
+
+* **Google Widevine** -- Chrome, Firefox, Android, Chromecast, daudzi viedie televizori. Drošības līmenis L1 nozīmē, ka atšifrēšana un atkodēšana notiek aizsargātā aparatūras vidē (*trusted execution environment*), L3 -- tikai programmatūrā; augstākās izšķirtspējas saturu parasti izsniedz tikai L1 ierīcēm.
+* **Apple FairPlay Streaming** -- Safari, iOS, macOS, Apple TV; izmanto HLS un `cbcs` shēmu.
+* **Microsoft PlayReady** -- Edge, Windows, Xbox, daudzi televizori un televīzijas priedēkļi.
+
+Pārlūkprogrammā šīs sistēmas pieslēdz ar W3C standartu *Encrypted Media Extensions* (EME, 2017): tīmekļa lapas JavaScript kods saņem no faila šifrēšanas informāciju, pieprasa licenci no licenču servera un nodod to pārlūkprogrammas *satura atšifrēšanas modulim* (*Content Decryption Module*, CDM). CDM ir slēgta programmatūra, kuras atslēgas un atšifrētie kadri nav pieejami lapai; atvērts atsauces variants testēšanai ir *ClearKey*.
+
+**Ierobežojumi.** DRM nevar novērst "analogo caurumu" (*analog hole*): ekrānu var nofilmēt. Tāpēc DRM papildina ar izejas aizsardzību (HDCP šifrēšana HDMI kabelī) un individuālajām ūdenszīmēm, kas ļauj atrast noplūdes avotu. DRM ir arī kritizēts, jo ierobežo likumīgu satura lietošanu (piemēram, rezerves kopijas) un balstās uz slēgtu programmatūru.
+
+## Uzdevumi
+
+**6.1. uzdevums (Naikvista teorēma):** Mūzikas ierakstā ir frekvences līdz $20$ kHz.
+
+* **(a)** Kāda ir mazākā paraugu ņemšanas frekvence, ar kuru šo signālu vēl var precīzi atjaunot?
+* **(b)** Kāda frekvence būs dzirdama atskaņojumā, ja $20$ kHz toni bez filtrēšanas iegūst ar paraugu ņemšanas frekvenci $32$ kHz?
+* **(c)** Kāpēc kompaktdiskam izvēlēja $44.1$ kHz, nevis tieši $40$ kHz?
+
+**Atbilde:**
+
+**(a)** Paraugu ņemšanas frekvencei jābūt lielākai par $2 \cdot 20 = 40$ kHz.
+
+**(b)** Pēc paraugu ņemšanas frekvences $f$ un $f_s - f$ nav atšķiramas (tāpat kā lekcijas attēlā $7$ Hz sinusoīdas paraugi pie $8$ Hz atbilst $1$ Hz sinusoīdai). Tātad $20$ kHz tonis izklausīsies kā $32 - 20 = 12$ kHz tonis -- dzirdams kropļojums, kura oriģinālā nebija.
+
+**(c)** Pirms paraugu ņemšanas signālu filtrē, atmetot frekvences virs $f_s / 2$. Reāls filtrs nevar pāriet no "visu laiž cauri" uz "neko nelaiž cauri" vienā punktā; ar $44.1$ kHz tam ir josla no $20$ kHz līdz $22.05$ kHz. $\square$
+
+**6.2. uzdevums (audio bitu ātrums):** Dziesma skan $3$ minūtes.
+
+* **(a)** Cik megabaitu ($1$ MB $= 10^6$ baiti) tā aizņem nesaspiestā kompaktdiska formātā ($44.1$ kHz, $16$ biti, stereo)?
+* **(b)** Cik -- MP3 formātā ar $128$ kbit/s un Opus formātā ar $64$ kbit/s? Kādas ir saspiešanas attiecības?
+* **(c)** Cik stundu MP3 mūzikas ($128$ kbit/s) ietilpst $1$ GB ($10^9$ baiti) atmiņā?
+
+**Atbilde:**
+
+**(a)** $44\,100 \cdot 16 \cdot 2 = 1\,411\,200$ bit/s; $1\,411\,200 \cdot 180 / 8 = 31\,752\,000$ baiti $\approx 31.8$ MB.
+
+**(b)** MP3: $128\,000 \cdot 180 / 8 = 2\,880\,000$ baiti $= 2.88$ MB, saspiešanas attiecība $1411.2 / 128 \approx 11$. Opus: $1.44$ MB, attiecība $\approx 22$.
+
+**(c)** $8 \cdot 10^9 / 128\,000 = 62\,500$ s $\approx 17.4$ stundas. $\square$
+
+**6.3. uzdevums (nesaspiests video):** Video ir $1920 \times 1080$ pikseļi, $30$ kadri sekundē, $8$ bitu YUV ar 4:2:0 krāsainības izretināšanu.
+
+* **(a)** Cik baitu aizņem viens kadrs un kāds ir nesaspiestas plūsmas bitu ātrums?
+* **(b)** Kā tas mainītos ar 4:4:4 (bez izretināšanas)?
+* **(c)** Straumēšanas serviss šo video pārraida ar H.264 ar $5$ Mbit/s. Kāda ir saspiešanas attiecība un cik gigabaitu aizņem stunda šāda video?
+
+**Atbilde:**
+
+**(a)** $1920 \cdot 1080 = 2\,073\,600$ pikseļi; ar 4:2:0 ir $1.5$ vērtības uz pikseli, tātad $3\,110\,400$ baiti kadrā. Bitu ātrums: $3\,110\,400 \cdot 8 \cdot 30 \approx 746.5$ Mbit/s.
+
+**(b)** Ar 4:4:4 ir $3$ vērtības uz pikseli -- divreiz vairāk, apmēram $1.49$ Gbit/s.
+
+**(c)** $746.5 / 5 \approx 149$ reizes. Stunda: $5 \cdot 10^6 \cdot 3600 / 8 = 2.25 \cdot 10^9$ baiti $= 2.25$ GB (nesaspiesti -- apmēram $336$ GB). $\square$
+
+**6.4. uzdevums (I, P un B freimi):** Izmantojiet freimu izmērus no H.264 nodaļas tabulas "Saspiešanas datu piemēri" (I-freims $18$ KiB, P-freims $6$ KiB, B-freims $2.5$ KiB) un $30$ kadrus sekundē.
+
+* **(a)** Video kodē ar atkārtotu GOP struktūru `IBBPBBPBB` ($9$ kadri). Kāds ir vidējais kadra izmērs un bitu ātrums?
+* **(b)** Kāds būtu bitu ātrums, ja visi kadri būtu I-freimi (piemēram, lai video būtu viegli rediģēt kadru pa kadram)?
+* **(c)** Kādā secībā jānosūta kadri $I_0 B_1 B_2 P_3 B_4 B_5 P_6 B_7 B_8 I_9$?
+
+**Atbilde:**
+
+**(a)** Vienā GOP ir $1$ I, $2$ P un $6$ B freimi: $(18 + 2 \cdot 6 + 6 \cdot 2.5) / 9 = 45 / 9 = 5$ KiB. Bitu ātrums: $5 \cdot 1024 \cdot 8 \cdot 30 = 1\,228\,800$ bit/s $\approx 1.23$ Mbit/s.
+
+**(b)** $18 \cdot 1024 \cdot 8 \cdot 30 \approx 4.42$ Mbit/s -- $3.6$ reizes vairāk.
+
+**(c)** Katrs enkurfreims (I vai P) jānosūta pirms B-freimiem, kas atskaņošanas secībā ir pirms tā: $I_0 P_3 B_1 B_2 P_6 B_4 B_5 I_9 B_7 B_8$ (sk. attēlu "B-freimi: sūtīšanas un atskaņošanas secība"). $\square$
+
+**6.5. uzdevums (VP9 iekodētāja parametri):** To pašu video iekodē ar `vpxenc` divos veidos:
+
+* **A:** `--end-usage=q --cq-level=10 --good --cpu-used=0 --passes=2 --auto-alt-ref=1 --lag-in-frames=25`
+* **B:** `--end-usage=q --cq-level=40 --rt --cpu-used=8 --passes=1 --auto-alt-ref=0 --lag-in-frames=0`
+
+Salīdziniet abus rezultātus: (a) faila izmērs un kvalitāte; (b) iekodēšanas ātrums; (c) freimu struktūra (slēptie freimi, dekodēšanas un rādīšanas secība); (d) kurš variants der videozvanam un kurš -- video publicēšanai.
+
+**Atbilde:**
+
+**(a)** A mērķa kvantizācijas līmenis (`--cq-level`, skalā $0$--$63$) ir daudz mazāks, tātad arī `qindex` ir mazāks un kvantizācija smalkāka: fails būs daudz lielāks, bet kvalitāte augsta. B kvantizē rupji: fails mazs, bet redzami bloki un izplūdušas detaļas.
+
+**(b)** A ir daudz lēnāks: `--good --cpu-used=0` liek RDO izmēģināt ļoti daudz variantu (bloku sadalījumus, režīmus, kustības vektorus), un divu gājienu režīmā video jāapstrādā divreiz. B (`--rt --cpu-used=8`) lielāko daļu variantu atmet ar heiristikām un darbojas reāllaikā.
+
+**(c)** A iekodētājs redz $25$ nākotnes kadrus un veido slēptus ALTREF freimus (superfreimos), tāpēc dekodēšanas secība nesakrīt ar rādīšanas secību. B ir *low-delay* plūsma: slēptu freimu nav, un freimi ir tieši rādīšanas secībā.
+
+**(d)** Videozvanam der tikai B: A pirms pirmā freima izvadīšanas jāgaida $25$ nākamie kadri (apmēram $1$ sekunde aiztures), un iekodēšana ir pārāk lēna. Publicēšanai (piemēram, YouTube) labāks ir A: iekodē vienreiz, bet skatās daudzreiz, tāpēc lēna iekodēšana atmaksājas ar labāku kvalitāti vai mazāku failu. $\square$
+
+**6.6. uzdevums (konteineri un kodeki):**
+
+* **(a)** Fails `lekcija.webm` satur VP9 video un Opus audio. Vai to var pārvērst par `lekcija.mkv` bez kvalitātes zuduma? Un par MP4 failu ierīcei, kas atbalsta tikai H.264 video un AAC audio?
+* **(b)** Kāpēc `ffmpeg -i video.webm -c:v copy -an video.ivf` nemaina video kvalitāti un strādā ļoti ātri?
+* **(c)** Draugs pārdēvē `dziesma.opus` par `dziesma.mp3`. Vai fails kļūs par MP3 failu?
+
+**Atbilde:**
+
+**(a)** Matroska (MKV) var saturēt gan VP9, gan Opus, tāpēc pietiek ar pārpakošanu (`ffmpeg -i lekcija.webm -c copy lekcija.mkv`) -- bez zudumiem. Ierīcei, kas atbalsta tikai H.264 un AAC, konteinera maiņa nepalīdz: abas plūsmas jāatkodē un jāiekodē ar citiem kodekiem, un tas ir lēni un pasliktina kvalitāti.
+
+**(b)** `-c:v copy` nokopē VP9 freimu bitus nemainītus un tikai ieraksta tos IVF konteinerā (`-an` atmet audio, jo IVF audio nevar glabāt). Nekas netiek atkodēts vai iekodēts.
+
+**(c)** Nē. Paplašinājums ir tikai nosaukuma daļa; faila iekšā joprojām ir Ogg konteiners ar Opus audio. Daudzi atskaņotāji nosaka formātu pēc faila satura, citi -- pēc paplašinājuma un tad failu neatskaņos. $\square$
+
+**6.7. uzdevums (maskēšana):** Aplūkojiet frekvenču maskēšanas attēlu nodaļā "Audio kodējumi".
+
+* **(a)** Vai $1200$ Hz tonis ar skaļumu $45$ dB (tonis A) būtu dzirdams, ja $1$ kHz maskējošais tonis nepastāvētu?
+* **(b)** Ko iekodētājs var darīt ar joslu ap $1200$ Hz, kamēr skan maskējošais tonis?
+* **(c)** Kāpēc temporālās maskēšanas dēļ iekodētājam pirms asa sitiena jāpārslēdzas uz īsiem transformācijas logiem?
+
+**Atbilde:**
+
+**(a)** Jā: dzirdamības slieksnis klusumā pie $1200$ Hz ir tikai dažus decibelus virs nulles, un $45$ dB tonis ir labi dzirdams. To nomaskē tikai skaļais $1$ kHz tonis.
+
+**(b)** Kvantizēt to ļoti rupji (vai to nekodēt nemaz): kvantizācijas troksnis līdz apmēram maskēšanas sliekšņa līmenim ($\approx 48$ dB) nebūs dzirdams, tāpēc šai joslai vajag ļoti maz bitu.
+
+**(c)** Kvantizācijas troksnis izplūst pa visu transformācijas logu. Garā logā troksnis nonāk arī klusumā pirms sitiena, kur to sedz tikai īsā priekšmaskēšana ($5$--$20$ ms), un to var sadzirdēt kā pirmsatbalsi. Īsā logā troksnis paliek tuvu sitienam, kur to nomaskē pats sitiens. $\square$
 
 ## Izmantotā literatūra
 
 <a id="Guru14"></a>**[Guru14]** Guru, J. and Damecha, H. (2014). A review of watermarking algorithms for digital image. *Int. J. Innov. Res. Comput. Commun. Eng.*, 2, 5701--5708. Available at [https://api.semanticscholar.org/CorpusID:44191784](https://api.semanticscholar.org/CorpusID:44191784).
 
 <a id="Pol16"></a>**[Pol16]** Yury Polyanskiy, *Information Theory*, MIT OpenCourseWare, Massachusetts Institute of Technology, Spring 2016. Available at [https://bit.ly/47EfIZ8](https://bit.ly/47EfIZ8), [Archived](https://web.archive.org/web/20240000000000*/https://ocw.mit.edu/courses/6-441-information-theory-spring-2016/).
+
+**DRM standarti:** ISO/IEC 23001-7 (*Common encryption in ISO base media file format files*, CENC); ISO/IEC 23000-19 (*Common Media Application Format*, CMAF); ISO/IEC 23009-1 (MPEG-DASH); [RFC 8216](https://www.rfc-editor.org/rfc/rfc8216) (HTTP Live Streaming); W3C [Encrypted Media Extensions](https://www.w3.org/TR/encrypted-media/).

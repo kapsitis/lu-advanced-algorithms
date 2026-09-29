@@ -10,6 +10,7 @@ Only the pages listed in `docs/_data/nav.yml` are published and translated:
 
 - `docs/index.lv.md`, `docs/index.en.md` (home page)
 - `docs/lectures/lossless_*/index.lv.md`, `docs/lectures/lossless_*/index.en.md`
+- `docs/lectures/lossy_*/index.lv.md`, `docs/lectures/lossy_*/index.en.md`
 - extra page pairs next to them: `lossless_final_problemsets/solutions.{lv,en}.md` and
   `lossy_images_and_audio/jpeg_lab/index.{lv,en}.md` (the English versions were written first,
   and the Latvian ones were translated from them once, in September 2026; from then on the Latvian

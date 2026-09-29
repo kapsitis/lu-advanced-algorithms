@@ -18,6 +18,8 @@
       url: /lectures/lossless_final_problemsets/
     - title: { en: "5. Lossy Compression: Images and Audio", lv: "5. Zudumradošā saspiešana: attēli un audio" }
       url: /lectures/lossy_images_and_audio/
+    - title: { en: "Lab: Breaking JPEG on Purpose", lv: "Laboratorijas darbs: JPEG mērķtiecīga bojāšana" }
+      url: /lectures/lossy_images_and_audio/jpeg_lab/
     - title: { en: "6. Video Compression", lv: "6. Video saspiešana" }
       url: /lectures/lossy_video/
     - title: { en: "7. Error Correction: Hamming Codes", lv: "7. Kļūdu korekcija: Heminga kodi" }

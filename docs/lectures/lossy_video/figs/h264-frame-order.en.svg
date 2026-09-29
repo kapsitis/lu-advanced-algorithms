@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 910 420" width="910" height="420" role="img" aria-label="H.264 frame order">
+<title>H.264 frame transmission and display order</title>
+<rect x="0" y="0" width="910" height="420" fill="#ffffff"/>
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#777"/></marker></defs>
+<text x="20" y="80" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#222" text-anchor="start" font-weight="bold">transmission</text>
+<text x="20" y="96" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#222" text-anchor="start" font-weight="bold">(decoding) order</text>
+<text x="20" y="230" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#222" text-anchor="start" font-weight="bold">display</text>
+<text x="20" y="246" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#222" text-anchor="start" font-weight="bold">order</text>
+<text x="215" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">0</text>
+<rect x="190" y="60" width="50" height="50" rx="6" fill="#dcecd8" stroke="#54A24B" stroke-width="1.8"/>
+<text x="215" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">I<tspan baseline-shift="sub" font-size="70%">0</tspan></text>
+<line x1="215" y1="112" x2="215" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="285" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">1</text>
+<rect x="260" y="60" width="50" height="50" rx="6" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.8"/>
+<text x="285" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">P<tspan baseline-shift="sub" font-size="70%">3</tspan></text>
+<line x1="285" y1="112" x2="425" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="355" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">2</text>
+<rect x="330" y="60" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="355" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">1</tspan></text>
+<line x1="355" y1="112" x2="285" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="425" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">3</text>
+<rect x="400" y="60" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="425" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">2</tspan></text>
+<line x1="425" y1="112" x2="355" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="495" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">4</text>
+<rect x="470" y="60" width="50" height="50" rx="6" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.8"/>
+<text x="495" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">P<tspan baseline-shift="sub" font-size="70%">6</tspan></text>
+<line x1="495" y1="112" x2="635" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="565" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">5</text>
+<rect x="540" y="60" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="565" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">4</tspan></text>
+<line x1="565" y1="112" x2="495" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="635" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">6</text>
+<rect x="610" y="60" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="635" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">5</tspan></text>
+<line x1="635" y1="112" x2="565" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="705" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">7</text>
+<rect x="680" y="60" width="50" height="50" rx="6" fill="#dcecd8" stroke="#54A24B" stroke-width="1.8"/>
+<text x="705" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">I<tspan baseline-shift="sub" font-size="70%">9</tspan></text>
+<line x1="705" y1="112" x2="845" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="775" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">8</text>
+<rect x="750" y="60" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="775" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">7</tspan></text>
+<line x1="775" y1="112" x2="705" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<text x="845" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">9</text>
+<rect x="820" y="60" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="845" y="91" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">8</tspan></text>
+<line x1="845" y1="112" x2="775" y2="206" stroke="#777" stroke-width="1.4" marker-end="url(#arw)"/>
+<rect x="190" y="210" width="50" height="50" rx="6" fill="#dcecd8" stroke="#54A24B" stroke-width="1.8"/>
+<text x="215" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">I<tspan baseline-shift="sub" font-size="70%">0</tspan></text>
+<text x="215" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">0</text>
+<rect x="260" y="210" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="285" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">1</tspan></text>
+<text x="285" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">1</text>
+<rect x="330" y="210" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="355" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">2</tspan></text>
+<text x="355" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">2</text>
+<rect x="400" y="210" width="50" height="50" rx="6" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.8"/>
+<text x="425" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">P<tspan baseline-shift="sub" font-size="70%">3</tspan></text>
+<text x="425" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">3</text>
+<rect x="470" y="210" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="495" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">4</tspan></text>
+<text x="495" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">4</text>
+<rect x="540" y="210" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="565" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">5</tspan></text>
+<text x="565" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">5</text>
+<rect x="610" y="210" width="50" height="50" rx="6" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.8"/>
+<text x="635" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">P<tspan baseline-shift="sub" font-size="70%">6</tspan></text>
+<text x="635" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">6</text>
+<rect x="680" y="210" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="705" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">7</tspan></text>
+<text x="705" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">7</text>
+<rect x="750" y="210" width="50" height="50" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.8"/>
+<text x="775" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">B<tspan baseline-shift="sub" font-size="70%">8</tspan></text>
+<text x="775" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">8</text>
+<rect x="820" y="210" width="50" height="50" rx="6" fill="#dcecd8" stroke="#54A24B" stroke-width="1.8"/>
+<text x="845" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">I<tspan baseline-shift="sub" font-size="70%">9</tspan></text>
+<text x="845" y="276" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#777" text-anchor="middle" font-weight="normal">9</text>
+<path d="M 225 284 Q 250 310 275 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 415 284 Q 355 326 295 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 225 284 Q 285 326 345 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 415 284 Q 390 310 365 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 225 284 Q 320 342 415 284" stroke="#4C78A8" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 435 284 Q 460 310 485 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 625 284 Q 565 326 505 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 435 284 Q 495 326 555 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 625 284 Q 600 310 575 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 435 284 Q 530 342 625 284" stroke="#4C78A8" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 645 284 Q 670 310 695 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 835 284 Q 775 326 715 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 645 284 Q 705 326 765 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<path d="M 835 284 Q 810 310 785 284" stroke="#F58518" stroke-width="1.3" fill="none" stroke-opacity="0.8" marker-end="url(#arw)"/>
+<text x="20" y="386" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">Arcs show the prediction: blue — a P-frame from the previous anchor frame, orange — a B-frame from both neighboring anchor frames.</text>
+<text x="20" y="404" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="start" font-weight="normal">The subscript is the frame number in display order; the gray numbers on top are the numbers in transmission order.</text>
+</svg>

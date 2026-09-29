@@ -308,7 +308,7 @@ $$
 30\,\text{kadri/s}\cdot 4.8\,\text{KiB/kadrs}\cdot 1024 \cdot 8 \approx 1.18\,\text{Mbit/s}.
 $$
 
-Kopā ar audio tas var būt 1.45 megabiti sekundē, kas aizņem T1 Interneta savienojumu (viens vītais pāris; 1.544 Mbps).
+Kopā ar audio tas var būt 1.45 megabiti sekundē, kas aizņem T1 Interneta savienojumu (divi vītie pāri; 1.544 Mbps).
 
 ### H.264 un MPEG lietojumi
 

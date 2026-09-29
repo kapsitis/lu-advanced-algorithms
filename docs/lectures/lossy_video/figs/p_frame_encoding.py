@@ -15,9 +15,14 @@ Sintētisks piemērs ar īstiem pikseļiem (gaišuma plakne 64 x 48, makrobloki 
 Kadri iegulti kā nelieli PNG attēli (palielināti bez izplūšanas), shēma --
 SVG elementi.
 
-    python p_frame_encoding.py
+
+Uzraksti ir latviski (p-frame-encoding.svg) un angliski (p-frame-encoding.en.svg):
+
+    python p_frame_encoding.py              # abas valodas
+    python p_frame_encoding.py --lang en    # tikai angļu
 """
 
+import argparse
 import base64
 import io
 import os
@@ -35,6 +40,19 @@ SHIFT = (6, 3)            # figūriņas nobīde (dx, dy) pašreizējā kadrā
 BRIGHTEN = 4              # apgaismojuma izmaiņa figūriņai
 TARGET = (1, 1)           # kodējamais makrobloks (kolonna, rinda)
 SEARCH = 8                # meklēšanas logs +-8 pikseļi
+
+
+LANG = "lv"                           # uzrakstu valoda: "lv" vai "en" (sk. main)
+
+
+def T(lv, en):
+    """Uzraksts izvēlētajā valodā LANG."""
+    return en if LANG == "en" else lv
+
+
+def svg_name(name):
+    """Faila nosaukums izvēlētajā valodā: x.svg (latviski) vai x.en.svg (angliski)."""
+    return name[:-4] + ".en.svg" if LANG == "en" else name
 
 
 def draw_scene(cx, cy, extra):
@@ -135,19 +153,22 @@ def build():
 
     W, H = 960, 600
     s = ('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
-         'viewBox="0 0 %d %d" width="%d" height="%d" role="img" aria-label="P-freima kodēšana">\n'
-         '<title>P-freima makrobloka kodēšana ar kustības vektoru</title>\n'
+         'viewBox="0 0 %d %d" width="%d" height="%d" role="img" aria-label="%s">\n'
+         '<title>%s</title>\n'
          '<rect x="0" y="0" width="%d" height="%d" fill="#ffffff"/>\n'
          '<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" '
          'markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" '
          'fill="#444"/></marker><marker id="arwb" viewBox="0 0 10 10" refX="9" refY="5" '
          'markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" '
-         'fill="#4C78A8"/></marker></defs>\n' % (W, H, W, H, W, H))
+         'fill="#4C78A8"/></marker></defs>\n'
+         % (W, H, W, H, T("P-freima kodēšana", "P-frame encoding"),
+            T("P-freima makrobloka kodēšana ar kustības vektoru",
+              "Encoding a P-frame macroblock with a motion vector"), W, H))
 
     S = 5                                  # kadru palielinājums
     fx, fy_ref, fy_cur = 20, 44, 340
-    s += frame_panel(fx, fy_ref, REF, S, "atsauces kadrs (reference frame)")
-    s += frame_panel(fx, fy_cur, CUR, S, "pašreizējais kadrs (current frame)")
+    s += frame_panel(fx, fy_ref, REF, S, T("atsauces kadrs (reference frame)", "reference frame"))
+    s += frame_panel(fx, fy_cur, CUR, S, T("pašreizējais kadrs (current frame)", "current frame"))
     # kodējamais makrobloks pašreizējā kadrā
     s += rect(fx + bx * S, fy_cur + by * S, MB * S, MB * S, ORANGE, 3)
     # tā pati vieta atsauces kadrā (pārtraukti) un labākā sakritība (zaļi)
@@ -157,57 +178,57 @@ def build():
     c1 = (fx + (bx + dx + MB / 2) * S, fy_ref + (by + dy + MB / 2) * S)
     s += ('<circle cx="%g" cy="%g" r="3.5" fill="%s"/>' % (c0[0], c0[1], BLUE)) + chr(10)
     s += arrow(c0[0], c0[1], c1[0], c1[1], BLUE, 3)
-    s += txt(fx + W_F * S + 10, fy_ref + (by + dy) * S + 10, "labākā sakritība", 11.5, GREEN, "start")
-    s += txt(fx + W_F * S + 10, fy_ref + by * S + MB * S - 4, "tā pati vieta", 11.5, ORANGE, "start")
-    s += txt(fx + W_F * S + 10, fy_ref + by * S + MB * S + 12, "kā pašreizējā blokā", 11.5, ORANGE, "start")
-    s += txt(fx + W_F * S + 10, fy_cur + by * S + MB * S / 2, "kodējamais", 11.5, ORANGE, "start")
-    s += txt(fx + W_F * S + 10, fy_cur + by * S + MB * S / 2 + 15, "makrobloks 16×16", 11.5, ORANGE, "start")
-    s += txt(fx, fy_ref + H_F * S + 20, "kustības vektors MV = (%+d, %+d)" % (dx, dy), 12.5, BLUE, "start", "bold")
+    s += txt(fx + W_F * S + 10, fy_ref + (by + dy) * S + 10, T("labākā sakritība", "best match"), 11.5, GREEN, "start")
+    s += txt(fx + W_F * S + 10, fy_ref + by * S + MB * S - 4, T("tā pati vieta", "the same position"), 11.5, ORANGE, "start")
+    s += txt(fx + W_F * S + 10, fy_ref + by * S + MB * S + 12, T("kā pašreizējā blokā", "as the current block"), 11.5, ORANGE, "start")
+    s += txt(fx + W_F * S + 10, fy_cur + by * S + MB * S / 2, T("kodējamais", "16×16 macroblock"), 11.5, ORANGE, "start")
+    s += txt(fx + W_F * S + 10, fy_cur + by * S + MB * S / 2 + 15, T("makrobloks 16×16", "to be encoded"), 11.5, ORANGE, "start")
+    s += txt(fx, fy_ref + H_F * S + 20, T("kustības vektors MV = (%+d, %+d)", "motion vector MV = (%+d, %+d)") % (dx, dy), 12.5, BLUE, "start", "bold")
 
     # --- izgrieztie bloki un atlikumi ------------------------------------------
     B = 5
     bw = MB * B
     cx0, cy0 = 480, 76
-    s += txt(cx0 + bw / 2, cy0 - 26, "pašreizējais", 12, INK, weight="bold")
-    s += txt(cx0 + bw / 2, cy0 - 10, "bloks", 12, INK, weight="bold")
+    s += txt(cx0 + bw / 2, cy0 - 26, T("pašreizējais", "current"), 12, INK, weight="bold")
+    s += txt(cx0 + bw / 2, cy0 - 10, T("bloks", "block"), 12, INK, weight="bold")
     s += image(cx0, cy0, bw, bw, png_b64(block, B)) + rect(cx0, cy0, bw, bw, ORANGE, 2.5)
     px0 = cx0 + bw + 50
-    s += txt(px0 + bw / 2, cy0 - 26, "prognoze", 12, INK, weight="bold")
-    s += txt(px0 + bw / 2, cy0 - 10, "(atsauce + MV)", 12, INK, weight="bold")
+    s += txt(px0 + bw / 2, cy0 - 26, T("prognoze", "prediction"), 12, INK, weight="bold")
+    s += txt(px0 + bw / 2, cy0 - 10, T("(atsauce + MV)", "(reference + MV)"), 12, INK, weight="bold")
     s += image(px0, cy0, bw, bw, png_b64(pred, B)) + rect(px0, cy0, bw, bw, GREEN, 2.5)
     s += txt(cx0 + bw + 25, cy0 + bw / 2 + 6, "−", 22, INK, weight="bold")
 
     rx0, ry0 = cx0 + (bw + 50) / 2, cy0 + bw + 50
-    s += txt(rx0 + bw / 2, ry0 - 12, "atlikums = bloks − prognoze", 12, INK, weight="bold")
+    s += txt(rx0 + bw / 2, ry0 - 12, T("atlikums = bloks − prognoze", "residual = block − prediction"), 12, INK, weight="bold")
     s += image(rx0, ry0, bw, bw, residual_rgb(res, B)) + rect(rx0, ry0, bw, bw, "#5a6a7a", 1.2)
     s += arrow(rx0 + bw / 2, cy0 + bw + 6, rx0 + bw / 2, ry0 - 22)
     vals = sorted(set(res.ravel().tolist()))
-    s += txt(rx0 + bw / 2, ry0 + bw + 18, "vērtības: %s; SAD = %d" % (", ".join(map(str, vals)), sad),
+    s += txt(rx0 + bw / 2, ry0 + bw + 18, T("vērtības: %s; SAD = %d", "values: %s; SAD = %d") % (", ".join(map(str, vals)), sad),
              11.5, "#333")
 
     zx0 = rx0
     zy0 = ry0 + bw + 58
-    s += txt(zx0 - 16, zy0 + bw / 2 - 8, "salīdzinājumam:", 11.5, "#555", "end")
-    s += txt(zx0 - 16, zy0 + bw / 2 + 8, "bez kustības (MV = 0)", 11.5, "#555", "end")
+    s += txt(zx0 - 16, zy0 + bw / 2 - 8, T("salīdzinājumam:", "for comparison:"), 11.5, "#555", "end")
+    s += txt(zx0 - 16, zy0 + bw / 2 + 8, T("bez kustības (MV = 0)", "without motion (MV = 0)"), 11.5, "#555", "end")
     s += image(zx0, zy0, bw, bw, residual_rgb(res0, B)) + rect(zx0, zy0, bw, bw, "#5a6a7a", 1.2)
-    s += txt(zx0 + bw / 2, zy0 + bw + 18, "lielas vērtības; SAD = %d" % sad0, 11.5, "#333")
+    s += txt(zx0 + bw / 2, zy0 + bw + 18, T("lielas vērtības; SAD = %d", "large values; SAD = %d") % sad0, 11.5, "#333")
 
     # --- kas tiek nosūtīts ------------------------------------------------------
     qx = 760
     s += ('<rect x="%g" y="%g" width="180" height="56" rx="6" fill="#dbe6f3" stroke="%s" '
           'stroke-width="1.4"/>\n' % (qx, 60, BLUE))
-    s += txt(qx + 90, 84, "kustības vektors", 12, INK, weight="bold")
+    s += txt(qx + 90, 84, T("kustības vektors", "motion vector"), 12, INK, weight="bold")
     s += txt(qx + 90, 102, "(%+d, %+d)" % (dx, dy), 12, INK, family=MONO)
     s += ('<rect x="%g" y="%g" width="180" height="70" rx="6" fill="#fde5cc" stroke="%s" '
           'stroke-width="1.4"/>\n' % (qx, 200, ORANGE))
-    s += txt(qx + 90, 224, "transformācija", 12, INK, weight="bold")
-    s += txt(qx + 90, 241, "+ kvantizācija", 12, INK, weight="bold")
-    s += txt(qx + 90, 259, "(tikai atlikumam)", 11, "#444")
+    s += txt(qx + 90, 224, T("transformācija", "transform"), 12, INK, weight="bold")
+    s += txt(qx + 90, 241, T("+ kvantizācija", "+ quantization"), 12, INK, weight="bold")
+    s += txt(qx + 90, 259, T("(tikai atlikumam)", "(residual only)"), 11, "#444")
     s += arrow(rx0 + bw + 8, ry0 + bw / 2, qx - 6, 235)
     s += ('<rect x="%g" y="%g" width="180" height="56" rx="6" fill="#dcecd8" stroke="%s" '
           'stroke-width="1.4"/>\n' % (qx, 320, GREEN))
-    s += txt(qx + 90, 344, "entropijas kods", 12, INK, weight="bold")
-    s += txt(qx + 90, 362, "(CAVLC vai CABAC)", 11, "#444")
+    s += txt(qx + 90, 344, T("entropijas kods", "entropy coding"), 12, INK, weight="bold")
+    s += txt(qx + 90, 362, T("(CAVLC vai CABAC)", "(CAVLC or CABAC)"), 11, "#444")
     s += arrow(qx + 90, 272, qx + 90, 316)
     s += ('<path d="M %g %g L %g %g L %g %g" stroke="#444" stroke-width="1.8" fill="none" '
           'marker-end="url(#arw)"/>\n' % (qx + 184, 88, qx + 196, 88, qx + 196, 340))
@@ -219,11 +240,17 @@ def build():
 
 
 def main():
-    svg, info = build()
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "p-frame-encoding.svg")
-    with open(out, "w", encoding="utf-8", newline="\n") as f:
-        f.write(svg)
-    print("Wrote", out)
+    global LANG
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--lang", choices=["lv", "en", "all"], default="all",
+                    help="uzrakstu valoda (noklusēti abas)")
+    langs = {"lv": ["lv"], "en": ["en"], "all": ["lv", "en"]}[ap.parse_args().lang]
+    for LANG in langs:
+        svg, info = build()
+        out = os.path.join(os.path.dirname(os.path.abspath(__file__)), svg_name("p-frame-encoding.svg"))
+        with open(out, "w", encoding="utf-8", newline="\n") as f:
+            f.write(svg)
+        print("Wrote", out)
     print("MV = (%+d, %+d), SAD ar MV = %d, SAD bez MV = %d, atlikuma vērtības %s" % info)
 
 

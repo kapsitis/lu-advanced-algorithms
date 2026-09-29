@@ -18,9 +18,16 @@ Skripts
 
 Vajadzīgs ffmpeg un ffprobe ar libmp3lame un libopus, kā arī numpy un scipy.
 
-    python audio_examples.py
+
+Uzraksti ir latviski (audio-bitrate.svg, audio-spectrum.svg, audio-preecho.svg) un angliski (audio-bitrate.en.svg, audio-spectrum.en.svg, audio-preecho.en.svg):
+
+    python audio_examples.py              # abas valodas
+    python audio_examples.py --lang en    # tikai angļu
+    python audio_examples.py --svg-only   # tikai attēli no esošajiem audio failiem
+                                          # (nesintezē un nekodē no jauna)
 """
 
+import argparse
 import json
 import os
 import subprocess
@@ -50,6 +57,19 @@ ENCODINGS = [
 
 
 # --- 1. sintēze ---------------------------------------------------------------
+
+LANG = "lv"                           # uzrakstu valoda: "lv" vai "en" (sk. main)
+
+
+def T(lv, en):
+    """Uzraksts izvēlētajā valodā LANG."""
+    return en if LANG == "en" else lv
+
+
+def svg_name(name):
+    """Faila nosaukums izvēlētajā valodā: x.svg (latviski) vai x.en.svg (angliski)."""
+    return name[:-4] + ".en.svg" if LANG == "en" else name
+
 
 def note(freq, start, length, t, amp=0.18):
     """Klavierveida nots: 6 harmonikas, ātrs uzbrukums, eksponenciāla dzišana."""
@@ -149,12 +169,12 @@ COLORS = {"mp3_cbr128": G.BLUE, "mp3_vbr_v5": G.PURPLE, "mp3_cbr64": "#1f3b5c",
 
 def bitrate_svg(curves):
     W, H = 900, 420
-    s = G.head(W, H, "Bitu ātrums laika gaitā")
+    s = G.head(W, H, T("Bitu ātrums laika gaitā", "Bitrate over time"))
     p = G.Plot(80, 60, 620, 290, (0, DUR), (0, 220))
     s += p.frame([(k, str(k)) for k in range(9)], [(v, str(v)) for v in range(0, 221, 40)],
-                 "laiks, s", "kbit/s (0.25 s logos)")
-    for x0, x1, lab in [(0, 3, "akordi"), (3, 5.5, "akordi + troksnis + klikšķi"), (5.5, 7, "kluss tonis"),
-                        (7, 8, "klusums")]:
+                 T("laiks, s", "time, s"), T("kbit/s (0.25 s logos)", "kbit/s (0.25 s windows)"))
+    for x0, x1, lab in [(0, 3, T("akordi", "chords")), (3, 5.5, T("akordi + troksnis + klikšķi", "chords + noise + clicks")), (5.5, 7, T("kluss tonis", "quiet tone")),
+                        (7, 8, T("klusums", "silence"))]:
         s += G.txt((p.X(x0) + p.X(x1)) / 2, 50, lab, 11, "#555")
         s += ('<line x1="%.1f" y1="60" x2="%.1f" y2="350" stroke="#c9d3de" stroke-dasharray="3 3"/>\n'
               % (p.X(x0), p.X(x0)))
@@ -163,34 +183,40 @@ def bitrate_svg(curves):
         s += ('<line x1="715" y1="%d" x2="745" y2="%d" stroke="%s" stroke-width="2.4"%s/>\n'
               % (80 + 22 * k, 80 + 22 * k, COLORS[key], ' stroke-dasharray="6 3"' if "cbr" in key else ""))
         s += G.txt(752, 84 + 22 * k, label, 11.5, "#333", "start")
-    s += G.txt(80, 395, "CBR (raustītās līnijas) tērē vienādi daudz bitu gan troksnim, gan klusumam; "
-               "VBR bitus pārdala uz sarežģītākajām vietām.", 11.5, "#333", "start")
+    s += G.txt(80, 395, T("CBR (raustītās līnijas) tērē vienādi daudz bitu gan troksnim, gan klusumam; "
+                          "VBR bitus pārdala uz sarežģītākajām vietām.",
+                          "CBR (dashed lines) spends as many bits on silence as on noise; "
+                          "VBR moves the bits to the complex parts."), 11.5, "#333", "start")
     return s + "</svg>\n"
 
 
 def spectrum_svg(spectra):
     W, H = 900, 420
-    s = G.head(W, H, "Vidējais spektrs")
+    s = G.head(W, H, T("Vidējais spektrs", "Average spectrum"))
     p = G.Plot(80, 30, 620, 320, (100, 24000), (-120, -20), xlog=True)
     xt = [(100, "100"), (200, "200"), (500, "500"), (1000, "1k"), (2000, "2k"), (5000, "5k"),
           (10000, "10k"), (20000, "20k")]
-    s += p.frame(xt, [(v, str(v)) for v in range(-120, -19, 20)], "frekvence, Hz", "jauda, dB")
+    s += p.frame(xt, [(v, str(v)) for v in range(-120, -19, 20)], T("frekvence, Hz", "frequency, Hz"), T("jauda, dB", "power, dB"))
     for k, (key, label, (f, db)) in enumerate(spectra):
+        if key == "ref":
+            label = T(label, "FLAC lossless reference")
         col = COLORS.get(key, G.GRAY)
         m = f >= 100
         s += p.line(f[m], db[m], col, 2.6 if key == "ref" else 1.8, None, 0.55 if key == "ref" else 1)
         s += ('<line x1="715" y1="%d" x2="745" y2="%d" stroke="%s" stroke-width="2.4"/>\n'
               % (60 + 22 * k, 60 + 22 * k, col))
         s += G.txt(752, 64 + 22 * k, label, 11.5, "#333", "start")
-    s += G.txt(80, 395, "Trokšņainās daļas (3–5.5 s) vidējais spektrs: pie mazāka bitu ātruma "
-               "kodeki nogriež augstās frekvences.", 11.5, "#333", "start")
+    s += G.txt(80, 395, T("Trokšņainās daļas (3–5.5 s) vidējais spektrs: pie mazāka bitu ātruma "
+                          "kodeki nogriež augstās frekvences.",
+                          "Average spectrum of the noisy part (3–5.5 s): at lower bitrates the codecs "
+                          "cut off the high frequencies."), 11.5, "#333", "start")
     return s + "</svg>\n"
 
 
 def preecho_svg(waves):
     """Augšā oriģinālais signāls ap klikšķi, zemāk -- kļūdas signāls (atkodētais - oriģināls)."""
     W, H = 900, 118 * len(waves) + 80
-    s = G.head(W, H, "Pirmsatbalss ap klikšķi")
+    s = G.head(W, H, T("Pirmsatbalss ap klikšķi", "Pre-echo around a click"))
     for k, (key, label, (tt, y)) in enumerate(waves):
         if key == "ref":
             yr, yt = (-0.7, 0.7), [(-0.5, "−0.5"), (0, "0"), (0.5, "0.5")]
@@ -202,29 +228,48 @@ def preecho_svg(waves):
         s += ('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="%s" fill-opacity="0.08"/>\n'
               % (p.X(-30), p.y, p.X(0) - p.X(-30), p.h, G.PURPLE))
         s += p.line(tt, np.clip(y, *yr), COLORS.get(key, G.GRAY), 1.2)
+        if key == "ref":
+            label = T(label, "original")
         s += G.txt(205, 20 + 118 * k + 38, label, 12, G.INK, "end", "bold")
-        s += G.txt(205, 20 + 118 * k + 55, "signāls" if key == "ref" else "kļūda", 11, "#555", "end")
-    s += G.txt(540, H - 44, "laiks, ms (0 — klikšķa sākums)", 12)
-    s += G.txt(20, H - 22, "Augšā: oriģinālais signāls — kluss 1 kHz tonis un ass klikšķis. Zemāk: "
-               "kodēšanas kļūda (atkodētais − oriģināls, cits mērogs).", 11.5, "#333", "start")
-    s += G.txt(20, H - 6, "Kļūda, kas parādās jau pirms klikšķa (iekrāsotajā apgabalā), ir pirmsatbalss: "
-               "kvantizācijas troksnis izplūst pa visu transformācijas logu.", 11.5, "#333", "start")
+        s += G.txt(205, 20 + 118 * k + 55, T("signāls", "signal") if key == "ref" else T("kļūda", "error"),
+                   11, "#555", "end")
+    s += G.txt(540, H - 44, T("laiks, ms (0 — klikšķa sākums)", "time, ms (0 — start of the click)"), 12)
+    s += G.txt(20, H - 22, T("Augšā: oriģinālais signāls — kluss 1 kHz tonis un ass klikšķis. Zemāk: "
+                             "kodēšanas kļūda (atkodētais − oriģināls, cits mērogs).",
+                             "Top: the original signal — a quiet 1 kHz tone and a sharp click. Below: "
+                             "the coding error (decoded − original, different scale)."), 11.5, "#333", "start")
+    s += G.txt(20, H - 6, T("Kļūda, kas parādās jau pirms klikšķa (iekrāsotajā apgabalā), ir pirmsatbalss: "
+                            "kvantizācijas troksnis izplūst pa visu transformācijas logu.",
+                            "Error that appears already before the click (in the shaded area) is pre-echo: "
+                            "the quantization noise spreads over the whole transform window."),
+               11.5, "#333", "start")
     return s + "</svg>\n"
 
 
 def main():
+    global LANG
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--lang", choices=["lv", "en", "all"], default="all",
+                    help="uzrakstu valoda (noklusēti abas)")
+    ap.add_argument("--svg-only", action="store_true",
+                    help="nesintezēt un nekodēt no jauna; zīmēt attēlus no esošajiem audio failiem")
+    opts = ap.parse_args()
+    langs = {"lv": ["lv"], "en": ["en"], "all": ["lv", "en"]}[opts.lang]
     os.makedirs(OUT, exist_ok=True)
-    x = synth()
     wav = os.path.join(OUT, "sample.wav")
-    wavfile.write(wav, FS, (x * 32767).astype(np.int16))
     flac = os.path.join(OUT, "sample_ref.flac")
-    run(["ffmpeg", "-y", "-v", "error", "-i", wav, "-c:a", "flac", flac])
+    if not opts.svg_only:
+        x = synth()
+        wavfile.write(wav, FS, (x * 32767).astype(np.int16))
+        run(["ffmpeg", "-y", "-v", "error", "-i", wav, "-c:a", "flac", flac])
     files = [("ref", "FLAC", "bezzudumu atsauce", flac)]
     for key, codec, mode, args, ext in ENCODINGS:
         out = os.path.join(OUT, "sample_" + key + ext)
-        run(["ffmpeg", "-y", "-v", "error", "-i", wav] + args + [out])
+        if not opts.svg_only:
+            run(["ffmpeg", "-y", "-v", "error", "-i", wav] + args + [out])
         files.append((key, codec, mode, out))
-    os.remove(wav)
+    if not opts.svg_only:
+        os.remove(wav)
 
     ref = decode(flac)
     curves, spectra, waves, rows = [], [], [], []
@@ -251,9 +296,10 @@ def main():
             avg = sum(8 * s_ for _, _, s_ in pk) / DUR / 1000
         rows.append((key, codec, mode, os.path.basename(path), size, avg, d))
 
-    G.save(os.path.join(HERE, "audio-bitrate.svg"), bitrate_svg(curves))
-    G.save(os.path.join(HERE, "audio-spectrum.svg"), spectrum_svg(spectra))
-    G.save(os.path.join(HERE, "audio-preecho.svg"), preecho_svg(waves))
+    for LANG in langs:
+        G.save(os.path.join(HERE, svg_name("audio-bitrate.svg")), bitrate_svg(curves))
+        G.save(os.path.join(HERE, svg_name("audio-spectrum.svg")), spectrum_svg(spectra))
+        G.save(os.path.join(HERE, svg_name("audio-preecho.svg")), preecho_svg(waves))
     print("\n| Fails | Kodeks | Režīms | Izmērs | Vidējais bitu ātrums |")
     print("| --- | --- | --- | --- | --- |")
     for key, codec, mode, name, size, avg, d in rows:

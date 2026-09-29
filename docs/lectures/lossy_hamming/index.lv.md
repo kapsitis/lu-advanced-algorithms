@@ -218,7 +218,7 @@ Tabula parāda, kā kodēt divu bitu virknītes par piecu bitu virknītēm: divr
 
 ## Heminga kodi
 
-**Ja pārraida $n=7$ bitus:** No $n=7$ iespējams izveidot $2^4 = 16$ atšķiramas virknes:
+**Ja pārraida $n=7$ bitus:** No $n=7$ iespējams izveidot $2^4 = 16$ atšķiramas virknes (leksikogrāfiskā secībā):
 
 ```text
 0000000
@@ -229,8 +229,14 @@ Tabula parāda, kā kodēt divu bitu virknītes par piecu bitu virknītēm: divr
 0101101
 0110011
 0110100
+1001011
+1001100
+1010010
+1010101
 1100001
 1100110
+1111000
+1111111
 ```
 
 **Heminga koda konstruēšana:** Virkni $x_1x_2x_3x_4$ pārraida kā $x_1x_2x_3y_1x_4y_2y_3$, kur
@@ -350,7 +356,7 @@ x_4
 \end{array} \right)
 $$
 
-un tad reizinām šo vektoru ar ģeneratormatricu $M$. Nokodētais ziņojums būs $M\mathbf{x}$, visus tā elementus rēķinot pēc moduļa $2$.
+un tad reizinām šo vektoru ar ģeneratormatricu $M$. Nokodētais ziņojums būs $G\mathbf{x}$, visus tā elementus rēķinot pēc moduļa $2$.
 
 **Lineāra koda atkodēšana:** Atkodēšanai var izmantot paritātes pārbaudes matricu. Hemingam $[7,4,1]$ tā ir šāda:
 
@@ -384,7 +390,7 @@ Paritātes pārbaudes matricu var izmantot arī, lai noteiktu, kur ir kļūdas, 
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Apzīmējumi ar bināriem indeksiem | $\textcolor{blue}{x_{111}}$ | $\textcolor{blue}{x_{110}}$ | $\textcolor{blue}{x_{101}}$ | $\textcolor{blue}{x_{100}}$ | $\textcolor{blue}{x_{011}}$ | $\textcolor{blue}{x_{010}}$ | $\textcolor{blue}{x_{001}}$ |
 
-Kodi $x_{111},\ldots,x_{001}$ izkārtoti *apgrieztā leksikogrāfiskā secībā* (*reverse lexicographic order*) -- [Wikipedia](https://oeis.org/wiki/Orderings#Reverse_lexicographic_order).
+Kodi $x_{111},\ldots,x_{001}$ izkārtoti *apgrieztā leksikogrāfiskā secībā* ([reverse lexicographic order](https://oeis.org/wiki/Orderings#Reverse_lexicographic_order)) vai vienkārši dilstošā secībā.
 
 Kāpēc virknītē $x_1,x_2,x_3,y_1,x_4,y_2,y_3$ ziņojuma biti $x_i$ nedaudz sajaukti ar kontrolbitiem $y_j$?
 

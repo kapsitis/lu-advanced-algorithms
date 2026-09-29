@@ -12,9 +12,14 @@ Ziņojuma biti x_j ir aplīši apakšējā rindā, kontrolbiti (pārbaudes) y_i 
 kvadrātiņi augšējā rindā; šķautne savieno y_i ar katru x_j, kas ietilpst y_i
 formulā.  Zīmēšanas funkcijas un krāsas ņemtas no ldpc_toy.py.
 
-    python tanner_graphs.py
+
+Uzraksti ir latviski (hamming-tanner.svg, erasure-problem.svg) un angliski (hamming-tanner.en.svg, erasure-problem.en.svg):
+
+    python tanner_graphs.py              # abas valodas
+    python tanner_graphs.py --lang en    # tikai angļu
 """
 
+import argparse
 import os
 import sys
 
@@ -22,14 +27,28 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import ldpc_toy as L  # noqa: E402
 
+# nosaukums: ((virsraksts latviski, angliski), bitu skaits, pārbaudes)
 GRAPHS = {
     "hamming-tanner.svg": (
-        "Heminga koda [7,4,1] Tanera grafs", 4,
+        ("Heminga koda [7,4,1] Tanera grafs", "Tanner graph of the Hamming code [7,4,1]"), 4,
         [[1, 2, 3], [1, 2, 4], [1, 3, 4]]),
     "erasure-problem.svg": (
-        "Tanera grafs 8.5. uzdevumam", 6,
+        ("Tanera grafs 8.5. uzdevumam", "Tanner graph for Problem 8.5"), 6,
         [[1, 2, 3], [1, 4, 5], [2, 4, 6], [3, 5, 6]]),
 }
+
+
+LANG = "lv"                           # uzrakstu valoda: "lv" vai "en" (sk. main)
+
+
+def T(lv, en):
+    """Uzraksts izvēlētajā valodā LANG."""
+    return en if LANG == "en" else lv
+
+
+def svg_name(name):
+    """Faila nosaukums izvēlētajā valodā: x.svg (latviski) vai x.en.svg (angliski)."""
+    return name[:-4] + ".en.svg" if LANG == "en" else name
 
 
 def label(x, y, letter, index, size=13):
@@ -60,16 +79,22 @@ def tanner_svg(title, n_bits, checks):
         s += ('<circle cx="%g" cy="%g" r="16" fill="#dbe6f3" stroke="%s" '
               'stroke-width="1.6"/>\n' % (xb[j], ybit, L.BLUE))
         s += label(xb[j], ybit + 5, "x", j + 1)
-    s += L.txt(W / 2, Ht - 12, "katrs y ir ar to savienoto x XOR", 11, "#555")
+    s += L.txt(W / 2, Ht - 12, T("katrs y ir ar to savienoto x XOR", "each y is the XOR of the x connected to it"), 11, "#555")
     s += "</svg>\n"
     return s
 
 
 def main():
-    for name, (title, n_bits, checks) in GRAPHS.items():
-        with open(os.path.join(HERE, name), "w", encoding="utf-8", newline="\n") as f:
-            f.write(tanner_svg(title, n_bits, checks))
-        print("Wrote", name)
+    global LANG
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--lang", choices=["lv", "en", "all"], default="all",
+                    help="uzrakstu valoda (noklusēti abas)")
+    langs = {"lv": ["lv"], "en": ["en"], "all": ["lv", "en"]}[ap.parse_args().lang]
+    for LANG in langs:
+        for name, (title, n_bits, checks) in GRAPHS.items():
+            with open(os.path.join(HERE, svg_name(name)), "w", encoding="utf-8", newline="\n") as f:
+                f.write(tanner_svg(T(*title), n_bits, checks))
+            print("Wrote", svg_name(name))
 
 
 if __name__ == "__main__":

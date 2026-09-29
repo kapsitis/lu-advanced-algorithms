@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 960 600" width="960" height="600" role="img" aria-label="P-frame encoding">
+<title>Encoding a P-frame macroblock with a motion vector</title>
+<rect x="0" y="0" width="960" height="600" fill="#ffffff"/>
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/></marker><marker id="arwb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C78A8"/></marker></defs>
+<text x="20" y="34" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#222" text-anchor="start" font-weight="bold">reference frame</text>
+<image x="20" y="44" width="320" height="240" preserveAspectRatio="none" style="image-rendering:pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAAAAABURuK3AAAByElEQVR42u3dQY6CMBSA4afxMF33OD2Ex+I4rnscl2wQE4sU6PdvZyaTfHn4AqjcnqGW7ggAAgQIUAABAgQogAABAhRAgAABCiBAgAAFECBAgAIIECBAAQQIEKAAAgQIUAABAgQogAABAgQogAABAhRAgAABCiBAgAAFECBAgAII8PA9OvzPEhExmUABBAjQEvmyK16rP52bf6+aQIewAAIce4mUhr9N59okJhAgQICWSP/VsbRJcsTxL3uZQIAAAVoi27zoD3kDxQQCBAgQoAACBAhQXc5EUgz9fi4TCBAgQIACCBAgQAEECBCgAMZZLmel8BlFEwgQIEBL5MfqrpvEPRGHsAACBAhQAAECBCiAAAECVPtbfPe4puXDhg5hAQQIEKAAAgToTOTT6Uge7CTEBAIECNAS+cvrfdlkKVUT6BAWQIAjfhX81LBJPE/EISyAAD2UauVCVPZkQwEECNASueptDhMIECBAAQQIEKAAAgQIUAABAgQogAABAhRAgAABCiBAgAAFECBAgAAFECBAgAIIECBAAQQIEKAAAgQIUAABAgQogAABAhRAgAABCiBAgAAFECBAgAIIECBAAQQIECBAAezVG3VKGGYkma9pAAAAAElFTkSuQmCC"/>
+<line x1="100" y1="44" x2="100" y2="284" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<line x1="180" y1="44" x2="180" y2="284" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<line x1="260" y1="44" x2="260" y2="284" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<line x1="20" y1="124" x2="340" y2="124" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<line x1="20" y1="204" x2="340" y2="204" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<rect x="20" y="44" width="320" height="240" rx="0" fill="none" stroke="#5a6a7a" stroke-width="1.2"/>
+<text x="20" y="330" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#222" text-anchor="start" font-weight="bold">current frame</text>
+<image x="20" y="340" width="320" height="240" preserveAspectRatio="none" style="image-rendering:pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAAAAABURuK3AAAByUlEQVR42u3dva3CMBiG0RfEOK4yUEZgqAxE5YEo00BS5EeOc572gnR1ZOtTHCCPd7SlJwKAAAECFECAAAEKIECAAAUQIECAAggQIEABBAgQoAACBAhQAAECBCiAAAECFECAAAEKIECAAAEKIECAAAUQIECAAggQIEABBAgQoAACBAhQAAECBCiAAAECFECAAAEK4H69mvuPxiSZrEBbWAABGiIrs+Kz+Ne5+XXVCrSFBRDgvYfIuOG9pbVJYgUCBAjQEGl9dPyaJEPSwrGXFQgQIEBD5OBKxzdQrECAAAECFECAAAGqwSuRks4/z2UFAgQIEKAAAgQIUAABAgQogOnjOKvkDt9RtAIBAgRoiBxSPXWSuCdiCwMUQIAAAQogQIAABRAgwDjOyhXOtHzZ0BYGKIAAAQIUQICuRP5djgzdXYRYgQABAjREcv7Hp8ZdhlK1Am1hAQR4x5+CnzZMEs8TsYUFEKCHUi0cRA2ebGgLCyBAQ+S6tzmsQIAAAQogQIAABRAgQIACCBAgQAEECBCgAAIECFAAAQIEKIAAAQIEKIAAAQIUQIAAAQogQIAABRAgQIACCBAgQAEECBCgAAIECFAAAQLsrC+wpBhWv3bHKAAAAABJRU5ErkJggg=="/>
+<line x1="100" y1="340" x2="100" y2="580" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<line x1="180" y1="340" x2="180" y2="580" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<line x1="260" y1="340" x2="260" y2="580" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<line x1="20" y1="420" x2="340" y2="420" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<line x1="20" y1="500" x2="340" y2="500" stroke="#fff" stroke-width="1" stroke-opacity="0.8"/>
+<rect x="20" y="340" width="320" height="240" rx="0" fill="none" stroke="#5a6a7a" stroke-width="1.2"/>
+<rect x="100" y="420" width="80" height="80" rx="0" fill="none" stroke="#F58518" stroke-width="3"/>
+<rect x="100" y="124" width="80" height="80" rx="0" fill="none" stroke="#F58518" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="70" y="109" width="80" height="80" rx="0" fill="none" stroke="#54A24B" stroke-width="3"/>
+<circle cx="140" cy="164" r="3.5" fill="#4C78A8"/>
+<line x1="140" y1="164" x2="110" y2="149" stroke="#4C78A8" stroke-width="3" marker-end="url(#arwb)"/>
+<text x="350" y="119" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#54A24B" text-anchor="start" font-weight="normal">best match</text>
+<text x="350" y="200" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#F58518" text-anchor="start" font-weight="normal">the same position</text>
+<text x="350" y="216" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#F58518" text-anchor="start" font-weight="normal">as the current block</text>
+<text x="350" y="460" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#F58518" text-anchor="start" font-weight="normal">16×16 macroblock</text>
+<text x="350" y="475" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#F58518" text-anchor="start" font-weight="normal">to be encoded</text>
+<text x="20" y="304" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#4C78A8" text-anchor="start" font-weight="bold">motion vector MV = (-6, -3)</text>
+<text x="520" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">current</text>
+<text x="520" y="66" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">block</text>
+<image x="480" y="76" width="80" height="80" preserveAspectRatio="none" style="image-rendering:pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAAAAACreq1xAAAAdElEQVR42u2YwQ2AIAxFv8RxenKgjuBQDOSpA3nzSDAaLPH1Rkje4f0ALcuuh+WSVK9l0cv1Q+B6y/3R3CWUgaE4DrOE4jhMFYrhECDA9kkxHAIECHC668twmC+U4E0BCBDgxC1xMDwCBNj7zRKStOHwK+AJRzwH8Dp/USwAAAAASUVORK5CYII="/>
+<rect x="480" y="76" width="80" height="80" rx="0" fill="none" stroke="#F58518" stroke-width="2.5"/>
+<text x="650" y="50" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">prediction</text>
+<text x="650" y="66" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">(reference + MV)</text>
+<image x="610" y="76" width="80" height="80" preserveAspectRatio="none" style="image-rendering:pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAAAAACreq1xAAAAdElEQVR42u2YwQ2AIAxFv8RhenacDuFYjOO543jzSDAaLPH1Rkje4f0ALcuuh+WSVK9l0cv1Q+B6y/3R3CWUgaE4DrOE4jhMFYrhECDA9kkxHAIECHC668twmC+U4E0BCBDgxC1xMDwCBNj7zRKStOHwK+AJMHIH2DsyCIEAAAAASUVORK5CYII="/>
+<rect x="610" y="76" width="80" height="80" rx="0" fill="none" stroke="#54A24B" stroke-width="2.5"/>
+<text x="585" y="122" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" fill="#222" text-anchor="middle" font-weight="bold">−</text>
+<text x="585" y="194" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">residual = block − prediction</text>
+<image x="545" y="206" width="80" height="80" preserveAspectRatio="none" style="image-rendering:pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAIAAAABc2X6AAAApklEQVR42u3cMQ6AIAwF0GI8GQfnajjrYBw0WHjdTFxeaH4oQUvvPbJXa6fHWm/e3WKxAgaerMqw0LokjRUGBgZ+Uvv0KaWlgYGF1r9jyQoDAwutzCmlpYGBgYGBgYGT7LQSbq20NDAwMDAwMDAwMDAw8AvjYf55UEsDA8fCl0udaQEDAwMDAwMDAwMDAxsPXS7V0sDAwMDAwMDD/vLg20NgYOCv6wCeTx7z+NngPAAAAABJRU5ErkJggg=="/>
+<rect x="545" y="206" width="80" height="80" rx="0" fill="none" stroke="#5a6a7a" stroke-width="1.2"/>
+<line x1="585" y1="162" x2="585" y2="184" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<text x="585" y="304" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="middle" font-weight="normal">values: 0, 4; SAD = 720</text>
+<text x="529" y="376" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#555" text-anchor="end" font-weight="normal">for comparison:</text>
+<text x="529" y="392" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#555" text-anchor="end" font-weight="normal">without motion (MV = 0)</text>
+<image x="545" y="344" width="80" height="80" preserveAspectRatio="none" style="image-rendering:pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAIAAAABc2X6AAABCUlEQVR42u3bwQ2CMBQG4GI8u4KaeIYddAFncAMncRUXwB3kTGJcQQeoV+VQFU1Q+N6tCdB8ec2flkAWQgwvV56H1lVV7e9Nz3s8Te6HxfySmHcUBlbAwD2rcVcTx/JwP5xtlqlY2h1Sz1qnMiyUe0saGFhofZxSOgwMDNx1aDW3OM3a6zAwMHCnodU8ta11GBgYGBgYGBi47U7ryQtxHQYGBgYGBgYGBgYGBu7p8XA61WFgYOA/Cq3zWYeBgYGBgYGBgYGBgYEHcTyMj/9LZ1nq6mK7/IMvIK7Xh+FqZUkDA/f3ndZbGfajKaXDwMA9rizG+L2HJSOuLBMboLBYtJ+3rnUYGHgodQPxMS9MKQ8HKAAAAABJRU5ErkJggg=="/>
+<rect x="545" y="344" width="80" height="80" rx="0" fill="none" stroke="#5a6a7a" stroke-width="1.2"/>
+<text x="585" y="442" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#333" text-anchor="middle" font-weight="normal">large values; SAD = 10658</text>
+<rect x="760" y="60" width="180" height="56" rx="6" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="850" y="84" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">motion vector</text>
+<text x="850" y="102" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12" fill="#222" text-anchor="middle" font-weight="normal">(-6, -3)</text>
+<rect x="760" y="200" width="180" height="70" rx="6" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
+<text x="850" y="224" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">transform</text>
+<text x="850" y="241" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">+ quantization</text>
+<text x="850" y="259" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">(residual only)</text>
+<line x1="633" y1="246" x2="754" y2="235" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<rect x="760" y="320" width="180" height="56" rx="6" fill="#dcecd8" stroke="#54A24B" stroke-width="1.4"/>
+<text x="850" y="344" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">entropy coding</text>
+<text x="850" y="362" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" text-anchor="middle" font-weight="normal">(CAVLC or CABAC)</text>
+<line x1="850" y1="272" x2="850" y2="316" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<path d="M 944 88 L 956 88 L 956 340" stroke="#444" stroke-width="1.8" fill="none" marker-end="url(#arw)"/>
+<line x1="956" y1="340" x2="944" y2="340" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<line x1="850" y1="378" x2="850" y2="410" stroke="#444" stroke-width="1.8" marker-end="url(#arw)"/>
+<text x="850" y="428" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="13" fill="#222" text-anchor="middle" font-weight="normal">0100110…</text>
+</svg>

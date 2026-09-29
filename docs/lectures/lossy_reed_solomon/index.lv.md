@@ -187,7 +187,7 @@ Saskaitīšanas un reizināšanas tabula pie $p = 3$.
 
 **Piemērs ($\text{GF}(8)$):**
 
-* $p(x) = x^3 + x + 1$ ir *nereducējams* (*irreducible*) polinoms; citiem vārdiem - to nevar sadalīt reizinātājos tā, lai reizinātāju koeficienti būtu veseli skaitļi.
+* $p(x) = x^3 + x + 1$ ir *nereducējams* (*irreducible*) polinoms; citiem vārdiem - to nevar sadalīt reizinātājos tā, lai reizinātāju koeficienti būtu skaitļi no $\text{GF}(2)$ (0 un 1 ar modulāro aritmētiku).
 * Veidojam visus iespējamos "atlikumus", dalot ar polinomu $p(x)$, turklāt šo polinomu koeficientus visur saskaitām un reizinām pēc moduļa $2$.
 * Tad visi $8$ iespējamie atlikumi veido Galuā lauku $\text{GF}(2^3)$: $0,\;1,\;x,\;x+1,\;x^2,\;x^2+1,\;x^2+x,\;x^2+x+1.$
 

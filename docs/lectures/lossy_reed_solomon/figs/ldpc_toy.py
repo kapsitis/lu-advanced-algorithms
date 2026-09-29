@@ -18,9 +18,14 @@ tikai 1 kļūdu (tāpat kā Heminga kods).  Dimensija k = 12 - rank(H) = 7.
 Kanāls: bitu 0 sūta kā +1, bitu 1 -- kā -1; saņemtā vērtība r_j ir signāls ar
 troksni.  Zīme rāda ticamāko bitu, |r_j| -- cik tas ir drošs.
 
-    python ldpc_toy.py
+
+Uzraksti ir latviski (ldpc-tanner.svg, ldpc-decoding.svg) un angliski (ldpc-tanner.en.svg, ldpc-decoding.en.svg):
+
+    python ldpc_toy.py              # abas valodas
+    python ldpc_toy.py --lang en    # tikai angļu
 """
 
+import argparse
 import itertools
 import os
 
@@ -39,6 +44,19 @@ RECEIVED = np.array([0.1, 0.8, 0.3, 1.3, 0.8, 0.9, 0.6, 1.1, -1.3, 1.4, 0.9, 1.2
 
 
 # --- 1. Tanera grafs ----------------------------------------------------------
+
+LANG = "lv"                           # uzrakstu valoda: "lv" vai "en" (sk. main)
+
+
+def T(lv, en):
+    """Uzraksts izvēlētajā valodā LANG."""
+    return en if LANG == "en" else lv
+
+
+def svg_name(name):
+    """Faila nosaukums izvēlētajā valodā: x.svg (latviski) vai x.en.svg (angliski)."""
+    return name[:-4] + ".en.svg" if LANG == "en" else name
+
 
 def tanner_edges(H):
     """Šķautne (i, j) savieno pārbaudi i ar bitu j, ja H[i, j] = 1."""
@@ -137,10 +155,10 @@ def num(v):
 def tanner_svg():
     m, n = H.shape
     W, Ht = 900, 340
-    s = svg_head(W, Ht, "LDPC koda pārbaudes matrica H un Tanera grafs")
+    s = svg_head(W, Ht, T("LDPC koda pārbaudes matrica H un Tanera grafs", "Parity-check matrix H and Tanner graph of an LDPC code"))
     # matrica H
     cx0, cy0, cc = 20, 60, 20
-    s += txt(cx0 + n * cc / 2, 36, "pārbaudes matrica H", 13, weight="bold")
+    s += txt(cx0 + n * cc / 2, 36, T("pārbaudes matrica H", "parity-check matrix H"), 13, weight="bold")
     for i in range(m):
         s += txt(cx0 - 6, cy0 + i * cc + 14, "", 11)
         for j in range(n):
@@ -152,13 +170,13 @@ def tanner_svg():
         s += txt(cx0 + j * cc + cc / 2, cy0 + m * cc + 16, str(j + 1), 10, "#555")
     for i in range(m):
         s += txt(cx0 + n * cc + 14, cy0 + i * cc + 14, "p%d" % (i + 1), 10.5, "#555")
-    s += txt(cx0 + n * cc / 2, cy0 + m * cc + 34, "kolonnas — biti, rindas — pārbaudes", 11, "#555")
-    s += txt(cx0 + n * cc / 2, cy0 + m * cc + 50, "katrā kolonnā 2 vieninieki, katrā rindā 4", 11, "#555")
+    s += txt(cx0 + n * cc / 2, cy0 + m * cc + 34, T("kolonnas — biti, rindas — pārbaudes", "columns — bits, rows — checks"), 11, "#555")
+    s += txt(cx0 + n * cc / 2, cy0 + m * cc + 50, T("katrā kolonnā 2 vieninieki, katrā rindā 4", "2 ones in every column, 4 in every row"), 11, "#555")
 
     # Tanera grafs
     gx0, gx1 = 390, 880
     ycheck, ybit = 80, 270
-    s += txt((gx0 + gx1) / 2, 36, "Tanera grafs", 13, weight="bold")
+    s += txt((gx0 + gx1) / 2, 36, T("Tanera grafs", "Tanner graph"), 13, weight="bold")
     xb = [gx0 + (gx1 - gx0) * (j + 0.5) / n for j in range(n)]
     xc = [gx0 + (gx1 - gx0) * (i + 0.5) / m for i in range(m)]
     for (i, j) in tanner_edges(H):
@@ -172,12 +190,12 @@ def tanner_svg():
         s += ('<circle cx="%g" cy="%g" r="14" fill="#dbe6f3" stroke="%s" '
               'stroke-width="1.6"/>\n' % (xb[j], ybit, BLUE))
         s += txt(xb[j], ybit + 4.5, str(j + 1), 12, INK, weight="bold")
-    s += txt(gx0 - 6, ycheck + 4, "pārbaudes", 11, "#555", "end")
-    s += txt(gx0 - 6, ybit + 4, "biti", 11, "#555", "end")
+    s += txt(gx0 - 6, ycheck + 4, T("pārbaudes", "checks"), 11, "#555", "end")
+    s += txt(gx0 - 6, ybit + 4, T("biti", "bits"), 11, "#555", "end")
     s += txt((gx0 + gx1) / 2, ybit + 40,
-             "šķautne savieno pārbaudi i ar bitu j, ja H[i, j] = 1;", 11, "#555")
+             T("šķautne savieno pārbaudi i ar bitu j, ja H[i, j] = 1;", "an edge joins check i and bit j if H[i, j] = 1;"), 11, "#555")
     s += txt((gx0 + gx1) / 2, ybit + 56,
-             "katras pārbaudes bitu summa pēc moduļa 2 ir 0", 11, "#555")
+             T("katras pārbaudes bitu summa pēc moduļa 2 ir 0", "the bits of every check add up to 0 modulo 2"), 11, "#555")
     s += "</svg>\n"
     return s
 
@@ -187,17 +205,17 @@ def decoding_svg(y, bf_hist, bf_result, ms_hist, ms_result):
     lw, cw, rh = 300, 48, 38
     W = lw + n * cw + 20
     rows = [
-        ("nosūtītais koda vārds c", "bits", CODEWORD),
-        ("saņemtās vērtības r (0 → +1, 1 → −1)", "value", RECEIVED),
-        ("cietais lēmums y (r < 0 → 1)", "bits", y),
-        ("bitu pārslēgšana: neapmierinātās pārbaudes", "count", bf_hist[0][2]),
-        ("bitu pārslēgšana: rezultāts", "bits", bf_result),
-        ("min–sum: vērtības pēc 1. iterācijas", "value", ms_hist[-1]),
-        ("min–sum: rezultāts", "bits", ms_result),
+        (T("nosūtītais koda vārds c", "sent codeword c"), "bits", CODEWORD),
+        (T("saņemtās vērtības r (0 → +1, 1 → −1)", "received values r (0 → +1, 1 → −1)"), "value", RECEIVED),
+        (T("cietais lēmums y (r < 0 → 1)", "hard decision y (r < 0 → 1)"), "bits", y),
+        (T("bitu pārslēgšana: neapmierinātās pārbaudes", "bit flipping: unsatisfied checks"), "count", bf_hist[0][2]),
+        (T("bitu pārslēgšana: rezultāts", "bit flipping: result"), "bits", bf_result),
+        (T("min–sum: vērtības pēc 1. iterācijas", "min–sum: values after iteration 1"), "value", ms_hist[-1]),
+        (T("min–sum: rezultāts", "min–sum: result"), "bits", ms_result),
     ]
     Ht = 70 + len(rows) * rh + 60
-    s = svg_head(W, Ht, "Cietā un mīkstā LDPC atkodēšana")
-    s += txt(20, 28, "Divas kļūdas (1. un 3. bits) vienā koda vārdā: cietā un mīkstā atkodēšana",
+    s = svg_head(W, Ht, T("Cietā un mīkstā LDPC atkodēšana", "Hard and soft LDPC decoding"))
+    s += txt(20, 28, T("Divas kļūdas (1. un 3. bits) vienā koda vārdā: cietā un mīkstā atkodēšana", "Two errors (bits 1 and 3) in one codeword: hard and soft decoding"),
              14, INK, "start", weight="bold")
     for j in range(n):
         s += txt(lw + j * cw + cw / 2, 56, str(j + 1), 11, "#555")
@@ -228,18 +246,26 @@ def decoding_svg(y, bf_hist, bf_result, ms_hist, ms_result):
                          RED if v == max(vals) else "#555", weight="bold" if v == max(vals) else "normal")
     yb = 64 + len(rows) * rh + 14
     s += rect(20, yb - 10, 14, 14, "#dcecd8", GREEN, 1.4, 3)
-    s += txt(40, yb + 2, "bits sakrīt ar nosūtīto", 11, "#333", "start")
+    s += txt(40, yb + 2, T("bits sakrīt ar nosūtīto", "bit equals the sent bit"), 11, "#333", "start")
     s += rect(220, yb - 10, 14, 14, "#fbdcdc", RED, 1.4, 3)
-    s += txt(240, yb + 2, "kļūda", 11, "#333", "start")
-    s += txt(300, yb + 2, "zilā vērtība → drīzāk 0, oranžā → drīzāk 1; josla — drošums |r|",
+    s += txt(240, yb + 2, T("kļūda", "error"), 11, "#333", "start")
+    s += txt(300, yb + 2, T("zilā vērtība → drīzāk 0, oranžā → drīzāk 1; josla — drošums |r|", "blue value → probably 0, orange → probably 1; bar — confidence |r|"),
              11, "#333", "start")
-    s += txt(20, yb + 24, "Bitu pārslēgšana pārslēdz 9. bitu un iegūst derīgu, bet nepareizu koda vārdu 000000000000; "
-             "min–sum redz, ka 1. un 3. bits ir nedroši, un atrod pareizo.", 11, "#333", "start")
+    s += txt(20, yb + 24, T("Bitu pārslēgšana pārslēdz 9. bitu un iegūst derīgu, bet nepareizu koda vārdu "
+                            "000000000000; min–sum redz, ka 1. un 3. bits ir nedroši, un atrod pareizo.",
+                            "Bit flipping flips bit 9 and reaches a valid but wrong codeword 000000000000; "
+                            "min–sum sees that bits 1 and 3 are unreliable and finds the correct one."),
+             11, "#333", "start")
     s += "</svg>\n"
     return s
 
 
 def main():
+    global LANG
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--lang", choices=["lv", "en", "all"], default="all",
+                    help="uzrakstu valoda (noklusēti abas)")
+    langs = {"lv": ["lv"], "en": ["en"], "all": ["lv", "en"]}[ap.parse_args().lang]
     m, n = H.shape
     print("H: %d x %d, rank %d, k = %d" % (m, n, rank2(H), n - rank2(H)))
     words = [np.array(v) for v in itertools.product([0, 1], repeat=n)
@@ -277,11 +303,12 @@ def main():
           % (RECEIVED @ (1 - 2 * best), RECEIVED.sum()))
 
     here = os.path.dirname(os.path.abspath(__file__))
-    for name, content in [("ldpc-tanner.svg", tanner_svg()),
-                          ("ldpc-decoding.svg", decoding_svg(y, bf_hist, bf, ms_hist, ms))]:
-        with open(os.path.join(here, name), "w", encoding="utf-8", newline="\n") as f:
-            f.write(content)
-        print("Wrote", name)
+    for LANG in langs:
+        for name, content in [("ldpc-tanner.svg", tanner_svg()),
+                              ("ldpc-decoding.svg", decoding_svg(y, bf_hist, bf, ms_hist, ms))]:
+            with open(os.path.join(here, svg_name(name)), "w", encoding="utf-8", newline="\n") as f:
+                f.write(content)
+            print("Wrote", svg_name(name))
 
 
 if __name__ == "__main__":

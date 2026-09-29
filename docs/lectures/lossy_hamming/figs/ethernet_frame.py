@@ -10,14 +10,32 @@ Parādīti lauku garumi bitos un kontrolsummas trijos protokolu slāņos:
 
 Lauku platumi attēlā nav proporcionāli garumiem (datu lauks ir daudz garāks).
 
-    python ethernet_frame.py
+
+Uzraksti ir latviski (ethernet-frame.svg) un angliski (ethernet-frame.en.svg):
+
+    python ethernet_frame.py              # abas valodas
+    python ethernet_frame.py --lang en    # tikai angļu
 """
 
+import argparse
 import os
 
 FONT = "DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif"
 INK, BLUE, ORANGE, GREEN = "#222", "#4C78A8", "#F58518", "#54A24B"
 GRAYF, GRAYS = "#eceff3", "#8a96a3"
+
+
+LANG = "lv"                           # uzrakstu valoda: "lv" vai "en" (sk. main)
+
+
+def T(lv, en):
+    """Uzraksts izvēlētajā valodā LANG."""
+    return en if LANG == "en" else lv
+
+
+def svg_name(name):
+    """Faila nosaukums izvēlētajā valodā: x.svg (latviski) vai x.en.svg (angliski)."""
+    return name[:-4] + ".en.svg" if LANG == "en" else name
 
 
 def txt(x, y, s, size=12, fill=INK, anchor="middle", weight="normal"):
@@ -53,28 +71,29 @@ def fields(x0, y, h, items):
 
 
 def build():
+    title = T("Ethernet kadrs un kontrolsummas", "Ethernet frame and checksums")
     W, H = 960, 430
     s = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" '
-         'height="%d" role="img" aria-label="Ethernet kadrs un kontrolsummas">\n'
-         '<title>Ethernet kadrs un kontrolsummas</title>\n'
+         'height="%d" role="img" aria-label="%s">\n'
+         '<title>%s</title>\n'
          '<rect x="0" y="0" width="%d" height="%d" fill="#ffffff"/>\n'
          '<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" '
          'markerWidth="6" markerHeight="6" orient="auto-start-reverse">'
          '<path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/></marker></defs>\n'
-         % (W, H, W, H, W, H))
+         % (W, H, W, H, title, title, W, H))
 
     # --- Ethernet kadrs -------------------------------------------------------
-    s += txt(20, 28, "Ethernet II kadrs (kanāla slānis, OSI 2. slānis)", 14, INK,
+    s += txt(20, 28, T("Ethernet II kadrs (kanāla slānis, OSI 2. slānis)", "Ethernet II frame (data link layer, OSI layer 2)"), 14, INK,
              "start", weight="bold")
     y1, h1 = 50, 56
     row, pos = fields(20, y1, h1, [
-        ("Preambula", "56 biti", 110, GRAYF, GRAYS),
-        ("SFD", "8 biti", 50, GRAYF, GRAYS),
-        ("Mērķa\nMAC adrese", "48 biti", 120, "#f4f6f8", "#5a6a7a"),
-        ("Sūtītāja\nMAC adrese", "48 biti", 120, "#f4f6f8", "#5a6a7a"),
-        ("EtherType", "16 biti", 90, "#f4f6f8", "#5a6a7a"),
-        ("Dati (payload)", "368 – 12 000 biti (46 – 1500 baiti)", 300, "#dbe6f3", BLUE),
-        ("FCS\nCRC-32", "32 biti", 100, "#fde5cc", ORANGE),
+        (T("Preambula", "Preamble"), T("56 biti", "56 bits"), 110, GRAYF, GRAYS),
+        ("SFD", T("8 biti", "8 bits"), 50, GRAYF, GRAYS),
+        (T("Mērķa\nMAC adrese", "Destination\nMAC address"), T("48 biti", "48 bits"), 120, "#f4f6f8", "#5a6a7a"),
+        (T("Sūtītāja\nMAC adrese", "Source\nMAC address"), T("48 biti", "48 bits"), 120, "#f4f6f8", "#5a6a7a"),
+        ("EtherType", T("16 biti", "16 bits"), 90, "#f4f6f8", "#5a6a7a"),
+        (T("Dati (payload)", "Data (payload)"), T("368 – 12 000 biti (46 – 1500 baiti)", "368 – 12 000 bits (46 – 1500 bytes)"), 300, "#dbe6f3", BLUE),
+        ("FCS\nCRC-32", T("32 biti", "32 bits"), 100, "#fde5cc", ORANGE),
     ])
     s += row
     # iekava: CRC-32 aprēķina pār mērķa adresi ... datiem
@@ -90,43 +109,54 @@ def build():
     s += ('<line x1="%g" y1="%g" x2="%g" y2="%g" stroke="%s" stroke-width="1.6" '
           'marker-end="url(#arw)"/>\n' % (fx, yb + 26, fx, y1 + h1 + 24, ORANGE))
     s += txt((bx0 + bx1) / 2, yb + 44,
-             "sūtītājs aprēķina CRC-32 no šiem laukiem un ieraksta to FCS laukā; "
-             "saņēmējs pārrēķina un bojātu kadru izmet", 11.5, "#333")
-    s += txt(20 + 80, yb + 12, "sinhronizācija (nepārbauda)", 11, "#666")
+             T("sūtītājs aprēķina CRC-32 no šiem laukiem un ieraksta to FCS laukā; "
+               "saņēmējs pārrēķina un bojātu kadru izmet",
+               "the sender computes CRC-32 over these fields and writes it into FCS; "
+               "the receiver recomputes it and drops a corrupted frame"), 11.5, "#333")
+    s += txt(20 + 80, yb + 12, T("sinhronizācija (nepārbauda)", "sync (not checked)"), 11, "#666")
 
     # --- datu lauka saturs: IPv4 + TCP ---------------------------------------
     y2, h2 = 290, 56
-    s += txt(20, y2 - 38, "Ethernet datu lauka saturs: IPv4 pakete ar TCP segmentu", 14, INK,
+    s += txt(20, y2 - 38, T("Ethernet datu lauka saturs: IPv4 pakete ar TCP segmentu", "Contents of the Ethernet data field: an IPv4 packet with a TCP segment"), 14, INK,
              "start", weight="bold")
     row2, pos2 = fields(60, y2, h2, [
-        ("", "160 biti (bez opcijām)", 260, "#f4f6f8", "#5a6a7a"),
-        ("", "160 biti (bez opcijām)", 260, "#f4f6f8", "#5a6a7a"),
-        ("TCP dati", "pārējie biti", 300, "#dbe6f3", BLUE),
+        ("", T("160 biti (bez opcijām)", "160 bits (no options)"), 260, "#f4f6f8", "#5a6a7a"),
+        ("", T("160 biti (bez opcijām)", "160 bits (no options)"), 260, "#f4f6f8", "#5a6a7a"),
+        (T("TCP dati", "TCP data"), T("pārējie biti", "remaining bits"), 300, "#dbe6f3", BLUE),
     ])
     s += row2
     # kontrolsummu lauki galvenēs
-    for (x, w), label in zip(pos2[:2], ["80.–95. bits", "128.–143. bits"]):
+    for (x, w), label in zip(pos2[:2], [T("80.–95. bits", "bits 80–95"), T("128.–143. bits", "bits 128–143")]):
         cx = x + w - 92
         s += rect(cx, y2 + 6, 84, h2 - 12, "#dcecd8", GREEN, 1.6, 3)
-        s += txt(cx + 42, y2 + h2 / 2 - 2, "kontrolsumma", 10.5, INK, weight="bold")
+        s += txt(cx + 42, y2 + h2 / 2 - 2, T("kontrolsumma", "checksum"), 10.5, INK, weight="bold")
         s += txt(cx + 42, y2 + h2 / 2 + 12, label, 10, "#333")
-    s += txt(pos2[0][0] + 84, y2 + h2 / 2 + 5, "IPv4 galvene", 12)
-    s += txt(pos2[1][0] + 84, y2 + h2 / 2 + 5, "TCP galvene", 12)
+    s += txt(pos2[0][0] + 84, y2 + h2 / 2 + 5, T("IPv4 galvene", "IPv4 header"), 12)
+    s += txt(pos2[1][0] + 84, y2 + h2 / 2 + 5, T("TCP galvene", "TCP header"), 12)
     s += txt(60, y2 + h2 + 40,
-             "IPv4 galvenes kontrolsumma sargā tikai IP galveni; TCP kontrolsumma — TCP galveni un datus "
-             "(un IP adreses).", 11.5, "#333", "start")
+             T("IPv4 galvenes kontrolsumma sargā tikai IP galveni; TCP kontrolsumma — TCP galveni un datus "
+               "(un IP adreses).",
+               "The IPv4 header checksum protects only the IP header; the TCP checksum covers the TCP "
+               "header and data (and the IP addresses)."), 11.5, "#333", "start")
     s += txt(60, y2 + h2 + 58,
-             "Abas ir 16 bitu vārdu summa ar pārnesi (vieninieku papildkods) — daudz vājākas par CRC-32.",
-             11.5, "#333", "start")
+             T("Abas ir 16 bitu vārdu summa ar pārnesi (vieninieku papildkods) — daudz vājākas par CRC-32.",
+               "Both are sums of 16-bit words with end-around carry (ones' complement) — much weaker "
+               "than CRC-32."), 11.5, "#333", "start")
     s += "</svg>\n"
     return s
 
 
 def main():
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ethernet-frame.svg")
-    with open(out, "w", encoding="utf-8", newline="\n") as f:
-        f.write(build())
-    print("Wrote", out)
+    global LANG
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--lang", choices=["lv", "en", "all"], default="all",
+                    help="uzrakstu valoda (noklusēti abas)")
+    langs = {"lv": ["lv"], "en": ["en"], "all": ["lv", "en"]}[ap.parse_args().lang]
+    for LANG in langs:
+        out = os.path.join(os.path.dirname(os.path.abspath(__file__)), svg_name("ethernet-frame.svg"))
+        with open(out, "w", encoding="utf-8", newline="\n") as f:
+            f.write(build())
+        print("Wrote", out)
 
 
 if __name__ == "__main__":

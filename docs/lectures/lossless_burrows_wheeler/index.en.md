@@ -104,7 +104,9 @@ The Burrows–Wheeler transform sorts all right contexts lexicographically and w
 
 ### Inverse Burrows–Wheeler Transform
 
-From the Burrows–Wheeler transform (the last column) one can deduce what the first column will be (the same letters, but in alphabetical order). One can show that the order of identical letters does not change in the result of the Burrows–Wheeler transform. Therefore it is enough to know these two columns and use the L2F (Last-to-First) mapping table.
+From the Burrows–Wheeler transform (the last column) one can deduce what the first column will be (the same letters, but 
+in alphabetical order). One can show that the order of identical letters does not change in the result of the 
+Burrows–Wheeler transform. Therefore it is enough to know these two columns and use the L2F (Last-to-First) mapping table.
 
 It is also possible to reconstruct the whole matrix:
 

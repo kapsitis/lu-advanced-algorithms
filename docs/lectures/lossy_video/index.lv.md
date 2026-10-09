@@ -104,11 +104,7 @@ Skaņa ir gaisa spiediena svārstības. Mikrofons tās pārvērš elektriskā si
 
 #### Dzirdamās frekvences, kritiskās joslas un filtrubankas
 
-* Cilvēka ausis var uztvert no $20$ līdz $20\,000$ hercu skaņas frekvenci. Pusmūža cilvēki - no $16\,000$ herciem (*dog whistle* uz dzirdamības diapazona robežas).
-* Pirmās oktāvas "la" (jeb **A4**) izmanto toņdakšu, ko sauc **Stuttgart pitch**, kam ir 440 Hz (nosvārsta gaisu 440 reizes sekundē). Ja frekvence palielinās divkārt, skaņa par oktāvu augstāka.
-* "Labi temperēta" skaņu skala saliek $12$ pustoņus ar vienādām blakusesošo pustoņu frekvenču attiecībām.
-* Piemēram, "do" (C) un "do diēzs" (Cis) frekvenču attiecība ir $1$ pret $\sqrt[12]{2}$.
-
+Cilvēka ausis var uztvert no $20$ līdz $20\,000$ hercu skaņas frekvenci. Pusmūža cilvēki - no $16\,000$ herciem (*dog whistle* uz dzirdamības diapazona robežas).
 Iekšējā ausī (gliemezī) katra vieta reaģē uz savu frekvenču apgabalu, tāpēc dzirde darbojas kā filtru komplekts. Apgabalus, kuros skaņas savstarpēji ietekmē viena otras uztveri, sauc par *kritiskajām joslām*; to ir apmēram $24$. Zemās frekvencēs kritiskās joslas ir šauras (apmēram $100$ Hz), augstās -- platas (vairāki kHz): auss zemās frekvences izšķir daudz smalkāk. Šo skalu sauc par Bark skalu.
 
 **Analizējošās filtrubankas** (*filterbanks*) atdarina šo dzirdes uzbūvi: kodētājs skaņas signālu sadala daudzās frekvenču joslās (parasti ar MDCT -- modificēto diskrēto kosinusu transformāciju, sk. DCT attēlu lekcijā) un katru joslu kvantizē atsevišķi -- tik rupji, cik atļauj dzirde.
@@ -121,6 +117,21 @@ Iekšējā ausī (gliemezī) katra vieta reaģē uz savu frekvenču apgabalu, t�
 />
 
 *MP3 filtrubankas $32$ vienāda platuma joslas, auss $24$ kritiskās joslas un Opus (CELT) $21$ josla uz vienas frekvenču ass.*
+
+
+#### Mūzikas harmoniskā analīze 
+
+* Pirmās oktāvas "la" (jeb **A4**) izmanto toņdakšu, ko sauc **Stuttgart pitch**, kam ir 440 Hz (nosvārsta gaisu 440 reizes sekundē). Ja frekvence palielinās divkārt, skaņa par oktāvu augstāka.
+* "Labi temperēta" skaņu skala saliek $12$ pustoņus ar vienādām blakusesošo pustoņu frekvenču attiecībām.
+* Piemēram, "do" (C) un "do diēzs" (Cis) frekvenču attiecība ir $1$ pret $\sqrt[12]{2}$.
+
+Līdzās runas analīzei (transkripta veidošanai no audioieraksta) ir iespējama arī mūzikas analīze - restaurējot 
+skaņu un akordu augstumus un ilgumus. Tādējādi no mūzikas skaņdarba, ja tas pietiekami precīzi izpildīts, 
+var izsecināt notis - arī tās, kuras netrenētam cilvēkam grūtāk sadzirdamas.
+Sk. [MusicOmar: Piano TEMPERAMENT comparison](https://youtu.be/3O5J6A4uh30?si=T74nyg627wcY6yZm) - kā tas pats F.Šopēna mūzikas 
+fragments skan uz (precīzi uzskaņotām) klavierēm dažādos temperējumos.
+
+
 
 #### Frekvenču maskēšana
 

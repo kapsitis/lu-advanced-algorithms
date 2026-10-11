@@ -1,0 +1,58 @@
+**1. uzdevums:** 
+
+  :math:`\mathtt{TORABORA}` ir nosaukums alu sistēmai Afganistānā. 
+  Pierakstīt šim vārdam beigās dolāra simbolu (kas alfabētiski ir pirms visiem burtiem). 
+
+  **(A)** 
+    Apskatām *nesaspiestu sufiksu koku* (*suffix tree* jeb *trie*) šim 9 simbolu vārdam.
+    Tas ir koks, kurā no katras virsotnes, ja apakšstringu šajā 
+    vietā vēl var turpināt, iziet šķautnes; katra šķautne apzīmēta ar alfabēta simbolu  
+    (*trie* datu struktūra, kas ļauj iet pa vienam burtam uz priekšu).
+    No katras virsotnes izejošās šķautnes sakārtoti alfabētiski. 
+    
+    Uzzīmēt šo koku un uzrakstīt, cik virsotņu tajā ir. 
+
+  **(B)** 
+    Attēlot *saspiestu sufiksu koku* šim pašam vārdam.
+    Atšķirībā no nesaspiesta sufiksu koka, šis koks nesatur tādas virsotnes, kurām ir tikai 
+    viens bērns (jeb attiecīgo apakšstringu var turpināt tikai vienā veidā.) 
+    Šķautnes saspiestajam sufiksu kokam var būt apzīmētas gan ar atsevišķiem simboliem, 
+    gan arī ar garākām simbolu virknēm.  
+
+    Uzzīmēt šo koku un uzrakstīt, cik virsotņu tajā ir. 
+
+
+**2. uzdevums:** 
+
+  Aplūkot stringu :math:`W = \mathtt{TORABORA}\mathtt{\$}_1\mathtt{LABORATORY}\mathtt{\$}_2`. 
+  Atdalītājsimboli :math:`\mathtt{\$}_1, \mathtt{\$}_2` ir alfabētiski pirms visiem citiem 
+  burtiem, turklāt :math:`\mathtt{\$}_1` ir pirms :math:`\mathtt{\$}_2`. 
+
+  **(A)**
+    Izveidot sufiksu masīvu šim stringam no :math:`20` simboliem. 
+    Attēlot šo sufiksu masīvu kā tabulu ar četrām kolonnām (tabulu var pareizi sakārtot un 
+    iekopēt no izklājlapas vai tml.): 
+
+    * Masīva indeksu kolonna (augoša skaitļu virkne no :math:`0` līdz :math:`19`, kas sanumurē masīvā esošos elementus pēc kārtas). 
+    * Sufiksa indeksa kolonna (skaitļi no :math:`0` līdz :math:`19` jauktā secībā) -- katram sufiksam norādīts, cik burtu no 
+      sākotnējā stringa jānosvītro, lai iegūtu šo sufiksu. 
+    * LCP (*longest common prefix*) kolonna -- tie ir dažādi veseli nenegatīvi skaitļi 
+      kas parāda, cik garš ir kopīgais gabals šīs rindas sufiksam ar iepriekšējās rindas sufiksu. (Pašā pirmajā rindā 
+      pieņemts rakstīt LCP vērtību :math:`0`, jo pirms šī sufiksa nekā alfabētiski agrāka nav. Tāpat LCP vērtība ir :math:`0` 
+      ja šīs rindas sufikss sākas ar citu burtu nekā iepriekšējās rindas sufikss.) 
+    * Pats sufikss, izmetot no :math:`W` tik daudz burtu, cik norādīts otrajā kolonnā. Tas palīdz pareizi izrēķināt citas kolonnas. 
+      (Gariem tekstiem visus 
+      sufiksus nav praktiski šādi izrakstīt, jo tas aizņem daudz laika un vietas.)
+
+  **(B)**  
+    Parādīt, kā šo sufiksu masīvu var izmantot, lai atrastu vārdu :math:`\mathtt{TORABORA}` un 
+    :math:`\mathtt{LABORATORY}` garāko kopīgo apakšstringu, izmantojot slīdošā loga algoritmu.
+    Sk. `Youtube. William Fisset: Longest common substring problem <https://youtu.be/DTLjHSToxmo?si=UDHJ0O74byKS_6QJ>`_. 
+    Uzrakstīt šī algoritma pseidokodu (tieši 2 stringu gadījumam, ko atdala :math:`\mathtt{\$}_1` un :math:`\mathtt{\$}_2`) 
+    un atrast tā laika sarežģītību 
+    atkarībā no ievades vārda garuma :math:`|W| = n`. 
+
+  **(C)**
+    Izmantot sufiksu masīvu, lai atrastu stringam :math:`W` tā Berouza-Vīlera pārveidojumu 
+    (sk. 4. lekciju). 
+   

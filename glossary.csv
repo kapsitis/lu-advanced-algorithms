@@ -326,3 +326,19 @@ steganogrāfija / steganalīze,steganography / steganalysis,standard,
 ūdenszīme,watermark,standard,
 aktīvais uzraugs,active warden,standard,Steganography
 digitālo tiesību pārvaldība,digital rights management (DRM),standard,
+paplašinātais Heminga kods,extended Hamming code,name,"[8,4] code: Hamming [7,4,1] plus an overall parity bit"
+primitīvs elements,primitive element,standard,Generator of the multiplicative group of a finite field
+apgrieztais elements,inverse (multiplicative inverse),standard,
+sistemātisks kods,systematic code,standard,Message symbols appear unchanged in the codeword
+apstāšanās kopa,stopping set,course,Erasure set on which the peeling decoder gets stuck
+nulles koda vārds,all-zero codeword,standard,
+kļūdu uzliesmojums,burst error,course,"Used in the lossy problem set; same concept as ""kļūdu virkne (burst)"""
+starpkodēšana,interleaving,course,"No established Latvian term; English term given in brackets"
+frekvenču izšķirtspēja,frequency resolution,standard,
+spektra noplūde,spectral leakage,standard,
+signāla un trokšņa attiecība,signal-to-noise ratio (SNR),standard,
+Hanna logs,Hann window,name,
+palete,palette,standard,Indexed colors (GIF)
+kļūdu izkliedēšana,dithering,course,"English term given in brackets; ""joslas"" = banding"
+bezšuvju cilpa,seamless loop,course,Animation whose last frame connects to the first
+krāsu loks,hue ramp,course,Band in gradient-bands.png where the hue goes from 0 to 360 degrees

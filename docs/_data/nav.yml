@@ -26,3 +26,5 @@
       url: /lectures/lossy_hamming/
     - title: { en: "8. Error Correction: Reed-Solomon Codes", lv: "8. Kļūdu korekcija: Rīda-Solomona kodi" }
       url: /lectures/lossy_reed_solomon/
+    - title: { en: "Lossy Compression and Error Correction: Final Problem Set", lv: "Zudumradošā saspiešana un kļūdu korekcija - Beigu uzdevumi" }
+      url: /lectures/lossy_final_problemsets/

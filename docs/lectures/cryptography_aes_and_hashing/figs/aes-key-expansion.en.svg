@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 980 420" width="980" height="420" role="img" aria-label="AES-128 key expansion: from K₀ = (w₀, w₁, w₂, w₃) to K₁ = (w₄, w₅, w₆, w₇)">
+<title>AES-128 key expansion: from K₀ = (w₀, w₁, w₂, w₃) to K₁ = (w₄, w₅, w₆, w₇)</title>
+<rect x="0" y="0" width="980" height="420" fill="#ffffff"/>
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/></marker></defs>
+<text x="20" y="26" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#222" text-anchor="start" font-weight="bold">AES-128 key expansion: from K₀ = (w₀, w₁, w₂, w₃) to K₁ = (w₄, w₅, w₆, w₇)</text>
+<rect x="40" y="70" width="96" height="30" rx="4" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="88" y="89.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">2b7e1516</text>
+<text x="88" y="63" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">w<tspan baseline-shift="sub" font-size="75%">0</tspan></text>
+<rect x="190" y="70" width="96" height="30" rx="4" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="238" y="89.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">28aed2a6</text>
+<text x="238" y="63" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">w<tspan baseline-shift="sub" font-size="75%">1</tspan></text>
+<rect x="340" y="70" width="96" height="30" rx="4" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="388" y="89.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">abf71588</text>
+<text x="388" y="63" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">w<tspan baseline-shift="sub" font-size="75%">2</tspan></text>
+<rect x="490" y="70" width="96" height="30" rx="4" fill="#dbe6f3" stroke="#4C78A8" stroke-width="1.4"/>
+<text x="538" y="89.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">09cf4f3c</text>
+<text x="538" y="63" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">w<tspan baseline-shift="sub" font-size="75%">3</tspan></text>
+<rect x="674" y="108" width="290" height="168" rx="8" fill="none" stroke="#9aa5b1" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="950" y="268" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#555" text-anchor="end" font-weight="normal">function g (only w₄, w₈, …)</text>
+<path d="M 590 85 L 738 85 L 738 126" fill="none" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="690" y="128" width="96" height="30" rx="4" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
+<text x="738" y="147.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">cf4f3c09</text>
+<text x="798" y="141" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="start" font-weight="bold">RotWord</text>
+<text x="798" y="156" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#555" text-anchor="start" font-weight="normal">rotate left by 1 byte</text>
+<line x1="738" y1="158" x2="738" y2="172" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="690" y="173" width="96" height="30" rx="4" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
+<text x="738" y="192.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">8a84eb01</text>
+<text x="798" y="186" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="start" font-weight="bold">SubWord</text>
+<text x="798" y="201" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#555" text-anchor="start" font-weight="normal">S-box on each byte</text>
+<line x1="738" y1="203" x2="738" y2="217" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="690" y="218" width="96" height="30" rx="4" fill="#fde5cc" stroke="#F58518" stroke-width="1.4"/>
+<text x="738" y="237.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">8b84eb01</text>
+<text x="798" y="231" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="start" font-weight="bold">⊕ Rcon<tspan baseline-shift="sub" font-size="75%">1</tspan></text>
+<text x="798" y="246" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#555" text-anchor="start" font-weight="normal">Rcon<tspan baseline-shift="sub" font-size="75%">1</tspan> = 01 00 00 00</text>
+<path d="M 738 248 L 738 278 L 118 278 L 118 305" fill="none" stroke="#F58518" stroke-width="1.6" marker-end="url(#arw)"/>
+<line x1="118" y1="305" x2="100" y2="305" stroke="#F58518" stroke-width="1.6" marker-end="url(#arw)"/>
+<line x1="88" y1="102" x2="88" y2="293" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<circle cx="88" cy="305" r="10" fill="#fff" stroke="#222" stroke-width="1.5"/>
+<line x1="78" y1="305" x2="98" y2="305" stroke="#222" stroke-width="1.5"/>
+<line x1="88" y1="295" x2="88" y2="315" stroke="#222" stroke-width="1.5"/>
+<line x1="88" y1="315" x2="88" y2="338" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="40" y="340" width="96" height="30" rx="4" fill="#dcecd8" stroke="#54A24B" stroke-width="1.4"/>
+<text x="88" y="359.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">a0fafe17</text>
+<text x="88" y="390" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">w<tspan baseline-shift="sub" font-size="75%">4</tspan></text>
+<line x1="238" y1="102" x2="238" y2="293" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<circle cx="238" cy="305" r="10" fill="#fff" stroke="#222" stroke-width="1.5"/>
+<line x1="228" y1="305" x2="248" y2="305" stroke="#222" stroke-width="1.5"/>
+<line x1="238" y1="295" x2="238" y2="315" stroke="#222" stroke-width="1.5"/>
+<line x1="238" y1="315" x2="238" y2="338" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="190" y="340" width="96" height="30" rx="4" fill="#dcecd8" stroke="#54A24B" stroke-width="1.4"/>
+<text x="238" y="359.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">88542cb1</text>
+<text x="238" y="390" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">w<tspan baseline-shift="sub" font-size="75%">5</tspan></text>
+<path d="M 138 355 L 158 355 L 227 308" fill="none" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<line x1="388" y1="102" x2="388" y2="293" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<circle cx="388" cy="305" r="10" fill="#fff" stroke="#222" stroke-width="1.5"/>
+<line x1="378" y1="305" x2="398" y2="305" stroke="#222" stroke-width="1.5"/>
+<line x1="388" y1="295" x2="388" y2="315" stroke="#222" stroke-width="1.5"/>
+<line x1="388" y1="315" x2="388" y2="338" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="340" y="340" width="96" height="30" rx="4" fill="#dcecd8" stroke="#54A24B" stroke-width="1.4"/>
+<text x="388" y="359.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">23a33939</text>
+<text x="388" y="390" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">w<tspan baseline-shift="sub" font-size="75%">6</tspan></text>
+<path d="M 288 355 L 308 355 L 377 308" fill="none" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<line x1="538" y1="102" x2="538" y2="293" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<circle cx="538" cy="305" r="10" fill="#fff" stroke="#222" stroke-width="1.5"/>
+<line x1="528" y1="305" x2="548" y2="305" stroke="#222" stroke-width="1.5"/>
+<line x1="538" y1="295" x2="538" y2="315" stroke="#222" stroke-width="1.5"/>
+<line x1="538" y1="315" x2="538" y2="338" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<rect x="490" y="340" width="96" height="30" rx="4" fill="#dcecd8" stroke="#54A24B" stroke-width="1.4"/>
+<text x="538" y="359.5" font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12.5" fill="#222" text-anchor="middle" font-weight="normal">2a6c7605</text>
+<text x="538" y="390" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">w<tspan baseline-shift="sub" font-size="75%">7</tspan></text>
+<path d="M 438 355 L 458 355 L 527 308" fill="none" stroke="#444" stroke-width="1.6" marker-end="url(#arw)"/>
+<text x="674" y="360" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="start" font-weight="normal">w₄ = w₀ ⊕ g(w₃),  w₅ = w₁ ⊕ w₄,</text>
+<text x="674" y="380" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#222" text-anchor="start" font-weight="normal">w₆ = w₂ ⊕ w₅,  w₇ = w₃ ⊕ w₆</text>
+</svg>

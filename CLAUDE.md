@@ -65,9 +65,6 @@ Each published page exists as two files in the **same directory**:
   `<dir>/en/` for `index`), plus a stub `<base>.html` with `layout: lang_redirect` and
   `permalink: <dir>/<base>/`. The EN/LV buttons link to the twin; nav links use
   `index.<lang>.md` in the item's directory.
-- A small inline script remembers the language of every opened page in `localStorage`
-  (`lu-advanced-algorithms.lang`); the `lang_redirect` stubs use it. So internal links written
-  with the language-neutral URL keep the reader's language.
 - `{% include doc_links.html url="/lectures/<topic>/..." %}` also accepts the language-neutral
   URL and links to the version (and its `.pdf`/`.docx`) in the current page's language.
 

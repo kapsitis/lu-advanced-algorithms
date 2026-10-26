@@ -13,3 +13,4 @@ model += lpDot(prices, variables)
 status = model.solve(PULP_CBC_CMD(msg=False))
 print("price:", model.objective.value())
 print("take:", [variables[i].value() for i in range(n)])
+

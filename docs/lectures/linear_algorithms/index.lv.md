@@ -7,420 +7,336 @@ permalink: /lectures/linear_algorithms/lv/
 # 10. Lineārās programmēšanas algoritmi
 
 
-## Kāpostu-burkānu uzdevums un tā duālais
 
-**Piemērs:** Aplūkojam LP uzdevumu sējumu platībai, kas ierobežota ar $5$ hektāriem:
+## Simpleksa algoritms
+
+Simpleksalgoritma pamatideja:
+
+1. Sāk ar kādu pieļaujamā apgabala stūri $v$.
+2. Ja stūrim $v$ ir blakus stūris $u$, kurā mērķa funkcijas $c_1x_1+\ldots+c_nx_n$
+   vērtība ir lielāka, tad aizstāj $v$ ar $u$ un atkārto šo soli.
+
+Ja neviens blakus stūris nedod lielāku vērtību, tad mērķa funkcija jau sasniegusi maksimumu
+visā pieļaujamajā apgabalā (tā kā apgabals ir izliekts un mērķa funkcija lineāra,
+lokāls maksimums ir arī globāls).
+
+
+### Uzdevuma pārveidojums standartformā
+
+Par uzdevuma *standartformu* sauc tādu pierakstu, kurā visi nosacījumi ir vienādības,
+izņemot nenegativitātes nosacījumus $x_i \geq 0$.
+Nevienādību $\leq$ pārvērš vienādībā, ieviešot papildmainīgo
+(*slack variable*), kas ir nenegatīvs. Piemēram:
 
 $$
-\textcolor{blue}{\max \left( 1200x_k + 1700x_b \right)},\;\;\text{kur}\;\;
+x_1-2x_2 \leq 4\;\; \Leftrightarrow \;\; x_1-2x_2+x_3=4,\;x_3 \geq 0.
+$$
+
+Katrai nevienādībai vajag savu papildmainīgo.
+
+**Piemērs:** $\textcolor{blue}{\max \left( 2x_1 + 3x_2 \right)}$, kur
+
+$$
 \left\{ \begin{array}{l}
-x_k \leq 3,\\
-x_b \leq 4\\
-x_k + x_b \leq 5,\\
-x_k,x_b \geq 0.
+x_1-2x_2 \leq 4,\\
+x_1+x_2 \leq 18,\\
+x_2 \leq 10,\\
+x_1,x_2 \geq 0.
 \end{array} \right.
 $$
 
-Atrisinājums: $(x_k, x_b) = (1,4)$. Mērķa funkcija: $8000$.
-
-**Duālais uzdevums:** Kā pārliecināties, vai tas, ko atrada programma, ir īstais atrisinājums (un nevar labāk)? Visas trīs nevienādības var piereizināt ar nenegatīviem skaitļiem $y_1, y_2, y_3$ un saskaitīt.
+Standartformā: $\textcolor{blue}{\max \left( 2x_1 + 3x_2 \right)}$, kur
 
 $$
-\textcolor{blue}{\min \left( 3y_1 + 4y_2 + 5y_3 \right)},\;\;\text{kur}\;\;
 \left\{ \begin{array}{l}
-y_1 + y_3 \geq 1200,\\
-y_2 + y_3 \geq 1700,\\
-y_1,y_2,y_3 \geq 0.
+x_1-2x_2+x_3=4,\\
+x_1+x_2+x_4=18,\\
+x_2+x_5=10,\\
+x_1,x_2,x_3,x_4,x_5 \geq 0.
 \end{array} \right.
 $$
 
+### Nosacījumiem atbilstošais apgabals
 
+![Pieļaujamais apgabals](figs/feasible-region.png)
 
-Atrisinājums: $(y_1, y_2, y_3)= (0.0, 500.0, 1200.0)$. Mērķa funkcija: $8000$.
+Katra pieļaujamā apgabala mala atrodas uz taisnes, kur viens no mainīgajiem
+$x_1,\ldots,x_5$ ir $0$ (piemēram, uz taisnes $x_2+x_5=10$ ir $x_5=0$).
+Stūris ir divu malu krustpunkts, t.i., punkts, kurā divi no mainīgajiem ir vienādi ar $0$:
 
-**Primārais un duālais LP uzdevumi matricu pierakstā:**
+![Pieļaujamā apgabala daudzstūris ar stūriem](figs/lp-polygon.png)
 
-$$
-(P): \textcolor{blue}{\max \left( 1200x_k + 1700x_b \right)},\;\;\text{kur}\;\;
-A = \left( \begin{array}{cc}
-1 & 0 \\
-0 & 1 \\
-1 & 1 \\
-\end{array} \right) \cdot \left( \begin{array}{c}
-x_k \\
-x_b \\
-\end{array} \right) \leq \left( \begin{array}{c}
-3 \\
-4 \\
-5 \\
-\end{array} \right),\;\; x_k,x_b \geq 0.
-$$
+Vairāku dimensiju gadījumā ir līdzīgi. Ja sākotnējā uzdevumā ir $k$ mainīgie un $m$
+nevienādības, tad standartformā ir $n = k+m$ mainīgie, un stūris ir punkts, kurā
+krustojas $k$ hiperplaknes, t.i., $k$ no $n$ mainīgajiem ir vienādi ar $0$.
 
-$$
-(D):  \textcolor{blue}{\min \left( 3y_1 + 4y_2 + 5y_3 \right)},\;\;\text{kur}\;\;
-A = \left( \begin{array}{ccc}
-1 & 0 & 1 \\
-0 & 1 & 1 \\
-\end{array} \right) \cdot \left( \begin{array}{c}
-y_1 \\
-y_2 \\
-y_3 \\
-\end{array} \right) \geq \left( \begin{array}{c}
-1200 \\
-1700 \\
-\end{array} \right),\;\; y_1, y_2, y_3 \geq 0.
-$$
+### Simpleksalgoritma tabula
 
-### Duālās problēmas interpretācijas
+Simpleksalgoritma soļus ērti pierakstīt tabulā. Tabulas rindiņās ieraksta
+vienādību koeficientus un labās puses $b_i$, bet pēdējā rindiņā -- mērķa funkcijas koeficientus.
+Pēdējās rindiņas ailē $b_i$ glabā pašreizējo mērķa funkcijas vērtību ar mīnusa zīmi
+(sākumā tā ir $0$).
 
-**Ēnu cenas (Shadow prices):** Peļņas maksimizēšanas uzdevumos duālais atrisinājums $(y_1, y_2, y_3)= (0.0, 500.0, 1200.0)$ parāda, kādā ātrumā pieaugtu peļņa, ja (kādā īsā intervālā) nedaudz atvieglotu kādu ierobežojumu. Ir pavisam trīs ierobežojumi jeb trīs *ēnu cenas*: kāpostiem, burkāniem un zemes hektāram (gada nomas maksa).
+<table>
+<thead>
+<tr><th style="background-color:#e6e6e6;">$x_1$</th><th style="background-color:#e6e6e6;">$x_2$</th><th>$x_3$</th><th>$x_4$</th><th>$x_5$</th><th>$b_i$</th><th>Atbilstošā izteiksme</th></tr>
+</thead>
+<tbody>
+<tr><td style="background-color:#e6e6e6;">$1$</td><td style="background-color:#e6e6e6;">$-2$</td><td>$1$</td><td>$0$</td><td>$0$</td><td>$4$</td><td>$x_1 - 2x_2 + x_3 = 4$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$1$</td><td style="background-color:#e6e6e6;">$1$</td><td>$0$</td><td>$1$</td><td>$0$</td><td>$18$</td><td>$x_1 + x_2 + x_4 = 18$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$0$</td><td style="background-color:#e6e6e6;">$1$</td><td>$0$</td><td>$0$</td><td>$1$</td><td>$10$</td><td>$x_2 + x_5 = 10$</td></tr>
+<tr><td style="background-color:#e6e6e6;"><b>2</b></td><td style="background-color:#e6e6e6;"><b>3</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td>$z = 2x_1+3x_2$</td></tr>
+</tbody>
+</table>
 
-* $y_1 = 0$. Atvieglojot ierobežojumu uz kāpostu sējas platību nav ietekmes uz peļņu, jo arī pašlaik visas kāpostu sēklas netiek izmantotas.
-* $y_2 = 500$. Ja burkānu sēklu būtu nedaudz vairāk, peļņa pieaugtu ar ātrumu $500$ par burkānu sēklu vienību. Ievērosim, ka $1700 - 1200$ ir peļņas starpība starp burkāniem un kāpostiem: varētu kāpostus aizstāt ar burkāniem.
-* $y_3 = 1200$. Papildus zemes hektārs atnestu $1200$ papildus peļņu, jo mums ir neizmantotas kāpostu sēklas.
+Tabula atbilst stūrim $(x_1,x_2) = (0,0)$:
 
-*Ēnu cenas* ir augšējais novērtējums tam, par cik būtu ekonomiski pamatoti iegādāties vienu vai otru resursu. Turklāt ēnu cenas paliek spēkā, vienīgi runājot par nelieliem iepirkšanas apjomiem, lai neizmainītos LP uzdevuma pieļaujamā apgabala forma, kad optimālais risinājums pārvietojas uz kādu citu stūri ar citiem būtiskajiem ierobežojumiem. Piemēram, būtiski palielinot pieejamo zemes platību virs 5 ha, varētu panākt, lai zemei ēnu cena kļūtu 0, bet parādītos pozitīva ēnu cena kāpostu sēklām. Ēnu cenām nav sakara ar faktiskajām cenām, ja tādas arī parādās LP uzdevumā.
+* Pelēkās kolonnas ir *brīvie mainīgie* (*non-basic variables*, *tight variables*);
+  stūrī tie ir vienādi ar $0$.
+* Pārējās kolonnas ir *pamatmainīgie* (*basic variables*, *loose variables*). To kolonnas veido
+  vienības matricu, tāpēc to vērtības var nolasīt ailē $b_i$: $x_3 = 4$, $x_4 = 18$, $x_5 = 10$.
+  Pēdējā rindiņā zem pamatmainīgajiem ir nulles, tāpēc mērķa funkcija ir izteikta tikai ar
+  brīvajiem mainīgajiem.
 
-**Gravitācijas un normālās reakcijas modelis:** Var uzzīmēt pieļaujamo apgabalu primārajam uzdevumam un primārā uzdevuma atrisinājums ir neliela lodīte, kas nonākusi (sekojot gravitācijas gradientam) vietā ar viszemāko potenciālu. Tad duālā uzdevuma atrisinājums ir normālās reakcijas, ko dod tie balsti, uz kuriem balstās lodīte, kas līdzsvaro gravitācijas spēku.
+Šādu tabulu sauksim par *kanonisku*. Simpleksalgoritma solī viens brīvais mainīgais kļūst par
+pamatmainīgo un viens pamatmainīgais -- par brīvo; pēc tam tabulu atkal pārveido kanoniskā formā.
 
-**Interpretācija ar nevienādību novērtējumiem:** Duālo uzdevumu var interpretēt šādi: katrs pieļaujams punkts $(y_1, y_2, y_3)$, kas apmierina visus ierobežojumus (bet varbūt neoptimizē mērķa funkciju), dod novērtējumu no augšas primārās programmas atrisinājumam.
+> *Piezīme:* Sākumstūrī $(x_1, x_2) = (0,0)$ brīvie mainīgie ir uzdevuma sākotnējie mainīgie
+> $x_1, x_2$, bet pamatmainīgie -- papildmainīgie $x_3,x_4,x_5$. Turpmākajos soļos
+> brīvie un pamatmainīgie mainās vietām; tie ir atkarīgi no stūra, kurā atrodamies.
 
-Kāpostu-burkānu uzdevumam ir vairāki pieļaujami atrisinājumi, arī iegūtie novērtējumi no augšas būs dažādi:
+### Pirmais simpleksalgoritma solis
 
-* $(y_1, y_2, y_3) = (1200, 1700, 0)$. Tad ir spēkā novērtējums:
+Simpleksalgoritma solis sastāv no trim daļām:
 
-  $$
-  1200 x_k + 1700 x_b \leq 1200 \cdot (x_k) + 1700 \cdot (x_b) \leq 1200 \cdot 3 + 1700 \cdot 4 = 10400.
-  $$
+1. **Ieejošais mainīgais.** Izvēlas brīvo mainīgo ar pozitīvu koeficientu pēdējā rindiņā;
+   to palielinot, mērķa funkcija pieaug. Parasti ņem lielāko koeficientu (*Danciga likums*), bet
+   der jebkurš pozitīvs. Ja pozitīvu koeficientu nav, stūris ir optimāls.
+2. **Izejošais mainīgais.** Palielina izvēlēto mainīgo par $d$, pārējos brīvos atstājot $0$,
+   un pamatmainīgos maina tā, lai vienādības paliktu spēkā. Palielināšanu aptur, kad kāds
+   pamatmainīgais kļūst $0$; tas kļūst par brīvo mainīgo.
+3. **Pārveidojums.** Apmaina abu mainīgo kolonnas un ar rindu pārveidojumiem atjauno
+   kanonisko formu.
 
-* $(y_1, y_2, y_3) = (200, 700, 1000)$. Tad ir spēkā novērtējums:
-
-  $$
-  1200 x_k + 1700 x_b \leq 200 \cdot (x_k) + 700 \cdot (x_b) + 1000 \cdot (x_k + x_b)
-  \leq 200 \cdot 3 + 700 \cdot 4 + 1000 \cdot 5 = 8400.
-  $$
-
-* $(\mathbf{y}^{\ast})^T = (y_1, y_2, y_3) = (0, 500, 1200)$. Tad ir spēkā novērtējums:
-
-  $$
-  1200 x_k + 1700 x_b \leq 0 \cdot (x_k) + 500 \cdot (x_b) + 1200 \cdot (x_k + x_b)
-  \leq 0 + 500 \cdot 4 + 1200 \cdot 5 = 8000.
-  $$
-
-Pēdējais no novērtējumiem, ko rada duālā uzdevuma optimālais atrisinājums $(\mathbf{y}^{\ast})^T$ ir $8000$, kuru tālāk uzlabot nevar.
-
-Ja primārais LP uzdevums prasīja maksimizēt kaut ko, tad duālais LP uzdevums prasa minimizēt. Un katrs duālā uzdevuma pieļaujamais punkts (ja vien tas nav pats minimums) dos duālajai mērķfunkcijai $3y_1 + 4y_2 + 5y_3$ lielāku vērtību nekā ir primārās problēmas mērķfunkcija $1200x_k + 1700x_b$ katrā pieļaujamā punktā $(x_k,x_b)$.
-
-**Piemērs:** Aplūkojam standartformas LP uzdevumu, kur jāmeklē minimums, visas nevienādības sistēmā ir $\leq$, bet visi mainīgie $x_i$ -- nenegatīvi skaitļi. Primārais (P) un duālais (D) doti ar matricu izteiksmēm:
+Mērķa funkcijā $2x_1+3x_2$ lielākais koeficients ir pie $x_2$, tāpēc palielina $x_2$
+(der arī $x_1$). Ja $x_2 = d$ un $x_1 = 0$, tad no vienādībām:
 
 $$
-(P): \textcolor{blue}{\min\left( \mathbf{c}^T \cdot \mathbf{x} \right)},\;\;\text{kur}
-A \mathbf{x} \leq \mathbf{b},\;\; \mathbf{x} \geq 0.
+x_3 = 4 + 2d \geq 0,\quad x_4 = 18 - d \geq 0,\quad x_5 = 10 - d \geq 0.
 $$
 
+Pirmais nosacījums izpildās jebkuram $d \geq 0$, otrais prasa $d \leq 18$, trešais -- $d \leq 10$.
+Tātad lielākais iespējamais $d = 10$ (mazākā no attiecībām $b_i/a_{i2}$ rindās, kur
+$a_{i2} > 0$), un pie tā $x_5 = 0$. Pārejam no stūra $x_1 = x_2 = 0$ uz stūri $x_1 = x_5 = 0$:
+$x_2$ kļūst par pamatmainīgo, $x_5$ -- par brīvo. Apmainām vietām kolonnas $x_2$ un $x_5$.
+Atslēgas elements (*pivot*) ir $x_2$ koeficients 3. rindā (dzeltenā šūna); zilās šūnas
+jāpadara par nullēm:
+
+<table>
+<thead>
+<tr><th style="background-color:#e6e6e6;">$x_1$</th><th style="background-color:#e6e6e6;">$x_5$</th><th>$x_3$</th><th>$x_4$</th><th>$x_2$</th><th>$b_i$</th><th>Atbilstošā izteiksme</th></tr>
+</thead>
+<tbody>
+<tr><td style="background-color:#e6e6e6;">$1$</td><td style="background-color:#e6e6e6;">$0$</td><td>$1$</td><td>$0$</td><td style="background-color:#b3ccff;">$-2$</td><td>$4$</td><td>$x_1 + x_3 - 2x_2 = 4$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$1$</td><td style="background-color:#e6e6e6;">$0$</td><td>$0$</td><td>$1$</td><td style="background-color:#b3ccff;">$1$</td><td>$18$</td><td>$x_1 + x_4 + x_2 = 18$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$0$</td><td style="background-color:#e6e6e6;">$1$</td><td>$0$</td><td>$0$</td><td style="background-color:#ffe08a;">$1$</td><td>$10$</td><td>$x_5 + x_2 = 10$</td></tr>
+<tr><td style="background-color:#e6e6e6;"><b>2</b></td><td style="background-color:#e6e6e6;"><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td style="background-color:#b3ccff;"><b>3</b></td><td><b>0</b></td><td>$z = 2x_1+3x_2$</td></tr>
+</tbody>
+</table>
+
+Rindu pārveidojumi (atslēgas elements jau ir $1$, tāpēc 3. rindu nedala):
+
+* 1. rindai pieskaita divkāršotu 3. rindu: $(x_1 + x_3 - 2x_2) + 2(x_5 + x_2) = 4 + 2 \cdot 10$.
+* No 2. rindas atņem 3. rindu: $(x_1 + x_4 + x_2) - (x_5 + x_2) = 18 - 10$.
+* No pēdējās rindas atņem trīskāršotu 3. rindu: $z = 2x_1 + 3(10 - x_5) = 30 + 2x_1 - 3x_5$.
+
+<table>
+<thead>
+<tr><th style="background-color:#e6e6e6;">$x_1$</th><th style="background-color:#e6e6e6;">$x_5$</th><th>$x_3$</th><th>$x_4$</th><th>$x_2$</th><th>$b_i$</th><th>Atbilstošā izteiksme</th></tr>
+</thead>
+<tbody>
+<tr><td style="background-color:#e6e6e6;">$1$</td><td style="background-color:#e6e6e6;">$2$</td><td>$1$</td><td>$0$</td><td>$0$</td><td>$24$</td><td>$x_1 + 2x_5 + x_3 = 24$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$1$</td><td style="background-color:#e6e6e6;">$-1$</td><td>$0$</td><td>$1$</td><td>$0$</td><td>$8$</td><td>$x_1 - x_5 + x_4 = 8$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$0$</td><td style="background-color:#e6e6e6;">$1$</td><td>$0$</td><td>$0$</td><td>$1$</td><td>$10$</td><td>$x_5 + x_2 = 10$</td></tr>
+<tr><td style="background-color:#e6e6e6;"><b>2</b></td><td style="background-color:#e6e6e6;"><b>-3</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td><b>-30</b></td><td>$z = 30 + 2x_1-3x_5$</td></tr>
+</tbody>
+</table>
+
+Tabula atkal ir kanoniska. Tā atbilst stūrim $(x_1, x_2) = (0, 10)$, kurā
+$x_3 = 24$, $x_4 = 8$, $x_2 = 10$ un $z = 30$.
+
+### Otrais simpleksalgoritma solis
+
+Pēdējā rindiņā pozitīvs koeficients ir tikai pie $x_1$ (palielinot $x_5$, mērķa funkcija
+samazinātos), tāpēc palielina $x_1$. Ja $x_1 = d$ un $x_5 = 0$, tad
+
 $$
-(D): \textcolor{blue}{\max\left( \mathbf{b}^T \cdot \mathbf{y} \right)},\;\;\text{kur}
-A^T \mathbf{y} \leq \mathbf{c},\;\; \mathbf{y} \geq 0.
+x_3 = 24 - d \geq 0,\quad x_4 = 8 - d \geq 0,\quad x_2 = 10 \geq 0.
 $$
 
+Lielākais iespējamais $d = \min(24/1,\, 8/1) = 8$, un pie tā $x_4 = 0$. Apmainām vietām
+kolonnas $x_1$ un $x_4$; atslēgas elements ir $x_1$ koeficients 2. rindā:
 
+<table>
+<thead>
+<tr><th style="background-color:#e6e6e6;">$x_4$</th><th style="background-color:#e6e6e6;">$x_5$</th><th>$x_3$</th><th>$x_1$</th><th>$x_2$</th><th>$b_i$</th><th>Atbilstošā izteiksme</th></tr>
+</thead>
+<tbody>
+<tr><td style="background-color:#e6e6e6;">$0$</td><td style="background-color:#e6e6e6;">$2$</td><td>$1$</td><td style="background-color:#b3ccff;">$1$</td><td>$0$</td><td>$24$</td><td>$x_1 + 2x_5 + x_3 = 24$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$1$</td><td style="background-color:#e6e6e6;">$-1$</td><td>$0$</td><td style="background-color:#ffe08a;">$1$</td><td>$0$</td><td>$8$</td><td>$x_1 - x_5 + x_4 = 8$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$0$</td><td style="background-color:#e6e6e6;">$1$</td><td>$0$</td><td>$0$</td><td>$1$</td><td>$10$</td><td>$x_5 + x_2 = 10$</td></tr>
+<tr><td style="background-color:#e6e6e6;"><b>0</b></td><td style="background-color:#e6e6e6;"><b>-3</b></td><td><b>0</b></td><td style="background-color:#b3ccff;"><b>2</b></td><td><b>0</b></td><td><b>-30</b></td><td>$z = 30 + 2x_1-3x_5$</td></tr>
+</tbody>
+</table>
 
+Rindu pārveidojumi:
 
+* No 1. rindas atņem 2. rindu: $(x_1 + 2x_5 + x_3) - (x_1 - x_5 + x_4) = 24 - 8$.
+* No pēdējās rindas atņem divkāršotu 2. rindu: $z = 30 + 2(8 + x_5 - x_4) - 3x_5 = 46 - 2x_4 - x_5$.
 
+<table>
+<thead>
+<tr><th style="background-color:#e6e6e6;">$x_4$</th><th style="background-color:#e6e6e6;">$x_5$</th><th>$x_3$</th><th>$x_1$</th><th>$x_2$</th><th>$b_i$</th><th>Atbilstošā izteiksme</th></tr>
+</thead>
+<tbody>
+<tr><td style="background-color:#e6e6e6;">$-1$</td><td style="background-color:#e6e6e6;">$3$</td><td>$1$</td><td>$0$</td><td>$0$</td><td>$16$</td><td>$-x_4 + 3x_5 + x_3 = 16$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$1$</td><td style="background-color:#e6e6e6;">$-1$</td><td>$0$</td><td>$1$</td><td>$0$</td><td>$8$</td><td>$x_4 - x_5 + x_1 = 8$</td></tr>
+<tr><td style="background-color:#e6e6e6;">$0$</td><td style="background-color:#e6e6e6;">$1$</td><td>$0$</td><td>$0$</td><td>$1$</td><td>$10$</td><td>$x_5 + x_2 = 10$</td></tr>
+<tr><td style="background-color:#e6e6e6;"><b>-2</b></td><td style="background-color:#e6e6e6;"><b>-1</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td><b>-46</b></td><td>$z = 46 - 2x_4 - x_5$</td></tr>
+</tbody>
+</table>
 
-## Vispārīga LP uzdevuma duālais
+Visi pēdējās rindiņas koeficienti pie brīvajiem mainīgajiem ir negatīvi. Tā kā $x_4, x_5 \geq 0$,
+no $z = 46 - 2x_4 - x_5$ izriet $z \leq 46$ visā pieļaujamajā apgabalā. Sasniegts maksimums.
 
-Duālos mēdz pierakstīt arī tādiem LP uzdevumiem, kuri nav standartformā. Mērķa funkcija primārajā uzdevumā var būt gan jāminimizē, gan jāmaksimizē, nevienādības vai vienādības ierobežojumos var būt uz jebkuru pusi, dažreiz mainīgie $x_i$ nevar būt negatīvi, citreiz tie netiek ierobežoti. Visi šādi uzdevumi pārveidojas par duālajiem.
+### Atrisinājuma iegūšana
 
-**Primārā lineārā programma:** Definēsim lineāru programmu $(P)$, ko sauksim par *primāro LP*:
+Pēdējā tabulā brīvie mainīgie ir $x_4 = x_5 = 0$, bet pamatmainīgo vērtības nolasa ailē $b_i$:
 
 $$
-(P): \textcolor{blue}{\min \left( c_1 x_1 + c_2 x_2 + \ldots + c_n x_n \right)},\;\;\text{kur}\;\;
-\left\{ \begin{array}{l}
-a_{11} x_1 + a_{12} x_2 + \ldots + a_{1n} x_n  \;\;\textcolor{red}{?}\;\; b_1,\\
+x_3 = 16,\quad x_1 = 8,\quad x_2 = 10.
+$$
+
+Tātad $(x_1,x_2) = (8, 10)$ un $(x_3,x_4,x_5) = (16,0,0)$. Pārbaude sākotnējos nosacījumos:
+$8 - 2 \cdot 10 + 16 = 4$, $8 + 10 + 0 = 18$, $10 + 0 = 10$. Mērķa funkcijas vērtība:
+
+$$
+2x_1 + 3x_2 = 2 \cdot 8 + 3 \cdot 10 = 46,
+$$
+
+kas sakrīt ar pēdējās tabulas ailē $b_i$ ierakstīto $-46$ (ar pretēju zīmi). Tātad $2x_1 + 3x_2$ lielākā vērtība pie dotajiem
+nosacījumiem ir $46$, un to sasniedz punktā $(x_1, x_2) = (8, 10)$. Simpleksalgoritms gāja pa
+daudzstūra stūriem $(0,0) \to (0,10) \to (8,10)$.
+
+## Simpleksalgoritms vispārīgajā formā
+
+**LP uzdevums standartformā:** atrast $\textcolor{blue}{\max(c_1x_1 + \ldots + c_nx_n)}$, ja izpildās
+$k$ vienādības un $n$ nenegativitātes nosacījumi:
+
+$$
+\left\{
+\begin{array}{l}
+a_{11}x_1 + a_{12}x_2 + \ldots + a_{1n}x_n = b_1\\
 \ldots\\
-a_{k1} x_1 + a_{k2} x_2 + \ldots + a_{kn} x_n \;\;\textcolor{red}{?}\;\; b_k,\\
-x_1 \textcolor{red}{?} 0,\; x_2 \textcolor{red}{?} 0,\;\ldots\;  x_n \textcolor{red}{?} 0.\\
+a_{k1}x_1 + a_{k2}x_2 + \ldots + a_{kn}x_n = b_k\\
+x_1,x_2,\ldots,x_n \geq 0
 \end{array} \right.
 $$
 
-Šeit LP var nebūt standartformā:
-
-* Nosacījumiem $a_{i1} x_1 + a_{i2} x_2 + \ldots + a_{in} x_n \;\;\textcolor{red}{?}\;\; b_i$, jautājuma zīmes vietā var būt jebkura zīme ($\geq$, $\leq$, $=$).
-* Mainīgajiem $x_i$ var būt nosacījumi $x_i \geq 0$, $x_i \leq 0$, vai arī var nebūt nosacījuma uz $x_i$.
-
-**Definīcija:** Par *duālo programmu* sauc lineāro programmu:
-
-$$
-(D): \textcolor{blue}{\max \left( b_1 y_1 + b_2 y_2 + \ldots + b_k y_k \right)},\;\;\text{kur}\;\;
-\left\{ \begin{array}{l}
-a_{11} y_1 + a_{21} y_2 + \ldots + a_{k1} y_k  \;\;\textcolor{red}{?}\;\; c_1,\\
-a_{12} y_1 + a_{22} y_2 + \ldots + a_{k2} y_k  \;\;\textcolor{red}{?}\;\; c_2,\\
-\ldots\\
-a_{1n} y_1 + a_{2n} y_2 + \ldots + a_{kn} y_k \;\;\textcolor{red}{?}\;\; c_n,\\
-y_1 \textcolor{blue}{?} 0,\; y_2 \textcolor{blue}{?} 0,\;\ldots\; y_k \textcolor{blue}{?} 0 \\
-\end{array} \right.
-$$
-
-Simbolus zilo jautājuma zīmju $\textcolor{blue}{?}$ vietā nosaka šādi:
-
-| Primārais nosacījums $i$ | Atbilstošais duālais mainīgais |
-| --- | --- |
-| ${\displaystyle \sum_{j=1}^n a_{ij}x_j \textcolor{blue}{\geq} b_i}$ |	$y_i \textcolor{blue}{\geq} 0$ |
-| ${\displaystyle \sum_{j=1}^n a_{ij}x_j \textcolor{blue}{\leq} b_i}$ |	$y_i \textcolor{blue}{\leq} 0$ |
-| ${\displaystyle \sum_{j=1}^n a_{ij}x_j \textcolor{blue}{=} b_i}$ | $y_i\;\;\textcolor{blue}{\text{bez ierobežojuma}}$ |
-
-Simbolus sarkano jautājuma zīmju $\textcolor{red}{?}$ vietā nosaka šādi:
-
-| Primārais mainīgais $x_j$ | Atbilstošais duālais nosacījums |
-| --- | --- |
-| $x_j \textcolor{red}{\geq} 0$ | ${\displaystyle \sum_{i=1}^k  a_{ij} y_i \;\;\textcolor{red}{\leq}\;\; c_j}$ |
-| $x_j \textcolor{red}{\leq} 0$ | ${\displaystyle \sum_{i=1}^k  a_{ij} y_i \;\;\textcolor{red}{\geq}\;\; c_j}$ |
-| $x_j\;\;\textcolor{red}{\text{bez ierobežojuma}}$ | ${\displaystyle \sum_{i=1}^k a_{ij} y_i \;\;\textcolor{red}{=}\;\; c_j}$ |
-
-
-
-
-**Piemērs:** Aplūkojam primāro LP uzdevumu, kura ierobežojumos saliktas visādu veidu nevienādības:
-
-$$
-\textcolor{blue}{\max \left( 4x_1 + 2x_2 - x_3 \right)},\;\; \text{kur}\;\;
-\left\{
-\begin{array}{l}
-x_1 + x_2 + x_3 = 20\\
-2x_1 - x_2 \geq 6\\
-3x_1 + 2x_2 + x_3 \leq 40\\
-x_1,x_2 \geq 0
-\end{array} \right.
-$$
-
-Tas pats matricu pierakstā, kur $\mathbf{x}$ ir kolonnas vektors ar 3 koordinātēm $x_1,x_2,x_3$:
-
-$$
-(P): \textcolor{blue}{\max \left( (4, 2, -1) \cdot \mathbf{x} \right)},\;\;\text{kur}\;\;
-\left(
-\begin{array}{ccc}
-1 & 1 & 1\\
-2 & -1 & 0\\
-3 & 2 & 1
-\end{array} \right) \left(
-\begin{array}{c}
-x_1\\
-x_2\\
-x_3 \end{array} \right)
-\begin{array}{c}
-=^{\textcolor{blue}{(a)}}\\
-\geq^{\textcolor{blue}{(b)}} \\
-\leq^{\textcolor{blue}{(c)}}
-\end{array}
-\left(
-\begin{array}{c}
-20\\
-6 \\
-40
-\end{array} \right)\;\;\text{un}
-$$
-
-$$
-x_1 \geq^{\textcolor{blue}{(d)}} 0,\; x_2 \geq^{\textcolor{blue}{(e)}} 0,
-x_3\;\text{bez nosac.}^{\textcolor{blue}{(f)}}
-$$
-
-**Atbilstošais duālais LP uzdevums:** Apzīmējam $\mathbf{y}$ kolonnas vektoru ar 3 koordinātēm: $y_1, y_2, y_3$. Tad
-
-$$
-(D): \textcolor{blue}{ \min \left(  (20,6,-40) \cdot \mathbf{y}  \right) },\;\;\text{kur}\;\;
-\left(
-\begin{array}{ccc}
-1 & 2 & 3\\
-1 & -1 & 2\\
-1 & 0 & 1
-\end{array} \right) \left(
-\begin{array}{c}
-y_1\\
-y_2\\
-y_3 \end{array} \right)
-\begin{array}{c}
-\geq^{\textcolor{blue}{(d)}}\\
-\geq^{\textcolor{blue}{(e)}} \\
-=^{\textcolor{blue}{(f)}}
-\end{array}
-\left(
-\begin{array}{c}
-4\\
-2 \\
--1
-\end{array} \right)\;\;\text{un}
-$$
-
-$$
-y_1\;\text{bez nosac.}^{\textcolor{blue}{(a)}},\;
-y_2 \leq^{\textcolor{blue}{(b)}} 0,\;
-y_3 \geq^{\textcolor{blue}{(c)}} 0.
-$$
-
-Duālajā uzdevumā koeficientus iegūst, transponējot matricu $A$. ienādību un nevienādību tipus nosaka atbilstoši augšminētajiem noteikumiem: Piemēram, ja $x_1 \geq 0$ primārajā problēmā, tad $x_1$ mainīgajam atbilstošais duālais vienādojums $y_1 + 2y_2 + 3y_3 \geq 4$ (arī nevienādība $\geq$).
-
-
-
-
-
-
-
-
-
-
-
-## Dualitātes teorēmas
-
-**Definīcija:** Vektoru $\mathbf{x}$ sauc par *iespējamu* (*feasible*) (arī (neoptimālu) LP uzdevuma *risinājumu*), ja tas apmierina visus ierobežojumus (vienādības, nevienādības).
-
-**Definīcija:** LP uzdevumu sauc par *iespējamu* (*feasible*), ja tam ir iespējams risinājums $\mathbf{x}$.
-
-**Definīcija:** LP uzdevums ir *neiespējams* (*infeasible*), ja tam šāds $\mathbf{x}$ neeksistē.
-
-**Definīcija:** LP minimuma uzdevums ($\min\lbrace \mathbf{c}^T \mathbf{x}\;:\;A\mathbf{x}=\mathbf{b},\mathbf{x}\geq\mathbf{0}\rbrace$) ir *neierobežots* (*unbounded*), ja katram $\lambda \in \mathbb{R}$ eksistē $\mathbf{x} \in \mathbb{R}^n$, ka visi LP ierobežojumi izpildās un $\mathbf{c}^T \mathbf{x} \leq \lambda$.
-
-Lineāru programmu var pārveidot, ieviešot *nokares mainīgos* (*slack variables*). Šajā gadījumā visas nevienādības var pārrakstīt par vienādībām, papildus prasot, lai mainīgie (ieskaitot nokares mainīgos) būtu nenegatīvi skaitļi.
-
-$$
-\begin{array}{ccc}
-\max\{ \mathbf{c}^T \mathbf{x}\} & \rightarrow  & \min\{ -\mathbf{c}^T \mathbf{x}\}\\
-\mathbf{a}_i^T \mathbf{x} = b_i & \rightarrow  &  (\mathbf{a}_i^T \mathbf{x} \leq b_i)
-\wedge (\mathbf{a}_i^T \mathbf{x} \geq b_i)  \\
-\mathbf{a}_i^T \mathbf{x} \leq b_i & \rightarrow  &  (\mathbf{a}_i^T \mathbf{x} + s_i = b_i)
-\wedge (s_i \geq 0)  \\
-\end{array}
-$$
-
-**Primārās un duālās LP apvienošana:** Ja dotas primārā LP un duālā LP, varam uzrakstīt jaunu LP, kas satur visus mainīgos (gan $x_1, x_2, \ldots, x_n$, gan $y_1, y_2, \ldots, y_k$), gan visus nosacījumus no abām programmām un pievienot tai vēl vienu nosacījumu:
-
-$$
-c_1 x_1 + c_2 x_2 + \ldots + c_n x_n = b_1 y_1 + b_2 y_2 + \ldots + b_k y_k.
-$$
-
-Vienīgais gadījums, kad izpildās visi nosacījumi ir, ja $x_1, x_2, \ldots, x_n$ sasniedz primārās LP maksimums, bet $y_1, y_2, \ldots, y_k$ sasniedz duālās LP minimumu.
-
-**Secinājums:** Ja mums ir algoritms, kas prot patvaļīgai LP atrast vienu punktu, kas apmierina visus nosacījumus, tad šo algoritmu var izmantot arī maksimuma atrašanai.
-
-### Vājā dualitāte
-
-**Farkaša lemma:** Ja $A$ ir $m \times n$ matrica, tad izpildās tieši viens no apgalvojumiem: **(1)** $\exists\mathbf{x} \in \mathbb{R}^n\;:\;A\mathbf{x}=\mathbf{b}$, kur $\mathbf{x} \geq \mathbf{0}$, **(2)** $\exists\mathbf{y} \in \mathbb{R}^m\;:\;A^T \mathbf{y} \geq \mathbf{0}$, kur $\mathbf{b}^T \mathbf{y} < 0$.
-
-Atsevišķs gadījums ir lineārajā algebrā, kur vai nu $A\mathbf{x} = \mathbf{b}$ eksistē atrisinājums, vai arī sistēmai $A^T \mathbf{y} = 0$ (kur $\mathbf{b}^T \mathbf{y} \neq 0$) eksistē atrisinājums.
-
-**Pierādījums:** Abi nosacījumi nevar vienlaicīgi izpildīties, jo šādu $\mathbf{x}$ un $\mathbf{y}$ pastāvēšana nozīmētu
-
-$$
-\begin{array}{l}
-\mathbf{y}^T A \mathbf{x} = \mathbf{y}^T (A \mathbf{x}) = \mathbf{y} \mathbf{b} < 0 \\
-\mathbf{y}^T A \mathbf{x} = (A^T \mathbf{y})^T \mathbf{x} \geq 0 \\
-\end{array}
-$$
-
-jo divu nenegatīvu vektoru skalārais reizinājums ir nenegatīvs.
-
-**Vājās dualitātes teorēma:** Primārā $P$: $\min \mathbf{c}^T \cdot \mathbf{x}$, kur $A\mathbf{x} = \mathbf{b}$, $\mathbf{x} \geq 0$.
-
-Duālā $D$: $\max \mathbf{b}^T \cdot \mathbf{y}$, kur $A^T\mathbf{y} \leq \mathbf{c}$.
-
-**Teorēma:** Zināms, ka $P$ atrisinājums ir $\mathbf{x} = \mathbf{x}_{\text{opt}}$ un $D$ atrisinājums ir $\mathbf{y} = \mathbf{y}_{\text{opt}}$. Apzīmējam optimālās vērtības ar $z_{\text{opt}} = \mathbf{c}^T \cdot \mathbf{x}_{\text{opt}}$ un $w_{\text{opt}} = \mathbf{b}^T \cdot \mathbf{y}_{\text{opt}}$.
-
-Tad $z_{\text{opt}} \geq w_{\text{opt}}$.
-
-**Pretrunīgi/neierobežoti nosacījumi:** Vājās dualitātes teorēma spēkā pat tad, ja primārā $P$ vai duālā $D$ ir pretrunīgas vai neierobežotas. Apzīmējam:
-
-* Ja primārais/minimuma uzdevums $P$ ir pretrunīgs, tad optimums $z_{\text{opt}} = +\infty$.
-* Ja primārais/minimuma uzdevums $P$ ir neierobežots, tad optimums $z_{\text{opt}} = -\infty$.
-* Ja duālais/maksimuma uzdevums $D$ ir pretrunīgs, tad optimums $w_{\text{opt}} = -\infty$.
-* Ja duālais/maksimuma uzdevums $D$ ir neierobežots, tad optimums $w_{\text{opt}} = +\infty$.
-
-**Vājās dualitātes teorēmas pierādījums:** Duālā LP veidota tā, lai vājā dualitāte būtu spēkā. Iedomāsimies, ka ir kaut kāds vektors $\mathbf{y}$, kam $A^T\mathbf{y} \leq \mathbf{c}$. Pārrakstām:
-
-$$
-\mathbf{y}^T \mathbf{b} = \mathbf{y}^T A \mathbf{x} \leq \mathbf{c}^T \mathbf{x},
-$$
-
-kur $\mathbf{x}$ ir jebkurš (arī neoptimāls) risinājums, kas apmierina $P$ nosacījumus. Tādēļ $\mathbf{y}^T \mathbf{b}$ ir apakšējais novērtējums optimālajam risinājumam. Tas ir spēkā visiem $\mathbf{y}$, kas apmierina $A^T \mathbf{y} \leq \mathbf{c}$, tādēļ vislabāko apakšējo novērtējumu iegūsim, maksimizējot $\mathbf{y}^T \mathbf{b}$ pie nosacījuma $A^T \mathbf{y} \leq \mathbf{c}$. $\square$
-
-### Stiprā dualitāte
-
-**Duālais uzdevums, tikai nevienādības**
-
-**Primārais LP uzdevums:** Maksimizēt skalāro reizinājumu $z = \mathbf{c} \cdot \mathbf{x}$, kur
-
-$$
-\left\{
-\begin{array}{l}
-A\mathbf{x} \leq \mathbf{b}\\
-\mathbf{x} \geq \mathbf{0}
-\end{array}
-\right.
-$$
-
-**Duālais LP uzdevums:** Minimizēt skalāro reizinājumu $Z = \mathbf{y} \cdot \mathbf{b}$, kur
-
-$$
-\left\{
-\begin{array}{l}
-A^{T}\mathbf{y} \geq \mathbf{c}\\
-\mathbf{y} \geq \mathbf{0}
-\end{array}
-\right.
-$$
-
-**Dualitātes teorēma:**
-
-* **(1)** Ja $\mathbf{x}^{\ast}$ ir pieļaujams vektors primārajai problēmai (apmierina nevienādības $A\mathbf{x}^{\ast} \leq \mathbf{b}$ un $\mathbf{x}^{\ast} \geq \mathbf{0}$),
-* **(2)** Un ja $\mathbf{y}^{\ast}$ ir pieļaujams risinājums duālajai problēmai (apmierina nevienādības $A^{T}\mathbf{y} \geq \mathbf{c}$ un $\mathbf{y} \geq \mathbf{0}$), TAD $\mathbf{c}\cdot \mathbf{x}^{\ast} \leq \mathbf{b} \cdot \mathbf{y}^{\ast}$.
-
-Ja turklāt $\mathbf{x}^{\ast}$ un $\mathbf{y}^{\ast}$ ir optimālie atrisinājumi attiecīgi primārajai un duālajai lineārajām programmām, tad
-
-$$
-\mathbf{c}\cdot \mathbf{x}^{\ast} = \mathbf{b} \cdot \mathbf{y}^{\ast}
-$$
-
-**Definīcija:** Atšķirību $\mathbf{b} \cdot \mathbf{y}^{\ast} - \mathbf{c} \cdot \mathbf{x}^{\ast}$ sauc par *dualitātes atstarpi* (*duality gap*). Šīs atstarpes lielums palīdz noteikt, cik tālu pašreizējais atrisinājums (neoptimāls, bet pieļaujams vektors $\mathbf{x}$ vai attiecīgi $\mathbf{y}$) ir no optimālā.
-
-## Dualitāte grafu uzdevumos
-
-**Maksimālās plūsmas atrašana grafā**
-
-![Maksimālās plūsmas grafs](figs/max-flow-graph.png)
-
-*Maksimālās plūsmas grafs.*
-
-Aplūkotajā grafā katrai šķautnei ir pierakstīta skaitliska vērtība - maksimālā atļautā plūsma, kuru pa šo šķautni var sūtīt (vai nu vienā, vai otrā virzienā). Var sūtīt arī mazāku plūsmu.
-
-**Lineārā programma plūsmai:** Katrai (neorientētai) šķautnei ieviešam divus mainīgos, piemēram, $x_1$ un $x'_1$ (nenegatīvas plūsmas katrā no iespējamajiem virzieniem).
-
-1. Katrai virsotnei grafā rakstām "plūsmas saglabāšanās" ("flow preservation") vienādojumus. Piemēram,
-
+Matricu pierakstā: $\max \mathbf{c}^T\mathbf{x}$, kur $A\mathbf{x} = \mathbf{b}$, $\mathbf{x} \geq \mathbf{0}$,
+un $A$ ir $k \times n$ matrica ($k < n$). Pieņemam, ka vienādības ir lineāri neatkarīgas
+(citādi liekās var izmest).
+
+Ar *simpleksalgoritma tabulu* (*simplex tableau*) sauc $(k+1) \times (n+1)$ matricu, kuras
+pirmajās $k$ rindās ir vienādību koeficienti un labās puses, bet pēdējā rindā --
+mērķa funkcijas koeficienti un pašreizējā mērķa funkcijas vērtība ar mīnusa zīmi:
+
+| $x_1$ | $x_2$ | $\ldots$ | $x_n$ | $b_i$ |
+| --- | --- | --- | --- | --- |
+| $a_{11}$ | $a_{12}$ | $\ldots$ | $a_{1n}$ | $b_1$ |
+| $\ldots$ | $\ldots$ | $\ldots$ | $\ldots$ | $\ldots$ |
+| $a_{k1}$ | $a_{k2}$ | $\ldots$ | $a_{kn}$ | $b_k$ |
+| $c_1$ | $c_2$ | $\ldots$ | $c_n$ | $0$ |
+
+Rindu pārveidojumi (rindas reizināšana ar skaitli $\neq 0$ un citas rindas daudzkārtņa
+pieskaitīšana) nemaina ne pieļaujamo apgabalu, ne mērķa funkciju; mainās tikai pieraksts.
+
+### Kanoniskā tabula
+
+Simpleksalgoritms visu laiku atrodas kādā stūrī. Stūrim atbilst $k$ *pamatmainīgie*; pārējie
+$n-k$ ir *brīvie mainīgie*, un stūrī tie ir vienādi ar $0$. Pārnumurēsim mainīgos tā, lai
+pamatmainīgie būtu pēdējie: $x_{n-k+1},\ldots,x_n$. Tabula ir *kanoniska*, ja
+
+* pamatmainīgo kolonnas veido vienības matricu;
+* pēdējā rindā zem pamatmainīgajiem ir nulles;
+* labās puses ir nenegatīvas: $\bar{b}_1,\ldots,\bar{b}_k \geq 0$.
+
+| $x_1$ | $\ldots$ | $x_{n-k}$ | $x_{n-k+1}$ | $x_{n-k+2}$ | $\ldots$ | $x_n$ | $b_i$ |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| $\bar{a}_{11}$ | $\ldots$ | $\bar{a}_{1,n-k}$ | $1$ | $0$ | $\ldots$ | $0$ | $\bar{b}_1$ |
+| $\bar{a}_{21}$ | $\ldots$ | $\bar{a}_{2,n-k}$ | $0$ | $1$ | $\ldots$ | $0$ | $\bar{b}_2$ |
+| $\ldots$ | $\ldots$ | $\ldots$ | $\ldots$ | $\ldots$ | $\ldots$ | $\ldots$ | $\ldots$ |
+| $\bar{a}_{k1}$ | $\ldots$ | $\bar{a}_{k,n-k}$ | $0$ | $0$ | $\ldots$ | $1$ | $\bar{b}_k$ |
+| $\bar{c}_1$ | $\ldots$ | $\bar{c}_{n-k}$ | $0$ | $0$ | $\ldots$ | $0$ | $-z_0$ |
+
+No kanoniskās tabulas uzreiz nolasa:
+
+* **stūri:** $x_1 = \ldots = x_{n-k} = 0$ (brīvie) un $x_{n-k+i} = \bar{b}_i$ (pamatmainīgie);
+* **mērķa funkciju**, izteiktu ar brīvajiem mainīgajiem:
+  $z = z_0 + \bar{c}_1x_1 + \ldots + \bar{c}_{n-k}x_{n-k}$; stūrī tās vērtība ir $z_0$.
+
+Koeficientus $\bar{c}_j$ sauc par *reducētajām izmaksām* (*reduced costs*): tie parāda, cik
+mainās $z$, ja brīvo mainīgo $x_j$ palielina par $1$.
+
+### Simpleksalgoritma solis
+
+Vispārīgā gadījumā viens solis kanoniskajā tabulā izskatās tā:
+
+1. **Optimalitātes pārbaude.** Ja visi $\bar{c}_j \leq 0$, tad $z \leq z_0$ visā pieļaujamajā
+   apgabalā, un pašreizējais stūris ir optimāls.
+2. **Ieejošais mainīgais.** Izvēlas brīvo mainīgo $x_j$ ar $\bar{c}_j > 0$ (piemēram, ar
+   lielāko $\bar{c}_j$).
+3. **Izejošais mainīgais.** Ja $x_j = d$, tad $i$-tā pamatmainīgā vērtība ir $\bar{b}_i - \bar{a}_{ij}d$.
+   Rindas ar $\bar{a}_{ij} \leq 0$ palielināšanu neierobežo. Ja visi $\bar{a}_{ij} \leq 0$, tad
+   $x_j$ var palielināt bezgalīgi, un mērķa funkcija ir neierobežota. Citādi izvēlas rindu $r$
+   ar mazāko attiecību (*minimum ratio test*):
    $$
-   x_1 + x_2 + x'_3 = x'_1 + x'_2 + x_3.
+   d = \frac{\bar{b}_r}{\bar{a}_{rj}} = \min_{i:\;\bar{a}_{ij} > 0} \frac{\bar{b}_i}{\bar{a}_{ij}}.
    $$
+   Rindas $r$ pamatmainīgais kļūst $0$ un iziet no pamatmainīgo kopas.
+4. **Pārveidojums (*pivot*).** Rindu $r$ izdala ar atslēgas elementu $\bar{a}_{rj}$, tad no
+   katras citas rindas (arī no pēdējās) atņem tādu rindas $r$ daudzkārtni, lai kolonnā $j$
+   paliktu $0$. Tabula atkal ir kanoniska, $x_j$ ir pamatmainīgais, un $z_0$ pieaug par
+   $\bar{c}_j d \geq 0$.
 
-2. Katrai šķautnei grafā rakstām divas nevienādības caurlaidībai ("edge capacity"). Piemēram,
+Pseidokodā (tabula $T$, kopā $B$ -- pamatmainīgo indeksi):
 
-   $$
-   x_1 \leq 3,\;\;x'_1 \leq 3.
-   $$
+$\textsf{Simplex}(T, B)$
+1. **while** pēdējā rindā ir $\bar{c}_j > 0$ kādam $j \notin B$ $\quad$ *// pretējā gadījumā stūris ir optimāls*
+2. $\quad$ izvēlas $j \notin B$ ar $\bar{c}_j > 0$ $\quad$ *// ieejošais mainīgais*
+3. $\quad$ **if** visi $\bar{a}_{ij} \leq 0$
+4. $\quad\quad$ **return** "neierobežots"
+5. $\quad$ izvēlas $r$ ar mazāko $\bar{b}_r / \bar{a}_{rj}$ starp $\bar{a}_{rj} > 0$ $\quad$ *// izejošais mainīgais*
+6. $\quad \textsf{Pivot}(T, r, j)$ $\quad$ *// rindu pārveidojumi, kolonnā $j$ vienības vektors*
+7. $\quad$ rindas $r$ pamatmainīgo kopā $B$ aizstāj ar $j$
+8. **return** stūris $x_{B} = \bar{\mathbf{b}}$, pārējie $x_j = 0$
 
-   (Ja šķautne, kas atbilst $x_1$ un $x'_1$ ir ar caurlaidību $3$.)
+Iepriekšējā piemērā abi soļi notika tieši tā; tur kolonnas vēl tika apmainītas vietām, lai
+pamatmainīgie vienmēr stāvētu pēdējās kolonnās.
 
-3. Visas plūsmas ir nenegatīvas. Piemēram,
+### Sākuma stūris un deģenerācija
 
-   $$
-   x_1 \geq 0,\;\;x'_1 \geq 0.
-   $$
-
-**Maksimizējamā funkcija:** Var maksimizēt plūsmu summu visām no "IN" izejošajām virsotnēm. Biežāk izmanto triku: pievieno fiktīvu šķautni no "OUT" atpakaļ uz "IN" un maksimizē plūsmu uz šīs vienas šķautnes.
-
-
-
-
-
-
+* **Sākuma stūris.** Ja visi sākotnējie nosacījumi ir $\leq$ ar $b_i \geq 0$, tad kanoniska ir
+  jau pirmā tabula: pamatmainīgie ir papildmainīgie, un stūris ir $\mathbf{x} = \mathbf{0}$
+  (kā piemērā). Citādi sākuma stūri atrod ar *divu fāžu metodi*: vispirms ar simpleksalgoritmu
+  minimizē mākslīgu palīgmainīgo summu; ja tā sasniedz $0$, iegūts pieļaujams stūris, ja nē --
+  uzdevumam nav pieļaujamu atrisinājumu.
+* **Deģenerācija.** Ja kāds $\bar{b}_r = 0$, tad solis var notikt ar $d = 0$: mainās
+  pamatmainīgo kopa, bet ne stūris un ne $z_0$. Neveiksmīgi izvēloties ieejošos mainīgos,
+  algoritms var cikliski atgriezties pie tās pašas tabulas. Ciklošanos novērš, piemēram,
+  *Blenda likums* (*Bland's rule*): par ieejošo un izejošo mainīgo ņem derīgo ar mazāko indeksu.
+  Tad simpleksalgoritms vienmēr beidzas, jo stūru skaits ir galīgs (ne lielāks par
+  $\binom{n}{k}$).
 
 ## LP risināšanas algoritmi
 
@@ -438,6 +354,7 @@ Ir pazīstami šādi algoritmi:
   - Projektīvā metode (Karmarkar, 1984).
   - Afīnā metode (Dikin, 1967).
   - Log Barrier Method.
+  - Primāli duālā centrālā ceļa metode (Kojima, Mizuno, Yoshise, 1989; Mehrotra, 1992).
 
 Simpleksalgoritms parasti ir efektīvs, bet īpaši uzkonstruēti piemēri var būt ļoti lēni. Matricām var būt ap 100 tūkstošiem rindiņu/kolonnu; ap miljons skaitļu šajās matricās nav nulles.
 
@@ -469,22 +386,33 @@ $$
 
 ### Elipsoīda algoritms
 
-Šo algoritmu izgudroja Hačijans (Khachiyan) 1979. gadā. Elipsoīda algoritms pazīstams kā pirmais lineārās programmēšanas algoritms, kuram tika pierādīts, ka tas atrod atrisinājumu polinomiālā laikā ($O(n^4L)$), kur $n$ - dimensiju skaits, $L$ -- ar cik bitu precizitāti jāatrod atrisinājums.
+Šo algoritmu izgudroja Hačijans (Khachiyan) 1979. gadā. Elipsoīda algoritms pazīstams kā 
+pirmais lineārās programmēšanas algoritms, kuram tika pierādīts, ka tas atrod atrisinājumu 
+polinomiālā laikā ($O(n^4L)$), kur $n$ - dimensiju skaits, $L$ -- ar cik bitu precizitāti 
+jāatrod atrisinājums.
 
-Lai gan teorētiski darbības laiks ir polinomiāls, praksē algoritms ir lēns un netiek lietots. Tāpēc šajā kursā mēs ierobežosimies ar īsu šī algoritma aprakstu.
+Lai gan teorētiski darbības laiks ir polinomiāls, praksē algoritms ir lēns un netiek lietots. 
+Tāpēc šajā kursā mēs ierobežosimies ar īsu šī algoritma aprakstu.
 
-**Elipsoīda algoritma kopsavilkums:** Dualitātes teorēmas (un redukcijas uz primāro+duālo) dēļ pietiek ar algoritmu, kas atrod punktu, kur izpildās visi nosacījumi. To meklē šādi:
+**Elipsoīda algoritma kopsavilkums:** Dualitātes teorēmas (un redukcijas uz primāro+duālo) 
+dēļ pietiek ar algoritmu, kas atrod punktu, kur izpildās visi nosacījumi. To meklē šādi:
 
-Sāk ar elipsoīdu $E_0$, kas noteikti ietver LP pieļaujamo apgabalu. Pilda sekojošus soļus līdzkamēr sasniegta vajadzīgā precizitāte:
+Sāk ar elipsoīdu $E_0$, kas noteikti ietver LP pieļaujamo apgabalu. Pilda sekojošus soļus 
+līdzkamēr sasniegta vajadzīgā precizitāte:
 
 1. Ņem iepriekšējā elipsoīda $E_i$ centru $c_i$.
-2. Ja $c_i$ neapmierina visus LP nosacījumus, tad atrod nosacījumu $a_k$, kas tiek pārkāpts visvairāk.
-3. Ar plakni, kas sastāv no visiem punktiem, kur nosacījuma $a_k$ izteiksmei ir vienāda vērtība $c$ (kur $c$ ir pa vidu starp vērtību punktā $c_i$ un pieļaujamajām izteiksmes vērtībām) pārdala telpu divās daļās. Ar $R_1$ apzīmējam daļu, kur nonāk $c_i$ un ar $R_2$ apzīmējam daļu, kur nonāk pieļaujamais apgabals.
+2. Ja $c_i$ neapmierina visus LP nosacījumus, tad atrod nosacījumu $a_k$, kas tiek pārkāpts 
+   visvairāk.
+3. Ar plakni, kas sastāv no visiem punktiem, kur nosacījuma $a_k$ izteiksmei ir vienāda vērtība 
+   $c$ (kur $c$ ir pa vidu starp vērtību punktā $c_i$ un pieļaujamajām izteiksmes vērtībām) 
+   pārdala telpu divās daļās. Ar $R_1$ apzīmējam daļu, kur nonāk $c_i$ un ar $R_2$ apzīmējam 
+   daļu, kur nonāk pieļaujamais apgabals.
 4. Uzkonstruē jaunu elipsoīdu $E_{i+1}$, tā lai izpildītos $E_i \cap R_2 \subseteq E_{i+1}$.
 
 ![Elipsoīda algoritms](figs/ellipsoid-algorithm.png)
 
-Meklē punktu izliektā $n$ dimensiju telpas apgabalā. Hačjana konstrukcijā (*barycentric coordinate descent*) veido elipsoīdu virkni, kurai
+Meklē punktu izliektā $n$ dimensiju telpas apgabalā. Hačjana konstrukcijā 
+(*barycentric coordinate descent*) veido elipsoīdu virkni, kurai
 
 $$
 \frac{\text{Volume}(E_{k+1})}{\text{Volume}(E_{k})} = e^{-\frac{1}{2n+1}}
@@ -494,7 +422,7 @@ jeb tilpumu attiecība ir stingri mazāka par $1$ (atkarīga tikai no dimensiju 
 
 Sal. [Elipsoīda algoritma lekcija 6-854J.L12](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-854j-advanced-algorithms-fall-2008/lecture-notes/lec12.pdf).
 
-## Iekšējā punkta metodes piemērs
+### Iekšējā punkta metožu pārskats
 
 Iekšējā punkta metožu kopīgās idejas:
 
@@ -515,305 +443,245 @@ Tad, tuvojoties $x_i=0$ plaknēm, kas ierobežo pieļaujamo apgabalu, $\ln x_i$ 
 
 ### Afīnās mērogošanas metode
 
-Afīnā mērogošana ir atsevišķs gadījums iekšējā punkta metodēm.
+Šo metodi 1967. gadā publicēja I.Dikins (Dikin), bet plaši pazīstama tā kļuva tikai pēc 1984. gada, 
+kad pēc Karmarkara projektīvās metodes vairāki autori (E.Barnes; R.Vanderbei, M.Meketon, B.Freedman) 
+to atklāja no jauna kā vienkāršāku alternatīvu. Tā ir vienkāršākā iekšējā punkta metode: tā izmanto tikai 
+primāro uzdevumu un neizmanto barjerfunkciju. Polinomiāls darbības laiks šai metodei nav pierādīts, 
+un praksē to ir aizstājušas primāli duālās metodes (sk. nākamo nodaļu). Tāpēc šajā kursā ierobežosimies 
+ar īsu aprakstu.
 
-**Uzdevums:**
+**Uzdevums:** $\max \mathbf{c}^T\mathbf{x}$, kur $A\mathbf{x} = \mathbf{b}$, $\mathbf{x} \geq \mathbf{0}$. 
+Zināms sākumpunkts $\mathbf{x} > \mathbf{0}$ ar $A\mathbf{x} = \mathbf{b}$ (pieļaujamā apgabala iekšpusē).
 
-$$
-\mathbf{x} = \left(
-\begin{array}{c}
-x_1\\
-x_2\\
-\ldots\\
-x_n
-\end{array} \right),\;\;
-A=\left(
-\begin{array}{cccc}
-a_{11} & a_{12} & \ldots & a_{1n}\\
-\ldots & \ldots & \ldots & \ldots\\
-a_{m1} & a_{m2} & \ldots & a_{mn}
-\end{array} \right),\;\;
-\mathbf{b}=\left(
-\begin{array}{c}
-b_1\\
-\ldots\\
-b_m
-\end{array} \right).
-$$
+**Afīnās mērogošanas kopsavilkums:** Ja $\mathbf{x}$ atrodas tuvu kādai robežai $x_j = 0$, tad pa 
+gradienta virzienu var paiet tikai mazu soli. Tāpēc katrā iterācijā koordinātes vispirms *mērogo* tā, 
+lai tekošais punkts būtu vienādā attālumā no visām robežām:
 
-$$
-\textcolor{blue}{\max(c_1 x_1 + c_2 x_2 + \ldots + c_n x_n)},\;\;\text{kur}\;\;
-\left\{ \begin{array}{l}
-A\mathbf{x} = \mathbf{b},\\
-x_1 \geq 0,\, x_2 \geq 0,\, \ldots,\, x_n \geq 0.\\
-\end{array} \right.
-$$
+1. Ar $X = \operatorname{diag}(x_1, \ldots, x_n)$ apzīmē diagonālmatricu. Koordinātēs $\tilde{\mathbf{x}} = X^{-1}\mathbf{x}$ 
+   tekošais punkts ir $\mathbf{e} = (1, \ldots, 1)$, un vienības lode ap to atrodas apgabalā $\tilde{\mathbf{x}} \geq \mathbf{0}$. 
+   Sākotnējās koordinātēs šai lodei atbilst elipsoīds $\sum_j (\Delta x_j / x_j)^2 \leq 1$ (*Dikina elipsoīds*), 
+   kas pieskaras plaknēm $x_j = 0$.
+2. Mērogotajās koordinātēs mērķfunkcijas gradientu $X\mathbf{c}$ projicē uz apakštelpu, kurā $AX\tilde{\mathbf{x}} = \mathbf{b}$ 
+   paliek spēkā. Atgriežoties sākotnējās koordinātēs, iegūst virzienu
+   
+   $$
+   \mathbf{y} = (A X^2 A^T)^{-1} A X^2 \mathbf{c},\qquad
+   \mathbf{r} = \mathbf{c} - A^T\mathbf{y},\qquad
+   \Delta\mathbf{x} = X^2 \mathbf{r}.
+   $$
+   
+   Tad $A\Delta\mathbf{x} = \mathbf{0}$, un $\mathbf{c}^T\Delta\mathbf{x} = \lVert X\mathbf{r} \rVert^2 \geq 0$.
+3. Atrod lielāko soli $\alpha_{\max} = \min_{j:\, \Delta x_j < 0} x_j / (-\Delta x_j)$, ar kuru vēl $\mathbf{x} + \alpha\Delta\mathbf{x} \geq \mathbf{0}$, 
+   un pārvietojas tikai daļu no tā: $\mathbf{x} \leftarrow \mathbf{x} + \beta\,\alpha_{\max}\Delta\mathbf{x}$, kur, piemēram, $\beta = 0.96$. 
+   (Ja $\Delta\mathbf{x} \geq \mathbf{0}$ un $\Delta\mathbf{x} \neq \mathbf{0}$, tad uzdevums ir neierobežots.)
+4. Vektors $\mathbf{y}$ ir duālā atrisinājuma novērtējums. Kad $\mathbf{r} \leq \mathbf{0}$ (t.i., $\mathbf{y}$ ir duāli pieļaujams) 
+   un dualitātes atstarpe $\mathbf{b}^T\mathbf{y} - \mathbf{c}^T\mathbf{x} = -\mathbf{x}^T\mathbf{r}$ ir pietiekami maza, algoritms apstājas.
 
-**Afīnās mērogošanas metodes soļi:** Sākam ar kaut kādu lineārās programmas atrisinājumu $\mathbf{x} = (x_1, x_2, \ldots, x_n)$. Atkārto šādu darbību virkni:
-
-1. Novelk elipsoīdu ap tekošo atrisinājumu $\mathbf{x} = (x_1, x_2, \ldots, x_n)$, kas pieskaras visām plaknēm $x_i=0$.
-2. Atrod, kurā elipsoīda punktā mērķfunkcija ir maksimāla. (Maksimumu meklē visos elipsoīda punktos, arī kur $A\mathbf{x}=\mathbf{b}$ neizpildās.) Atrasto maksimumu apzīmē ar $\mathbf{x}' = (x'_1, x'_2, \ldots, x'_n)$.
-3. Projicē vektoru $\mathbf{x}' - \mathbf{x}$ uz plakni $Ax=0$. Iegūto projekciju apzīmē ar $\mathbf{z} = (z_1, z_2, \ldots, z_n)$.
-4. Jebkuram $a \in \mathbb{R}$, vektors $\mathbf{x} + a \mathbf{z}$ apmierina nosacījumus $A\mathbf{x} = b$. Aprēķinām maksimālo $a$, pie kura $x_i + az_i \geq 0$ (t.i. joprojām $x_i \geq 0$).
-5. Jaunais atrisinājums būs $\mathbf{x}' = (x'_1, x'_2, \ldots, x'_n)$, kur $x'_i = x_i + 0.96 \cdot a \cdot z_i$.
-
-Šeit $\beta = 0.96$ ir *soļa garums* (*step size*), ko bieži izmanto praksē. Atkarībā no situācijas var izvēlēties arī citas vērtības $\beta \in \left[ \frac{2}{3};1 \right)$.
-
-### Afīnās mērogošanas metodes piemērs
-
-**LP uzdevums:**
-
-$$
-\textcolor{blue}{\max \left( -\frac{x_1}{3} + x_2 \right)},\;\;\text{kur}\;\;
-\left\{
-\begin{array}{l}
-x_1 + x_2 \leq 4,\\
-2x_1 - x_2 \leq 3,\\
-x_1 \geq 0, x_2 \geq 0.
-\end{array} \right.
-$$
-
-**Sākumpunkts:** $x_1=1$, $x_2=1$.
-
-![Afīnās mērogošanas piemēra uzdevums](figs/affine-scaling-sample-problem.png)
-
-**Pārveidošana standartformā:** Pārveido LP formā, kur ir tikai vienādības.
-
-$$
-\max \left( -\frac{x_1}{3} + x_2 \right),\;\;\text{kur}\;\;
-\left\{
-\begin{array}{l}
-x_1 + x_2 + x_3 = 4,\\
-2x_1 - x_2 + x_4 = 3,\\
-x_1 \geq 0, x_2 \geq 0, x_3 \geq 0, x_4 \geq 0.
-\end{array} \right.
-$$
-
-**Sākumpunkts:** $x_1=1$, $x_2=1$, $x_3=2$, $x_4=2$.
-
-**1.solis**
-
-* Koordinātu transformācija. $x_1=1+y_1$, $x_2=1+y_2$, $x_3=2+y_3$, $x_4=2+y_4$. Koordinātu pārveidojums: $(1, 1, 2, 2) \rightarrow (0, 0, 0, 0)$.
-* Jaunā programma.
-
-  $$
-  \textcolor{blue}{\max \left( -\frac{y_1 + 1}{3} + (y_2+1) = -\frac{y_1}{3} + y_2 + \frac{2}{3} \right)}\;\;\text{jeb}\;\;
-  \textcolor{blue}{\max \left( -\frac{y_1}{3} + y_2 \right) },\;\;\text{kur}
-  $$
-
-  $$
-  \left\{
-  \begin{array}{l}
-  y_1 + y_2 + y_3 = 0,\\
-  2y_1 - y_2 + y_4 = 0,\\
-  y_1 \geq -1,\; y_2 \geq -1,\; y_3 \geq -2,\; y_4 \geq -2.
-  \end{array} \right.
-  $$
-
-**2.solis**
-
-* Koordinātu "saspiešana". $y_1=z_1$, $y_2=z_2$, $y_3=2z_3$, $y_4=2z_4$.
-* Jaunā programma:
-
-  $$
-  \textcolor{blue}{\max \left( -\frac{z_1}{3} + z_2 \right)},\;\;\text{kur}\;\;
-  \left\{
-  \begin{array}{l}
-  z_1 + z_2 + 2z_3 = 0,\\
-  2z_1 - z_2 + 2z_4 = 0,\\
-  z_1 \geq -1, z_2 \geq -1, z_3 \geq -1, z_4 \geq -1.
-  \end{array} \right.
-  $$
-
-Tekošais punkts -- vienādā apkārtnē no visiem ierobežojumiem.
-
-**3.solis**
-
-$$
-\textcolor{blue}{\max \left( -\frac{z_1}{3} + z_2 \right)},\;\;\text{kur}\;\;
-\left\{
-\begin{array}{l}
-2z_1-z_2 + 2z_3 = 0,\\
-z_1+z_2 + 2z_4 = 0,\\
-z_1 \geq -1, z_2 \geq -1, z_3 \geq -1, z_4 \geq -1.
-\end{array} \right.
-$$
-
-Sfēra, kas pieskaras visiem ierobežojumiem:
-
-$$
-z_1^2 + z_2^2 + z_3^2 + z_4^2 = 1.
-$$
-
-**4.solis:** Ievērojam, ka izteiksmes $a_1z_1 + a_2z_2 +\ldots + a_nz_n$ maksimums uz sfēras
-
-$$
-z_1^2 + z_2^2 + \ldots + z_n^2 = 1
-$$
-
-tiek sasniegts virzienā
-
-$$
-z_1 = a_1,\;z_2=a_2,\,\ldots,\;z_n = a_n.
-$$
-
-Mūsu gadījumā izteiksmei $\displaystyle -\frac{z_1}{3} + z_2$ maksimums ir uz tā vektora, kas rāda virzienā $z_{\max} = (z_1,z_2,z_3,z_4) = (-1/3,1,0,0)$.
-
-**5.solis:** Vēlamies projicēt $z_{\max} = (-1/3, 1, 0, 0)$ uz divdimensiju hipertelpu (divu trīsdimensiju hipertelpu šķēlumu), kur izpildās nosacījumi:
-
-$$
-\left\{
-\begin{array}{l}
-z_1 + z_2 + 2z_3 = 0,\\
-2z_1 - z_2 + 2z_4 = 0.
-\end{array} \right.
-$$
-
-Koeficientu matrica ir
-
-$$
-B = \left(
-\begin{array}{cccc}
-1 & 1 & 2 & 0 \\
-2 & -1 & 0 & 2
-\end{array} \right)
-$$
-
-Aprēķinām $B \cdot B^T$ un $B \cdot z_{\max}$
-
-$$
-B \cdot B^T =
-\left(
-\begin{array}{cccc}
-1 & 1 & 2 & 0 \\
-2 & -1 & 0 & 2
-\end{array} \right) \cdot
-\left(
-\begin{array}{cc}
-1 & 2 \\
-1 & -1 \\
-2 & 0 \\
-0 & 2
-\end{array} \right)
-=
-\left(
-\begin{array}{cc}
-6 & 1\\
-1 & 9
-\end{array} \right)
-$$
-
-$$
-B \cdot z_{\max} = B \cdot \left( \begin{array}{c}
--1/3\\
-1\\
-0\\
-0 \end{array} \right) = \left(
-\begin{array}{c}
-2/3\\
--5/3
-\end{array} \right)
-$$
-
-**6.solis:** Risinām sistēmu $B \cdot B^T \cdot w = B \cdot z_{max}$.
-
-$$
-\left\{ \begin{array}{l}
-6w_1 + w_2 = \frac{2}{3}\\
-w_1 + 9w_2 = -\frac{5}{3}
-\end{array} \right.
-$$
-
-Vienādojumu sistēmas atrisinājums ir
-
-$$
-w_1 = \frac{23}{159},\;\;w_2 = -\frac{32}{159}.
-$$
-
-**7.solis:** Projekcijas vektora virziens:
-
-$$
-p = z - B^T \cdot w =
-\left( \begin{array}{c}
--\frac{1}{3}\\
-1\\
-0\\
-0 \end{array} \right) -
-\left( \begin{array}{cc}
-1 & 2\\
-1 & -1\\
-2 & 0\\
-0 & 2 \end{array} \right) \cdot
-\left( \begin{array}{c}
-\frac{23}{159}\\
--\frac{32}{159} \end{array} \right) =
-\left( \begin{array}{c}
--\frac{12}{159}\\
-\frac{104}{159}\\
--\frac{46}{159}\\
-\frac{64}{159}
-\end{array} \right).
-$$
-
-**8.solis:** Novelkam taisni virzienā $p$. Šo taisni var uzdot parametriski:
-
-$$
-\left\{ \begin{array}{l}
-z_1 = -12t,\\
-z_2 = 104t,\\
-z_3 = -46t,\\
-z_4 = 64t,
-\end{array} \right.
-$$
-
-kur $t$ ir parametrs.
-
-Tagad jānosaka pirmais krustpunkts starp šo taisni un plaknēm $z_i \geq -1$ (virzienā $t \geq 0$). Tas ir $t = 1/46$, kur mūsu taisne krusto $z_3 \geq -1$.
-
-**9.solis:** Tātad jaunais atrisinājums būs
-
-$$
-\left\{ \begin{array}{l}
-z_1 = -0.96 \cdot 12 \cdot \frac{1}{46} = -0.25043,\\
-z_2 = 0.96 \cdot 104 \cdot \frac{1}{46} = 2.17044,\\
-z_3 = -0.96 \cdot 46 \cdot \frac{1}{46} = 0.96000,\\
-z_4 = 0.96 \cdot 64 \cdot \frac{1}{46} = 1.33565.
-\end{array} \right.
-$$
-
-Pārveidojam atpakaļ uz sākotnējās koordinātēm:
-
-$$
-\left\{ \begin{array}{l}
-y_1 = z_1 = -0.25043\\
-y_2 = z_2 = 2.17044\\
-y_3 = 2z_3 = 1.92000\\
-y_4 = 2z_4 = 2.67130
-\end{array} \right.;\;\;
-\left\{ \begin{array}{l}
-x_1 = 1 + y_1 = 0.74957\\
-x_2 = 1 + y_2 = 3.17044\\
-x_3 = 2 + y_3 = 3.92000\\
-x_4 = 2 + y_4 = 4.67130
-\end{array} \right.
-$$
+**Piemērs:** Uzdevumam $\max \left( -\frac{x_1}{3} + x_2 \right)$, kur $x_1 + x_2 \leq 4$, $2x_1 - x_2 \leq 3$, $x_1, x_2 \geq 0$ 
+(standartformā ar papildmainīgajiem $x_3, x_4$), no sākumpunkta $\mathbf{x} = (1, 1, 2, 2)$ viena iterācija ar $\beta = 0.96$ 
+dod $\mathbf{x} = (0.74957;\ 3.17043;\ 0.08000;\ 4.67130)$. Šo soli ierobežo papildmainīgais $x_3$, kas ir tuvu nullei, 
+t.i., punkts jau ir tuvu robežai $x_1 + x_2 = 4$. Optimums ir $(x_1, x_2) = (0, 4)$.
 
 ![Afīnās mērogošanas galarezultāts](figs/affine-scaling-sample-result.png)
 
-*Afīnās mērogošanas galarezultāts.*
+*Afīnās mērogošanas pirmā iterācija no punkta $(1,1)$.*
 
-Maksimizēt $\displaystyle -\frac{x_1}{3} + x_2$ pie nosacījumiem:
+**Trūkumi:** Garā solī ($\beta$ tuvu $1$) iterācijas pietuvojas robežai, un tad nākamie soļi kļūst ļoti īsi, jo 
+Dikina elipsoīds ir šaurs. Konverģence uz optimumu ir pierādīta, ja $\beta \leq 2/3$, bet zināmi pretpiemēri, 
+kuros ar $\beta = 0.999$ metode konverģē uz neoptimālu punktu. Primāli duālajā metodē (sk. tālāk) 
+šo problēmu risina, turot iterācijas tuvu *centrālajam ceļam*; tur matricas $X^2$ vietā parādās $X S^{-1}$.
+
+### Primāli duālā centrālā ceļa metode
+
+Primāli duālās centrālā ceļa sekošanas metodes (*primal-dual path-following methods*) ir mūsdienās 
+visvairāk lietotās iekšējā punkta metodes. Centrālo ceļu aprakstīja N.Megido (Megiddo, 1989), 
+primāli duālo algoritmu ar polinomiālu laiku -- M.Kojima, S.Mizuno un A.Jošise (Yoshise, 1989), 
+bet praktisko *prediktora-korektora* variantu -- S.Mehrotra (1992). Šīs metodes ir lielākās daļas 
+komerciālo un atvērtā koda LP risinātāju iekšējā punkta (*barrier*) algoritmu pamatā; tās parasti 
+atrod atrisinājumu pēc dažiem desmitiem iterāciju gandrīz neatkarīgi no uzdevuma izmēra.
+
+Metode izmanto dualitātes rezultātus no [iepriekšējās lekcijas]({{ '/lectures/linear_introduction/' | relative_url }}) 
+(nodaļa "Dualitātes teorēmas: kopsavilkums algoritmiem"). Plašāks izklāsts ir grāmatā [[Wri97]](#Wri97).
+
+**Uzdevums:** Primārais un duālais uzdevums standartformā, kur $A$ ir $m \times n$ matrica:
 
 $$
-\left\{
-\begin{array}{l}
-x_1 + x_2 \leq 4,\\
-2x_1 - x_2 \leq 3,\\
-x_1 \geq 0, x_2 \geq 0.
+(P): \textcolor{blue}{\min \left( \mathbf{c}^T \mathbf{x} \right)},\;\;\text{kur}\;\;
+A\mathbf{x} = \mathbf{b},\;\; \mathbf{x} \geq \mathbf{0};
+\qquad
+(D): \textcolor{blue}{\max \left( \mathbf{b}^T \mathbf{y} \right)},\;\;\text{kur}\;\;
+A^T\mathbf{y} + \mathbf{s} = \mathbf{c},\;\; \mathbf{s} \geq \mathbf{0}.
+$$
+
+Apzīmējam $X = \operatorname{diag}(\mathbf{x})$, $S = \operatorname{diag}(\mathbf{s})$, $\mathbf{e} = (1, \ldots, 1)^T$.
+
+**Pamatideja:** Optimālie $\mathbf{x}$ un $(\mathbf{y}, \mathbf{s})$ ir sistēmas
+
+$$
+A\mathbf{x} = \mathbf{b},\;\;
+A^T\mathbf{y} + \mathbf{s} = \mathbf{c},\;\;
+X S \mathbf{e} = \mathbf{0},\;\;
+\mathbf{x} \geq \mathbf{0},\;\; \mathbf{s} \geq \mathbf{0}
+$$
+
+atrisinājums. Šo sistēmu ir grūti risināt tieši, jo $x_j s_j = 0$ nozīmē kombinatorisku izvēli -- kuri 
+$x_j$ būs nulle. Tāpēc algoritms uztur stingri pozitīvus $\mathbf{x} > \mathbf{0}$ un $\mathbf{s} > \mathbf{0}$ un katrā iterācijā:
+
+* aprēķina $\mu = \mathbf{x}^T\mathbf{s} / n$ -- vidējo reizinājumu $x_j s_j$ (dualitātes atstarpe ir $n\mu$);
+* izvēlas mērķi uz centrālā ceļa ar mazāku parametru $\sigma\mu$, kur $0 < \sigma < 1$ (*centrēšanas parametrs*);
+* izdara vienu *Ņūtona metodes* soli sistēmai $A\mathbf{x} = \mathbf{b}$, $A^T\mathbf{y} + \mathbf{s} = \mathbf{c}$, $X S \mathbf{e} = \sigma\mu\mathbf{e}$;
+* soli saīsina tā, lai $\mathbf{x}$ un $\mathbf{s}$ paliktu pozitīvi.
+
+Tā iterācijas seko centrālajam ceļam, un dualitātes atstarpe katrā iterācijā samazinās apmēram $1/\sigma$ reizes.
+
+**Ņūtona solis:** Pirmie divi vienādojumi ir lineāri, bet trešajā $(x_j + \Delta x_j)(s_j + \Delta s_j) = \sigma\mu$ 
+atmet mazo saskaitāmo $\Delta x_j \Delta s_j$. Iegūst lineāru sistēmu virzienam $(\Delta\mathbf{x}, \Delta\mathbf{y}, \Delta\mathbf{s})$:
+
+$$
+\left( \begin{array}{ccc}
+A & 0 & 0\\
+0 & A^T & I\\
+S & 0 & X
+\end{array} \right)
+\left( \begin{array}{c}
+\Delta\mathbf{x}\\
+\Delta\mathbf{y}\\
+\Delta\mathbf{s}
+\end{array} \right)
+=
+\left( \begin{array}{c}
+\mathbf{r}_P\\
+\mathbf{r}_D\\
+\mathbf{r}_C
+\end{array} \right),
+\;\;\text{kur}\;\;
+\left\{ \begin{array}{l}
+\mathbf{r}_P = \mathbf{b} - A\mathbf{x},\\
+\mathbf{r}_D = \mathbf{c} - A^T\mathbf{y} - \mathbf{s},\\
+\mathbf{r}_C = \sigma\mu\mathbf{e} - X S\mathbf{e}.
 \end{array} \right.
 $$
 
-No punkta $(x_1,x_2) = (1,1)$ pēc 1.iterācijas ieguvām $(0.74957;3.17044)$
+Izslēdzot $\Delta\mathbf{s}$ un $\Delta\mathbf{x}$, paliek tikai $m \times m$ sistēma (*normālvienādojumi*) ar simetrisku 
+pozitīvi definītu matricu $A D A^T$, kur $D = X S^{-1}$:
+
+$$
+(A D A^T)\,\Delta\mathbf{y} = \mathbf{r}_P + A S^{-1}(X\mathbf{r}_D - \mathbf{r}_C),\qquad
+\Delta\mathbf{s} = \mathbf{r}_D - A^T\Delta\mathbf{y},\qquad
+\Delta\mathbf{x} = S^{-1}(\mathbf{r}_C - X\Delta\mathbf{s}).
+$$
+
+Ja sākumpunkts ir pieļaujams ($\mathbf{r}_P = \mathbf{0}$, $\mathbf{r}_D = \mathbf{0}$), tad tādi tie paliek arī turpmāk, 
+jo $A\Delta\mathbf{x} = \mathbf{0}$ un $A^T\Delta\mathbf{y} + \Delta\mathbf{s} = \mathbf{0}$.
+
+**Primāli duālās metodes pseidokods**
+
+*Ievade:* Matrica $A$, vektori $\mathbf{b}$, $\mathbf{c}$; sākumpunkts $\mathbf{x} > \mathbf{0}$, $\mathbf{y}$, $\mathbf{s} > \mathbf{0}$; 
+precizitāte $\varepsilon > 0$; parametri $\sigma \in (0;1)$ (piemēram, $0.1$) un $\eta \in (0;1)$ (piemēram, $0.9$--$0.99$).  
+*Izvade:* Tuvināti optimālie $\mathbf{x}$ un $(\mathbf{y}, \mathbf{s})$.
+
+$\textsf{Primal-Dual-Path-Following}(A, \mathbf{b}, \mathbf{c}, \mathbf{x}, \mathbf{y}, \mathbf{s})$
+1. **while** $\mathbf{x}^T\mathbf{s} > \varepsilon$ **or** $\lVert \mathbf{b} - A\mathbf{x} \rVert > \varepsilon$ **or** $\lVert \mathbf{c} - A^T\mathbf{y} - \mathbf{s} \rVert > \varepsilon$
+2. $\quad \mu = \mathbf{x}^T\mathbf{s} / n$ $\quad$ *// dualitātes atstarpe ir $n\mu$*
+3. $\quad \mathbf{r}_P = \mathbf{b} - A\mathbf{x}$; $\;\;\mathbf{r}_D = \mathbf{c} - A^T\mathbf{y} - \mathbf{s}$; $\;\;\mathbf{r}_C = \sigma\mu\mathbf{e} - X S\mathbf{e}$
+4. $\quad D = X S^{-1}$
+5. $\quad \Delta\mathbf{y} = \textsf{Solve}\left(A D A^T,\; \mathbf{r}_P + A S^{-1}(X\mathbf{r}_D - \mathbf{r}_C)\right)$ $\quad$ *// normālvienādojumi*
+6. $\quad \Delta\mathbf{s} = \mathbf{r}_D - A^T\Delta\mathbf{y}$
+7. $\quad \Delta\mathbf{x} = S^{-1}(\mathbf{r}_C - X\Delta\mathbf{s})$
+8. $\quad \alpha_P = \min\left(1,\; \eta \cdot \min_{j:\, \Delta x_j < 0} x_j / (-\Delta x_j)\right)$ $\quad$ *// $\mathbf{x}$ paliek pozitīvs*
+9. $\quad \alpha_D = \min\left(1,\; \eta \cdot \min_{j:\, \Delta s_j < 0} s_j / (-\Delta s_j)\right)$ $\quad$ *// $\mathbf{s}$ paliek pozitīvs*
+10. $\quad \mathbf{x} = \mathbf{x} + \alpha_P \Delta\mathbf{x}$
+11. $\quad \mathbf{y} = \mathbf{y} + \alpha_D \Delta\mathbf{y}$; $\;\;\mathbf{s} = \mathbf{s} + \alpha_D \Delta\mathbf{s}$
+12. **return** $(\mathbf{x}, \mathbf{y}, \mathbf{s})$
+
+Galvenais darbs katrā iterācijā ir 5.rindiņa: $m \times m$ sistēmas atrisināšana (lielos uzdevumos -- ar retināto 
+matricu Holecka sadalījumu). Matrica $A D A^T$ katrā iterācijā mainās, bet tās nenulles elementu izvietojums paliek 
+tas pats, tāpēc sadalījuma struktūru var aprēķināt vienreiz.
+
+**Darbības laiks:** Ja iterācijas tur pietiekami tuvu centrālajam ceļam (*short-step* variants ar $\sigma = 1 - 0.4/\sqrt{n}$ 
+un pilnu soli), tad pietiek ar $O(\sqrt{n}\, L)$ iterācijām, kur $L$ ir ievades bitu skaits; tas ir labākais zināmais 
+iterāciju skaita novērtējums iekšējā punkta metodēm. Praksē lieto lielākus soļus ($\sigma \approx 0.1$ vai adaptīvu $\sigma$) 
+un Mehrotras prediktora-korektora shēmu: vispirms aprēķina virzienu ar $\sigma = 0$ (*prediktors*), pēc tā izvēlas $\sigma$ 
+un pieskaita korekciju, kas ņem vērā atmesto $\Delta x_j \Delta s_j$ (*korektors*). Abiem virzieniem izmanto vienu un to pašu 
+matricas $A D A^T$ sadalījumu.
+
+#### Primāli duālās metodes piemērs
+
+Atrisināsim to pašu uzdevumu, kas afīnās mērogošanas metodei: $\max \left( -\frac{x_1}{3} + x_2 \right)$, kur 
+$x_1 + x_2 \leq 4$, $2x_1 - x_2 \leq 3$, $x_1, x_2 \geq 0$. Ar papildmainīgajiem $x_3, x_4$ un pārejot uz minimizāciju:
+
+$$
+\textcolor{blue}{\min \left( \frac{x_1}{3} - x_2 \right)},\;\;\text{kur}\;\;
+A = \left( \begin{array}{cccc}
+1 & 1 & 1 & 0\\
+2 & -1 & 0 & 1
+\end{array} \right),\;\;
+\mathbf{b} = \left( \begin{array}{c}
+4\\
+3
+\end{array} \right),\;\;
+\mathbf{c} = \left( \begin{array}{c}
+1/3\\
+-1\\
+0\\
+0
+\end{array} \right),\;\;
+\mathbf{x} \geq \mathbf{0}.
+$$
+
+Duālais uzdevums: $\max (4y_1 + 3y_2)$, kur $y_1 + 2y_2 + s_1 = 1/3$, $y_1 - y_2 + s_2 = -1$, $y_1 + s_3 = 0$, $y_2 + s_4 = 0$, 
+$\mathbf{s} \geq \mathbf{0}$.
+
+**Sākumpunkts:** $\mathbf{x}^{(0)} = (1, 1, 2, 2)$ (primāli pieļaujams) un $\mathbf{y}^{(0)} = (-2, -1/2)$, no kā 
+$\mathbf{s}^{(0)} = \mathbf{c} - A^T\mathbf{y}^{(0)} = (10/3,\ 1/2,\ 2,\ 1/2) > \mathbf{0}$ (duāli pieļaujams). 
+Dualitātes atstarpe $\mathbf{x}^T\mathbf{s} = 10/3 + 1/2 + 4 + 1 = 8.8333$, tātad $\mu = 8.8333/4 = 2.2083$. 
+Parametri: $\sigma = 0.1$, $\eta = 0.9$.
+
+**Pirmā iterācija:**
+
+* Mērķis uz centrālā ceļa: $\sigma\mu = 0.22083$. Tā kā sākumpunkts ir pieļaujams, $\mathbf{r}_P = \mathbf{0}$ un $\mathbf{r}_D = \mathbf{0}$, bet 
+  $\mathbf{r}_C = \sigma\mu\mathbf{e} - X S\mathbf{e} = 0.22083 - (3.33333,\ 0.5,\ 4,\ 1) = (-3.11250,\ -0.27917,\ -3.77917,\ -0.77917)$.
+* $D = X S^{-1} = \operatorname{diag}(0.3,\ 2,\ 1,\ 4)$, un normālvienādojumu matrica
+
+  $$
+  A D A^T = \left( \begin{array}{cc}
+  0.3 + 2 + 1 & 0.6 - 2\\
+  0.6 - 2 & 1.2 + 2 + 4
+  \end{array} \right)
+  = \left( \begin{array}{cc}
+  3.3 & -1.4\\
+  -1.4 & 7.2
+  \end{array} \right).
+  $$
+
+* Labā puse $-A S^{-1}\mathbf{r}_C = (3.38167,\ 2.86750)$; atrisinot sistēmu, $\Delta\mathbf{y} = (1.30103,\ 0.65124)$.
+* $\Delta\mathbf{s} = -A^T\Delta\mathbf{y} = (-2.60352,\ -0.64979,\ -1.30103,\ -0.65124)$ un 
+  $\Delta\mathbf{x} = S^{-1}(\mathbf{r}_C - X\Delta\mathbf{s}) = (-0.15269,\ 0.74125,\ -0.58855,\ 1.04664)$.
+* Soļa garumi: primārajam $\alpha_P = \min(1;\ 0.9 \cdot 1/0.15269;\ 0.9 \cdot 2/0.58855) = 1$; duālajam 
+  $\alpha_D = 0.9 \cdot 0.5 / 0.65124 = 0.69099$ (to ierobežo $s_4$).
+* Jaunais punkts: $\mathbf{x}^{(1)} = (0.84731,\ 1.74125,\ 1.41145,\ 3.04664)$, $\mathbf{y}^{(1)} = (-1.10100,\ -0.05000)$, 
+  dualitātes atstarpe $\mathbf{x}^T\mathbf{s} = 3.09520$.
+
+**Turpmākās iterācijas** (aprēķinātas ar programmu [figs/primal-dual-path.py](figs/primal-dual-path.py)):
+
+| $k$ | $x_1$ | $x_2$ | $\mu = \mathbf{x}^T\mathbf{s}/4$ | Atstarpe $\mathbf{x}^T\mathbf{s}$ | $\alpha_P$ | $\alpha_D$ |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | 1.00000 | 1.00000 | 2.20833 | 8.83333 | -- | -- |
+| 1 | 0.84731 | 1.74125 | 0.77380 | 3.09520 | 1.0000 | 0.6910 |
+| 2 | 0.20797 | 3.54898 | 0.15425 | 0.61701 | 1.0000 | 0.5980 |
+| 3 | 0.02080 | 3.95321 | 0.01922 | 0.07687 | 0.9685 | 1.0000 |
+| 4 | 0.00208 | 3.99524 | 0.00227 | 0.00908 | 0.9719 | 1.0000 |
+| 5 | 0.00021 | 3.99952 | 0.00025 | 0.00100 | 0.9810 | 1.0000 |
+| 6 | 0.00002 | 3.99995 | 0.00003 | 0.00011 | 0.9896 | 1.0000 |
+
+Kad soļi ir gandrīz pilni, atstarpe katrā iterācijā samazinās apmēram $1/\sigma = 10$ reizes. Iterācijas tuvojas 
+$\mathbf{x}^{\ast} = (0, 4, 0, 7)$, $\mathbf{y}^{\ast} = (-1, 0)$, $\mathbf{s}^{\ast} = (4/3, 0, 1, 0)$ -- visi reizinājumi $x_j s_j$ tiecas uz $0$, 
+un mērķfunkcijas maksimums ir $-0/3 + 4 = 4$. Sākotnējam maksimizācijas uzdevumam ēnu cenas ir $-\mathbf{y}^{\ast} = (1, 0)$: 
+aktīvs ir tikai ierobežojums $x_1 + x_2 \leq 4$.
+
+![Primāli duālās metodes iterācijas un centrālais ceļš](figs/primal-dual-path.png)
+
+*Centrālais ceļš (zaļš) sākas pieļaujamā apgabala analītiskajā centrā un beidzas optimumā $(0,4)$. Sākumpunkts $\mathbf{x}^{(0)}$ nav uz centrālā ceļa, bet jau pirmās iterācijas tam pietuvojas un pēc tam seko tam līdz optimumam.*
 
 
 
@@ -946,58 +814,91 @@ Ja $\mathbf{x}$ apraksta vairākus apakšciklus, tad, par $S$ izvēloties viena 
 
 ### Branch and Bound metode
 
-**Mugursomas uzdevums (0-1 Knapsack Problem):** Kombinatoriskās optimizācijas uzdevums: Dotas vairākas lietas (katrai zināms gan svars $w_i$, gan vērtība $c_i$), atrast kuras no tām pievienot kolekcijai ("mugursomai") tā, lai kopīgais svars nepārsniedz doto limitu un kopīgā vērtība ir iespējami liela. (Piemēram, resursu piešķiršanas uzdevumi, kur jāizvēlas no daudziem nedalāmiem projektiem pie fiksēta budžeta vai laika ierobežojuma.)
+**Mugursomas uzdevums (*0-1 Knapsack Problem*):** Dotas $n$ lietas; katrai zināms 
+svars $w_i$ un vērtība $c_i$. Jāatrod, kuras no tām ielikt kolekcijā 
+("mugursomā") tā, lai kopējais svars nepārsniegtu doto limitu $W$ un kopējā vērtība 
+būtu iespējami liela. (Piemēram, resursu piešķiršanas uzdevumi, kur jāizvēlas no 
+daudziem nedalāmiem projektiem pie fiksēta budžeta vai laika ierobežojuma.)
 
 $$
-\textcolor{blue}{\max \left( \sum\limits_{i=1}^n v_i x_i \right)},\;\;\text{kur}\;\;
+\textcolor{blue}{\max \left( \sum\limits_{i=1}^n c_i x_i \right)},\;\;\text{kur}\;\;
 \left\{ \begin{array}{l}
 \sum\limits_{i=1}^n w_i x_i \leq W,\\
-x_i \in \{0,1\}\\
+x_i \in \{0,1\}.\\
 \end{array} \right.
 $$
 
-Cits šī uzdevuma variants *Bounded knapsack problem* atļauj ņemt vairākas identiskas lietas (katru lietu līdz skaitam $d$). Vai arī *Unbounded knapsack problem*, kas atļauj paņemt jebkuru veselu skaitu kopiju.
+Ir arī citi šī uzdevuma varianti: *Bounded knapsack problem* atļauj ņemt vairākas 
+identiskas lietas (katru lietu līdz $d$ eksemplāriem), bet *Unbounded knapsack problem* 
+atļauj ņemt katras lietas jebkuru veselu skaitu eksemplāru.
 
-Var meklēt risinājumu ar pilno pārlasi. Rodas lēmumu koks (*decision tree*) mainīgajiem $x_1,x_2,x_3,\ldots$.
+Risinājumu var meklēt ar pilno pārlasi. Rodas lēmumu koks (*decision tree*) 
+mainīgajiem $x_1,x_2,x_3,\ldots$: katrā līmenī viens mainīgais tiek fiksēts kā $0$ vai $1$.
 
 ![Lēmumu koks mainīgajiem](figs/binary-search-tree1.png)
 
-* Jau zināms, ka LP uzdevuma mainīgie ir veseli skaitļi, kas izpilda nevienādības: $0 \leq x_i \leq 1$ visiem $i = 1,\ldots,m$.
-* Pilnā pārlase vienmēr strādās ($4$ mainīgajiem un $16$ gadījumiem tā ir efektīvākā metode), bet lielākām problēmām pilnās pārlases ilgums pieaugs eksponenciāli.
+* Mainīgie ir veseli skaitļi, kas izpilda nevienādības $0 \leq x_i \leq 1$ visiem 
+  $i = 1,\ldots,n$, t.i., $x_i \in \lbrace 0,1 \rbrace$. Kokam ir $2^n$ lapas.
+* Pilnā pārlase vienmēr atrod optimumu, un mazos uzdevumos (piemēram, $4$ mainīgajiem 
+  ir tikai $2^4 = 16$ gadījumi) tā ir pilnīgi pietiekama, bet lielākiem uzdevumiem 
+  pilnās pārlases ilgums pieaug eksponenciāli.
 
 **Branch and Bound algoritma pamatideja:**
 
-* "Branch and bound" izmanto *LP relaksāciju* (atļauj reālus $x_i \in [0;1]$), lai risinātu sākotnējo veselo skaitļu uzdevumu.
-* Ja arī relaksētā LP uzdevuma atrisinājums ir mazāks, nekā līdz šim atrastais veselo skaitļu risinājums - *pašreizējais risinājums* (*incumbent solution*), tad attiecīgo zaru *nogriež* (*prune*).
+* *Zarošana* (*branch*): uzdevumu sadala apakšuzdevumos, fiksējot kāda mainīgā vērtību 
+  ($x_k = 0$ vai $x_k = 1$); tie ir lēmumu koka mezgla bērni.
+* *Novērtējums* (*bound*): katrā mezglā atrisina *LP relaksāciju* -- to pašu uzdevumu, 
+  bet ar reāliem $x_i \in [0;1]$. Relaksētajam uzdevumam ir vairāk pieļaujamo atrisinājumu, 
+  tāpēc tā maksimums ir augšējais novērtējums visiem veselo skaitļu atrisinājumiem 
+  šī mezgla apakškokā.
+* Labāko līdz šim atrasto veselo skaitļu atrisinājumu sauc par *pašreizējo atrisinājumu* 
+  (*incumbent solution*). Ja relaksētā LP maksimums nav lielāks par pašreizējo 
+  atrisinājumu, tad šajā apakškokā labāka atrisinājuma nav, un visu zaru *nogriež* (*prune*).
+* Zaru nogriež arī tad, ja relaksētā LP atrisinājums jau ir veselos skaitļos (tas ir 
+  labākais šajā apakškokā), vai arī LP nav izpildāms.
 
-Atskaitot mazus vai īpaši uzkonstruētus (praksē maz sastopamus) piemērus, šādai pieejai var atmest $>99.99999\%$ utml. no lēmumu koka virsotnēm. Iespēja ievērojami samazināt pilno pārlasi dod ietaupījumu -- pat ja ir papildus jārisina relaksētie LP apakšuzdevumi.
+Praktiskos uzdevumos šādi parasti izdodas nogriezt lielāko daļu lēmumu koka virsotņu 
+(lai gan sliktākajā gadījumā darba apjoms joprojām aug eksponenciāli). Iespēja 
+ievērojami samazināt pilno pārlasi dod ietaupījumu -- pat ja katrā mezglā ir papildus 
+jārisina relaksētais LP apakšuzdevums.
 
-* Ieviesīsim numurētus *mezglus* (*nodes*) lēmumu kokā (atkarībā no tā, cik mainīgos esam fiksējuši par $0$ vai $1$). Tos saliek BFS apstaigāšanas secībā:
-  - Mezglā $v_1$ nekas nav fiksēts (visus mainīgos var izvēlēties patvaļīgi);
-  - Mezglā $v_2$ ir zināms, ka $x_1 = 0$ (visi citi ir patvaļīgi);
-  - Mezglā $v_3$ ir zināms, ka $x_1 = 1$ (visi citi ir patvaļīgi);
-  - Mezglā $v_4$ ir zināms, ka $x_1 = 0$ un $x_2 = 0$ (visi citi ir patvaļīgi).
-* Ar $\mathbf{x}(j)$ apzīmējam (relaksētā) LP uzdevuma optimālās reālās vērtības $x_i \in [0;1]$ mezglā $v_j$ un $z_{LP}(j)$ apzīmē iegūto mērķfunkcijas maksimumu mezglā $v_j$.
+**Apzīmējumi:**
 
-**"Branch and Bound" pseidokods:**
+* Lēmumu koka *mezglus* (*nodes*) numurē to izveidošanas secībā $v_1, v_2, \ldots$. 
+  Katrs mezgls atbilst apakšuzdevumam, kurā daļa mainīgo ir fiksēti kā $0$ vai $1$:
+  - saknē $v_1$ neviens mainīgais nav fiksēts;
+  - $v_1$ bērnos ir fiksēts zarošanas mainīgais, piemēram, $v_2$: $x_1 = 0$ un $v_3$: $x_1 = 1$ 
+    (pārējie mainīgie nav fiksēti);
+  - nākamie numuri tiek piešķirti tikai tiem mezgliem, kurus algoritms tiešām izveido 
+    (nogriezto mezglu bērnus neveido).
+* $\mathbf{x}_{LP}(j)$ -- relaksētā LP optimālās reālās vērtības $x_i \in [0;1]$ mezglā $v_j$; 
+  $z_{LP}(j)$ -- atbilstošais mērķfunkcijas maksimums.
+* $\mathbf{x}^{\ast}$ un $z^{\ast}$ -- pašreizējais atrisinājums un tā mērķfunkcijas vērtība.
 
-*Ievade:* Veselo skaitļu programmēšanas uzdevums (mainīgo vērtības $x_i \in \lbrace 0,1 \rbrace$) ar mērķa funkcijas koeficientiem $\mathbf{c}$, ar ierobežojumu nevienādību labajām pusēm $\mathbf{b}$ un matricu $A$.
+**Branch and Bound pseidokods**
 
-*Izvade:* Optimālās mainīgo vērtības $x_i \in \lbrace 0,1 \rbrace$.
+*Ievade:* Veselo skaitļu programmēšanas uzdevums $\max \mathbf{c}^T \mathbf{x}$, kur 
+$A\mathbf{x} \leq \mathbf{b}$, $x_i \in \lbrace 0,1 \rbrace$ (mērķfunkcijas koeficienti 
+$\mathbf{c}$, ierobežojumu matrica $A$ un labās puses $\mathbf{b}$).  
+*Izvade:* Optimālais atrisinājums $\mathbf{x}^{\ast} \in \lbrace 0,1 \rbrace^n$.
 
-$\textsf{BranchAndBound}(\mathbf{c},A,\mathbf{b})$
-1. Aktīvie mezgli $= \lbrace v_1 \rbrace$ $\quad$ *// neviens $x(i)$ nav fiksēts*
-2. Pašreizējais (*incumbent*) risinājums $\mathbf{x} = (0,\ldots,0)$, $z^{\ast} = 0$.
-3. **while** aktīvo mezglu kopa $\neq \varnothing$
-4. $\quad$ Izvēlas aktīvu mezglu $j$ un atzīmē to kā neaktīvu
-5. $\quad$ Ar $\mathbf{x}(j)$ apzīmē relaksētā LP atrisinājumu un $z_{LP}(j) = \mathbf{c}^T \cdot \mathbf{x}(j)$.
-6. $\quad$ **if** $z^{\ast} \geq z_{LP}(j)$: $\quad$ *// Pat relaksētais LP nav labāks par pašreizējo*
-7. $\quad\quad$ Nogriež $j$
-8. $\quad$ **else if** $z^{\ast} < z_{LP}(j)$ **and** visas $\mathbf{x}(j)$ koordinātes ir veseli skaitļi: $\quad$ *// Labāks nekā pašreizējais/incumbent atrisinājums*
-9. $\quad\quad$ Pašreizējais risinājums kļūst $\mathbf{x}(j)$
-10. $\quad\quad$ Nogriež $j$
-11. $\quad$ **else if** $z^{\ast} < z_{LP}(j)$ **and** ne visas $\mathbf{x}(j)$ koordinātes ir veseli skaitļi: $\quad$ *// Varbūt var uzlabot pašreizējo?*
-12. $\quad\quad$ Atzīmē mezgla $j$ pēctečus kā aktīvus
+$\textsf{Branch-And-Bound}(\mathbf{c}, A, \mathbf{b})$
+1. $Q = \lbrace v_1 \rbrace$ $\quad$ *// aktīvie mezgli; saknē $v_1$ neviens $x_i$ nav fiksēts*
+2. $\mathbf{x}^{\ast} = (0,\ldots,0)$; $\;\;z^{\ast} = 0$ $\quad$ *// pašreizējais atrisinājums (der, ja $\mathbf{b} \geq \mathbf{0}$)*
+3. **while** $Q \neq \varnothing$
+4. $\quad$ izņem no $Q$ kādu mezglu $v_j$
+5. $\quad (\mathbf{x}_{LP}(j), z_{LP}(j)) = \textsf{Solve-LP-Relaxation}(\mathbf{c}, A, \mathbf{b}, v_j)$ $\quad$ *// ja LP nav izpildāms, $z_{LP}(j) = -\infty$*
+6. $\quad$ **if** $z_{LP}(j) \leq z^{\ast}$ $\quad$ *// pat relaksētais LP nav labāks par pašreizējo*
+7. $\quad\quad$ nogriež $v_j$
+8. $\quad$ **elseif** visas $\mathbf{x}_{LP}(j)$ koordinātes ir veseli skaitļi $\quad$ *// labāks par pašreizējo atrisinājumu*
+9. $\quad\quad \mathbf{x}^{\ast} = \mathbf{x}_{LP}(j)$; $\;\;z^{\ast} = z_{LP}(j)$
+10. $\quad\quad$ nogriež $v_j$
+11. $\quad$ **else** $\quad$ *// varbūt apakškokā var uzlabot pašreizējo?*
+12. $\quad\quad$ izvēlas mainīgo $x_k$, kura vērtība $\mathbf{x}_{LP}(j)$ nav vesela
+13. $\quad\quad$ ievieto $Q$ divus $v_j$ bērnus: ar papildu ierobežojumu $x_k = 0$ un ar $x_k = 1$
+14. **return** $\mathbf{x}^{\ast}$
+
+Rindiņā 4 mezglu var izvēlēties dažādi. Ja $Q$ ir rinda (FIFO), koku apstaigā platumā (BFS) -- tā darīts arī piemērā zemāk; ja $Q$ ir steks, koku apstaigā dziļumā (DFS), un tad ātrāk atrod pirmo veselo skaitļu atrisinājumu. Rindiņā 2 sākuma atrisinājums $\mathbf{x}^{\ast} = \mathbf{0}$ ir pieļaujams, ja $\mathbf{b} \geq \mathbf{0}$ (piemēram, mugursomas uzdevumā); vispārīgā gadījumā sāk ar $z^{\ast} = -\infty$.
 
 ### Veselu skaitļu uzdevuma piemērs
 
@@ -1011,25 +912,9 @@ x_k \in \{0,1\}\;\;\text{pie}\;\;k=1,2,3,4.\\
 \end{array} \right.
 $$
 
-```python
-from pulp import *
-
-n = 4
-weights = [8, 5, 3, 2]
-prices = [15, 12, 4, 2]
-carry_weight = 10
-
-model = LpProblem(sense=LpMaximize)
-variables = [LpVariable(name=f"x_{i}", cat=LpBinary) for i in range(n)]
-model += lpDot(weights, variables) <= carry_weight
-model += lpDot(prices, variables)
-
-status = model.solve(PULP_CBC_CMD(msg=False))
-print("price:", model.objective.value())
-print("take:", [variables[i].value() for i in range(n)])
-```
-
-Šajā programmā (`cat=LpBinary`) aprakstīts veselo skaitļu programmēšanas uzdevums -- parasti atrisinājumu atrod ātri, bet vispārīgajā gadījumā tas ir NP pilns.
+Tas ir mugursomas uzdevums ar $4$ lietām un svara limitu $W = 10$. (Bibliotēkā `pulp` šādus 
+mainīgos definē ar `cat=LpBinary`; risinātājs tos parasti atrod ātri, lai gan vispārīgajā 
+gadījumā veselo skaitļu programmēšana ir NP-grūta.)
 
 Tas pats uzdevums matricu pierakstā:
 
@@ -1067,12 +952,18 @@ A = \left(
 \end{array} \right)
 $$
 
+Relaksēto LP šajā uzdevumā var atrisināt arī bez simpleksa algoritma: lietas sakārto pēc 
+vērtības attiecības pret svaru ($c_2/w_2 = 12/5 = 2.4$; $c_1/w_1 = 15/8 = 1.875$; 
+$c_3/w_3 = 4/3 \approx 1.33$; $c_4/w_4 = 2/2 = 1$) un rijīgi ņem tās šajā secībā, kamēr 
+pietiek vietas; pēdējo lietu, kas pilnībā vairs neietilpst, ņem daļēji. 
+Mezglus apstrādājam to izveidošanas secībā (BFS).
+
 #### Pirmais solis
 
 Mezglā $v_1$ (neviens no $x_i$ nav fiksēts) relaksētais LP uzdevums:
 
 $$
-\textcolor{blue}{\max \left( 15x_1 + 12x_2 + 4x_3 + 2x_4 \right)},\;\;\text{kur}
+\textcolor{blue}{\max \left( 15x_1 + 12x_2 + 4x_3 + 2x_4 \right)},\;\;\text{kur}\;\;
 \left\{ \begin{array}{l}
 8x_1 + 5x_2 + 3x_3 + 2x_4 \leq 10,\\
 x_k \leq 1,\;\;k=1,2,3,4,\\
@@ -1082,33 +973,17 @@ $$
 
 ![Lēmumu koka sakne v1](figs/binary-search-tree2.png)
 
-*Pašreizējais* (*Incumbent*) atrisinājums: $\mathbf{x}^{\ast} = (0, 0, 0, 0)$, un $z^{\ast} = 0$.
+Pašreizējais atrisinājums: $\mathbf{x}^{\ast} = (0, 0, 0, 0)$, $z^{\ast} = 0$.
 
-```python
-from pulp import *
+Relaksētā LP atrisinājums: $\mathbf{x}_{LP}(1) = (5/8, 1, 0, 0)$, $z_{LP}(1) = 12 + 15 \cdot 5/8 = 21\frac{3}{8}$.
 
-n = 4
-weights = [8, 5, 3, 2]
-prices = [15, 12, 4, 2]
-carry_weight = 10
-
-model = LpProblem(sense=LpMaximize)
-variables = [LpVariable(name=f"x_{i}", lowBound=0, upBound=1) for i in range(n)]
-model += lpDot(weights, variables) <= carry_weight
-model += lpDot(prices, variables)
-
-status = model.solve(PULP_CBC_CMD(msg=False))
-print("price:", model.objective.value())
-print("take:", [variables[i].value() for i in range(n)])
-```
-
-Relaksētā LP atrisinājums: $\mathbf{x}_{LP}(1) = (5/8, 1 , 0, 0)$ un $z_{LP}(1) = 21\frac{3}{8}$. Varētu būt labāks atrisinājums par pašreizējo $z^{\ast} = 0$, bet nav redzami veselie skaitļi. Pievieno kokam abus $v_1$ bērnus:
+Tā kā $z_{LP}(1) = 21\frac{3}{8} > z^{\ast} = 0$, bet $x_1 = 5/8$ nav vesels skaitlis, tad zarojam pēc $x_1$: kokam pievieno abus $v_1$ bērnus -- $v_2$ ($x_1 = 0$) un $v_3$ ($x_1 = 1$).
 
 ![Lēmumu koks ar v1 bērniem](figs/binary-search-tree3.png)
 
 #### Otrais solis
 
-Mezglā $v_2$ (fiksēts $x_1=0$) relaksētais LP uzdevums:
+Mezglā $v_2$ (fiksēts $x_1 = 0$) relaksētais LP uzdevums:
 
 $$
 \textcolor{blue}{\max \left( 15x_1 + 12x_2 + 4x_3 + 2x_4 \right)},\;\;\text{kur}\;\;
@@ -1120,54 +995,79 @@ x_k \geq 0,\;\;k=1,2,3,4.\\
 \end{array} \right.
 $$
 
-![Lēmumu koks ar v1 bērniem](figs/binary-search-tree3.png)
+Pašreizējais atrisinājums: $\mathbf{x}^{\ast} = (0, 0, 0, 0)$, $z^{\ast} = 0$.
 
-*Pašreizējais* (*Incumbent*) risinājums joprojām: $\mathbf{x}^{\ast} = (0, 0, 0, 0)$, un $z^{\ast} = 0$.
+Relaksētā LP atrisinājums: $\mathbf{x}_{LP}(2) = (0, 1, 1, 1)$, $z_{LP}(2) = 12 + 4 + 2 = 18$ (visas trīs lietas ietilpst: $5 + 3 + 2 = 10$).
 
-Relaksētā LP atrisinājums: $\mathbf{x}_{LP}(2) = (0, 1, 1, 1)$; $z_{LP}(2) = 18$.
-
-Tā kā $z_{LP}(2) = 18 > z^{\ast}$, un $\mathbf{x}_{LP}(2) = (0, 1, 1, 1)$ ir veseli skaitļi, tad tas ir jaunais tekošais risinājums. Mezgls $v_2$ kļūst neaktīvs; apakškoku zem tā nogriež.
+Tā kā $z_{LP}(2) = 18 > z^{\ast} = 0$ un visas $\mathbf{x}_{LP}(2)$ koordinātes ir veseli skaitļi, tad tas kļūst par jauno pašreizējo atrisinājumu: $\mathbf{x}^{\ast} = (0, 1, 1, 1)$, $z^{\ast} = 18$. Mezglu $v_2$ nogriež (labāka atrisinājuma tā apakškokā nav).
 
 ![Lēmumu koks pēc mezgla v2 apstrādes](figs/binary-search-tree4.png)
 
 #### Trešais solis
 
+Mezglā $v_3$ (fiksēts $x_1 = 1$) relaksētais LP uzdevums:
+
 $$
 \textcolor{blue}{\max \left( 15x_1 + 12x_2 + 4x_3 + 2x_4 \right)},\;\;\text{kur}\;\;
 \left\{ \begin{array}{l}
 8x_1 + 5x_2 + 3x_3 + 2x_4 \leq 10,\\
+x_1 = 1,\\
 x_k \leq 1,\;\;k=1,2,3,4,\\
 x_k \geq 0,\;\;k=1,2,3,4.\\
 \end{array} \right.
 $$
 
-Spēkā esošais risinājums: $\mathbf{x}^{\ast} = (0, 1, 1, 1)$; $z^{\ast} = 18$.
+Pašreizējais atrisinājums: $\mathbf{x}^{\ast} = (0, 1, 1, 1)$, $z^{\ast} = 18$.
 
-$\mathbf{x}_{LP}(3) = (1, 2/5 , 0, 0)$, $z_{LP}(3) = 19\frac{4}{5}.$
+Relaksētā LP atrisinājums: $\mathbf{x}_{LP}(3) = (1, 2/5, 0, 0)$, $z_{LP}(3) = 15 + 12 \cdot 2/5 = 19\frac{4}{5}$ (pēc $x_1$ atlikušajā vietā $10 - 8 = 2$ ietilpst $2/5$ no otrās lietas).
+
+Tā kā $z_{LP}(3) = 19\frac{4}{5} > z^{\ast} = 18$, bet $x_2 = 2/5$ nav vesels skaitlis, tad zarojam pēc $x_2$: kokam pievieno abus $v_3$ bērnus -- $v_4$ ($x_1 = 1$, $x_2 = 0$) un $v_5$ ($x_1 = 1$, $x_2 = 1$).
 
 ![Lēmumu koks pēc mezgla v3 apstrādes](figs/binary-search-tree5.png)
 
 #### Ceturtais solis
 
+Mezglā $v_4$ (fiksēts $x_1 = 1$ un $x_2 = 0$) relaksētais LP uzdevums:
+
 $$
 \textcolor{blue}{\max \left( 15x_1 + 12x_2 + 4x_3 + 2x_4 \right)},\;\;\text{kur}\;\;
 \left\{ \begin{array}{l}
 8x_1 + 5x_2 + 3x_3 + 2x_4 \leq 10,\\
+x_1 = 1,\;\;x_2 = 0,\\
 x_k \leq 1,\;\;k=1,2,3,4,\\
 x_k \geq 0,\;\;k=1,2,3,4.\\
 \end{array} \right.
 $$
 
-Spēkā esošais risinājums: $\mathbf{x}^{\ast} = (0, 1, 1, 1)$; $z^{\ast} = 18$.
+Pašreizējais atrisinājums: $\mathbf{x}^{\ast} = (0, 1, 1, 1)$, $z^{\ast} = 18$.
 
-Atbilstošā lineārā programma:
+Relaksētā LP atrisinājums: $\mathbf{x}_{LP}(4) = (1, 0, 2/3, 0)$, $z_{LP}(4) = 15 + 4 \cdot 2/3 = 17\frac{2}{3}$.
 
-$\mathbf{x}_{LP}(4) = (1, 0, 2/3, 0)$ un mērķa funkcija $z_{LP}(4) = 17 \frac{2}{3}$.
+Tā kā $z_{LP}(4) = 17\frac{2}{3} \leq z^{\ast} = 18$, tad pat relaksētais LP nav labāks par pašreizējo atrisinājumu. Mezglu $v_4$ nogriež (lai gan $x_3 = 2/3$ nav vesels skaitlis).
 
-$\mathbf{x}_{LP}(5)$ ir neizpildāms.
+#### Piektais solis
+
+Mezglā $v_5$ (fiksēts $x_1 = 1$ un $x_2 = 1$) relaksētais LP uzdevums:
+
+$$
+\textcolor{blue}{\max \left( 15x_1 + 12x_2 + 4x_3 + 2x_4 \right)},\;\;\text{kur}\;\;
+\left\{ \begin{array}{l}
+8x_1 + 5x_2 + 3x_3 + 2x_4 \leq 10,\\
+x_1 = 1,\;\;x_2 = 1,\\
+x_k \leq 1,\;\;k=1,2,3,4,\\
+x_k \geq 0,\;\;k=1,2,3,4.\\
+\end{array} \right.
+$$
+
+Pašreizējais atrisinājums: $\mathbf{x}^{\ast} = (0, 1, 1, 1)$, $z^{\ast} = 18$.
+
+Relaksētais LP nav izpildāms: jau $8 \cdot 1 + 5 \cdot 1 = 13 > 10$. Tātad $z_{LP}(5) = -\infty \leq z^{\ast}$, un mezglu $v_5$ nogriež.
 
 ![Lēmumu koks pēc mezglu v4 un v5 apstrādes](figs/binary-search-tree6.png)
 
+#### Rezultāts
+
+Aktīvo mezglu vairs nav, tāpēc pašreizējais atrisinājums ir optimāls: $\mathbf{x}^{\ast} = (0, 1, 1, 1)$, $z^{\ast} = 18$ -- jāņem 2., 3. un 4. lieta (kopējais svars $10$). Algoritms atrisināja $5$ relaksētos LP uzdevumus, bet pilnajā pārlasē būtu jāpārbauda $2^4 = 16$ gadījumi.
 
 
 
@@ -1199,6 +1099,8 @@ Kopā $20 + 524\,287 = 524\,307$ ierobežojumi (neskaitot $0 \leq x_e \leq 1$).
 <a id="Lee2023"></a>**[Lee2023]** J.Lee, *A First Course in Linear Optimization*, 4th ed., Ann Arbor, Michigan, 2024. Available at [https://github.com/jon77lee/JLee_LinearOptimizationBook](https://github.com/jon77lee/JLee_LinearOptimizationBook).
 
 <a id="Str18"></a>**[Str18]** G.Strang, *MIT 18.065 Matrix Methods in Data Analysis*, MIT OpenCourseWare, Massachusetts Institute of Technology, Spring 2018. Available at [https://bit.ly/40H8H8z](https://bit.ly/40H8H8z), [YouTube](https://youtu.be/feb9j65Iz4w?si=mtQZZxM6jex8zCAp).
+
+<a id="Wri97"></a>**[Wri97]** S.J.Wright, *Primal-Dual Interior-Point Methods*, SIAM, Philadelphia, 1997.
 
 <!--
 [https://ocw.mit.edu/courses/mathematics/18-086-mathematical-methods-for-engineers-ii-spring-2006/video-lectures/lecture-28-linear-programming-and-duality/](https://ocw.mit.edu/courses/mathematics/18-086-mathematical-methods-for-engineers-ii-spring-2006/video-lectures/lecture-28-linear-programming-and-duality/) -- MIT lekcija

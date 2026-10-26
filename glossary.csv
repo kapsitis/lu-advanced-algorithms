@@ -497,3 +497,147 @@ S.Mehrotra,Sanjay Mehrotra,name,
 Dž.fon Neimans,John von Neumann,name,
 Dž.Akerlofs,George Akerlof,name,
 Ričards Karps,Richard Karp,name,
+rokasspiediens,handshake,standard,TLS
+ieraksts (TLS),record,standard,TLS record layer
+šifru komplekts,cipher suite,standard,
+simetriskā kriptogrāfija / asimetriskā kriptogrāfija,symmetric cryptography / asymmetric cryptography,standard,
+publiskās atslēgas kriptogrāfija,public-key cryptography,standard,
+privātā atslēga / publiskā atslēga,private key / public key,standard,
+atslēgu pāris,key pair,standard,
+atslēgu apmaiņa; atslēgu vienošanās,key exchange; key agreement,standard,
+kopīgais noslēpums,shared secret,standard,
+īslaicīgā atslēga / statiskā atslēga,ephemeral key / static key,course,The Latvian text also writes the English term in brackets
+uz priekšu vērstā slepenība,forward secrecy,course,No settled Latvian term; the lectures use this phrase with the English term in brackets
+uzbrucēja modelis,adversary model,standard,
+uzbrucējs,adversary; attacker,standard,"Prefer ""adversary"" in formal statements"
+konfidencialitāte / integritāte / autentiskums,confidentiality / integrity / authenticity,standard,
+cilvēks pa vidu,man-in-the-middle,standard,
+Kerkhofa princips,Kerckhoffs's principle,name,
+Dolevs-Jao (modelis),Dolev–Yao (model),name,
+bloku šifrs,block cipher,standard,
+plūsmas šifrs,stream cipher,standard,
+atklātais teksts / šifrteksts,plaintext / ciphertext,standard,
+kārta (AES),round,course,AES rounds; not to be confused with kārta = order of a group element
+kārta (grupas elementa); grupas kārta,order; group order,standard,
+kārtas atslēga,round key,standard,
+stāvoklis (AES),state,standard,
+atslēgu izvēršana,key expansion; key schedule,standard,AES
+atslēgu grafiks,key schedule,course,"TLS 1.3 key schedule (RFC 8446, 7.1); chosen to distinguish it from AES key expansion"
+S-bloks,S-box,standard,
+afīnais pārveidojums,affine transformation,standard,
+sajaukšana / difūzija,confusion / diffusion,standard,Shannon's design principles
+plašā ceļa stratēģija,wide trail strategy,course,No established Latvian term
+slīdēšanas uzbrukums,slide attack,course,No established Latvian term
+MDS matrica,MDS (maximum distance separable) matrix,standard,
+Singltona robeža,Singleton bound,name,
+paplašinātais Eiklīda algoritms,extended Euclidean algorithm,name,
+mazā Ferma teorēma,Fermat's little theorem,name,
+Lagranža teorēma,Lagrange's theorem,name,Group theory
+multiplikatīvā grupa,multiplicative group,standard,
+raksturīgais skaitlis (laukam),characteristic (of a field),standard,
+nulles dalītājs,zero divisor,standard,
+bezpārneses reizināšana,carry-less multiplication,standard,
+darbības režīms,mode of operation,standard,Block cipher modes
+skaitītāja režīms,counter mode (CTR),standard,
+atslēgas plūsma,keystream,standard,
+papildināšana (bloka),padding,standard,
+brīvpiekļuve,random access,standard,
+autentifikācijas tags,authentication tag,standard,
+papildu autentificētie dati,additional authenticated data (AAD),standard,
+autentificētā šifrēšana ar papildu datiem,authenticated encryption with associated data (AEAD),standard,
+ziņojuma autentifikācijas kods,message authentication code (MAC),standard,
+Hornera shēma,Horner's scheme,name,
+Kantora-Zasenhauza algoritms,Cantor–Zassenhaus algorithm,name,
+Merkla-Damgora konstrukcija,Merkle–Damgård construction,name,
+saspiešanas funkcija,compression function,standard,Hash functions
+garuma paplašināšanas uzbrukums,length extension attack,standard,
+pseidogadījuma funkcija,pseudorandom function (PRF),standard,
+atslēgu atvasināšana; atslēgu atvasināšanas funkcija,key derivation; key derivation function (KDF),standard,
+ievades atslēgas materiāls,input keying material (IKM),standard,HKDF
+ziņojumu kopsavilkums (TLS),transcript hash,course,TLS 1.3 transcript hash; Latvian term chosen for the course
+satiksmes noslēpums,traffic secret,course,TLS 1.3; literal translation
+kārtas numurs (TLS ierakstam),sequence number,standard,"TLS record sequence number; differs from the general row ""kārtas numurs = index; rank"""
+sānu kanāls; sānu kanālu uzbrukums,side channel; side-channel attack,standard,
+kešatmiņas laika uzbrukums,cache-timing attack,standard,
+jaudas analīze / diferenciālā jaudas analīze,power analysis / differential power analysis (DPA),standard,
+Heminga svars,Hamming weight,name,
+maskēšana,masking,standard,Side-channel countermeasure
+baltās kastes kriptogrāfija,white-box cryptography,standard,
+aizliegtais uzbrukums,forbidden attack,course,Joux's attack on GCM with a repeated nonce
+konstanta laika implementācija,constant-time implementation,standard,
+vienvirziena funkcija,one-way function,standard,
+diskrētais logaritms; diskrētā logaritma problēma,discrete logarithm; discrete logarithm problem (DLP),standard,
+primitīvā sakne,primitive root,standard,
+ātrā kāpināšana,square-and-multiply; fast exponentiation,standard,
+Difija-Helmana atslēgu apmaiņa,Diffie–Hellman key exchange,name,
+eliptiskā līkne,elliptic curve,standard,
+eliptisko līkņu kriptogrāfija,elliptic curve cryptography (ECC),standard,
+Veierštrāsa forma,Weierstrass form,name,
+Montgomerija forma / Montgomerija līkne,Montgomery form / Montgomery curve,name,
+bezgalīgi tālais punkts,point at infinity,standard,
+hordas un pieskares konstrukcija,chord-and-tangent construction,standard,
+Ābela grupa,abelian group,name,
+Hasses teorēma,Hasse's theorem,name,
+skalārā reizināšana; skalārais reizinājums,scalar multiplication; scalar multiple,standard,Of a curve point
+dubultošana un saskaitīšana,double-and-add,standard,
+Montgomerija kāpnes,Montgomery ladder,name,
+nosacītā apmaiņa,conditional swap,standard,
+kofaktors,cofactor,standard,
+Polarda ro metode,Pollard's rho method,name,
+Poliga-Helmana algoritms,Pohlig–Hellman algorithm,name,
+Ķīniešu atlikumu teorēma,Chinese remainder theorem (CRT),name,
+Jakobi koordinātes,Jacobian coordinates,name,
+vispārinātais Mersena pirmskaitlis,generalized Mersenne prime (Solinas prime),name,
+saspiestā forma / nesaspiestā forma (punkta),compressed form / uncompressed form,standard,Point encoding
+pagrieztā līkne,twist (of a curve),course,"Literal translation of ""twist"""
+apgriešana (privātās atslēgas),clamping,course,X25519 private keys
+nederīgas līknes uzbrukums,invalid-curve attack,standard,
+anomālā līkne,anomalous curve,standard,
+iegulšanas pakāpe,embedding degree,standard,
+Veila sapārošana,Weil pairing,name,
+nekas piedurknē,nothing up my sleeve,course,Translation of the English idiom about verifiable constants
+sētas durvis,backdoor,course,
+deterministisks nonce,deterministic nonce,standard,RFC 6979
+novirzīts nonce,biased nonce,course,
+režģu metodes; režģu uzbrukums,lattice methods; lattice attack,standard,
+slēptā skaitļa problēma,hidden number problem (HNP),standard,
+gadījumskaitļu ģenerators; nejaušo skaitļu ģenerators,random number generator,standard,The Latvian text uses both variants
+pseidogadījuma skaitļu ģenerators,pseudorandom number generator,standard,
+sertifikāts (X.509),certificate,standard,
+sertificēšanas iestāde,certificate authority (CA),standard,
+saknes CA / starpniek-CA,root CA / intermediate CA,course,Hybrid Latvian-English term used in the course
+sertifikāta parakstīšanas pieprasījums,certificate signing request (CSR),standard,
+sertifikātu ķēde,certificate chain,standard,
+uzticamo sertifikātu krātuve,trust store,course,No established Latvian term
+derīguma termiņš,validity period,standard,
+domēna kontroles pārbaude,domain control validation,standard,
+atsaukšana (sertifikāta),revocation,standard,
+atsaukto sertifikātu saraksts,certificate revocation list (CRL),standard,
+sertifikātu caurspīdīgums,Certificate Transparency (CT),standard,
+atslēgu piespraušana,key pinning,course,Literal translation of pinning
+abpusējā TLS,mutual TLS (mTLS),standard,
+pazemināšanas aizsardzība,downgrade protection,course,
+sesijas atjaunošana; sesijas atsākšana,session resumption,standard,The Latvian text uses both variants
+postkvantu kriptogrāfija,post-quantum cryptography,standard,
+kubits,qubit,standard,
+"saglabā tagad, atšifrē vēlāk","harvest now, decrypt later",course,Translation of the English slogan
+atslēgu iekapsulēšanas mehānisms,key encapsulation mechanism (KEM),standard,
+hibrīdā atslēgu apmaiņa,hybrid key exchange,standard,
+D.Difijs / M.Helmans,Whitfield Diffie / Martin Hellman,name,
+R.Rivests / A.Šamīrs / L.Adlemans,Ron Rivest / Adi Shamir / Leonard Adleman,name,
+V.Millers / N.Koblics,Victor Miller / Neal Koblitz,name,
+P.Montgomerijs,Peter Montgomery,name,
+D.Bernšteins / T.Lange,Daniel J. Bernstein / Tanja Lange,name,
+J.Dāmens / V.Reimens,Joan Daemen / Vincent Rijmen,name,
+A.Žū,Antoine Joux,name,
+H.Beks,Hanno Böck,name,
+D.A.Osviks / E.Tromers,Dag Arne Osvik / Eran Tromer,name,
+P.Kočers,Paul Kocher,name,
+Bīls / Meijers / Millers,Biehl / Meyer / Müller,name,Invalid-curve attack (2000)
+Jēgers / Švenks / Somorovskis,Jager / Schwenk / Somorovsky,name,
+Bramlijs / Tuveri,Brumley / Tuveri,name,
+Bonē / Venkatesans,Boneh / Venkatesan,name,
+Hovgreivs-Grehems / Smarts,Howgrave-Graham / Smart,name,
+Semajevs,Semaev,name,
+A.Korbellīni,Andrea Corbellini,name,
+E.Snoudens,Edward Snowden,name,

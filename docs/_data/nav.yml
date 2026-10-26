@@ -32,3 +32,7 @@
       url: /lectures/linear_introduction/
     - title: { en: "10. Linear Programming Algorithms", lv: "10. Lineārās programmēšanas algoritmi" }
       url: /lectures/linear_algorithms/
+    - title: { en: "11. Cryptography in TLS 1.3: AES and Hash Functions", lv: "11. Kriptogrāfija TLS 1.3: AES un hešfunkcijas" }
+      url: /lectures/cryptography_aes_and_hashing/
+    - title: { en: "12. Cryptography in TLS 1.3: Elliptic Curves and Key Exchange", lv: "12. Kriptogrāfija TLS 1.3: eliptiskās līknes un atslēgu apmaiņa" }
+      url: /lectures/cryptography_elliptic_curves/

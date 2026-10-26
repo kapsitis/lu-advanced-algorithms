@@ -28,3 +28,7 @@
       url: /lectures/lossy_reed_solomon/
     - title: { en: "Lossy Compression and Error Correction: Final Problem Set", lv: "Zudumradošā saspiešana un kļūdu korekcija - Beigu uzdevumi" }
       url: /lectures/lossy_final_problemsets/
+    - title: { en: "9. Introduction to Linear Programming", lv: "9. Lineārās programmēšanas ievads" }
+      url: /lectures/linear_introduction/
+    - title: { en: "10. Linear Programming Algorithms", lv: "10. Lineārās programmēšanas algoritmi" }
+      url: /lectures/linear_algorithms/

@@ -342,3 +342,158 @@ palete,palette,standard,Indexed colors (GIF)
 kļūdu izkliedēšana,dithering,course,"English term given in brackets; ""joslas"" = banding"
 bezšuvju cilpa,seamless loop,course,Animation whose last frame connects to the first
 krāsu loks,hue ramp,course,Band in gradient-bands.png where the hue goes from 0 to 360 degrees
+lineāra programma; LP,linear program (LP),standard,
+mērķa funkcija; mērķfunkcija,objective function,standard,Latvian text uses both spellings
+ierobežojums; nosacījums (optimizācijā),constraint,standard,
+optimizācija ar nosacījumiem / bez nosacījumiem,constrained / unconstrained optimization,standard,
+kvadrātiskā programmēšana,quadratic programming,standard,
+veselo skaitļu programmēšana,integer programming (IP),standard,Also: lineārā programmēšana veselos skaitļos
+jauktā veselo skaitļu programmēšana,mixed integer programming (MIP),standard,
+LP relaksācija,LP relaxation,standard,"See also ""veselo skaitļu uzdevumu relaksācija"""
+pieļaujamais apgabals,feasible region,standard,
+pieļaujams (punkts / atrisinājums),feasible (point / solution),standard,
+primāli pieļaujams / duāli pieļaujams,primal feasible / dual feasible,standard,
+stingri pieļaujams,strictly feasible,standard,x > 0 and s > 0
+stūris (pieļaujamā apgabala),corner; vertex,course,"The Latvian text says stūris for a vertex of the feasible region; ""corner"" in the simplex sections, ""vertex"" for polygons"
+slēgts / izliekts (apgabals),closed / convex (region),standard,
+neierobežots (uzdevums),unbounded (problem),standard,
+nav pieļaujams; nav izpildāms (uzdevums),infeasible (problem),standard,
+optimums; optimālais atrisinājums,optimum; optimal solution,standard,
+diētas problēma,diet problem,standard,
+resursu piešķiršanas problēma,resource allocation problem,standard,
+maksimālās plūsmas problēma,maximum flow problem,standard,
+plūsma / plūsmas vērtība,flow / value of a flow,standard,
+plūsmas grafs,flow network,standard,
+ieteka / izteka,source / sink,standard,Flow networks
+ietilpība (šķautnes),capacity (of an edge),standard,
+ietilpības ierobežojums,capacity constraint,standard,
+plūsmas saglabāšanās,flow conservation,standard,
+griezums; minimālais griezums,cut; minimum cut,standard,
+orientēts / neorientēts grafs,directed / undirected graph,standard,
+šķautne / virsotne (grafa),edge / vertex,standard,
+starpvirsotne,intermediate vertex,standard,Flow networks: every vertex except s and t
+viena avota īsāko ceļu uzdevums,single-source shortest path problem,standard,
+potenciāls (virsotnes),potential (of a vertex),standard,
+trijstūra nevienādība,triangle inequality,standard,
+īsāko ceļu koks,shortest path tree,standard,
+minimālo izmaksu plūsma,minimum-cost flow,standard,
+Dijkstras algoritms,Dijkstra's algorithm,name,
+Belmana-Forda algoritms,Bellman–Ford algorithm,name,
+Forda-Falkersona / Edmonda-Karpa algoritms,Ford–Fulkerson / Edmonds–Karp algorithm,name,
+Lagranža reizinātāji,Lagrange multipliers,name,
+skalārs lauks,scalar field,standard,
+gradients,gradient,standard,
+parciālais atvasinājums,partial derivative,standard,
+līmeņa līnija,level line,standard,
+pusplakne,half-plane,standard,
+hiperplakne,hyperplane,standard,
+matricu spēle,matrix game,standard,
+nulles summas spēle / nenulles summas spēle,zero-sum game / non-zero-sum game,standard,
+maksājumu matrica,payoff matrix,standard,Entry a_ij is what X pays Y
+gājiens (spēlē),move,standard,
+tīrā stratēģija / jauktā stratēģija,pure strategy / mixed strategy,standard,
+varbūtību vektors; stohastisks vektors,probability vector; stochastic vector,standard,
+labākā atbilde,best response,standard,
+spēles vērtība,value of the game,standard,
+optimālā stratēģija,optimal strategy,standard,
+sedlu punkts,saddle point,standard,
+dominēt (rinda / kolonna); dominēta rinda,dominate; dominated row,standard,
+minimaksa teorēma,minimax theorem,name,von Neumann (1928)
+vienaldzības princips,indifference principle,standard,
+maksimina stratēģija,maximin strategy,standard,
+Neša līdzsvars,Nash equilibrium,name,
+cietumnieku dilemma,prisoner's dilemma,standard,
+Lemkes-Hausona algoritms,Lemke–Howson algorithm,name,
+primārais uzdevums / duālais uzdevums,primal problem / dual problem,standard,Also: primārā / duālā programma (primal / dual program)
+duālais mainīgais,dual variable,standard,
+bez ierobežojuma (mainīgais),unrestricted (variable),standard,Free variable in the dual tables
+vājā dualitāte / stiprā dualitāte,weak duality / strong duality,standard,
+dualitātes atstarpe,duality gap,standard,
+optimalitātes sertifikāts,certificate of optimality,standard,
+optimalitātes nosacījumi,optimality conditions,standard,
+komplementaritātes nosacījumi; komplementaritāte,complementary slackness (conditions),standard,
+aktīvs ierobežojums,active constraint,standard,
+ēnu cena,shadow price,standard,
+augšējais / apakšējais novērtējums,upper / lower bound,standard,
+papildmainīgais,slack variable,standard,
+duālais papildmainīgais,dual slack,standard,s = c - A^T y
+mākslīgais palīgmainīgais,artificial variable,standard,Two-phase method
+nenegativitātes nosacījums,non-negativity constraint,standard,
+Farkaša lemma,Farkas' lemma,name,
+KKT nosacījumi (Karuša-Kūna-Takera),KKT conditions (Karush–Kuhn–Tucker),name,
+standartforma (LP),standard form,standard,All constraints are equalities plus x >= 0
+kanoniska tabula; kanoniskā forma,canonical tableau; canonical form,course,Tableau with an identity matrix under the basic variables and zeros below them
+simpleksa algoritms; simpleksalgoritms; simpleksa metode,simplex algorithm; simplex method,standard,Latvian text uses several spellings
+simpleksalgoritma tabula,simplex tableau,standard,
+pamatmainīgais / brīvais mainīgais,basic variable / non-basic variable,standard,Other Latvian sources: bāzes / nebāzes mainīgais
+ieejošais / izejošais mainīgais,entering / leaving variable,standard,
+atslēgas elements,pivot element,standard,
+pārveidojums (simpleksalgoritmā),pivoting,standard,
+mazākās attiecības tests,minimum ratio test,standard,
+reducētās izmaksas,reduced costs,standard,
+Danciga likums,Dantzig's rule,name,Largest reduced cost enters
+Blenda likums,Bland's rule,name,
+divu fāžu metode,two-phase method,standard,
+deģenerācija / ciklošanās,degeneracy / cycling,standard,
+rindu pārveidojumi,row operations,standard,
+vienības matrica,identity matrix,standard,
+diagonālmatrica,diagonal matrix,standard,
+pozitīvi definīta matrica,positive definite matrix,standard,
+retināta matrica,sparse matrix,standard,
+Klī-Mintija saspiestais hiperkubs,Klee–Minty (squashed) cube,name,The Latvian text writes Klee-Minty
+elipsoīda algoritms,ellipsoid algorithm,standard,
+iekšējā punkta metode,interior point method,standard,
+barjerfunkcija / barjeruzdevums,barrier function / barrier problem,standard,
+afīnās mērogošanas metode; afīnā metode,affine scaling method,standard,
+Dikina elipsoīds,Dikin ellipsoid,name,
+projektīvā metode,projective method,standard,Karmarkar (1984)
+primāli duālā centrālā ceļa metode,primal-dual path-following method,standard,
+centrālais ceļš,central path,standard,
+analītiskais centrs,analytic center,standard,
+centrēšanas parametrs,centering parameter,standard,sigma
+Ņūtona metode / Ņūtona solis,Newton's method / Newton step,name,
+normālvienādojumi,normal equations,standard,
+Holecka sadalījums,Cholesky factorization,name,
+prediktors / korektors,predictor / corrector,standard,Mehrotra's predictor-corrector scheme
+soļa garums,step length,standard,
+NP-pilns / NP-grūts,NP-complete / NP-hard,standard,
+izlemšanas problēma / optimizācijas problēma,decision problem / optimization problem,standard,
+Ričarda Karpa saraksts,Karp's list (of 21 NP-complete problems),name,
+virsotņu pārklājums,vertex cover,standard,
+mugursomas uzdevums,knapsack problem,standard,
+Hamiltona cikls / Hamiltona grafs,Hamiltonian cycle / Hamiltonian graph,name,
+apakšcikls,subtour,standard,
+virsotņu ierobežojumi / griezuma ierobežojumi,vertex constraints / cut constraints,standard,Hamiltonian cycle as an integer program
+ceļojošā tirgotāja uzdevums,traveling salesman problem,standard,
+Branch and Bound metode,branch and bound method,standard,The Latvian text keeps the English name
+zarošana / novērtējums (Branch and Bound),branching / bounding,standard,
+pašreizējais atrisinājums,incumbent solution,course,Best integer solution found so far
+nogriezt (zaru / mezglu),prune,standard,
+lēmumu koks,decision tree,standard,
+apstaigāt platumā / dziļumā,traverse breadth-first / depth-first (BFS / DFS),standard,
+rijīgi (ņemt),greedily,standard,
+dodekaedrs,dodecahedron,standard,
+informācijas asimetrija,information asymmetry,standard,
+nelabvēlīgā atlase; skrīnings,adverse selection; screening,standard,
+slēptā informācija,hidden information,standard,
+līgumu izvēlne,menu of contracts,standard,
+dalības ierobežojums,participation constraint (individual rationality),standard,
+stimulu saderības ierobežojums,incentive compatibility constraint,standard,
+informācijas renta,information rent,standard,
+efektivitātes zudums,efficiency loss,standard,
+citronu tirgus,market for lemons,name,Akerlof (1970)
+kāpostu-burkānu uzdevums,cabbage–carrot problem,course,Running example of the LP lectures
+Fakts,Fact,label,
+Secinājums,Corollary,label,"After a theorem; see also ""Sekas"""
+Mācīšanās rezultāti,Learning outcomes,label,
+L.Kantorovičs,Leonid Kantorovich,name,
+Dž.Dancigs,George Dantzig,name,
+L.Hačijans,Leonid Khachiyan,name,The Latvian text also uses the spelling Khachian
+I.Dikins,Ilya Dikin,name,
+N.Karmarkars,Narendra Karmarkar,name,
+N.Megido,Nimrod Megiddo,name,
+M.Kojima / S.Mizuno / A.Jošise,Masakazu Kojima / Shinji Mizuno / Akiko Yoshise,name,
+S.Mehrotra,Sanjay Mehrotra,name,
+Dž.fon Neimans,John von Neumann,name,
+Dž.Akerlofs,George Akerlof,name,
+Ričards Karps,Richard Karp,name,

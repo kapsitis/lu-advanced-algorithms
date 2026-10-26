@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Heiristikas un tuvinātas metodes"
+title: "Lineārās programmēšanas algoritmi"
 lang: lv
 permalink: /lectures/linear_algorithms/lv/
 ---
@@ -342,7 +342,7 @@ pamatmainīgie vienmēr stāvētu pēdējās kolonnās.
 
 * (Reālo skaitļu) LP ir pirmais solis, lai risinātu veselo skaitļu problēmas (*Integer Programming, IP*) un jauktās LP problēmas (*Mixed Integer Linear Programs, MIP*).
 * Kā optimāli izvēlēties komplektu (izejvielas, akciju portfeļus), kā vislabāk sadalīt kādu resursu.
-* Plūsmas maksimizēšana grafā (skatīsimies šajā lekcijā).
+* Plūsmas maksimizēšana grafā (sk. iepriekšējo lekciju).
 
 Veselie skaitļi kā nezināmie (*Integer Programming*) labāk modelē Yes/No lēmumu pieņemšanu (0 un 1 vērtības), bet šādus uzdevumus ir grūtāk risināt.
 
@@ -379,7 +379,7 @@ $$
 **Klee-Minty saspiestais hiperkubs:**
 
 * Deterministisks simpleksa algoritms apciemo visas $2^D$ hiperkuba virsotnes pirms atrod optimālo risinājumu $x_D = 5^D$ (visas citas ir nulles).
-* Ja simpleksu algoritms izvēlas nākamo soli ar varbūtisku (nevis deterministisku) metodi, pietiek ar polinomiālu laiku.
+* Ja simpleksa algoritms izvēlas nākamo soli ar varbūtisku (nevis deterministisku) metodi, pietiek ar polinomiālu laiku.
 * Piemērs ir nestabils; reālo skaitļu aritmētika un noapaļošana arī parasti noved pie tā, ka algoritms beidzas pēc polinomiāli daudziem soļiem.
 
 [Reālo LP algoritmu ātrdarbība](https://cstheory.stackexchange.com/questions/2373/complexity-of-the-simplex-algorithm)
@@ -688,7 +688,7 @@ aktīvs ir tikai ierobežojums $x_1 + x_2 \leq 4$.
 ## Veselo skaitļu programmēšana
 
 **Apgalvojums:** Veselo skaitļu programmēšanas uzdevums ir NP-pilns: tas pieder labi pazīstamai 
-uzdevumu saimei, kurus var visus citu uz citu reducēt. (Efektīvs algoritms NP-pilnajiem uzdevumiem nav zināms. 
+uzdevumu saimei, kurus var visus citu uz citu reducēt. Efektīvs algoritms NP-pilnajiem uzdevumiem nav zināms. 
 Ja kādam no uzdevumiem šādu algoritmu atrastu, tad varētu efektīvi atrisināt arī 
 visus citus NP-pilnos uzdevumus no slavenā [Ričarda Karpa saraksta](https://en.wikipedia.org/wiki/Karp%27s_21_NP-complete_problems) un vēl simtiem citu uzdevumu, kas arī ir NP-pilni (jeb algoritmiskās sarežģītības ziņā efektīvi reducējami 
 cits uz citu). 
@@ -705,11 +705,11 @@ Izlemšanas problēma ir NP-pilna:
 
 * Izlemšanas problēma ir NP-grūta pat ja atļautās mainīgo vērtības ir $x_i \in \{0,1\}$. 
   Uz šo problēmu var reducēt virsotņu pārklāšanos, 3SAT un vairākas citas NP-grūtas problēmas.
-* Izlemšanas problēma pieder NP (tās atrisinājumu var pārbaudīt (lai gan nevar atrast)  
-  polinomiālā laikā.
+* Izlemšanas problēma pieder NP: ja atbilde ir "jā", to apliecinošu $\mathbf{x}$ var pārbaudīt
+  polinomiālā laikā (lai gan atrast to, iespējams, nevar).
 
 **Optimizācijas problēma:**  
-$$\min{c^\top x:Ax\le b,\ x\in\mathbb Z_{\ge0}^n}$$
+$$\min \lbrace \mathbf{c}^\top \mathbf{x} : A\mathbf{x}\le \mathbf{b},\ \mathbf{x}\in\mathbb Z_{\ge0}^n \rbrace$$
 
 Optimizācijas problēma veseliem skaitļiem ir NP-grūta (uz to var reducēt citas NP-grūtas problēmas). 
 To nevar uzskatīt par NP-pilnu, jo tā nav izlemšanas problēma.

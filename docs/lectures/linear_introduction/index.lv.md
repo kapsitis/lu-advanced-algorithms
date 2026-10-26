@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Lineārā programmēšana"
+title: "Lineārās programmēšanas ievads"
 lang: lv
 permalink: /lectures/linear_introduction/lv/
 ---
@@ -14,7 +14,7 @@ permalink: /lectures/linear_introduction/lv/
 * Analizēt matricu (nulles summas) spēles. 
 * Risināt lineārās programmēšanas uzdevumus ar simpleksa algoritmu.
 
-## Standarti optimizācijas uzdevumi
+## Standarta optimizācijas uzdevumi
 
 **Optimizācijas uzdevumu veidi**
 
@@ -121,7 +121,7 @@ Divu dimensiju gadījumā, piemēram, par 2.faktu var pārliecināties, lietojot
 šķirojot gadījumus:
 
 * **(a)** Ja visos kaimiņu stūros mērķa funkcijas vērtības ir mazākas, $c_1x_1 + c_2x_2 \leq c$, tad stūris ir maksimums.
-* **(b)** Ja visos kaimiņu stūros mērķa funkcijas vērtības ir lielākas, $c_1x_1+c_2x_2 \geq c$, tad tad stūris ir minimums.
+* **(b)** Ja visos kaimiņu stūros mērķa funkcijas vērtības ir lielākas, $c_1x_1+c_2x_2 \geq c$, tad stūris ir minimums.
 * **(c)** Citos gadījumos stūris nav ne maksimums, ne minimums, tad atrodas gan blakus stūris ar lielāku mērķa funkcijas vērtību $c_1x_1+c_2x_2$ vērtību, gan arī ar mazāku vērtību.
 
 ![Maksimuma atrašanās pieļaujamā apgabala stūros](figs/locate-maximum.png)
@@ -1016,7 +1016,7 @@ $$
 **Atbilstošais duālais LP uzdevums:** Apzīmējam $\mathbf{y}$ kolonnas vektoru ar 3 koordinātēm: $y_1, y_2, y_3$. Tad
 
 $$
-(D): \textcolor{blue}{ \min \left(  (20,6,-40) \cdot \mathbf{y}  \right) },\;\;\text{kur}\;\;
+(D): \textcolor{blue}{ \min \left(  (20,6,40) \cdot \mathbf{y}  \right) },\;\;\text{kur}\;\;
 \left(
 \begin{array}{ccc}
 1 & 2 & 3\\
@@ -1046,7 +1046,7 @@ y_2 \leq^{\textcolor{blue}{(b)}} 0,\;
 y_3 \geq^{\textcolor{blue}{(c)}} 0.
 $$
 
-Duālajā uzdevumā koeficientus iegūst, transponējot matricu $A$. ienādību un nevienādību tipus nosaka atbilstoši augšminētajiem noteikumiem: Piemēram, ja $x_1 \geq 0$ primārajā problēmā, tad $x_1$ mainīgajam atbilstošais duālais vienādojums $y_1 + 2y_2 + 3y_3 \geq 4$ (arī nevienādība $\geq$).
+Duālajā uzdevumā koeficientus iegūst, transponējot matricu $A$. Augšminētās tabulas ir primārajam uzdevumam ar $\min$; ja primārajā uzdevumā ir $\max$ (kā šajā piemērā), tad visas zīmes abās tabulās apgriežas: nosacījumam $\leq$ atbilst $y_i \geq 0$, nosacījumam $\geq$ atbilst $y_i \leq 0$, bet mainīgajam $x_j \geq 0$ atbilst duālais nosacījums ar $\geq$. Piemēram, tā kā $x_1 \geq 0$, tad mainīgajam $x_1$ atbilstošais duālais nosacījums ir $y_1 + 2y_2 + 3y_3 \geq 4$. Abu uzdevumu optimālā vērtība ir $33.5$: primārajam pie $\mathbf{x}^{\ast} = (6.5;\ 7;\ 6.5)$, duālajam pie $\mathbf{y}^{\ast} = (-3.75;\ -0.25;\ 2.75)$.
 
 
 
@@ -1143,7 +1143,7 @@ $$
 
 Šeit $X = \operatorname{diag}(x_1, \ldots, x_n)$ un $S = \operatorname{diag}(s_1, \ldots, s_n)$ ir diagonālmatricas, bet $\mathbf{e} = (1, \ldots, 1)^T$; tātad $X S \mathbf{e} = (x_1 s_1, \ldots, x_n s_n)^T$. Šos nosacījumus sauc arī par *KKT nosacījumiem* (Karuša-Kūna-Takera). Pirmie divi bloki ir lineāri, bet komplementaritāte nav lineāra (tajā ir reizinājumi $x_j s_j$). Dažādi algoritmi šos nosacījumus apstrādā dažādi:
 
-* *Simpleksa algoritms* vienmēr uztur $A\mathbf{x} = \mathbf{b}$, $\mathbf{x} \geq \mathbf{0}$ un komplementaritāti (nebāzes mainīgie $x_j = 0$, bāzes mainīgajiem $s_j = 0$) un pārvietojas pa virsotnēm, līdz arī $\mathbf{s} \geq \mathbf{0}$.
+* *Simpleksa algoritms* vienmēr uztur $A\mathbf{x} = \mathbf{b}$, $\mathbf{x} \geq \mathbf{0}$ un komplementaritāti (brīvie mainīgie $x_j = 0$, pamatmainīgajiem $s_j = 0$) un pārvietojas pa virsotnēm, līdz arī $\mathbf{s} \geq \mathbf{0}$.
 * *Iekšējā punkta metodes* uztur $\mathbf{x} > \mathbf{0}$ un $\mathbf{s} > \mathbf{0}$ (stingri pozitīvus) un pakāpeniski tuvina reizinājumus $x_j s_j$ nullei.
 
 **Centrālais ceļš (*central path*):** Komplementaritātes nosacījumu $x_j s_j = 0$ aizstāj ar $x_j s_j = \mu$ visiem $j$, kur $\mu > 0$ ir parametrs:

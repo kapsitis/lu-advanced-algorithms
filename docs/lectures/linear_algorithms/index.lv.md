@@ -482,7 +482,11 @@ lai tekošais punkts būtu vienādā attālumā no visām robežām:
 dod $\mathbf{x} = (0.74957;\ 3.17043;\ 0.08000;\ 4.67130)$. Šo soli ierobežo papildmainīgais $x_3$, kas ir tuvu nullei, 
 t.i., punkts jau ir tuvu robežai $x_1 + x_2 = 4$. Optimums ir $(x_1, x_2) = (0, 4)$.
 
+<div style="max-width: 340px" markdown="1">
+
 ![Afīnās mērogošanas galarezultāts](figs/affine-scaling-sample-result.png)
+
+</div>
 
 *Afīnās mērogošanas pirmā iterācija no punkta $(1,1)$.*
 
@@ -679,9 +683,19 @@ $\mathbf{x}^{\ast} = (0, 4, 0, 7)$, $\mathbf{y}^{\ast} = (-1, 0)$, $\mathbf{s}^{
 un mērķfunkcijas maksimums ir $-0/3 + 4 = 4$. Sākotnējam maksimizācijas uzdevumam ēnu cenas ir $-\mathbf{y}^{\ast} = (1, 0)$: 
 aktīvs ir tikai ierobežojums $x_1 + x_2 \leq 4$.
 
+<div style="max-width: 375px" markdown="1">
+
 ![Primāli duālās metodes iterācijas un centrālais ceļš](figs/primal-dual-path.png)
 
-*Centrālais ceļš (zaļš) sākas pieļaujamā apgabala analītiskajā centrā un beidzas optimumā $(0,4)$. Sākumpunkts $\mathbf{x}^{(0)}$ nav uz centrālā ceļa, bet jau pirmās iterācijas tam pietuvojas un pēc tam seko tam līdz optimumam.*
+</div>
+
+*Centrālais ceļš (zaļš) sākas pieļaujamā apgabala analītiskajā centrā un beidzas optimumā $(0,4)$. 
+Analītiskais centrs ir pieļaujamā apgabala iekšējais punkts, kurā sasniedz maksimumu summa $\sum_j \ln x_j$, t.i. 
+reizinājums $x_1 x_2 x_3 x_4$ (šeit $x_3 = 4 - x_1 - x_2$, $x_4 = 3 - 2x_1 + x_2$ ir proporcionāli attālumiem līdz abām ierobežojumu taisnēm). 
+Tas ir punkts, kas ir "vistālāk" no visām robežām vienlaikus; tas atkarīgs tikai no ierobežojumiem, nevis no mērķfunkcijas. 
+Centrālā ceļa punkti $\mathbf{x}(\mu)$ ir uzdevuma $\min \left( \mathbf{c}^T\mathbf{x} - \mu \sum_j \ln x_j \right)$, $A\mathbf{x} = \mathbf{b}$ 
+atrisinājumi (tieši tie apmierina $x_j s_j = \mu$); ja $\mu \to \infty$, mērķfunkcija kļūst nenozīmīga un $\mathbf{x}(\mu)$ tiecas uz analītisko centru, 
+bet ja $\mu \to 0$ -- uz optimumu. Sākumpunkts $\mathbf{x}^{(0)}$ nav uz centrālā ceļa, bet jau pirmās iterācijas tam pietuvojas un pēc tam seko tam līdz optimumam.*
 
 
 
@@ -730,7 +744,11 @@ Abos gadījumos var papildus vēlēties ne tikai atrast atbildi Jā/Nē (vai ska
 
 **Virsotņu pārklājuma redukcija uz veselo skaitļu programmēšanu**
 
+<div style="max-width: 395px" markdown="1">
+
 ![Virsotņu pārklājuma redukcija uz veselo skaitļu programmēšanu](figs/vertex-cover.png)
+
+</div>
 
 Virsotņu skaits atbilst mainīgo skaitam, ierobežojumu skaits atbilst šķautņu skaitam. Ja virsotni $v_i$ liek pārklājumā, tad attiecīgais mainīgais $x_i = 1$; pretējā gadījumā $x_i = 0$.
 
@@ -783,7 +801,11 @@ katru grafa virsotni tieši vienu reizi. Grafu, kurā eksistē Hamiltona cikls, 
 
 Uzdevums noskaidrot, vai dotajā grafā eksistē Hamiltona cikls, arī ir NP-pilns (tas ir Ričarda Karpa sarakstā).
 
+<div style="max-width: 600px" markdown="1">
+
 ![Dodekaedra grafa Hamiltona cikls](figs/hamiltonian-paths.png)
+
+</div>
 
 *Dodekaedra grafa Hamiltona cikls: cikla šķautnes ir sarkanas, pārējās grafa šķautnes -- punktētas.*
 
@@ -835,7 +857,11 @@ atļauj ņemt katras lietas jebkuru veselu skaitu eksemplāru.
 Risinājumu var meklēt ar pilno pārlasi. Rodas lēmumu koks (*decision tree*) 
 mainīgajiem $x_1,x_2,x_3,\ldots$: katrā līmenī viens mainīgais tiek fiksēts kā $0$ vai $1$.
 
+<div style="max-width: 275px" markdown="1">
+
 ![Lēmumu koks mainīgajiem](figs/binary-search-tree1.png)
+
+</div>
 
 * Mainīgie ir veseli skaitļi, kas izpilda nevienādības $0 \leq x_i \leq 1$ visiem 
   $i = 1,\ldots,n$, t.i., $x_i \in \lbrace 0,1 \rbrace$. Kokam ir $2^n$ lapas.

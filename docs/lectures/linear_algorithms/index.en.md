@@ -483,7 +483,11 @@ that the current point is at the same distance from all boundaries:
 gives $\mathbf{x} = (0.74957;\ 3.17043;\ 0.08000;\ 4.67130)$. This step is limited by the slack variable $x_3$, which is close to zero, 
 i.e., the point is already close to the boundary $x_1 + x_2 = 4$. The optimum is $(x_1, x_2) = (0, 4)$.
 
+<div style="max-width: 340px" markdown="1">
+
 ![Result of affine scaling](figs/affine-scaling-sample-result.png)
+
+</div>
 
 *The first iteration of affine scaling from the point $(1,1)$.*
 
@@ -680,9 +684,19 @@ $\mathbf{x}^{\ast} = (0, 4, 0, 7)$, $\mathbf{y}^{\ast} = (-1, 0)$, $\mathbf{s}^{
 and the maximum of the objective function is $-0/3 + 4 = 4$. For the original maximization problem the shadow prices are $-\mathbf{y}^{\ast} = (1, 0)$: 
 only the constraint $x_1 + x_2 \leq 4$ is active.
 
+<div style="max-width: 375px" markdown="1">
+
 ![Iterations of the primal-dual method and the central path](figs/primal-dual-path.png)
 
-*The central path (green) starts at the analytic center of the feasible region and ends at the optimum $(0,4)$. The starting point $\mathbf{x}^{(0)}$ is not on the central path, but the very first iterations come close to it and then follow it to the optimum.*
+</div>
+
+*The central path (green) starts at the analytic center of the feasible region and ends at the optimum $(0,4)$. 
+The analytic center is the interior point of the feasible region at which the sum $\sum_j \ln x_j$ is maximal, i.e., 
+the product $x_1 x_2 x_3 x_4$ (here $x_3 = 4 - x_1 - x_2$, $x_4 = 3 - 2x_1 + x_2$ are proportional to the distances to the two constraint lines). 
+It is the point that is "farthest" from all boundaries at once; it depends only on the constraints, not on the objective function. 
+The points $\mathbf{x}(\mu)$ of the central path are the solutions of the problem $\min \left( \mathbf{c}^T\mathbf{x} - \mu \sum_j \ln x_j \right)$, $A\mathbf{x} = \mathbf{b}$ 
+(exactly these satisfy $x_j s_j = \mu$); as $\mu \to \infty$, the objective function becomes negligible and $\mathbf{x}(\mu)$ tends to the analytic center, 
+and as $\mu \to 0$ -- to the optimum. The starting point $\mathbf{x}^{(0)}$ is not on the central path, but the very first iterations come close to it and then follow it to the optimum.*
 
 
 
@@ -731,7 +745,11 @@ In both cases one may want not only to find the answer Yes/No (or the number $k$
 
 **Reduction of vertex cover to integer programming**
 
+<div style="max-width: 395px" markdown="1">
+
 ![Reduction of vertex cover to integer programming](figs/vertex-cover.png)
+
+</div>
 
 The number of vertices corresponds to the number of variables, and the number of constraints corresponds to the number of edges. If vertex $v_i$ is put in the cover, the corresponding variable is $x_i = 1$; otherwise $x_i = 0$.
 
@@ -784,7 +802,11 @@ every vertex of the graph exactly once. A graph that has a Hamiltonian cycle is 
 
 The problem of determining whether a given graph has a Hamiltonian cycle is also NP-complete (it is on Richard Karp's list).
 
+<div style="max-width: 600px" markdown="1">
+
 ![Hamiltonian cycle in the dodecahedron graph](figs/hamiltonian-paths.png)
+
+</div>
 
 *A Hamiltonian cycle in the dodecahedron graph: the edges of the cycle are red, the other edges of the graph are dotted.*
 
@@ -836,7 +858,11 @@ allows taking any integer number of copies of each item.
 The solution can be sought by exhaustive search. This gives a *decision tree* 
 for the variables $x_1,x_2,x_3,\ldots$: at each level one variable is fixed as $0$ or $1$.
 
+<div style="max-width: 275px" markdown="1">
+
 ![Decision tree for the variables](figs/binary-search-tree1.png)
+
+</div>
 
 * The variables are integers that satisfy the inequalities $0 \leq x_i \leq 1$ for all 
   $i = 1,\ldots,n$, i.e., $x_i \in \lbrace 0,1 \rbrace$. The tree has $2^n$ leaves.

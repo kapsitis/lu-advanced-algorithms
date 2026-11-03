@@ -1225,7 +1225,49 @@ $$
 
 Kopā ir $12$ mainīgie, $6$ vienādības un $24$ vienkāršas nevienādības (apakšējās un augšējās robežas). Mērķfunkcijas vietā var maksimizēt arī izteku ienākošo plūsmu $f_{2t} + f_{4t} + f_{6t}$ -- plūsmas saglabāšanās dēļ abas izteiksmes ir vienādas.
 
-*Piezīme:* Atrisinot šo lineāro programmu (piemēram, ar `pulp`), iegūst maksimālo plūsmu $5$. Lielāka tā nevar būt, jo šķautnes $v_2 \to t$, $v_5 \to v_4$ un $v_6 \to t$ atdala $\lbrace s, v_1, v_2, v_3, v_5, v_6 \rbrace$ no $\lbrace v_4, t \rbrace$, un to kopējā ietilpība ir $2 + 2 + 1 = 5$. $\square$
+*Piezīme:* Atrisinot šo lineāro programmu (piemēram, ar `pulp`), iegūst maksimālo plūsmu $5$. Lielāka tā nevar būt, jo šķautnes $v_2 \to t$, $v_5 \to v_4$ un $v_6 \to t$ atdala $\lbrace s, v_1, v_2, v_3, v_5, v_6 \rbrace$ no $\lbrace v_4, t \rbrace$, un to kopējā ietilpība ir $2 + 2 + 1 = 5$.
+
+*Duālais uzdevums:* Katrai plūsmas saglabāšanās vienādībai (virsotnei $v_i$) atbilst duālais mainīgais $p_i$ bez zīmes 
+ierobežojuma -- virsotnes *potenciāls*, bet katram ietilpības ierobežojumam $f_{uv} \leq c_{uv}$ -- mainīgais $z_{uv} \geq 0$, 
+šķautnes *cena*. Pierakstu vienkāršo, ja pieņem $p_s = 1$ un $p_t = 0$. Tad duālais uzdevums ir
+
+$$
+\textcolor{blue}{\min \left( 3z_{s1} + z_{s3} + 3z_{s5} + 5z_{31} + 4z_{12} + 2z_{42} + 2z_{2t} + 3z_{4t} + 2z_{36} + 2z_{54} + 5z_{56} + z_{6t} \right)},
+$$
+
+kur katrai šķautnei $(u,v)$ ir ierobežojums $z_{uv} \geq p_u - p_v$:
+
+$$
+\begin{array}{llll}
+z_{s1} \geq 1 - p_1, & z_{s3} \geq 1 - p_3, & z_{s5} \geq 1 - p_5, & z_{31} \geq p_3 - p_1,\\
+z_{12} \geq p_1 - p_2, & z_{42} \geq p_4 - p_2, & z_{2t} \geq p_2, & z_{4t} \geq p_4,\\
+z_{36} \geq p_3 - p_6, & z_{54} \geq p_5 - p_4, & z_{56} \geq p_5 - p_6, & z_{6t} \geq p_6,
+\end{array}
+$$
+
+visi $z_{uv} \geq 0$, bet $p_1, \ldots, p_6$ var būt jebkuras zīmes. Duālajā uzdevumā ir $12 + 6 = 18$ mainīgie 
+(primārajā -- $12$ mainīgie un $12 + 6 = 18$ ierobežojumi, neskaitot $f_{uv} \geq 0$).
+
+Optimālais duālais atrisinājums atbilst minētajam griezumam: $p_1 = p_2 = p_3 = p_5 = p_6 = 1$, $p_4 = 0$, 
+$z_{2t} = z_{54} = z_{6t} = 1$, visi pārējie $z_{uv} = 0$. Visi ierobežojumi izpildās (piemēram, $z_{42} = 0 \geq p_4 - p_2 = -1$), 
+un mērķfunkcijas vērtība ir $2 + 2 + 1 = 5$ -- tāda pati kā maksimālā plūsma, tātad dualitātes atstarpe ir $0$.
+
+*Intuīcija:* Jebkuram griezumam ($S \ni s$, $T \ni t$) var izvēlēties $p_v = 1$, ja $v \in S$, un $p_v = 0$, ja $v \in T$, 
+un $z_{uv} = 1$ tieši tām šķautnēm, kas iet no $S$ uz $T$. Tad duālā mērķfunkcija ir griezuma ietilpība, tātad 
+duālais uzdevums ir *minimālā griezuma* uzdevums (var pierādīt, ka tam vienmēr ir optimāls atrisinājums ar $p_v \in \lbrace 0, 1 \rbrace$), 
+un teorēma par maksimālo plūsmu un minimālo griezumu ir stiprās dualitātes sekas.
+
+* *Potenciāls* $p_v$ ir kā "augstums": ieteka ir augstumā $1$, izteka -- augstumā $0$. Plūsma tek "lejup", un 
+  $p_u - p_v$ ir kritums pa šķautni $(u,v)$. Kā ēnu cena $p_v$ rāda, cik vērta ir viena plūsmas vienība, kas nonākusi 
+  virsotnē $v$: no virsotnēm pusē $S$ tai vēl jāšķērso šaurā vieta (vērtība $1$), bet no pusē $T$ esošajām 
+  tā jau ir "garām" griezumam (vērtība $0$).
+* *Cena* $z_{uv}$ ir šķautnes ietilpības ēnu cena: par cik pieaugtu maksimālā plūsma, ja $c_{uv}$ palielinātu par $1$. 
+  Šaurās vietas šķautnēm $v_2 \to t$, $v_5 \to v_4$, $v_6 \to t$ tā ir $1$, pārējām -- $0$ (tām ietilpības pietiek). 
+  Nosacījums $z_{uv} \geq p_u - p_v$ nozīmē, ka šķautne, pa kuru potenciāls krītas, "jāapmaksā".
+
+Komplementaritātes nosacījumi: ja $z_{uv} > 0$, tad $f_{uv} = c_{uv}$ (šķautnes no $S$ uz $T$ ir piesātinātas); 
+ja duālā nevienādība nav aktīva, tad $f_{uv} = 0$. Piemēram, $z_{42} = 0 > p_4 - p_2 = -1$, tāpēc optimālajā 
+plūsmā $f_{42} = 0$: pa šķautni no $T$ atpakaļ uz $S$ plūsma neiet. $\square$
 
 **9.2. uzdevums (informācijas asimetrija):** Programmatūras uzņēmums pārdod gada licences. Klienti ir divu veidu: *mazie* uzņēmumi licenci vērtē par $4$ tūkst. EUR, *lielie* -- par $10$ tūkst. EUR. Lielie uzņēmumi ir $50\%$ no visiem klientiem, bet pārdevējs nezina, kura veida ir konkrētais klients (klients to zina; tā ir *informācijas asimetrija*). Licences izplatīšanas izmaksas var neņemt vērā.
 

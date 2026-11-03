@@ -1225,7 +1225,49 @@ $$
 
 In total there are $12$ variables, $6$ equalities and $24$ simple inequalities (lower and upper bounds). Instead of this objective function one can also maximize the flow entering the sink, $f_{2t} + f_{4t} + f_{6t}$ -- by flow conservation both expressions are equal.
 
-*Note:* Solving this linear program (for example, with `pulp`) gives the maximum flow $5$. It cannot be larger, because the edges $v_2 \to t$, $v_5 \to v_4$ and $v_6 \to t$ separate $\lbrace s, v_1, v_2, v_3, v_5, v_6 \rbrace$ from $\lbrace v_4, t \rbrace$, and their total capacity is $2 + 2 + 1 = 5$. $\square$
+*Note:* Solving this linear program (for example, with `pulp`) gives the maximum flow $5$. It cannot be larger, because the edges $v_2 \to t$, $v_5 \to v_4$ and $v_6 \to t$ separate $\lbrace s, v_1, v_2, v_3, v_5, v_6 \rbrace$ from $\lbrace v_4, t \rbrace$, and their total capacity is $2 + 2 + 1 = 5$.
+
+*Dual problem:* Each flow conservation equation (vertex $v_i$) has a dual variable $p_i$ without a sign 
+constraint -- the *potential* of the vertex, and each capacity constraint $f_{uv} \leq c_{uv}$ has a variable $z_{uv} \geq 0$, 
+the *price* of the edge. The notation becomes simpler if we set $p_s = 1$ and $p_t = 0$. Then the dual problem is
+
+$$
+\textcolor{blue}{\min \left( 3z_{s1} + z_{s3} + 3z_{s5} + 5z_{31} + 4z_{12} + 2z_{42} + 2z_{2t} + 3z_{4t} + 2z_{36} + 2z_{54} + 5z_{56} + z_{6t} \right)},
+$$
+
+where each edge $(u,v)$ has the constraint $z_{uv} \geq p_u - p_v$:
+
+$$
+\begin{array}{llll}
+z_{s1} \geq 1 - p_1, & z_{s3} \geq 1 - p_3, & z_{s5} \geq 1 - p_5, & z_{31} \geq p_3 - p_1,\\
+z_{12} \geq p_1 - p_2, & z_{42} \geq p_4 - p_2, & z_{2t} \geq p_2, & z_{4t} \geq p_4,\\
+z_{36} \geq p_3 - p_6, & z_{54} \geq p_5 - p_4, & z_{56} \geq p_5 - p_6, & z_{6t} \geq p_6,
+\end{array}
+$$
+
+all $z_{uv} \geq 0$, while $p_1, \ldots, p_6$ can have any sign. The dual problem has $12 + 6 = 18$ variables 
+(the primal one has $12$ variables and $12 + 6 = 18$ constraints, not counting $f_{uv} \geq 0$).
+
+The optimal dual solution corresponds to the cut mentioned above: $p_1 = p_2 = p_3 = p_5 = p_6 = 1$, $p_4 = 0$, 
+$z_{2t} = z_{54} = z_{6t} = 1$, all other $z_{uv} = 0$. All constraints are satisfied (for example, $z_{42} = 0 \geq p_4 - p_2 = -1$), 
+and the value of the objective function is $2 + 2 + 1 = 5$ -- the same as the maximum flow, so the duality gap is $0$.
+
+*Intuition:* For any cut ($S \ni s$, $T \ni t$) we can choose $p_v = 1$ if $v \in S$ and $p_v = 0$ if $v \in T$, 
+and $z_{uv} = 1$ exactly for the edges that go from $S$ to $T$. Then the dual objective function is the capacity of the cut, so 
+the dual problem is the *minimum cut* problem (one can prove that it always has an optimal solution with $p_v \in \lbrace 0, 1 \rbrace$), 
+and the max-flow min-cut theorem is a consequence of strong duality.
+
+* The *potential* $p_v$ is like a "height": the source is at height $1$, the sink at height $0$. The flow runs "downhill", and 
+  $p_u - p_v$ is the drop along the edge $(u,v)$. As a shadow price, $p_v$ shows how much one unit of flow that has reached 
+  vertex $v$ is worth: from the vertices on the side $S$ it still has to cross the bottleneck (value $1$), while from those on 
+  the side $T$ it is already "past" the cut (value $0$).
+* The *price* $z_{uv}$ is the shadow price of the edge capacity: how much the maximum flow would increase if $c_{uv}$ were increased by $1$. 
+  For the bottleneck edges $v_2 \to t$, $v_5 \to v_4$, $v_6 \to t$ it is $1$, for the others it is $0$ (their capacity is sufficient). 
+  The constraint $z_{uv} \geq p_u - p_v$ means that an edge along which the potential drops has to be "paid for".
+
+Complementary slackness conditions: if $z_{uv} > 0$, then $f_{uv} = c_{uv}$ (the edges from $S$ to $T$ are saturated); 
+if a dual inequality is not active, then $f_{uv} = 0$. For example, $z_{42} = 0 > p_4 - p_2 = -1$, so in the optimal 
+flow $f_{42} = 0$: no flow goes along an edge from $T$ back to $S$. $\square$
 
 **Problem 9.2 (information asymmetry):** A software company sells annual licenses. There are two types of customers: *small* companies value a license at $4$ thousand EUR, *large* ones at $10$ thousand EUR. Large companies make up $50\%$ of all customers, but the seller does not know the type of a particular customer (the customer knows it; this is *information asymmetry*). The cost of distributing a license can be ignored.
 

@@ -374,6 +374,7 @@ orientēts / neorientēts grafs,directed / undirected graph,standard,
 starpvirsotne,intermediate vertex,standard,Flow networks: every vertex except s and t
 viena avota īsāko ceļu uzdevums,single-source shortest path problem,standard,
 potenciāls (virsotnes),potential (of a vertex),standard,
+cena (šķautnes),price (of an edge),course,"dual variable z_uv of the capacity constraint in the max-flow LP (linear_introduction, problem 9.1); pairs with the vertex potential"
 trijstūra nevienādība,triangle inequality,standard,
 īsāko ceļu koks,shortest path tree,standard,
 minimālo izmaksu plūsma,minimum-cost flow,standard,

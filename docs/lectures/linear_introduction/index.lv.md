@@ -1399,3 +1399,77 @@ $$
 3. $\mathbf{x}^{\ast} = (3, 2)$ ir pieļaujams: $3 + 2 = 5 \leq 5$, $3 + 6 = 9 \leq 12$, $6 + 2 = 8 \leq 8$. Otrais ierobežojums nav aktīvs ($9 < 12$), tāpēc $y_2 = 0$. Tā kā $x_1 > 0$ un $x_2 > 0$, abas duālās nevienādības ir vienādības: $y_1 + 2y_3 = 3$ un $y_1 + y_3 = 2$. No tā $y_3 = 1$, $y_1 = 1$, tātad $\mathbf{y}^{\ast} = (1, 0, 1) \geq \mathbf{0}$ -- duāli pieļaujams. Mērķfunkciju vērtības: $3 \cdot 3 + 2 \cdot 2 = 13$ un $5 \cdot 1 + 12 \cdot 0 + 8 \cdot 1 = 13$. Tās sakrīt, tātad abi atrisinājumi ir optimāli.
 4. Ēnu cena $y_1^{\ast} = 1$, tāpēc optimālā vērtība pieaug par aptuveni $1 \cdot 0.1 = 0.1$, līdz $13.1$. (Pārbaude: jaunais optimums ir $(2.9;\ 2.2)$ ar vērtību $8.7 + 4.4 = 13.1$.) Otrā ierobežojuma ēnu cena ir $y_2^{\ast} = 0$: samazinot labo pusi līdz $11$, optimums nemainās, jo $\mathbf{x}^{\ast}$ šim ierobežojumam joprojām atbilst ($9 \leq 11$).
 5. Nē. Primārajai programmai ir pieļaujams punkts (piemēram, $\mathbf{x} = (0, 0)$ vai $\mathbf{x}^{\ast}$), un pēc vājās dualitātes katra duālā vērtība ir vismaz $3x_1 + 2x_2$ šajā punktā. Tātad duālās mērķfunkcijas vērtības ir ierobežotas no apakšas. $\square$
+
+**9.5. uzdevums:** Divi spēlētāji spēlē šādu spēli: katrā gājienā viņi vienlaikus pieraksta katrs pa vienam pozitīvam veselam skaitlim; apzīmēsim tos ar $a$ un $b$.
+
+* (i) ja $a = b$, ir neizšķirts (neviens nemaksā);
+* (ii) ja $a > b$ un turklāt $a < 3b$, tad spēlētājs "$a$" (lielākā skaitļa autors) uzvar un iegūst $1$ vienību;
+* (iii) ja $a \geq 3b$, tad spēlētājs "$a$" zaudē $2$ vienības.
+
+Izslēgt gājienus, kas nav optimāli (ir dominēti ar kādu citu). Pārveidot spēli par galīgu matricu spēli. Atrast optimālo jaukto stratēģiju (varbūtības visiem optimālajiem gājieniem).
+
+**Atbilde:**
+
+**Aptuvenais novērtējums.** Spēle ir simetriska (noteikumi abiem spēlētājiem vienādi), tāpēc tās vērtība ir $v = 0$ un abiem spēlētājiem optimālā stratēģija sakrīt. Katrs grib uzrakstīt mazliet vairāk par pretinieku (lai iegūtu $1$ pēc (ii)), bet ne pārāk daudz, lai nebūtu trīsreiz vairāk. 
+
+$$
+2 \;\text{uzvar}\; 1 \;(2>1,\ 2<3),\qquad
+5 \;\text{uzvar}\; 2 \;(5>2,\ 5<6),\qquad
+1 \;\text{uzvar}\; 5 \;(5 \geq 3\cdot 1,\ \text{tātad}\ 5\ \text{zaudē}\ 2).
+$$
+
+Optimālā stratēģija nejauši izvēlas no $\lbrace 1, 2, 5 \rbrace$. Aptuvenais minējums būtu aptuveni vienādas varbūtības ($\approx 1/3$), bet tā kā cikla posms "$1$ uzvar $5$" nes $2$ vienības (pārējie tikai $1$), līdzsvars ir nobīdīts. Precīzais aprēķins dod $(1/4, 1/2, 1/4)$.
+
+**Kāpēc pietiek ar skaitļiem $1$–$5$.** Parādīsim, ka gājiens $a = 1$ *dominē* jebkuru gājienu $a \geq 6$ (katrā pretinieka atbildē $b$ rakstīt $1$ nav sliktāk nekā rakstīt $k \geq 6$):
+
+* pret $b = 1$: $k \geq 3$, tātad $k$ zaudē $2$; bet $1$ dod neizšķirtu $0$ -- labāk;
+* pret $b = 2$: $k \geq 6 = 3 \cdot 2$, tātad $k$ zaudē $2$; bet $1$ zaudē tikai $1$ -- labāk;
+* pret $b \geq 3$: skaitlis $1$ iegūst $2$ (jo $b \geq 3 \cdot 1$, pretinieks zaudē), kas ir maksimālais iespējamais ieguvums, savukārt $k$ labākajā gadījumā iegūst tikai $1$.
+
+Tātad spēlētājam nekad nav izdevīgi rakstīt $6$ vai vairāk, un pietiek aplūkot gājienus $\lbrace 1, 2, 3, 4, 5 \rbrace$. Rindās/kolonnās sakārtojot skaitļus $1, \ldots, 5$, maksājumu matrica (spēlētājs $X$ raksta rindu, $Y$ -- kolonnu, $X$ samaksā $Y$ summu $a_{ij}$, $X$ minimizē) ir
+
+$$
+A = \left( \begin{array}{rrrrr}
+ 0 &  1 & -2 & -2 & -2 \\
+-1 &  0 &  1 &  1 &  1 \\
+ 2 & -1 &  0 &  1 &  1 \\
+ 2 & -1 & -1 &  0 &  1 \\
+ 2 & -1 & -1 & -1 &  0 \\
+\end{array} \right).
+$$
+
+(Piemēram, $a_{31} = 2$: ja $X$ raksta $3$ un $Y$ raksta $1$, tad $3 \geq 3 \cdot 1$, spēlētājs $X$ zaudē $2$, t.i., samaksā $Y$ divas vienības. Matrica ir *antisimetriska* -- $A^T = -A$ -- kā jebkurai simetriskai spēlei.)
+
+**Kāpēc $3$ un $4$ nav optimāli.** Šajā $5 \times 5$ matricā $5$.rindiņa $(2, -1, -1, -1, 0)$ katrā kolonnā nav lielāka ne par $4$.rindiņu $(2, -1, -1, 0, 1)$, ne par $3$.rindiņu $(2, -1, 0, 1, 1)$. Tātad minimizējošajam spēlētājam $X$ gājiens $5$ *dominē* gan pār $4$, gan pār $3$ (samaksa nekad nav lielāka), un $X$ tos nekad neizvēlas. (Simetriski $Y$ neizvēlas $3$.kolonnu un $4$.kolonnu.) Paliek gājieni $\lbrace 1, 2, 5 \rbrace$ ar apakšmatricu
+
+$$
+B = \left( \begin{array}{rrr}
+ 0 &  1 & -2 \\
+-1 &  0 &  1 \\
+ 2 & -1 &  0 \\
+\end{array} \right),
+$$
+
+kur rindiņas un kolonnas atbilst gājieniem $1, 2, 5$.
+
+**Optimālā stratēģija.** Spēle ir simetriska, tāpēc $\mathbf{x}^{\ast} = \mathbf{y}^{\ast}$ un $v = 0$. Tā kā (pēc aptuvenā novērtējuma) visi trīs gājieni tiek lietoti, pēc vienaldzības principa katra kolonnas vidējā samaksa ir vienāda ar vērtību $0$. Ar $\mathbf{x} = (x_1, x_2, x_3)$ apzīmējot varbūtības gājieniem $1, 2, 5$:
+
+$$
+\mathbf{x}^T B = \left( -x_2 + 2x_3,\;\; x_1 - x_3,\;\; -2x_1 + x_2 \right) = (0, 0, 0).
+$$
+
+No $x_1 = x_3$ un $x_2 = 2x_3$ (trešā vienādība $-2x_1 + x_2 = 0$ izpildās automātiski), un ņemot vērā $x_1 + x_2 + x_3 = 1$, iegūstam $4x_1 = 1$, t.i.,
+
+$$
+\mathbf{x}^{\ast} = \mathbf{y}^{\ast} = \left( \tfrac{1}{4},\, \tfrac{1}{2},\, \tfrac{1}{4} \right).
+$$
+
+Tātad abi spēlētāji raksta $1$ ar varbūtību $1/4$, $2$ ar varbūtību $1/2$ un $5$ ar varbūtību $1/4$ (bet $3$ un $4$ -- nekad). 
+
+**Pārbaude.** Pilnajā $5 \times 5$ matricā ar $\mathbf{x}^{\ast} = (\tfrac{1}{4}, \tfrac{1}{2}, 0, 0, \tfrac{1}{4})$:
+
+$$
+(\mathbf{x}^{\ast})^T A = \left( 0,\; 0,\; -\tfrac{1}{4},\; -\tfrac{1}{4},\; 0 \right).
+$$
+
+Visas koordinātes ir $\leq 0$, tātad $\max_j ((\mathbf{x}^{\ast})^T A)_j = 0 = v$: spēlētājs $X$ garantē, ka samaksā ne vairāk kā $0$. Kolonnas $3$ un $4$ dod $-\tfrac{1}{4}$ (ja $Y$ izvēlas $3$ vai $4$, tad $X$ pat *iegūst* $\tfrac{1}{4}$), tāpēc šie gājieni nekad nav $Y$ labākā atbilde -- tas vēlreiz apstiprina, ka $3$ un $4$ nav optimāli. $\square$

@@ -67,7 +67,7 @@ $$x \mapsto g^x \bmod p.$$
   algoritmi (indeksu metode, skaitļu lauka siets) ir *subeksponenciāli*, bet 2048-3072 bitu
   pirmskaitlim $p$ joprojām praktiski neizpildāmi.
 
-Šeit $\mathbb{Z}_p^{\ast} = \{1, 2, \ldots, p-1\}$ ir *multiplikatīvā grupa* atlikumiem pēc
+Šeit $\mathbb{Z}_p^{\ast} = \lbrace 1, 2, \ldots, p-1 \rbrace$ ir *multiplikatīvā grupa* atlikumiem pēc
 pirmskaitļa $p$ (sk. [Rīda-Solomona lekcijas]({{ '/lectures/lossy_reed_solomon/' | relative_url }})
 nodaļu "Galuā lauki": $\mathbb{F}_p$ nenulles elementi). Tā vienmēr ir *cikliska*: eksistē
 *ģenerators* (*primitīvā sakne*) $g$, kura pakāpes $g^0, g^1, \ldots, g^{p-2}$ ir visi $p - 1$
@@ -279,8 +279,8 @@ iespējams. Polinomiāla algoritma pamatā ir divi fakti par līknes *Frobeniusa
 
 **Frobeniusa endomorfisms:**
 
-Aplūkosim līknes punktus ar koordinātēm ne tikai no $\mathbb{F}_p$, bet arī no tā paplašinājumiem
-$\mathbb{F}_{p^k}$ (visu kopā -- no algebriskā slēguma $\overline{\mathbb{F}}_p$). Attēlojums
+Aplūkosim līknes punktus ar koordinātēm ne tikai no $\mathbb{F}\_p$, bet arī no tā paplašinājumiem
+$\mathbb{F}\_{p^k}$ (visu kopā -- no algebriskā slēguma $\overline{\mathbb{F}}_p$). Attēlojums
 
 $$\varphi(x, y) = (x^p, y^p), \qquad \varphi(\mathcal{O}) = \mathcal{O}$$
 
@@ -307,8 +307,8 @@ $\left\lvert \sharp E(\mathbb{F}_p) - (p + 1) \right\rvert \le 2\sqrt{p}$.
 Intuīcija: apmēram pusei $x$ vērtību labā puse $x^3 + ax + b$ ir kvadrāts pēc moduļa $p$, un tad
 tai ir divas saknes $\pm y$; pārējām nav neviena. Tātad "vidēji" ir $2 \cdot p/2 + 1 = p + 1$
 punkts, un novirze uzvedas līdzīgi kā $p$ nejaušu $\pm 1$ summa -- tā ir kārtā $\sqrt{p}$.
-Piemēri šajā lekcijā: līknei virs $\mathbb{F}_{17}$ ir $19$ punkti ($t = 18 - 19 = -1$), līknei
-virs $\mathbb{F}_{23}$ ECDSA piemērā -- $29$ punkti ($t = 24 - 29 = -5$, un $\lvert -5 \rvert \le 2\sqrt{23} \approx 9{,}59$),
+Piemēri šajā lekcijā: līknei virs $\mathbb{F}\_{17}$ ir $19$ punkti ($t = 18 - 19 = -1$), līknei
+virs $\mathbb{F}\_{23}$ ECDSA piemērā -- $29$ punkti ($t = 24 - 29 = -5$, un $\lvert -5 \rvert \le 2\sqrt{23} \approx 9{,}59$),
 līknei virs $\mathbb{F}_{271}$ Montgomerija kāpņu piemērā -- $269$ punkti ($t = 3$).
 
 **Shofa algoritma ideja:**
@@ -327,7 +327,7 @@ zināt atlikumus $t \bmod \ell$ dažiem maziem pirmskaitļiem $\ell = 2, 3, 5, 7
    $t \equiv 0 \pmod 2 \iff \gcd(x^p - x,\ x^3 + ax + b) \neq 1$ (polinoms $x^p - x$ ir visu
    $\mathbb{F}_p$ elementu $x - c$ reizinājums).
 3. **Atlikums $t \bmod \ell$ nepāra $\ell$.** Aplūko *$\ell$-torsijas punktus*
-   $E[\ell] = \{ P : \ell P = \mathcal{O} \}$. Šiem punktiem $pP = \bar{p} P$, kur $\bar{p} = p \bmod \ell$,
+   $E[\ell] = \lbrace P : \ell P = \mathcal{O} \rbrace$. Šiem punktiem $pP = \bar{p} P$, kur $\bar{p} = p \bmod \ell$,
    un $t\,\varphi(P) = \tau \varphi(P)$, kur $\tau = t \bmod \ell$ (jo arī $\varphi(P) \in E[\ell]$).
    Tāpēc raksturīgais vienādojums uz $E[\ell]$ kļūst par
 
@@ -335,9 +335,9 @@ zināt atlikumus $t \bmod \ell$ dažiem maziem pirmskaitļiem $\ell = 2, 3, 5, 7
 
    un atliek pārbaudīt $\ell$ iespējamās $\tau$ vērtības.
 4. **Kā rēķināt ar punktiem, kurus nezinām.** $E[\ell]$ punktu koordinātes parasti pieder lielam
-   paplašinājumam $\mathbb{F}_{p^k}$, un tos neviens neatrod. Tā vietā rēķina ar *vispārīgo punktu*
-   $P = (x, y)$, kur $x$ un $y$ ir mainīgie, pēc moduļa *dalīšanas polinoma* $\psi_\ell(x)$: tā
-   saknes ir tieši visu $E[\ell] \setminus \{\mathcal{O}\}$ punktu $x$ koordinātes (nepāra $\ell$
+   paplašinājumam $\mathbb{F}\_{p^k}$, un tos neviens neatrod. Tā vietā rēķina ar *vispārīgo punktu*
+   $P = (x, y)$, kur $x$ un $y$ ir mainīgie, pēc moduļa *dalīšanas polinoma* $\psi\_\ell(x)$: tā
+   saknes ir tieši visu $E[\ell] \setminus \lbrace \mathcal{O} \rbrace$ punktu $x$ koordinātes (nepāra $\ell$
    gadījumā $\deg \psi_\ell = (\ell^2 - 1)/2$), un $y^2$ aizstāj ar $x^3 + ax + b$. Piemēram,
    $\psi_3(x) = 3x^4 + 6ax^2 + 12bx - a^2$. Vienādība, kas izpildās pēc moduļa $\psi_\ell$, izpildās
    *visiem* $\ell$-torsijas punktiem vienlaikus. Koordinātes $x^p$, $y^p$, $x^{p^2}$, $y^{p^2}$ aprēķina
@@ -585,14 +585,14 @@ jauna ECDHE (režīms `psk_ke`) ir aizsargāta tikai tik ilgi, kamēr ir drošas
 
 *Elliptic Curve Digital Signature Algorithm* ([[FIPS186-5]](#FIPS186-5)) ir DSA paraksta shēmas
 variants eliptiskās līknes grupā. Publiski parametri: līkne, ģenerators $G$ ar pirmskaitļa kārtu
-$n$ un hešfunkcija $H$ (P-256 gadījumā SHA-256). Privātā atslēga ir nejaušs $d \in \{1, \ldots, n-1\}$,
+$n$ un hešfunkcija $H$ (P-256 gadījumā SHA-256). Privātā atslēga ir nejaušs $d \in \lbrace 1, \ldots, n-1 \rbrace$,
 publiskā -- punkts $Q = dG$. Ziņojuma $m$ hešu $h$ iegūst, ņemot $H(m)$ pirmos $\lceil \log_2 n \rceil$
 bitus kā veselu skaitli.
 
 $\textsf{ECDSA-Sign}(m, d)$
 1. $h \gets H(m)$ $\quad$ *// pirmie $\lceil \log_2 n \rceil$ biti kā vesels skaitlis*
 2. **repeat**
-3. $\quad k \gets$ nejaušs skaitlis no $\{1, \ldots, n-1\}$ $\quad$ *// nonce: jauns katram parakstam!*
+3. $\quad k \gets$ nejaušs skaitlis no $\lbrace 1, \ldots, n-1 \rbrace$ $\quad$ *// nonce: jauns katram parakstam!*
 4. $\quad (x_1, y_1) \gets kG$
 5. $\quad r \gets x_1 \bmod n$
 6. $\quad s \gets k^{-1}(h + r d) \bmod n$
@@ -600,7 +600,7 @@ $\textsf{ECDSA-Sign}(m, d)$
 8. **return** $(r, s)$
 
 $\textsf{ECDSA-Verify}(m, (r, s), Q)$
-1. **if** $r \notin \{1, \ldots, n-1\}$ **or** $s \notin \{1, \ldots, n-1\}$
+1. **if** $r \notin \lbrace 1, \ldots, n-1 \rbrace$ **or** $s \notin \lbrace 1, \ldots, n-1 \rbrace$
 2. $\quad$ **return** FALSE
 3. $h \gets H(m)$
 4. $w \gets s^{-1} \bmod n$
@@ -884,7 +884,7 @@ labošanu: dekodēt "trokšņainu" lineāru kodu bez slepenās struktūras ir gr
 TLS 1.3 to lieto *hibrīdā* grupā `X25519MLKEM768` (kods `0x11EC`): klienta `key_share` satur
 ML-KEM-768 atslēgu $ek$ ($1184$ baiti) un X25519 publisko atslēgu ($32$ baiti), servera
 atbilde -- kapsulu $c$ ($1088$ baiti) un savu X25519 atslēgu. Kopīgais noslēpums HKDF ievadei ir abu
-noslēpumu salikums $K_{\text{ML-KEM}} \,\|\, K_{\text{X25519}}$ ($64$ baiti), tātad uzbrucējam
+noslēpumu salikums $K_{\text{ML-KEM}} \,\Vert\, K_{\text{X25519}}$ ($64$ baiti), tātad uzbrucējam
 jāsalauž *abi* algoritmi: ja ML-KEM izrādītos vājš (tas ir jauns algoritms), joprojām aizsargā
 X25519, bet pret kvantu datoru -- ML-KEM. Cena: `ClientHello` kļūst par apmēram $1{,}2$ KB garāks (dažreiz
 vairs neietilpst vienā TCP segmentā). Kopš 2024.-2025. gada hibrīdo grupu pēc noklusējuma lieto
@@ -1249,10 +1249,10 @@ gan no publiskās atslēgas ($294$ pret $91$ baitu), gan no izdevēja paraksta (
 ECDSA paraksta garums svārstās par $1$-$2$ baitiem atkarībā no $r$ un $s$ DER kodējuma. $\square$
 
 **12.7. uzdevums:**  
-Ar Shofa algoritmu atrast līknes $y^2 = x^3 + x + 4$ virs $\mathbb{F}_{23}$ (līkne no nodaļas
+Ar Shofa algoritmu atrast līknes $y^2 = x^3 + x + 4$ virs $\mathbb{F}\_{23}$ (līkne no nodaļas
 "ECDSA piemērs mazā grupā") punktu skaitu, nepārlasot punktus. (a) Kuri pirmskaitļi $\ell$
 jāizmanto? (b) Aprakstīt, kā atrod $t \bmod \ell$ katram no tiem. (c) Salikt rezultātu ar KAT
-un pārbaudīt, ka $\sharp E(\mathbb{F}_{23}) = 29$. Polinomu aritmētiku (kāpināšanu un dalīšanu
+un pārbaudīt, ka $\sharp E(\mathbb{F}\_{23}) = 29$. Polinomu aritmētiku (kāpināšanu un dalīšanu
 ar atlikumu pēc moduļa $\psi_\ell$) var veikt ar skriptu [figs/schoof.py](figs/schoof.py), kas
 izdrukā visus starprezultātus.
 
@@ -1260,7 +1260,7 @@ izdrukā visus starprezultātus.
 pēc moduļa $23$.
 
 (a) Hasses intervāla garums ir $4\sqrt{23} \approx 19{,}18$. Reizinājums $2 \cdot 3 = 6$ ir par mazu,
-bet $2 \cdot 3 \cdot 5 = 30 > 19{,}18$, tātad $\ell \in \{2, 3, 5\}$.
+bet $2 \cdot 3 \cdot 5 = 30 > 19{,}18$, tātad $\ell \in \lbrace 2, 3, 5 \rbrace$.
 
 (b) **$\ell = 2$.** Ar ātro kāpināšanu pēc moduļa $f$: $x^{23} \equiv 20x^2 + 6x + 21 \pmod{f}$.
 Tad $\gcd(x^{23} - x,\ f) = \gcd(20x^2 + 5x + 21,\ f) = 1$: polinomam $f$ nav sakņu
@@ -1288,7 +1288,7 @@ tikai tad, ja $\bar{p}$ ir kvadrātisks atlikums pēc moduļa $\ell$; skaitlis $
 jo kvadrāti ir tikai $1$ un $4$.)
 
 (c) KAT: $t \equiv 1 \pmod 2$, $t \equiv 1 \pmod 3$, $t \equiv 0 \pmod 5$. No pirmajiem diviem
-$t \equiv 1 \pmod 6$, t.i., $t \in \{\ldots, -5, 1, 7, 13, 19, 25, \ldots\}$; no tiem dalās ar $5$
+$t \equiv 1 \pmod 6$, t.i., $t \in \lbrace \ldots, -5, 1, 7, 13, 19, 25, \ldots \rbrace$; no tiem dalās ar $5$
 tikai $-5$ un $25$, tātad $t \equiv 25 \equiv -5 \pmod{30}$. Hasses intervālā
 $\lvert t \rvert \le 2\sqrt{23} \approx 9{,}59$ ir vienīgi $t = -5$, tāpēc
 

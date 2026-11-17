@@ -67,7 +67,7 @@ $$x \mapsto g^x \bmod p.$$
   algorithms (index calculus, the number field sieve) are *subexponential*, but for a 2048–3072-bit
   prime $p$ they are still practically infeasible.
 
-Here $\mathbb{Z}_p^{\ast} = \{1, 2, \ldots, p-1\}$ is the *multiplicative group* of residues modulo
+Here $\mathbb{Z}_p^{\ast} = \lbrace 1, 2, \ldots, p-1 \rbrace$ is the *multiplicative group* of residues modulo
 the prime $p$ (see the section "Galois Fields" of the
 [Reed-Solomon lecture]({{ '/lectures/lossy_reed_solomon/' | relative_url }}): the nonzero elements of $\mathbb{F}_p$).
 It is always *cyclic*: there is a
@@ -280,8 +280,8 @@ A polynomial-time algorithm rests on two facts about the *Frobenius endomorphism
 
 **The Frobenius endomorphism:**
 
-Consider points of the curve whose coordinates come not only from $\mathbb{F}_p$, but also from its
-extensions $\mathbb{F}_{p^k}$ (all together, from the algebraic closure $\overline{\mathbb{F}}_p$). The map
+Consider points of the curve whose coordinates come not only from $\mathbb{F}\_p$, but also from its
+extensions $\mathbb{F}\_{p^k}$ (all together, from the algebraic closure $\overline{\mathbb{F}}_p$). The map
 
 $$\varphi(x, y) = (x^p, y^p), \qquad \varphi(\mathcal{O}) = \mathcal{O}$$
 
@@ -308,8 +308,8 @@ $\left\lvert \sharp E(\mathbb{F}_p) - (p + 1) \right\rvert \le 2\sqrt{p}$.
 Intuition: for about half of the values $x$ the right-hand side $x^3 + ax + b$ is a square modulo $p$,
 and then it has two roots $\pm y$; the others have none. So "on average" there are
 $2 \cdot p/2 + 1 = p + 1$ points, and the deviation behaves like a sum of $p$ random $\pm 1$ values --
-it is of order $\sqrt{p}$. Examples in this lecture: the curve over $\mathbb{F}_{17}$ has $19$ points
-($t = 18 - 19 = -1$), the curve over $\mathbb{F}_{23}$ in the ECDSA example has $29$ points
+it is of order $\sqrt{p}$. Examples in this lecture: the curve over $\mathbb{F}\_{17}$ has $19$ points
+($t = 18 - 19 = -1$), the curve over $\mathbb{F}\_{23}$ in the ECDSA example has $29$ points
 ($t = 24 - 29 = -5$, and $\lvert -5 \rvert \le 2\sqrt{23} \approx 9.59$), the curve over $\mathbb{F}_{271}$
 in the Montgomery ladder example has $269$ points ($t = 3$).
 
@@ -329,7 +329,7 @@ to know the remainders $t \bmod \ell$ for a few small primes $\ell = 2, 3, 5, 7,
    $t \equiv 0 \pmod 2 \iff \gcd(x^p - x,\ x^3 + ax + b) \neq 1$ (the polynomial $x^p - x$ is the
    product of $x - c$ over all elements of $\mathbb{F}_p$).
 3. **The remainder $t \bmod \ell$ for odd $\ell$.** Consider the *$\ell$-torsion points*
-   $E[\ell] = \{ P : \ell P = \mathcal{O} \}$. For these points $pP = \bar{p} P$, where $\bar{p} = p \bmod \ell$,
+   $E[\ell] = \lbrace P : \ell P = \mathcal{O} \rbrace$. For these points $pP = \bar{p} P$, where $\bar{p} = p \bmod \ell$,
    and $t\,\varphi(P) = \tau \varphi(P)$, where $\tau = t \bmod \ell$ (since $\varphi(P) \in E[\ell]$ as well).
    So on $E[\ell]$ the characteristic equation becomes
 
@@ -337,9 +337,9 @@ to know the remainders $t \bmod \ell$ for a few small primes $\ell = 2, 3, 5, 7,
 
    and it remains to test the $\ell$ possible values of $\tau$.
 4. **How to compute with points we do not know.** The coordinates of the points in $E[\ell]$ usually
-   lie in a large extension $\mathbb{F}_{p^k}$, and nobody finds them. Instead, one computes with the
+   lie in a large extension $\mathbb{F}\_{p^k}$, and nobody finds them. Instead, one computes with the
    *generic point* $P = (x, y)$, where $x$ and $y$ are variables, modulo the *division polynomial*
-   $\psi_\ell(x)$: its roots are exactly the $x$ coordinates of all points in $E[\ell] \setminus \{\mathcal{O}\}$
+   $\psi\_\ell(x)$: its roots are exactly the $x$ coordinates of all points in $E[\ell] \setminus \lbrace \mathcal{O} \rbrace$
    (for odd $\ell$, $\deg \psi_\ell = (\ell^2 - 1)/2$), and $y^2$ is replaced by $x^3 + ax + b$. For example,
    $\psi_3(x) = 3x^4 + 6ax^2 + 12bx - a^2$. An identity that holds modulo $\psi_\ell$ holds for *all*
    $\ell$-torsion points at once. The coordinates $x^p$, $y^p$, $x^{p^2}$, $y^{p^2}$ are computed by fast
@@ -587,14 +587,14 @@ encryption keys remain secure, so `psk_dhe_ke` (PSK together with a new ECDHE) i
 
 The *Elliptic Curve Digital Signature Algorithm* ([[FIPS186-5]](#FIPS186-5)) is a variant of the DSA signature scheme
 in an elliptic curve group. Public parameters: the curve, a generator $G$ of prime order
-$n$ and a hash function $H$ (SHA-256 for P-256). The private key is a random $d \in \{1, \ldots, n-1\}$,
+$n$ and a hash function $H$ (SHA-256 for P-256). The private key is a random $d \in \lbrace 1, \ldots, n-1 \rbrace$,
 the public key is the point $Q = dG$. The hash $h$ of a message $m$ is obtained by taking the first $\lceil \log_2 n \rceil$
 bits of $H(m)$ as an integer.
 
 $\textsf{ECDSA-Sign}(m, d)$
 1. $h \gets H(m)$ $\quad$ *// the first $\lceil \log_2 n \rceil$ bits as an integer*
 2. **repeat**
-3. $\quad k \gets$ a random number from $\{1, \ldots, n-1\}$ $\quad$ *// the nonce: a new one for every signature!*
+3. $\quad k \gets$ a random number from $\lbrace 1, \ldots, n-1 \rbrace$ $\quad$ *// the nonce: a new one for every signature!*
 4. $\quad (x_1, y_1) \gets kG$
 5. $\quad r \gets x_1 \bmod n$
 6. $\quad s \gets k^{-1}(h + r d) \bmod n$
@@ -602,7 +602,7 @@ $\textsf{ECDSA-Sign}(m, d)$
 8. **return** $(r, s)$
 
 $\textsf{ECDSA-Verify}(m, (r, s), Q)$
-1. **if** $r \notin \{1, \ldots, n-1\}$ **or** $s \notin \{1, \ldots, n-1\}$
+1. **if** $r \notin \lbrace 1, \ldots, n-1 \rbrace$ **or** $s \notin \lbrace 1, \ldots, n-1 \rbrace$
 2. $\quad$ **return** FALSE
 3. $h \gets H(m)$
 4. $w \gets s^{-1} \bmod n$
@@ -886,7 +886,7 @@ correction: decoding a "noisy" linear code without its secret structure is hard.
 TLS 1.3 uses it in the *hybrid* group `X25519MLKEM768` (code `0x11EC`): the client's `key_share` contains
 an ML-KEM-768 key $ek$ ($1184$ bytes) and an X25519 public key ($32$ bytes); the server's
 reply contains the capsule $c$ ($1088$ bytes) and its own X25519 key. The shared secret fed into HKDF is the
-concatenation of both secrets $K_{\text{ML-KEM}} \,\|\, K_{\text{X25519}}$ ($64$ bytes), so an adversary
+concatenation of both secrets $K_{\text{ML-KEM}} \,\Vert\, K_{\text{X25519}}$ ($64$ bytes), so an adversary
 has to break *both* algorithms: if ML-KEM turned out to be weak (it is a new algorithm), X25519 still
 protects, and against a quantum computer ML-KEM does. The price: `ClientHello` becomes about $1.2$ KB longer (sometimes
 it no longer fits into one TCP segment). Since 2024–2025 the hybrid group has been used by default by
@@ -1252,10 +1252,10 @@ both from the public key ($294$ vs. $91$ bytes) and from the issuer's signature 
 the length of an ECDSA signature varies by $1$–$2$ bytes depending on the DER encoding of $r$ and $s$. $\square$
 
 **Problem 12.7:**  
-Use Schoof's algorithm to find the number of points of the curve $y^2 = x^3 + x + 4$ over $\mathbb{F}_{23}$
+Use Schoof's algorithm to find the number of points of the curve $y^2 = x^3 + x + 4$ over $\mathbb{F}\_{23}$
 (the curve from the section "An ECDSA Example in a Small Group") without enumerating the points.
 (a) Which primes $\ell$ are needed? (b) Describe how $t \bmod \ell$ is found for each of them.
-(c) Combine the result with the CRT and check that $\sharp E(\mathbb{F}_{23}) = 29$. The polynomial
+(c) Combine the result with the CRT and check that $\sharp E(\mathbb{F}\_{23}) = 29$. The polynomial
 arithmetic (exponentiation and division with remainder modulo $\psi_\ell$) can be done with the script
 [figs/schoof.py](figs/schoof.py), which prints all intermediate results.
 
@@ -1263,7 +1263,7 @@ arithmetic (exponentiation and division with remainder modulo $\psi_\ell$) can b
 modulo $23$.
 
 (a) The length of the Hasse interval is $4\sqrt{23} \approx 19.18$. The product $2 \cdot 3 = 6$ is too small,
-but $2 \cdot 3 \cdot 5 = 30 > 19.18$, so $\ell \in \{2, 3, 5\}$.
+but $2 \cdot 3 \cdot 5 = 30 > 19.18$, so $\ell \in \lbrace 2, 3, 5 \rbrace$.
 
 (b) **$\ell = 2$.** By fast exponentiation modulo $f$: $x^{23} \equiv 20x^2 + 6x + 21 \pmod{f}$.
 Then $\gcd(x^{23} - x,\ f) = \gcd(20x^2 + 5x + 21,\ f) = 1$: the polynomial $f$ has no roots in
@@ -1291,7 +1291,7 @@ $\bar{p}$ is a quadratic residue modulo $\ell$; $3$ is not one modulo $5$, since
 $1$ and $4$.)
 
 (c) CRT: $t \equiv 1 \pmod 2$, $t \equiv 1 \pmod 3$, $t \equiv 0 \pmod 5$. The first two give
-$t \equiv 1 \pmod 6$, i.e., $t \in \{\ldots, -5, 1, 7, 13, 19, 25, \ldots\}$; of these, only $-5$ and $25$
+$t \equiv 1 \pmod 6$, i.e., $t \in \lbrace \ldots, -5, 1, 7, 13, 19, 25, \ldots \rbrace$; of these, only $-5$ and $25$
 are divisible by $5$, so $t \equiv 25 \equiv -5 \pmod{30}$. In the Hasse interval
 $\lvert t \rvert \le 2\sqrt{23} \approx 9.59$ the only such value is $t = -5$, therefore
 

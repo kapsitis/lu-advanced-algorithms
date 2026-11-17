@@ -15,3 +15,6 @@ defaults:
       type: pages
     values:
       layout: default
+# Links to source files (*.py) on the site open GitHub's source view instead of a download
+# (rewritten by a script in _layouts/default.html).
+source_blob_url: "https://github.com/kapsitis/lu-advanced-algorithms/blob/main/docs"

@@ -144,10 +144,8 @@ Koeficientiem $a, b \in \mathbb{F}_p$ jāapmierina nosacījums $4a^3 + 27b^2 \no
 tas nozīmē, ka polinomam $x^3 + ax + b$ nav vairākkārtēju sakņu, un līknei nav "asu stūru" vai
 pašķrustpunktu, kuros nevarētu novilkt pieskari.
 
-Līknes punktu skaits $\#E(\mathbb{F}_p)$ (ieskaitot $\mathcal{O}$) ir tuvs $p + 1$: pēc
-*Hasses teorēmas* $\left\lvert \#E(\mathbb{F}_p) - (p + 1) \right\rvert \le 2\sqrt{p}$. Intuīcija: apmēram
-pusei $x$ vērtību labā puse $x^3 + ax + b$ ir kvadrāts pēc moduļa $p$, un tad tai ir divas
-saknes $\pm y$.
+Līknes punktu skaitu (ieskaitot $\mathcal{O}$) apzīmē ar $\sharp E(\mathbb{F}_p)$; tas vienmēr ir
+tuvs $p + 1$ (Hasses teorēma, sk. nodaļu "Līknes punktu skaits un Shofa algoritms").
 
 Ģeometrisko intuīciju dod tā pati līkne virs reālajiem skaitļiem $\mathbb{R}$: tā ir simetriska
 pret $x$ asi (ja $(x, y)$ ir uz līknes, tad arī $(x, -y)$), un katra taisne, kas krusto līkni divos
@@ -272,6 +270,92 @@ mazās apakšgrupās (Poliga-Helmana metode, sk. nodaļu "Nederīgas līknes un 
 uzbrukumi").
 
 
+### Līknes punktu skaits un Shofa algoritms
+
+Lai pārbaudītu, ka grupas kārta ir liels pirmskaitlis, vispirms jāzina $\sharp E(\mathbb{F}_p)$.
+Mazajos piemēros punktus var vienkārši saskaitīt: katram $x \in \mathbb{F}_p$ pārbauda, vai
+$x^3 + ax + b$ ir kvadrāts pēc moduļa $p$. Bet tas prasa $p$ soļus, un pie $p \approx 2^{256}$ tas nav
+iespējams. Polinomiāla algoritma pamatā ir divi fakti par līknes *Frobeniusa endomorfismu*.
+
+**Frobeniusa endomorfisms:**
+
+Aplūkosim līknes punktus ar koordinātēm ne tikai no $\mathbb{F}_p$, bet arī no tā paplašinājumiem
+$\mathbb{F}_{p^k}$ (visu kopā -- no algebriskā slēguma $\overline{\mathbb{F}}_p$). Attēlojums
+
+$$\varphi(x, y) = (x^p, y^p), \qquad \varphi(\mathcal{O}) = \mathcal{O}$$
+
+ir *Frobeniusa endomorfisms*. Tas pārvērš līknes punktu atkal par līknes punktu (jo
+$(u + v)^p = u^p + v^p$ laukā ar raksturīgo skaitli $p$, un $a^p = a$, $b^p = b$), un tas ir grupas
+homomorfisms: $\varphi(P + Q) = \varphi(P) + \varphi(Q)$, jo saskaitīšanas formulās ir tikai
+lauka operācijas un koeficienti no $\mathbb{F}_p$. Pēc Fermā mazās teorēmas $z^p = z$ tieši tad,
+ja $z \in \mathbb{F}_p$, tāpēc
+
+$$E(\mathbb{F}_p) = \{ P : \varphi(P) = P \}.$$
+
+**Teorēma (raksturīgais vienādojums).** Eksistē vesels skaitlis $t$ (*Frobeniusa pēda*,
+*trace of Frobenius*), ka katram punktam $P \in E(\overline{\mathbb{F}}_p)$
+
+$$\varphi^2(P) - t\,\varphi(P) + pP = \mathcal{O}, \qquad \text{turklāt} \qquad
+\sharp E(\mathbb{F}_p) = p + 1 - t.$$
+
+(Te $\varphi^2(P) = (x^{p^2}, y^{p^2})$, un $t\,\varphi(P)$, $pP$ ir parastā reizināšana ar veselu
+skaitli līknes grupā. Pierādījumu sk. [[Was08]](#Was08), 4.2. nodaļa.)
+
+**Hasses teorēma.** $\lvert t \rvert \le 2\sqrt{p}$, t.i.,
+$\left\lvert \sharp E(\mathbb{F}_p) - (p + 1) \right\rvert \le 2\sqrt{p}$.
+
+Intuīcija: apmēram pusei $x$ vērtību labā puse $x^3 + ax + b$ ir kvadrāts pēc moduļa $p$, un tad
+tai ir divas saknes $\pm y$; pārējām nav neviena. Tātad "vidēji" ir $2 \cdot p/2 + 1 = p + 1$
+punkts, un novirze uzvedas līdzīgi kā $p$ nejaušu $\pm 1$ summa -- tā ir kārtā $\sqrt{p}$.
+Piemēri šajā lekcijā: līknei virs $\mathbb{F}_{17}$ ir $19$ punkti ($t = 18 - 19 = -1$), līknei
+virs $\mathbb{F}_{23}$ ECDSA piemērā -- $29$ punkti ($t = 24 - 29 = -5$, un $\lvert -5 \rvert \le 2\sqrt{23} \approx 9{,}59$),
+līknei virs $\mathbb{F}_{271}$ Montgomerija kāpņu piemērā -- $269$ punkti ($t = 3$).
+
+**Shofa algoritma ideja:**
+
+R.Shofs (*R.Schoof*, 1985, [[Sch85]](#Sch85)) ievēroja, ka $t$ nav jāatrod uzreiz -- pietiek
+zināt atlikumus $t \bmod \ell$ dažiem maziem pirmskaitļiem $\ell = 2, 3, 5, 7, \ldots$:
+
+1. **Cik pirmskaitļu vajag.** Pēc Hasses teorēmas $t$ pieder intervālam $[-2\sqrt{p}, 2\sqrt{p}]$,
+   kura garums ir $4\sqrt{p}$. Ja $\ell_1 \ell_2 \cdots \ell_k > 4\sqrt{p}$, tad no atlikumiem
+   $t \bmod \ell_i$ ar Ķīniešu atlikumu teorēmu (KAT) iegūst $t \bmod \ell_1 \cdots \ell_k$, un
+   šajā intervālā ir tikai viens skaitlis ar šo atlikumu. Tā kā pirmskaitļu reizinājums aug
+   eksponenciāli, pietiek ar $\ell = O(\log p)$.
+2. **Atlikums $t \bmod 2$.** Tā kā $p + 1$ ir pāra skaitlis, $t$ ir pāra tieši tad, kad
+   $\sharp E(\mathbb{F}_p)$ ir pāra, t.i., kad grupā ir punkts ar kārtu $2$. Tādi punkti ir
+   $(x_0, 0)$, kur $x_0 \in \mathbb{F}_p$ ir polinoma $x^3 + ax + b$ sakne. Tāpēc
+   $t \equiv 0 \pmod 2 \iff \gcd(x^p - x,\ x^3 + ax + b) \neq 1$ (polinoms $x^p - x$ ir visu
+   $\mathbb{F}_p$ elementu $x - c$ reizinājums).
+3. **Atlikums $t \bmod \ell$ nepāra $\ell$.** Aplūko *$\ell$-torsijas punktus*
+   $E[\ell] = \{ P : \ell P = \mathcal{O} \}$. Šiem punktiem $pP = \bar{p} P$, kur $\bar{p} = p \bmod \ell$,
+   un $t\,\varphi(P) = \tau \varphi(P)$, kur $\tau = t \bmod \ell$ (jo arī $\varphi(P) \in E[\ell]$).
+   Tāpēc raksturīgais vienādojums uz $E[\ell]$ kļūst par
+
+   $$\varphi^2(P) + \bar{p} P = \tau\, \varphi(P), \qquad \tau \in \{0, 1, \ldots, \ell - 1\},$$
+
+   un atliek pārbaudīt $\ell$ iespējamās $\tau$ vērtības.
+4. **Kā rēķināt ar punktiem, kurus nezinām.** $E[\ell]$ punktu koordinātes parasti pieder lielam
+   paplašinājumam $\mathbb{F}_{p^k}$, un tos neviens neatrod. Tā vietā rēķina ar *vispārīgo punktu*
+   $P = (x, y)$, kur $x$ un $y$ ir mainīgie, pēc moduļa *dalīšanas polinoma* $\psi_\ell(x)$: tā
+   saknes ir tieši visu $E[\ell] \setminus \{\mathcal{O}\}$ punktu $x$ koordinātes (nepāra $\ell$
+   gadījumā $\deg \psi_\ell = (\ell^2 - 1)/2$), un $y^2$ aizstāj ar $x^3 + ax + b$. Piemēram,
+   $\psi_3(x) = 3x^4 + 6ax^2 + 12bx - a^2$. Vienādība, kas izpildās pēc moduļa $\psi_\ell$, izpildās
+   *visiem* $\ell$-torsijas punktiem vienlaikus. Koordinātes $x^p$, $y^p$, $x^{p^2}$, $y^{p^2}$ aprēķina
+   ar ātro kāpināšanu pēc moduļa $\psi_\ell$, un punktu saskaitīšanas formulās dalīšana nozīmē
+   apgriezto elementu polinomu gredzenā pēc moduļa $\psi_\ell$ (paplašinātais Eiklīda algoritms).
+   Ja kāds dalītājs nav apgriežams, tā $\gcd$ ar $\psi_\ell$ ir netriviāls $\psi_\ell$ dalītājs,
+   un rēķinus var turpināt pēc tā moduļa.
+
+Visi polinomi ir ar pakāpi $O(\ell^2) = O(\log^2 p)$, tāpēc Shofa algoritms ir polinomiāls attiecībā
+pret $\log p$ (sākotnējā versijā $O(\log^8 p)$ bitu operāciju). Uzlabotais *SEA algoritms*
+(*Schoof-Elkies-Atkin*) lielai daļai $\ell$ aizstāj $\psi_\ell$ ar pakāpes $O(\ell)$ dalītāju, un ar to
+$256$ bitu līknes punktu skaitu aprēķina sekundes daļā. Tieši tā pārbauda standarta līknes (P-256
+grupas kārtu $n$) un ģenerē jaunas līknes: izvēlas nejaušus koeficientus, saskaita punktus un
+atmet līknes, kuru kārta nav pirmskaitlis (vai pirmskaitlis, reizināts ar mazu kofaktoru).
+Mācību implementācija ar visiem starprezultātiem ir [figs/schoof.py](figs/schoof.py) (sk. arī
+12.7. uzdevumu).
+
+
 ### Montgomerija kāpnes
 
 Dubultošana un saskaitīšana izpilda *atšķirīgas* darbības atkarībā no slepenā bita: bits $1$
@@ -353,7 +437,7 @@ līkne $y^2 = x^3 - 3x + b$ virs $\mathbb{F}_p$ ar parametriem (heksadecimāli):
 * $n = \texttt{ffffffff 00000000 ffffffff ffffffff bce6faad a7179e84 f3b9cac2 fc632551}$ (pirmskaitlis), kofaktors $h = 1$.
 
 Skripts [figs/ecc.py](figs/ecc.py) pārbauda, ka $G$ ir uz līknes un $nG = \mathcal{O}$. Kofaktors $1$
-nozīmē, ka $\#E = n$ ir pirmskaitlis: visi punkti (izņemot $\mathcal{O}$) ir ģeneratori, un mazu
+nozīmē, ka $\sharp E = n$ ir pirmskaitlis: visi punkti (izņemot $\mathcal{O}$) ir ģeneratori, un mazu
 apakšgrupu nav.
 
 Kāpēc tieši šādi parametri:
@@ -886,7 +970,7 @@ Dažām līkņu klasēm diskrētais logaritms ir viegls, tāpēc standarti tās 
 
 * **Gluda grupas kārta** -- Poliga-Helmana metode (sk. iepriekš); jāprasa, lai $n$ būtu liels
   pirmskaitlis.
-* **Anomālās līknes** ($\#E(\mathbb{F}_p) = p$): ECDLP atrisināms polinomiālā laikā (Smarta,
+* **Anomālās līknes** ($\sharp E(\mathbb{F}_p) = p$): ECDLP atrisināms polinomiālā laikā (Smarta,
   Satoh-Araki, Semajeva uzbrukums, 1998.-1999.).
 * **Maza iegulšanas pakāpe** (*embedding degree*, piemēram, supersingulāras līknes): MOV uzbrukums
   (Menezes, Okamoto, Vanstone, 1993) ar Veila sapārošanu (*Weil pairing*) pārnes ECDLP uz
@@ -1164,6 +1248,55 @@ ECDSA ķēde ietaupa apmēram $1$ KB (RSA-3072 gadījumā -- ap $1{,}6$ KB). Ser
 gan no publiskās atslēgas ($294$ pret $91$ baitu), gan no izdevēja paraksta ($256$ pret $\approx 71$ baitu);
 ECDSA paraksta garums svārstās par $1$-$2$ baitiem atkarībā no $r$ un $s$ DER kodējuma. $\square$
 
+**12.7. uzdevums:**  
+Ar Shofa algoritmu atrast līknes $y^2 = x^3 + x + 4$ virs $\mathbb{F}_{23}$ (līkne no nodaļas
+"ECDSA piemērs mazā grupā") punktu skaitu, nepārlasot punktus. (a) Kuri pirmskaitļi $\ell$
+jāizmanto? (b) Aprakstīt, kā atrod $t \bmod \ell$ katram no tiem. (c) Salikt rezultātu ar KAT
+un pārbaudīt, ka $\sharp E(\mathbb{F}_{23}) = 29$. Polinomu aritmētiku (kāpināšanu un dalīšanu
+ar atlikumu pēc moduļa $\psi_\ell$) var veikt ar skriptu [figs/schoof.py](figs/schoof.py), kas
+izdrukā visus starprezultātus.
+
+**Atbilde:** Šeit $p = 23$, $a = 1$, $b = 4$, $f(x) = x^3 + x + 4$. Visas polinomu vienādības ir
+pēc moduļa $23$.
+
+(a) Hasses intervāla garums ir $4\sqrt{23} \approx 19{,}18$. Reizinājums $2 \cdot 3 = 6$ ir par mazu,
+bet $2 \cdot 3 \cdot 5 = 30 > 19{,}18$, tātad $\ell \in \{2, 3, 5\}$.
+
+(b) **$\ell = 2$.** Ar ātro kāpināšanu pēc moduļa $f$: $x^{23} \equiv 20x^2 + 6x + 21 \pmod{f}$.
+Tad $\gcd(x^{23} - x,\ f) = \gcd(20x^2 + 5x + 21,\ f) = 1$: polinomam $f$ nav sakņu
+$\mathbb{F}_{23}$, līknei nav punktu ar kārtu $2$, tātad $\sharp E$ ir nepāra un $t \equiv 1 \pmod 2$.
+
+**$\ell = 3$.** $\bar{p} = 23 \bmod 3 = 2$. Dalīšanas polinoms
+$\psi_3 = 3x^4 + 6x^2 + 48x - 1 \equiv 3x^4 + 6x^2 + 2x + 22$ (pakāpe $4$: $E[3]$ ir $8$ punkti
+$\ne \mathcal{O}$ ar $4$ dažādām $x$ koordinātēm). Pēc moduļa $\psi_3$ aprēķina:
+
+1. $x^{23} \equiv 13x^3 + 2x^2 + 11x + 20$, $y^{23} = y \cdot f(x)^{11}$ (jo $y^{22} = (y^2)^{11}$);
+   tas ir $\varphi(P)$.
+2. $x^{23^2} = (x^{23})^{23} \equiv 12x^3 + 15x^2 + 14x + 21$ un līdzīgi $y^{23^2}$; tas ir $\varphi^2(P)$.
+3. $\bar{p}P = 2P$. Ievērojiet, ka pēc moduļa $\psi_3$ sanāk $x(2P) \equiv x$: tā kā $3P = \mathcal{O}$,
+   tad $2P = -P = (x, -y)$.
+4. Ar saskaitīšanas formulām aprēķina $\varphi^2(P) + 2P$ un salīdzina ar $\tau \varphi(P)$,
+   $\tau = 0, 1, 2$. Vienādība izpildās pie $\tau = 1$ (gan $x$, gan $y$ koordinātei), tātad
+   $t \equiv 1 \pmod 3$.
+
+**$\ell = 5$.** $\bar{p} = 23 \bmod 5 = 3$; $\psi_5$ ir pakāpes $(25 - 1)/2 = 12$ polinoms. Pēc moduļa
+$\psi_5$ aprēķina $\varphi(P)$, $\varphi^2(P)$ un $3P$ un konstatē, ka $x$ koordinātes sakrīt:
+$x^{23^2} \equiv x(3P)$, bet $y$ koordinātes ir pretējas: $\varphi^2(P) = -3P$. Tātad
+$\varphi^2(P) + 3P = \mathcal{O} = 0 \cdot \varphi(P)$ un $t \equiv 0 \pmod 5$. (Vispārīgā gadījumā
+sakritība $x(\varphi^2(P)) = x(\bar{p}P)$ var nozīmēt arī $\varphi^2(P) = +\bar{p}P$, bet tas iespējams
+tikai tad, ja $\bar{p}$ ir kvadrātisks atlikums pēc moduļa $\ell$; skaitlis $3$ pēc moduļa $5$ tāds nav,
+jo kvadrāti ir tikai $1$ un $4$.)
+
+(c) KAT: $t \equiv 1 \pmod 2$, $t \equiv 1 \pmod 3$, $t \equiv 0 \pmod 5$. No pirmajiem diviem
+$t \equiv 1 \pmod 6$, t.i., $t \in \{\ldots, -5, 1, 7, 13, 19, 25, \ldots\}$; no tiem dalās ar $5$
+tikai $-5$ un $25$, tātad $t \equiv 25 \equiv -5 \pmod{30}$. Hasses intervālā
+$\lvert t \rvert \le 2\sqrt{23} \approx 9{,}59$ ir vienīgi $t = -5$, tāpēc
+
+$$\sharp E(\mathbb{F}_{23}) = p + 1 - t = 23 + 1 + 5 = 29.$$
+
+Tas sakrīt ar $29$ punktiem tabulā nodaļā "ECDSA piemērs mazā grupā". Tā kā $29$ ir pirmskaitlis,
+grupa ir cikliska un katrs punkts $\ne \mathcal{O}$ ir ģenerators. $\square$
+
 
 ## Izmantotā literatūra
 
@@ -1250,4 +1383,10 @@ USENIX Security 2014. [https://www.usenix.org/conference/usenixsecurity14/techni
 [https://doi.org/10.1007/978-3-642-04101-3](https://doi.org/10.1007/978-3-642-04101-3).
 
 <a id="HMV04"></a>**[HMV04]** D.Hankerson, A.Menezes, S.Vanstone, *Guide to Elliptic Curve Cryptography*, Springer, 2004.
+
+<a id="Sch85"></a>**[Sch85]** R.Schoof, *Elliptic Curves over Finite Fields and the Computation of Square Roots mod p*,
+Mathematics of Computation 44(170), 1985, 483-494.
+
+<a id="Was08"></a>**[Was08]** L.Washington, *Elliptic Curves: Number Theory and Cryptography*, 2. izdevums, Chapman & Hall/CRC, 2008
+(4. nodaļa: Frobeniusa endomorfisms, Hasses teorēma, Shofa algoritms).
 [https://doi.org/10.1007/b97644](https://doi.org/10.1007/b97644).

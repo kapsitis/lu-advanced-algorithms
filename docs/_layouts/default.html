@@ -46,6 +46,23 @@
   try { window.localStorage.setItem("lu-advanced-algorithms.lang", "{{ page_lang }}"); } catch (e) {}
 </script>
 <script>
+  // GitHub Pages serves *.py files as downloads. Point links to the site's own .py files
+  // to GitHub's source view (syntax-highlighted, opens in the browser) instead:
+  // <baseurl>/lectures/x/figs/foo.py -> <source_blob_url>/lectures/x/figs/foo.py
+  document.addEventListener("DOMContentLoaded", function () {
+    var blob = "{{ site.source_blob_url }}";
+    if (!blob) return;
+    var base = new URL("{{ '/' | relative_url }}", window.location.href).pathname;
+    document.querySelectorAll("a[href]").forEach(function (a) {
+      var url;
+      try { url = new URL(a.getAttribute("href"), document.baseURI); } catch (e) { return; }
+      if (url.origin !== window.location.origin || !/\.py$/i.test(url.pathname)) return;
+      if (url.pathname.indexOf(base) !== 0) return;
+      a.href = blob + "/" + decodeURI(url.pathname.slice(base.length)) + url.hash;
+    });
+  });
+</script>
+<script>
     window.MathJax = {
     tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']],

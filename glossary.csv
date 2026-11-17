@@ -642,3 +642,16 @@ Hovgreivs-Grehems / Smarts,Howgrave-Graham / Smart,name,
 Semajevs,Semaev,name,
 A.Korbellīni,Andrea Corbellini,name,
 E.Snoudens,Edward Snowden,name,
+Frobeniusa endomorfisms,Frobenius endomorphism,standard,
+Frobeniusa pēda,trace of Frobenius,standard,"t = p + 1 - #E(F_p); Latvian term chosen for this course (not found in termini.gov.lv)"
+raksturīgais vienādojums (Frobeniusa),characteristic equation (of Frobenius),standard,
+Shofa algoritms,Schoof's algorithm,name,"R.Schoof (Dutch); transliteration Shofs follows the Dutch sch -> sh rule, not yet confirmed"
+SEA algoritms,SEA algorithm (Schoof–Elkies–Atkin),name,
+dalīšanas polinoms,division polynomial,standard,
+ℓ-torsijas punkti,ℓ-torsion points,course,"E[ℓ] = {P : ℓP = O}; Latvian term not found in termini.gov.lv"
+vispārīgais punkts,generic point,course,"symbolic point (x, y) used in Schoof's algorithm"
+Fermā mazā teorēma,Fermat's little theorem,name,
+algebriskais slēgums,algebraic closure,standard,
+lauka paplašinājums,field extension,standard,
+kvadrātisks atlikums,quadratic residue,standard,
+grupas homomorfisms,group homomorphism,standard,

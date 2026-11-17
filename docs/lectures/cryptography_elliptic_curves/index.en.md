@@ -145,10 +145,8 @@ The coefficients $a, b \in \mathbb{F}_p$ must satisfy the condition $4a^3 + 27b^
 it means that the polynomial $x^3 + ax + b$ has no multiple roots, and the curve has no "cusps" or
 self-intersections at which a tangent could not be drawn.
 
-The number of points $\#E(\mathbb{F}_p)$ of the curve (including $\mathcal{O}$) is close to $p + 1$: by
-*Hasse's theorem* $\left\lvert \#E(\mathbb{F}_p) - (p + 1) \right\rvert \le 2\sqrt{p}$. Intuition: for about
-half of the values $x$ the right-hand side $x^3 + ax + b$ is a square modulo $p$, and then it has two
-roots $\pm y$.
+The number of points of the curve (including $\mathcal{O}$) is denoted by $\sharp E(\mathbb{F}_p)$; it is
+always close to $p + 1$ (Hasse's theorem, see the section "Counting Points and Schoof's Algorithm").
 
 Geometric intuition comes from the same curve over the real numbers $\mathbb{R}$: it is symmetric
 about the $x$ axis (if $(x, y)$ is on the curve, so is $(x, -y)$), and every line that meets the curve in two
@@ -273,6 +271,93 @@ small subgroups (the Pohlig–Hellman method, see the section "Invalid-Curve and
 Attacks").
 
 
+### Counting Points and Schoof's Algorithm
+
+To check that the group order is a large prime, one first needs to know $\sharp E(\mathbb{F}_p)$.
+In the small examples the points can simply be counted: for each $x \in \mathbb{F}_p$ check whether
+$x^3 + ax + b$ is a square modulo $p$. But this takes $p$ steps, which is impossible for $p \approx 2^{256}$.
+A polynomial-time algorithm rests on two facts about the *Frobenius endomorphism* of the curve.
+
+**The Frobenius endomorphism:**
+
+Consider points of the curve whose coordinates come not only from $\mathbb{F}_p$, but also from its
+extensions $\mathbb{F}_{p^k}$ (all together, from the algebraic closure $\overline{\mathbb{F}}_p$). The map
+
+$$\varphi(x, y) = (x^p, y^p), \qquad \varphi(\mathcal{O}) = \mathcal{O}$$
+
+is the *Frobenius endomorphism*. It maps a point of the curve to a point of the curve again (because
+$(u + v)^p = u^p + v^p$ in a field of characteristic $p$, and $a^p = a$, $b^p = b$), and it is a group
+homomorphism: $\varphi(P + Q) = \varphi(P) + \varphi(Q)$, because the addition formulas contain only
+field operations and coefficients from $\mathbb{F}_p$. By Fermat's little theorem $z^p = z$ exactly when
+$z \in \mathbb{F}_p$, therefore
+
+$$E(\mathbb{F}_p) = \{ P : \varphi(P) = P \}.$$
+
+**Theorem (characteristic equation).** There exists an integer $t$ (the *trace of Frobenius*) such
+that for every point $P \in E(\overline{\mathbb{F}}_p)$
+
+$$\varphi^2(P) - t\,\varphi(P) + pP = \mathcal{O}, \qquad \text{and} \qquad
+\sharp E(\mathbb{F}_p) = p + 1 - t.$$
+
+(Here $\varphi^2(P) = (x^{p^2}, y^{p^2})$, and $t\,\varphi(P)$, $pP$ are ordinary multiplication by an integer
+in the group of the curve. For a proof, see [[Was08]](#Was08), Section 4.2.)
+
+**Hasse's theorem.** $\lvert t \rvert \le 2\sqrt{p}$, i.e.,
+$\left\lvert \sharp E(\mathbb{F}_p) - (p + 1) \right\rvert \le 2\sqrt{p}$.
+
+Intuition: for about half of the values $x$ the right-hand side $x^3 + ax + b$ is a square modulo $p$,
+and then it has two roots $\pm y$; the others have none. So "on average" there are
+$2 \cdot p/2 + 1 = p + 1$ points, and the deviation behaves like a sum of $p$ random $\pm 1$ values --
+it is of order $\sqrt{p}$. Examples in this lecture: the curve over $\mathbb{F}_{17}$ has $19$ points
+($t = 18 - 19 = -1$), the curve over $\mathbb{F}_{23}$ in the ECDSA example has $29$ points
+($t = 24 - 29 = -5$, and $\lvert -5 \rvert \le 2\sqrt{23} \approx 9.59$), the curve over $\mathbb{F}_{271}$
+in the Montgomery ladder example has $269$ points ($t = 3$).
+
+**The idea of Schoof's algorithm:**
+
+R. Schoof (1985, [[Sch85]](#Sch85)) observed that $t$ need not be found all at once -- it is enough
+to know the remainders $t \bmod \ell$ for a few small primes $\ell = 2, 3, 5, 7, \ldots$:
+
+1. **How many primes are needed.** By Hasse's theorem $t$ belongs to the interval $[-2\sqrt{p}, 2\sqrt{p}]$
+   of length $4\sqrt{p}$. If $\ell_1 \ell_2 \cdots \ell_k > 4\sqrt{p}$, then the Chinese remainder theorem
+   (CRT) combines the remainders $t \bmod \ell_i$ into $t \bmod \ell_1 \cdots \ell_k$, and only one
+   number in this interval has this remainder. Since the product of primes grows exponentially,
+   $\ell = O(\log p)$ suffices.
+2. **The remainder $t \bmod 2$.** Since $p + 1$ is even, $t$ is even exactly when $\sharp E(\mathbb{F}_p)$
+   is even, i.e., when the group contains a point of order $2$. Such points are $(x_0, 0)$, where
+   $x_0 \in \mathbb{F}_p$ is a root of the polynomial $x^3 + ax + b$. Therefore
+   $t \equiv 0 \pmod 2 \iff \gcd(x^p - x,\ x^3 + ax + b) \neq 1$ (the polynomial $x^p - x$ is the
+   product of $x - c$ over all elements of $\mathbb{F}_p$).
+3. **The remainder $t \bmod \ell$ for odd $\ell$.** Consider the *$\ell$-torsion points*
+   $E[\ell] = \{ P : \ell P = \mathcal{O} \}$. For these points $pP = \bar{p} P$, where $\bar{p} = p \bmod \ell$,
+   and $t\,\varphi(P) = \tau \varphi(P)$, where $\tau = t \bmod \ell$ (since $\varphi(P) \in E[\ell]$ as well).
+   So on $E[\ell]$ the characteristic equation becomes
+
+   $$\varphi^2(P) + \bar{p} P = \tau\, \varphi(P), \qquad \tau \in \{0, 1, \ldots, \ell - 1\},$$
+
+   and it remains to test the $\ell$ possible values of $\tau$.
+4. **How to compute with points we do not know.** The coordinates of the points in $E[\ell]$ usually
+   lie in a large extension $\mathbb{F}_{p^k}$, and nobody finds them. Instead, one computes with the
+   *generic point* $P = (x, y)$, where $x$ and $y$ are variables, modulo the *division polynomial*
+   $\psi_\ell(x)$: its roots are exactly the $x$ coordinates of all points in $E[\ell] \setminus \{\mathcal{O}\}$
+   (for odd $\ell$, $\deg \psi_\ell = (\ell^2 - 1)/2$), and $y^2$ is replaced by $x^3 + ax + b$. For example,
+   $\psi_3(x) = 3x^4 + 6ax^2 + 12bx - a^2$. An identity that holds modulo $\psi_\ell$ holds for *all*
+   $\ell$-torsion points at once. The coordinates $x^p$, $y^p$, $x^{p^2}$, $y^{p^2}$ are computed by fast
+   exponentiation modulo $\psi_\ell$, and division in the point addition formulas means taking the
+   inverse in the polynomial ring modulo $\psi_\ell$ (the extended Euclidean algorithm). If some divisor
+   is not invertible, its $\gcd$ with $\psi_\ell$ is a nontrivial factor of $\psi_\ell$, and the
+   computation can continue modulo that factor.
+
+All polynomials have degree $O(\ell^2) = O(\log^2 p)$, so Schoof's algorithm is polynomial in $\log p$
+($O(\log^8 p)$ bit operations in the original version). The improved *SEA algorithm*
+(*Schoof–Elkies–Atkin*) replaces $\psi_\ell$ for many $\ell$ by a factor of degree $O(\ell)$, and with it
+the number of points of a $256$-bit curve is computed in a fraction of a second. This is exactly how
+standard curves are checked (the group order $n$ of P-256) and how new curves are generated: pick random
+coefficients, count the points, and discard curves whose order is not a prime (or a prime times a small
+cofactor). A teaching implementation that prints all intermediate results is
+[figs/schoof.py](figs/schoof.py) (see also Problem 12.7).
+
+
 ### The Montgomery Ladder
 
 Double-and-add performs *different* operations depending on the secret bit: a bit $1$
@@ -354,7 +439,7 @@ curve $y^2 = x^3 - 3x + b$ over $\mathbb{F}_p$ with the parameters (in hexadecim
 * $n = \texttt{ffffffff 00000000 ffffffff ffffffff bce6faad a7179e84 f3b9cac2 fc632551}$ (a prime), cofactor $h = 1$.
 
 The script [figs/ecc.py](figs/ecc.py) checks that $G$ is on the curve and $nG = \mathcal{O}$. The cofactor $1$
-means that $\#E = n$ is a prime: all points (except $\mathcal{O}$) are generators, and there are no small
+means that $\sharp E = n$ is a prime: all points (except $\mathcal{O}$) are generators, and there are no small
 subgroups.
 
 Why exactly these parameters:
@@ -887,7 +972,7 @@ For some classes of curves the discrete logarithm is easy, so the standards excl
 
 * **Smooth group order** -- the Pohlig–Hellman method (see above); $n$ must be a large
   prime.
-* **Anomalous curves** ($\#E(\mathbb{F}_p) = p$): ECDLP can be solved in polynomial time (the attack of Smart,
+* **Anomalous curves** ($\sharp E(\mathbb{F}_p) = p$): ECDLP can be solved in polynomial time (the attack of Smart,
   Satoh–Araki and Semaev, 1998–1999).
 * **Small embedding degree** (for example, supersingular curves): the MOV attack
   (Menezes, Okamoto, Vanstone, 1993) uses the *Weil pairing* to transfer ECDLP to the
@@ -1166,6 +1251,55 @@ The ECDSA chain saves about $1$ KB (with RSA-3072 about $1.6$ KB). In the certif
 both from the public key ($294$ vs. $91$ bytes) and from the issuer's signature ($256$ vs. $\approx 71$ bytes);
 the length of an ECDSA signature varies by $1$–$2$ bytes depending on the DER encoding of $r$ and $s$. $\square$
 
+**Problem 12.7:**  
+Use Schoof's algorithm to find the number of points of the curve $y^2 = x^3 + x + 4$ over $\mathbb{F}_{23}$
+(the curve from the section "An ECDSA Example in a Small Group") without enumerating the points.
+(a) Which primes $\ell$ are needed? (b) Describe how $t \bmod \ell$ is found for each of them.
+(c) Combine the result with the CRT and check that $\sharp E(\mathbb{F}_{23}) = 29$. The polynomial
+arithmetic (exponentiation and division with remainder modulo $\psi_\ell$) can be done with the script
+[figs/schoof.py](figs/schoof.py), which prints all intermediate results.
+
+**Answer:** Here $p = 23$, $a = 1$, $b = 4$, $f(x) = x^3 + x + 4$. All polynomial identities are
+modulo $23$.
+
+(a) The length of the Hasse interval is $4\sqrt{23} \approx 19.18$. The product $2 \cdot 3 = 6$ is too small,
+but $2 \cdot 3 \cdot 5 = 30 > 19.18$, so $\ell \in \{2, 3, 5\}$.
+
+(b) **$\ell = 2$.** By fast exponentiation modulo $f$: $x^{23} \equiv 20x^2 + 6x + 21 \pmod{f}$.
+Then $\gcd(x^{23} - x,\ f) = \gcd(20x^2 + 5x + 21,\ f) = 1$: the polynomial $f$ has no roots in
+$\mathbb{F}_{23}$, the curve has no points of order $2$, so $\sharp E$ is odd and $t \equiv 1 \pmod 2$.
+
+**$\ell = 3$.** $\bar{p} = 23 \bmod 3 = 2$. The division polynomial is
+$\psi_3 = 3x^4 + 6x^2 + 48x - 1 \equiv 3x^4 + 6x^2 + 2x + 22$ (degree $4$: $E[3]$ has $8$ points
+$\ne \mathcal{O}$ with $4$ different $x$ coordinates). Modulo $\psi_3$ compute:
+
+1. $x^{23} \equiv 13x^3 + 2x^2 + 11x + 20$, $y^{23} = y \cdot f(x)^{11}$ (since $y^{22} = (y^2)^{11}$);
+   this is $\varphi(P)$.
+2. $x^{23^2} = (x^{23})^{23} \equiv 12x^3 + 15x^2 + 14x + 21$, and similarly $y^{23^2}$; this is $\varphi^2(P)$.
+3. $\bar{p}P = 2P$. Note that modulo $\psi_3$ we get $x(2P) \equiv x$: since $3P = \mathcal{O}$,
+   we have $2P = -P = (x, -y)$.
+4. Use the addition formulas to compute $\varphi^2(P) + 2P$ and compare it with $\tau \varphi(P)$,
+   $\tau = 0, 1, 2$. Equality holds for $\tau = 1$ (for both the $x$ and the $y$ coordinate), so
+   $t \equiv 1 \pmod 3$.
+
+**$\ell = 5$.** $\bar{p} = 23 \bmod 5 = 3$; $\psi_5$ is a polynomial of degree $(25 - 1)/2 = 12$. Modulo
+$\psi_5$ compute $\varphi(P)$, $\varphi^2(P)$ and $3P$ and find that the $x$ coordinates coincide:
+$x^{23^2} \equiv x(3P)$, but the $y$ coordinates are opposite: $\varphi^2(P) = -3P$. So
+$\varphi^2(P) + 3P = \mathcal{O} = 0 \cdot \varphi(P)$ and $t \equiv 0 \pmod 5$. (In general, the coincidence
+$x(\varphi^2(P)) = x(\bar{p}P)$ can also mean $\varphi^2(P) = +\bar{p}P$, but this is possible only if
+$\bar{p}$ is a quadratic residue modulo $\ell$; $3$ is not one modulo $5$, since the only squares are
+$1$ and $4$.)
+
+(c) CRT: $t \equiv 1 \pmod 2$, $t \equiv 1 \pmod 3$, $t \equiv 0 \pmod 5$. The first two give
+$t \equiv 1 \pmod 6$, i.e., $t \in \{\ldots, -5, 1, 7, 13, 19, 25, \ldots\}$; of these, only $-5$ and $25$
+are divisible by $5$, so $t \equiv 25 \equiv -5 \pmod{30}$. In the Hasse interval
+$\lvert t \rvert \le 2\sqrt{23} \approx 9.59$ the only such value is $t = -5$, therefore
+
+$$\sharp E(\mathbb{F}_{23}) = p + 1 - t = 23 + 1 + 5 = 29.$$
+
+This agrees with the $29$ points in the table in the section "An ECDSA Example in a Small Group".
+Since $29$ is a prime, the group is cyclic and every point $\ne \mathcal{O}$ is a generator. $\square$
+
 
 ## References
 
@@ -1252,4 +1386,10 @@ USENIX Security 2014. [https://www.usenix.org/conference/usenixsecurity14/techni
 [https://doi.org/10.1007/978-3-642-04101-3](https://doi.org/10.1007/978-3-642-04101-3).
 
 <a id="HMV04"></a>**[HMV04]** D. Hankerson, A. Menezes, S. Vanstone, *Guide to Elliptic Curve Cryptography*, Springer, 2004.
+
+<a id="Sch85"></a>**[Sch85]** R. Schoof, *Elliptic Curves over Finite Fields and the Computation of Square Roots mod p*,
+Mathematics of Computation 44(170), 1985, 483–494.
+
+<a id="Was08"></a>**[Was08]** L. Washington, *Elliptic Curves: Number Theory and Cryptography*, 2nd edition, Chapman & Hall/CRC, 2008
+(Chapter 4: the Frobenius endomorphism, Hasse's theorem, Schoof's algorithm).
 [https://doi.org/10.1007/b97644](https://doi.org/10.1007/b97644).

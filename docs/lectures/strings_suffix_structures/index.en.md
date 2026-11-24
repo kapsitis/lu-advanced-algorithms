@@ -12,6 +12,8 @@ In this chapter we look at data structures that make it possible to quickly sear
 2. Suffix tries, suffix trees and suffix arrays.
 3. Document retrieval.
 4. Building suffix trees in linear time.
+5. The FM-index: searching in the Burrows–Wheeler transform.
+6. LZ77 compression with a suffix array.
 
 ## One-Time and Repeated Searching
 
@@ -309,6 +311,114 @@ LCP information can also be added to a suffix array: the LCP (*longest common pr
 
 Suffix arrays are closely related to the Burrows–Wheeler transform (see [4. Burrows–Wheeler Transform]({{ '/lectures/lossless_burrows_wheeler/' | relative_url }})).
 
+### The FM-Index
+
+A suffix array for a text of length $n$ takes $n$ integers, i.e. $4n$ or $8n$ bytes -- many times more than the text itself. The human genome has about $3 \cdot 10^9$ letters $\mathtt{A}, \mathtt{C}, \mathtt{G}, \mathtt{T}$, and its suffix array does not fit into the memory of an ordinary computer. Paolo Ferragina and Giovanni Manzini (2000) discovered that for pattern searching the Burrows–Wheeler transform and a few small tables are enough. This data structure is called the *FM-index*.
+
+**BWT from the suffix array:** The sorted cyclic permutations (in Lecture 4) correspond to the sorted suffixes, since $\mathtt{\\$}$ is the smallest symbol. So the last column of the BWT consists of the letters that stand immediately *before* each suffix:
+
+$$
+L[r] = T[SA[r] - 1] \quad (\text{if } SA[r] = 0, \text{ then } L[r] = \mathtt{\$}).
+$$
+
+For the text $\mathtt{banana\\$}$:
+
+| $r$ | $SA[r]$ | Suffix (the $F$ column is its first letter) | $L[r]$ |
+| --- | --- | --- | --- |
+| $0$ | $6$ | $\mathtt{\\$}$ | $\mathtt{a}$ |
+| $1$ | $5$ | $\mathtt{a\\$}$ | $\mathtt{n}$ |
+| $2$ | $3$ | $\mathtt{ana\\$}$ | $\mathtt{n}$ |
+| $3$ | $1$ | $\mathtt{anana\\$}$ | $\mathtt{b}$ |
+| $4$ | $0$ | $\mathtt{banana\\$}$ | $\mathtt{\\$}$ |
+| $5$ | $4$ | $\mathtt{na\\$}$ | $\mathtt{a}$ |
+| $6$ | $2$ | $\mathtt{nana\\$}$ | $\mathtt{a}$ |
+
+So $L = \mathtt{annb\\$aa}$ (the same as BWT($\mathtt{BANANA\\$}$) = $\mathtt{ANNB\\$AA}$ in Lecture 4).
+
+**Two auxiliary tables:**
+
+* $C[c]$ -- the number of letters in the text that are alphabetically smaller than $c$. The rows whose suffixes start with the letter $c$ occupy the interval of the suffix array from $C[c]$ (inclusive) to $C[c] + (\text{frequency of } c)$ (exclusive). In the example $C[\mathtt{\\$}] = 0$, $C[\mathtt{a}] = 1$, $C[\mathtt{b}] = 4$, $C[\mathtt{n}] = 5$.
+* $\textit{Occ}(c, i)$ -- the number of occurrences of the letter $c$ in the prefix $L[0]\ldots{}L[i-1]$ of the string $L$ (in its first $i$ letters).
+
+These tables express the LF mapping of Lecture 4: $\textit{LF}(r) = C[L[r]] + \textit{Occ}(L[r], r)$. It relies on the same fact as the inverse BWT: equal letters in the column $L$ and in the column $F$ are ordered in the same way.
+
+**Backward search:** All suffixes that start with the pattern $P$ occupy one contiguous interval $[sp, ep)$ of the suffix array. This interval is found by reading the pattern *from the end*: if we know the interval of the suffixes that start with $P[j+1]\ldots{}P[m-1]$, then the rows in it whose $L$ letter is $c = P[j]$ are mapped by the LF mapping exactly to the suffixes that start with $cP[j+1]\ldots{}P[m-1]$. Moreover, they are mapped to a contiguous interval that is determined by its endpoints alone.
+
+$\textsf{BackwardSearch}(P)$
+1. $sp = 0$; $\;ep = n$ $\quad$ *// initially -- all rows*
+2. **for** $j = m-1$ **downto** $0$:
+3. $\quad c = P[j]$
+4. $\quad sp = C[c] + \textit{Occ}(c, sp)$
+5. $\quad ep = C[c] + \textit{Occ}(c, ep)$
+6. $\quad$ **if** $sp \geq ep$: **return** "not found"
+7. **return** $[sp, ep)$ $\quad$ *// the number of occurrences is $ep - sp$*
+
+**Example:** We search for $P = \mathtt{ana}$ in the text $\mathtt{banana\\$}$ ($L = \mathtt{annb\\$aa}$).
+
+| Step | Letter $c$ | $sp = C[c] + \textit{Occ}(c, sp)$ | $ep = C[c] + \textit{Occ}(c, ep)$ | Suffixes in the interval |
+| --- | --- | --- | --- | --- |
+| start | | $0$ | $7$ | all |
+| $j = 2$ | $\mathtt{a}$ | $1 + 0 = 1$ | $1 + 3 = 4$ | $\mathtt{a\\$}, \mathtt{ana\\$}, \mathtt{anana\\$}$ |
+| $j = 1$ | $\mathtt{n}$ | $5 + 0 = 5$ | $5 + 2 = 7$ | $\mathtt{na\\$}, \mathtt{nana\\$}$ |
+| $j = 0$ | $\mathtt{a}$ | $1 + 1 = 2$ | $1 + 3 = 4$ | $\mathtt{ana\\$}, \mathtt{anana\\$}$ |
+
+The pattern $\mathtt{ana}$ occurs $ep - sp = 2$ times; the positions are $SA[2] = 3$ and $SA[3] = 1$.
+
+**Time and space:**
+
+* Counting the occurrences takes $m$ steps, each with two $\textit{Occ}$ queries. If the $\textit{Occ}$ values are stored only at every $b$-th position (at checkpoints) and the rest is counted from $L$, a query takes $O(b)$ time; with bit operations it can be done in constant time.
+* To find the *positions* of the occurrences, only every $s$-th element of the suffix array is stored; a missing $SA[r]$ is found by walking back with LF steps until a stored element is reached ($\leq s$ steps).
+* The string $L$ itself compresses well (see Lecture 4 -- move-to-front and entropy codes), so the FM-index can take *less* space than the original text and still allows searching for any pattern. Such data structures are called *compressed indexes*.
+
+The FM-index is used by the DNA read aligners Bowtie and BWA: millions of short DNA fragments must be found in the human genome, and the index of the whole genome fits into a few gigabytes of memory.
+
+### LZ77 with a Suffix Array
+
+At each cursor position $i$ the LZ77 encoder (see [3. Lempel–Ziv Algorithms]({{ '/lectures/lossless_lempel_ziv/' | relative_url }})) solves a string searching problem: find the longest string that starts at position $i$ and has already occurred earlier in the text (starts at some position $j < i$; the match may overlap the part being encoded). Practical encoders do this with hash tables and a limited window. A suffix array solves this problem for *all* positions together in linear time and without a window limit.
+
+**Definition:** The *longest previous factor* array (LPF) is
+
+$$
+\textit{LPF}[i] = \max \left\lbrace \mathrm{lcp}(T[i:], T[j:]) \,:\, 0 \leq j < i \right\rbrace,
+$$
+
+where $\mathrm{lcp}$ is the length of the longest common prefix of two suffixes (if $i = 0$, then $\textit{LPF}[0] = 0$).
+
+**Main idea:** In a suffix array the $\mathrm{lcp}$ of two suffixes is the minimum of the LCP values between their rows. So moving away from the row of the suffix $T[i:]$ in the suffix array, the $\mathrm{lcp}$ can only decrease. Of all earlier suffixes ($j < i$), the longest common prefix is attained by one of the two *nearest* ones -- the nearest one above in the suffix array and the nearest one below:
+
+* $\textit{PSV}(i)$ (*previous smaller value*) -- the nearest row above the row of the suffix $T[i:]$ with $SA[r] < i$;
+* $\textit{NSV}(i)$ (*next smaller value*) -- the nearest row below the row of the suffix $T[i:]$ with $SA[r] < i$.
+
+Then $\textit{LPF}[i] = \max\left(\mathrm{lcp}(T[i:], T[SA[\textit{PSV}(i)]:]),\; \mathrm{lcp}(T[i:], T[SA[\textit{NSV}(i)]:])\right)$, and the source position is the one of the two that gives the larger value. All $\textit{PSV}$ and $\textit{NSV}$ values can be found in one pass over the suffix array with a stack (similarly to building a Cartesian tree), and the $\textit{LPF}$ array can also be computed in $O(n)$ time (Maxime Crochemore, Lucian Ilie, 2008).
+
+**LZ77 encoding with LPF:** The encoder outputs the same triples $(d, \ell, x)$ as in Lecture 3:
+
+$\textsf{LZ77-SA}(T)$ $\quad$ *// $T[0:n-1]$ ends with $\mathtt{\\$}$*
+1. Build $SA$, $LCP$ and $\textit{LPF}$ (together with the source positions $\textit{src}[i]$)
+2. $i = 0$
+3. **while** $i < n-1$:
+4. $\quad \ell = \min(\textit{LPF}[i],\; n-2-i)$ $\quad$ *// leave at least one letter $x$*
+5. $\quad$ **if** $\ell = 0$: output $(0, 0, T[i])$
+6. $\quad$ **else** output $(i - \textit{src}[i], \ell, T[i+\ell])$
+7. $\quad i = i + \ell + 1$
+
+**Example:** $T = \mathtt{abcabcabd\\$}$ ($n = 10$). The suffix array is $[9, 0, 3, 6, 1, 4, 7, 2, 5, 8]$.
+
+| $i$ | Suffix | $\textit{PSV}$ source | $\textit{NSV}$ source | $\textit{LPF}[i]$ | $\textit{src}[i]$ |
+| --- | --- | --- | --- | --- | --- |
+| $0$ | $\mathtt{abcabcabd\\$}$ | -- | -- | $0$ | -- |
+| $1$ | $\mathtt{bcabcabd\\$}$ | $0$ | -- | $0$ | -- |
+| $2$ | $\mathtt{cabcabd\\$}$ | $1$ | -- | $0$ | -- |
+| $3$ | $\mathtt{abcabd\\$}$ | $0$ | $1$ | $5$ | $0$ |
+| $4$ | $\mathtt{bcabd\\$}$ | $1$ | $2$ | $4$ | $1$ |
+| $5$ | $\mathtt{cabd\\$}$ | $2$ | -- | $3$ | $2$ |
+
+(The "source" columns contain the position $SA[r]$ in the corresponding row $r$; the table shows only the positions needed for encoding.) For example, immediately above the suffix $T[3:] = \mathtt{abcabd\\$}$ in the suffix array is $T[0:] = \mathtt{abcabcabd\\$}$ ($0 < 3$, LCP $= 5$), so $\textit{LPF}[3] = 5$.
+
+The encoder outputs $(0,0,\mathtt{a})$, $(0,0,\mathtt{b})$, $(0,0,\mathtt{c})$, and then at position $i = 3$ -- $(3, 5, \mathtt{d})$: $5$ letters $\mathtt{abcab}$ are copied from $3$ positions back (the match overlaps the part being encoded), and $\mathtt{d}$ is appended.
+
+**Where it is used:** Practical compressors (gzip, zstd) limit the window and search with hash tables or binary trees, since this is faster and needs less memory. Suffix arrays are used when an *optimal* factorization or a very long window is needed, for example, when compressing large collections of similar texts (the genomes of many people, the version history of documents). The number $z$ of LZ77 phrases is a measure of how repetitive a text is, and it is also the basis of compressed indexes (the LZ-index, the r-index) that, like the FM-index, allow searching directly in compressed text.
+
 ## Problems
 
 A tool for searching patterns in a dictionary: [Pattern Match](https://www.litscape.com/word_tools/pattern_match.php).
@@ -367,6 +477,39 @@ print(suf_array)
   style="width: 100%; max-width: 720px; border:none; background-color:#FFFFFF;"
 />
 
+**Problem 14.3 (Searching with the FM-index):** Consider the text $T = \mathtt{abaaba\\$}$ over the alphabet $\Sigma = \lbrace \mathtt{\\$}, \mathtt{a}, \mathtt{b} \rbrace$.
+
+* **(A)** Find the suffix array and the BWT string $L$ (use $L[r] = T[SA[r]-1]$).
+* **(B)** Find the table $C[c]$.
+* **(C)** Use backward search to determine how many times $\mathtt{aba}$ occurs in the text, and at which positions.
+* **(D)** Use backward search to verify that $\mathtt{bb}$ does not occur in the text.
+
+**Solution:**
+
+* **(A)** The sorted suffixes: $\mathtt{\\$}$ (6), $\mathtt{a\\$}$ (5), $\mathtt{aaba\\$}$ (2), $\mathtt{aba\\$}$ (3), $\mathtt{abaaba\\$}$ (0), $\mathtt{ba\\$}$ (4), $\mathtt{baaba\\$}$ (1). So $SA = [6, 5, 2, 3, 0, 4, 1]$ and $L = \mathtt{abba\\$aa}$.
+* **(B)** The text has one $\mathtt{\\$}$, four $\mathtt{a}$ and two $\mathtt{b}$, so $C[\mathtt{\\$}] = 0$, $C[\mathtt{a}] = 1$, $C[\mathtt{b}] = 5$.
+* **(C)** Start $[0, 7)$. Letter $\mathtt{a}$: $sp = 1 + \textit{Occ}(\mathtt{a}, 0) = 1$, $ep = 1 + \textit{Occ}(\mathtt{a}, 7) = 1 + 4 = 5$. Letter $\mathtt{b}$: $sp = 5 + \textit{Occ}(\mathtt{b}, 1) = 5$, $ep = 5 + \textit{Occ}(\mathtt{b}, 5) = 5 + 2 = 7$. Letter $\mathtt{a}$: $sp = 1 + \textit{Occ}(\mathtt{a}, 5) = 1 + 2 = 3$, $ep = 1 + \textit{Occ}(\mathtt{a}, 7) = 5$. The interval is $[3, 5)$: $\mathtt{aba}$ occurs $2$ times, at the positions $SA[3] = 3$ and $SA[4] = 0$.
+* **(D)** Letter $\mathtt{b}$: $[5, 7)$ (as before). The next letter $\mathtt{b}$: $sp = 5 + \textit{Occ}(\mathtt{b}, 5) = 7$, $ep = 5 + \textit{Occ}(\mathtt{b}, 7) = 7$. Since $sp \geq ep$, the pattern does not occur. (In the rows $5$ and $6$, whose suffixes start with $\mathtt{b}$, the $L$ letters are $\mathtt{a}$ -- no $\mathtt{b}$ is preceded by a $\mathtt{b}$.)
+
+**Problem 14.4 (LZ77 with the longest previous factor):** Consider the text $T = \mathtt{abababb\\$}$ ($n = 8$).
+
+* **(A)** Find the suffix array and the LCP values of adjacent suffixes.
+* **(B)** Use $\textit{PSV}$ and $\textit{NSV}$ to find $\textit{LPF}[2]$ and its source position.
+* **(C)** Find the LZ77 triples $(d, \ell, x)$ output by $\textsf{LZ77-SA}$.
+
+**Solution:**
+
+* **(A)** The sorted suffixes and the LCP with the previous one:
+
+  | $r$ | $0$ | $1$ | $2$ | $3$ | $4$ | $5$ | $6$ | $7$ |
+  | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+  | $SA[r]$ | $7$ | $0$ | $2$ | $4$ | $6$ | $1$ | $3$ | $5$ |
+  | Suffix | $\mathtt{\\$}$ | $\mathtt{abababb\\$}$ | $\mathtt{ababb\\$}$ | $\mathtt{abb\\$}$ | $\mathtt{b\\$}$ | $\mathtt{bababb\\$}$ | $\mathtt{babb\\$}$ | $\mathtt{bb\\$}$ |
+  | $LCP[r]$ | -- | $0$ | $4$ | $2$ | $0$ | $1$ | $3$ | $1$ |
+
+* **(B)** The suffix $T[2:] = \mathtt{ababb\\$}$ is in row $2$. The nearest row above it with $SA[r] < 2$ is row $1$ ($SA[1] = 0$), $\mathrm{lcp} = LCP[2] = 4$. The nearest row below it with $SA[r] < 2$ is row $5$ ($SA[5] = 1$), $\mathrm{lcp} = \min(LCP[3], LCP[4], LCP[5]) = 0$. So $\textit{LPF}[2] = 4$ with source $0$.
+* **(C)** At positions $0$ and $1$ the letters $\mathtt{a}$ and $\mathtt{b}$ occur for the first time: $(0, 0, \mathtt{a})$, $(0, 0, \mathtt{b})$. At position $2$: $\ell = \min(4, n-2-2) = 4$, $d = 2 - 0 = 2$, $x = T[6] = \mathtt{b}$, so $(2, 4, \mathtt{b})$. Then $i = 7 = n-1$, and the encoding ends. Decoding: $\mathtt{a}$, $\mathtt{b}$, then $4$ letters are copied from $2$ positions back (one by one: $\mathtt{a}, \mathtt{b}, \mathtt{a}, \mathtt{b}$) and $\mathtt{b}$ is appended -- this gives $\mathtt{abababb}$.
+
 ## References
 
 * [MIT 6.851 Advanced Data Structures: Session 16 -- Strings](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-851-advanced-data-structures-spring-2012/lecture-videos/session-16-strings/)
@@ -374,4 +517,6 @@ print(suf_array)
 * [CMU: Suffix Trees (slides)](https://www.cs.cmu.edu/~ckingsf/bioinfo-lectures/suffixtrees.pdf)
 * [Suffix Arrays (Yale, J. Aspnes)](https://www.cs.yale.edu/homes/aspnes/pinewiki/SuffixArrays.html) -- on suffix arrays and the Burrows–Wheeler transform.
 * [Suffix arrays: additional explanations (arXiv:1311.1762)](https://arxiv.org/pdf/1311.1762.pdf)
+* P. Ferragina, G. Manzini. [Opportunistic data structures with applications](https://doi.org/10.1109/SFCS.2000.892127). *FOCS 2000* -- the original paper of the FM-index.
+* M. Crochemore, L. Ilie. [Computing Longest Previous Factor in linear time and applications](https://doi.org/10.1016/j.ipl.2007.10.006). *Information Processing Letters* 106(2), 2008.
 * [MIT 6.854J Advanced Algorithms (1999)](https://dspace.mit.edu/bitstream/handle/1721.1/36897/6-854JFall-1999/OcwWeb/Electrical-Engineering-and-Computer-Science/6-854JAdvanced-AlgorithmsFall1999/CourseHome/index.htm)

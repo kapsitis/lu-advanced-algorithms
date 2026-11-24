@@ -12,7 +12,9 @@ permalink: /lectures/strings_search/lv/
 * Algoritms Levenšteina attāluma atrašanai
 * Ripojošās hešfunkcijas
 * Rabina-Karpa algoritms apakšstringa meklēšanai
+* Polinomiālā hešošana ar nejaušu bāzi galīgā laukā
 * Knuta-Morisa-Prata (*Knuth-Morris-Pratt*, KMP) algoritms
+* Aho-Korasikas (*Aho-Corasick*) algoritms vairāku paraugu meklēšanai
 * Bojera-Mūra (*Boyer-Moore*, BM) algoritms
 
 ## Stringu meklēšanas ievads
@@ -348,7 +350,7 @@ $\textsf{RabinKarpStringMatching}(T,P,a,q)$
 10. $\quad rT.\textsf{skip}(T[i - len(P)])$
 11. $\quad rT.\textsf{append}(T[i])$
 
-**Laika sarežģītība sliktākajā gadījumā:** Vai var nodrošināt, ka arī sliktākajā gadījumā viltus pozitīvie (hešfunkciju sakritība pat tad, ja paterns nav atrasts) negadās biežāk kā ar varbūtību $1/len(P)$?
+**Laika sarežģītība sliktākajā gadījumā:** Vai var nodrošināt, ka arī sliktākajā gadījumā viltus pozitīvie (hešfunkciju sakritība pat tad, ja paterns nav atrasts) negadās biežāk kā ar varbūtību $1/len(P)$? (Atbildi sk. sadaļā "Polinomiālā hešošana ar nejaušu bāzi".)
 
 **Rabina-Karpa algoritms vairākiem stringiem P:** Uzdevums: Mums ir teksts $T$ ar garumu $n$. Šobrīd mums ir $k$ meklējamie stringi $\mathcal{P} = \lbrace P_0, P_1, \ldots, P_{k-1} \rbrace$; visiem tiem ir vienāds garums $m$.
 
@@ -369,6 +371,42 @@ $\textsf{RabinKarpMultiString}(T, \mathcal{P}, m)$
 14. $\quad rT.\textsf{append}(T[j+m])$
 
 Šim algoritmam ir laika sarežģītība $O(n + km)$. Naivajai stringu meklēšanai būtu laika sarežģītība $O(nmk)$, ja mēs pārbaudītu meklējamos stringus pa vienam.
+
+### Polinomiālā hešošana ar nejaušu bāzi
+
+Polinomiālajā hešfunkcijā līdz šim bāze $a$ bija alfabēta izmērs (piemēram, $a = 256$), bet $q$ -- kāds fiksēts pirmskaitlis. Ja $a$ un $q$ ir zināmi iepriekš, tad nekas negarantē, ka viltus trāpījumu būs maz: ievades dati var būt tādi, ka hešfunkcijas vērtības sakrīt ļoti bieži. Situāciju glābj vienkārša pārmaiņa: pirmskaitli $q$ fiksē, bet bāzi $a$ izvēlas *nejauši* no kopas $\lbrace 0, 1, \ldots, q-1 \rbrace$ katru reizi, kad algoritmu palaiž.
+
+Atlikumi pēc pirmskaitļa $q$ moduļa veido galīgu lauku $\text{GF}(q)$ (sk. [8. Rīda-Solomona kodi]({{ '/lectures/lossy_reed_solomon/' | relative_url }})). Ja simbolu kodi $c_i$ ir mazāki par $q$, tad virknei $X = c_1c_2\ldots{}c_k$ atbilst polinoms ar koeficientiem no $\text{GF}(q)$:
+
+$$
+X(z) = c_1 z^{k-1} + c_2 z^{k-2} + \ldots + c_{k-1} z + c_k,
+$$
+
+un hešfunkcijas vērtība ir šī polinoma vērtība punktā $z = a$, t.i. $H_a(X) = X(a)\;\text{mod}\;q$. Ripošanas formula paliek tāda pati kā iepriekš.
+
+**Apgalvojums:** Ja $X \neq Y$ ir divas dažādas virknes garumā $k$, bet bāze $a$ ir izvēlēta nejauši un vienmērīgi no $\text{GF}(q)$, tad
+
+$$
+\Pr\left[ H_a(X) = H_a(Y) \right] \leq \frac{k-1}{q}.
+$$
+
+**Pierādījums:** Aplūkojam starpības polinomu $D(z) = X(z) - Y(z) = \sum_{i=1}^{k} (x_i - y_i)\,z^{k-i}$. Tā kā $X \neq Y$ un visi kodi ir mazāki par $q$, vismaz viens koeficients $x_i - y_i$ nav $0$ laukā $\text{GF}(q)$, tātad $D(z)$ nav identiski nulle, un tā pakāpe nepārsniedz $k-1$. Hešfunkciju vērtības sakrīt tad un tikai tad, ja $D(a) = 0$, t.i. ja $a$ ir polinoma $D$ sakne. Nenulles polinomam ar pakāpi $d$ laukā ir ne vairāk kā $d$ saknes (tas pats fakts, uz kura balstās Rīda-Solomona kodi). Tātad no $q$ iespējamām bāzēm ne vairāk kā $k-1$ izraisa sakritību. $\blacksquare$
+
+**Sekas Rabina-Karpa algoritmam:** Katrā no $n-m+1$ nobīdēm viltus trāpījuma varbūtība ir ne lielāka par $(m-1)/q$, tāpēc sagaidāmais viltus trāpījumu skaits ir ne lielāks par $(n-m+1)(m-1)/q$.
+
+* Ja izvēlas $q \geq m(m-1)$, tad katrā nobīdē viltus trāpījuma varbūtība nepārsniedz $1/m$ -- tieši tas, ko prasīja jautājums par laika sarežģītību sliktākajā gadījumā. Pārbaudes izmaksas viltus trāpījumiem ($m$ salīdzināšanas katram) tad sagaidāmi ir ne vairāk kā $O(n)$, un sagaidāmais kopējais laiks ir $O(n + m)$ plus $O(m)$ par katru īsto atradumu.
+* Praksē izvēlas lielu pirmskaitli, piemēram, Mersena pirmskaitli $q = 2^{61}-1$. Tekstam ar $n = 10^9$ simboliem un paraugam ar $m = 1000$ simboliem sagaidāmais viltus trāpījumu skaits visā tekstā ir mazāks par $10^{9} \cdot 999 / 2^{61} \approx 4 \cdot 10^{-7}$.
+* Varbūtība ir ņemta pa *algoritma* nejaušo izvēli (bāzi $a$), nevis pa ievades datiem. Tāpēc novērtējums der jebkuram tekstam un paraugam, arī tādiem, ko izvēlējies ļaunprātīgs lietotājs (ja vien viņš nezina $a$).
+
+**Kāpēc fiksēta bāze ir bīstama:** Pieņemsim, ka $a = 256$ un $q = 251$ ir zināmi. Tā kā $256 \equiv 5 \pmod{251}$, divu burtu virknei $H(c_1c_2) = (5c_1 + c_2)\;\text{mod}\;251$. ASCII kodi ir $\mathtt{A} = 65$, $\mathtt{B} = 66$, $\mathtt{F} = 70$, tāpēc
+
+$$
+H(\mathtt{AF}) = (5 \cdot 65 + 70)\;\text{mod}\;251 = 144 = (5 \cdot 66 + 65)\;\text{mod}\;251 = H(\mathtt{BA}).
+$$
+
+Tā kā $H(UV) = (H(U) \cdot a^{\lvert V\rvert } + H(V))\;\text{mod}\;q$, jebkuru bloku $\mathtt{AF}$ garākā virknē var aizstāt ar $\mathtt{BA}$, nemainot hešfunkcijas vērtību -- no $t$ blokiem var izveidot $2^t$ virknes ar vienādu hešfunkcijas vērtību. Uzbrucējs, kas iesūta tekstu $\mathtt{AFAF}\ldots\mathtt{AF}$ un meklē paraugu $\mathtt{BABA}\ldots\mathtt{BA}$, panāk viltus trāpījumu katrā otrajā nobīdē, un Rabina-Karpa algoritms strādā $O(nm)$ laikā. Tas pats uzbrukums heštabulām (*hash flooding*) var palēnināt tīmekļa serveri; tāpēc programmēšanas valodas (Python, Rust u.c.) savās heštabulās lieto hešfunkcijas ar slepenu nejaušu atslēgu, piemēram, SipHash.
+
+**Saistība ar kriptogrāfiju:** AES-GCM režīma autentifikācijas kods GHASH ir tieši tāda pati polinomiālā hešfunkcija, tikai laukā $\text{GF}(2^{128})$ un ar slepenu bāzi $H$ (sk. [11. AES un hešfunkcijas]({{ '/lectures/cryptography_aes_and_hashing/' | relative_url }})). Arī tā drošības novērtējums balstās uz to pašu sakņu skaita argumentu.
 
 ### MinHash algoritmi
 
@@ -524,7 +562,7 @@ $$
 1. Ievades tekstu lasa tikai vienreiz: $O(n)$, nevis $O(n \cdot m)$, kā naivajam algoritmam.
 2. Parauga $P$ priekšapstrāde notiks laikā $O(m)$, nevis $O(m\cdot\lvert S\rvert )$, kā pilnīgi izveidotam automātam.
 
-Knuta-Morisa-Prata algoritma variantu -- Aho-Korasikas (*Aho-Corasick*) stringu meklēšanas algoritmu -- izmanto ielaušanās atklāšanas sistēmās (*intrusion detection systems*), lai pakešu saturā vienlaikus meklētu daudzus paraugus.
+Knuta-Morisa-Prata algoritma variantu -- Aho-Korasikas (*Aho-Corasick*) stringu meklēšanas algoritmu -- izmanto ielaušanās atklāšanas sistēmās (*intrusion detection systems*), lai pakešu saturā vienlaikus meklētu daudzus paraugus. To aplūkosim šīs sadaļas beigās.
 
 ### Prefiksu funkcija
 
@@ -678,6 +716,73 @@ $\textsf{ComputePrefixFunction}(P)$
 2. Katrā iekšējā cikla iterācijā $\pi[i+1]$ vērtība tiek samazināta.
 3. Tā kā šī vērtība tiek palielināta tikai katrā ārējā cikla iterācijā par $1$, tad tā var sasniegt ne vairāk kā $m$. Tā kā tā nevar būt negatīva, tad samazināties var ne vairāk kā $m$ reizes, tātad iekšējais cikls kopumā izpildās ne vairāk kā $m$ reizes.
 
+### Aho-Korasikas algoritms
+
+**Uzdevums:** Dots teksts $T$ garumā $n$ un paraugu kopa $\mathcal{P} = \lbrace P_1, \ldots, P_k \rbrace$, kuru garumi var būt *dažādi*. Ar $M = \lvert P_1\rvert  + \ldots + \lvert P_k\rvert $ apzīmējam paraugu kopgarumu. Jāatrod visi visu paraugu parādījumi tekstā $T$.
+
+Šis ir "daudzi paraugi, viens dokuments" gadījums no ievada (datu noplūdes novēršana, ielaušanās atklāšana, antivīrusu signatūras). Rabina-Karpa algoritms vairākiem paraugiem prasa, lai visiem paraugiem būtu vienāds garums, bet KMP algoritma darbināšana $k$ reizes prasītu $O(kn + M)$ laiku. A.Aho un M.Korasika (*Alfred Aho, Margaret Corasick*, 1975) apvienoja KMP ideju ar traju (burtu koku, sk. [14. Sufiksu koki un sufiksu masīvi]({{ '/lectures/strings_suffix_structures/' | relative_url }})), un teksts jāizlasa tikai vienreiz.
+
+**Automāta uzbūve:**
+
+1. **Trajs (*goto* funkcija):** Visus paraugus ievieto trajā. Katrs mezgls $v$ atbilst kāda parauga prefiksam $\textit{str}(v)$; saknei atbilst tukšais strings $\varepsilon$. Ar $\textit{child}(v, c)$ apzīmē mezgla $v$ bērnu pa burtu $c$ (ja tāds ir).
+2. **Atteices links (*failure link*):** $\textit{fail}(v)$ ir mezgls, kas atbilst *garākajam* virknes $\textit{str}(v)$ īstajam sufiksam, kas arī ir trajā (t.i. ir kāda parauga prefikss). Tas ir KMP prefiksu funkcijas $\pi$ vispārinājums: ja ir tikai viens paraugs, tad trajs ir ķēde un $\textit{fail}$ sakrīt ar $\pi$.
+3. **Izvade:** $\textit{out}(v)$ ir to paraugu kopa, kas ir virknes $\textit{str}(v)$ sufiksi. Tajā ir paraugs, kas beidzas tieši mezglā $v$ (ja tāds ir), un arī visa kopa $\textit{out}(\textit{fail}(v))$ -- piemēram, ja mezglā $\mathtt{she}$ atrasts paraugs $\mathtt{she}$, tad vienlaikus atrasts arī paraugs $\mathtt{he}$.
+
+Atteices linkus rēķina, apstaigājot trajā mezglus pa līmeņiem (meklēšana plašumā, *breadth-first search*): mezgla $u = \textit{child}(v, c)$ atteices links atkarīgs tikai no seklākiem mezgliem.
+
+$\textsf{BuildAhoCorasick}(\mathcal{P})$
+1. Izveido traju visiem paraugiem $P \in \mathcal{P}$; mezglam, kurā beidzas $P$, pievieno $P$ kopai $\textit{out}$
+2. $Q = $ tukša rinda
+3. **for** katram saknes bērnam $u$:
+4. $\quad \textit{fail}(u) = \textit{root}$; $\;Q.\textsf{enqueue}(u)$
+5. **while** $Q$ nav tukša:
+6. $\quad v = Q.\textsf{dequeue}()$
+7. $\quad$ **for** katram bērnam $u = \textit{child}(v, c)$:
+8. $\quad\quad Q.\textsf{enqueue}(u)$
+9. $\quad\quad f = \textit{fail}(v)$
+10. $\quad\quad$ **while** $f \neq \textit{root}$ **and** $\textit{child}(f, c)$ neeksistē:
+11. $\quad\quad\quad f = \textit{fail}(f)$
+12. $\quad\quad$ **if** $\textit{child}(f, c)$ eksistē **then** $\textit{fail}(u) = \textit{child}(f, c)$ **else** $\textit{fail}(u) = \textit{root}$
+13. $\quad\quad \textit{out}(u) = \textit{out}(u) \cup \textit{out}(\textit{fail}(u))$
+
+Meklēšana ir tāda pati kā $\textsf{KMPmatcher}$, tikai $\pi$ vietā ir $\textit{fail}$:
+
+$\textsf{AhoCorasickMatcher}(T)$
+1. $v = \textit{root}$
+2. **for** $i = 0$ **to** $n-1$:
+3. $\quad$ **while** $v \neq \textit{root}$ **and** $\textit{child}(v, T[i])$ neeksistē:
+4. $\quad\quad v = \textit{fail}(v)$ $\quad$ *// hipotēze bija nepareiza; pārejam uz īsāku sufiksu*
+5. $\quad$ **if** $\textit{child}(v, T[i])$ eksistē:
+6. $\quad\quad v = \textit{child}(v, T[i])$
+7. $\quad$ **for** $P \in \textit{out}(v)$:
+8. $\quad\quad$ print "Paraugs" $P$ "parādās ar nobīdi" $i - \lvert P\rvert  + 1$
+
+**Piemērs:** Paraugu kopa $\mathcal{P} = \lbrace \mathtt{he}, \mathtt{she}, \mathtt{his}, \mathtt{hers} \rbrace$. Trajā ir $9$ mezgli (neskaitot sakni); tie un to atteices linki:
+
+| Mezgls $v$ | $\mathtt{h}$ | $\mathtt{he}$ | $\mathtt{her}$ | $\mathtt{hers}$ | $\mathtt{hi}$ | $\mathtt{his}$ | $\mathtt{s}$ | $\mathtt{sh}$ | $\mathtt{she}$ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| $\textit{fail}(v)$ | $\varepsilon$ | $\varepsilon$ | $\varepsilon$ | $\mathtt{s}$ | $\varepsilon$ | $\mathtt{s}$ | $\varepsilon$ | $\mathtt{h}$ | $\mathtt{he}$ |
+| $\textit{out}(v)$ | | $\mathtt{he}$ | | $\mathtt{hers}$ | | $\mathtt{his}$ | | | $\mathtt{she}, \mathtt{he}$ |
+
+Piemēram, $\textit{fail}(\mathtt{she}) = \mathtt{he}$, jo $\mathtt{he}$ ir garākais virknes $\mathtt{she}$ īstais sufikss, kas ir trajā. Bet $\textit{fail}(\mathtt{her}) = \varepsilon$, jo ne $\mathtt{er}$, ne $\mathtt{r}$ nav neviena parauga prefikss.
+
+Meklējam tekstā $T = \mathtt{ushers}$:
+
+| $i$ | $0$ | $1$ | $2$ | $3$ | $4$ | $5$ |
+| --- | --- | --- | --- | --- | --- | --- |
+| $T[i]$ | $\mathtt{u}$ | $\mathtt{s}$ | $\mathtt{h}$ | $\mathtt{e}$ | $\mathtt{r}$ | $\mathtt{s}$ |
+| Stāvoklis $v$ | $\varepsilon$ | $\mathtt{s}$ | $\mathtt{sh}$ | $\mathtt{she}$ | $\mathtt{her}$ | $\mathtt{hers}$ |
+| Izvade | | | | $\mathtt{she}$ (nobīde $1$), $\mathtt{he}$ (nobīde $2$) | | $\mathtt{hers}$ (nobīde $2$) |
+
+Pie $i = 4$ mezglam $\mathtt{she}$ nav bērna $\mathtt{r}$, tāpēc pāriet pa atteices linku uz $\mathtt{he}$, kuram bērns $\mathtt{r}$ ir.
+
+**Laika sarežģītība:**
+
+* Traja un atteices linku izveidošana prasa $O(M)$ laiku (ja bērnus glabā heštabulā; ar masīvu garumā $\lvert \Sigma\rvert $ katrā mezglā -- $O(M \cdot \lvert \Sigma\rvert )$). Iekšējā cikla soļu skaitu novērtē tāpat kā prefiksu funkcijai: katram paraugam atteices linka dziļums pieaug ne vairāk kā par $1$ uz katru burtu.
+* Meklēšana prasa $O(n + z)$ laiku, kur $z$ ir atrasto parādījumu skaits. Atteices linku pāreju skaits nepārsniedz $n$, jo katra pāreja samazina pašreizējā mezgla dziļumu, bet dziļums palielinās ne vairāk kā par $1$ uz katru teksta burtu. (Lai izvade arī maksātu $O(1)$ par katru parādījumu, kopas $\textit{out}(v)$ nekopē, bet katrā mezglā glabā linku uz tuvāko mezglu pa atteices linku ķēdi, kurā beidzas kāds paraugs.)
+
+Aho-Korasikas algoritmu izmanto UNIX rīks `fgrep` (`grep -F`), ielaušanās atklāšanas sistēmas Snort un Suricata, antivīrusu programmas (piemēram, ClamAV) un DLP produkti, kas pārbauda dokumentus pēc garā aizliegto vārdu saraksta.
+
 ## Bojera-Mūra algoritms
 
 **Pamatideja:** Bojera-Mūra algoritms sāk salīdzināšanu no pēdējā simbola ($P[m-1]$ un $T[i+m-1]$). Nesakritības gadījumā salīdzināmo virkni var būt iespējams pabīdīt uz priekšu vairāk nekā par $1$ simbolu. Piemēram, ja $T[i+m-1]$ ir simbols, kas nesakrīt ne ar vienu no $P[0],\ldots,P[m-1]$, tad varam pārbīdīt virkni par $m$ simboliem uz priekšu.
@@ -821,12 +926,52 @@ $$
 
 **13.4. uzdevums (Naivās tekstu meklēšanas vidējā sarežģītība):** Pieņemsim, ka paraugs $P$ un teksts $T$ ir nejauši izvēlēti virknēm ar garumiem $m$ un $n$ no alfabēta ar $a$ burtiem ($a \geq 2$). Kāds ir sagaidāmais burtu salīdzināšanu skaits naivajā algoritmā, ja katram salīdzinājumam ir izdošanās iespēja $1/a$?
 
+**13.5. uzdevums (Polinomiālā hešošana laukā GF(7)):** Strādājam laukā $\text{GF}(7)$, t.i. $q = 7$. Simbolu kodi ir skaitļi no $0$ līdz $6$. Hešfunkcija virknei $c_1c_2c_3$ ir $H_a(c_1c_2c_3) = (c_1a^2 + c_2a + c_3)\;\text{mod}\;7$. Aplūkojam virknes $X = (1, 2, 3)$ un $Y = (3, 2, 1)$.
+
+* **(A)** Aprēķināt $H_3(X)$ un $H_3(Y)$ (bāze $a = 3$).
+* **(B)** Izmantojot ripošanas formulu, iegūt $H_3((2, 3, 4))$ no $H_3(X)$, ja logā ienāk simbols $4$, bet izkrīt simbols $1$. Pārbaudīt rezultātu ar tiešu aprēķinu.
+* **(C)** Atrast visas bāzes $a \in \lbrace 0, 1, \ldots, 6 \rbrace$, kurām $H_a(X) = H_a(Y)$. Salīdzināt atrasto sakritības varbūtību ar novērtējumu $(k-1)/q$.
+
+**Risinājums:**
+
+* **(A)** $H_3(X) = (1 \cdot 9 + 2 \cdot 3 + 3)\;\text{mod}\;7 = 18\;\text{mod}\;7 = 4$ un $H_3(Y) = (3 \cdot 9 + 2 \cdot 3 + 1)\;\text{mod}\;7 = 34\;\text{mod}\;7 = 6$. Vērtības atšķiras.
+* **(B)** $H_3((2,3,4)) = \left( (H_3(X) - 1 \cdot 3^2) \cdot 3 + 4 \right)\;\text{mod}\;7 = \left( (4 - 9) \cdot 3 + 4 \right)\;\text{mod}\;7 = (-11)\;\text{mod}\;7 = 3$. Tiešs aprēķins: $(2 \cdot 9 + 3 \cdot 3 + 4)\;\text{mod}\;7 = 31\;\text{mod}\;7 = 3$.
+* **(C)** Starpības polinoms ir $D(z) = (1-3)z^2 + (2-2)z + (3-1) = -2z^2 + 2 = -2(z-1)(z+1)$. Laukā $\text{GF}(7)$ tā saknes ir $z = 1$ un $z = -1 = 6$. Pārbaude: $H_1(X) = H_1(Y) = 6$; $H_6(X) = 51\;\text{mod}\;7 = 2$ un $H_6(Y) = 121\;\text{mod}\;7 = 2$. Tātad sakritības varbūtība ir $2/7$ -- tieši novērtējums $(k-1)/q = 2/7$ (polinomam ar pakāpi $2$ ir abas iespējamās saknes).
+
+**13.6. uzdevums (Aho-Korasikas automāts):** Paraugu kopa ir $\mathcal{P} = \lbrace \mathtt{ab}, \mathtt{bab}, \mathtt{bc} \rbrace$.
+
+* **(A)** Uzzīmēt šo paraugu traju un atrast katra mezgla atteices linku $\textit{fail}(v)$.
+* **(B)** Atrast katram mezglam izvades kopu $\textit{out}(v)$.
+* **(C)** Ar Aho-Korasikas algoritmu atrast visus paraugu parādījumus tekstā $T = \mathtt{babcab}$; norādīt stāvokli pēc katra burta.
+
+**Risinājums:**
+
+* **(A), (B)** Trajā ir mezgli $\mathtt{a}, \mathtt{ab}, \mathtt{b}, \mathtt{ba}, \mathtt{bab}, \mathtt{bc}$:
+
+  | Mezgls $v$ | $\mathtt{a}$ | $\mathtt{ab}$ | $\mathtt{b}$ | $\mathtt{ba}$ | $\mathtt{bab}$ | $\mathtt{bc}$ |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | $\textit{fail}(v)$ | $\varepsilon$ | $\mathtt{b}$ | $\varepsilon$ | $\mathtt{a}$ | $\mathtt{ab}$ | $\varepsilon$ |
+  | $\textit{out}(v)$ | | $\mathtt{ab}$ | | | $\mathtt{bab}, \mathtt{ab}$ | $\mathtt{bc}$ |
+
+  Piemēram, $\textit{fail}(\mathtt{bab}) = \mathtt{ab}$, jo $\mathtt{ab}$ ir garākais virknes $\mathtt{bab}$ īstais sufikss, kas ir trajā; tāpēc $\textit{out}(\mathtt{bab})$ satur arī $\mathtt{ab}$. Savukārt $\textit{fail}(\mathtt{bc}) = \varepsilon$, jo saknei nav bērna $\mathtt{c}$.
+
+* **(C)**
+
+  | $i$ | $0$ | $1$ | $2$ | $3$ | $4$ | $5$ |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | $T[i]$ | $\mathtt{b}$ | $\mathtt{a}$ | $\mathtt{b}$ | $\mathtt{c}$ | $\mathtt{a}$ | $\mathtt{b}$ |
+  | Stāvoklis $v$ | $\mathtt{b}$ | $\mathtt{ba}$ | $\mathtt{bab}$ | $\mathtt{bc}$ | $\mathtt{a}$ | $\mathtt{ab}$ |
+  | Izvade | | | $\mathtt{bab}$ (nobīde $0$), $\mathtt{ab}$ (nobīde $1$) | $\mathtt{bc}$ (nobīde $2$) | | $\mathtt{ab}$ (nobīde $4$) |
+
+  Pie $i = 3$ mezglam $\mathtt{bab}$ nav bērna $\mathtt{c}$: pāriet uz $\textit{fail}(\mathtt{bab}) = \mathtt{ab}$ (arī nav bērna $\mathtt{c}$), tad uz $\textit{fail}(\mathtt{ab}) = \mathtt{b}$, kuram ir bērns $\mathtt{c}$. Pie $i = 4$ no $\mathtt{bc}$ pāriet uz sakni un tad uz $\mathtt{a}$.
+
 ## Atsauces
 
 BM algoritma aprēķinu piemērs.
 
 * [Good Suffix Heuristic](https://www.geeksforgeeks.org/boyer-moore-algorithm-good-suffix-heuristic/)
 * [Visualizing String Matching](http://whocouldthat.be/visualizing-string-matching/)
+* A.V.Aho, M.J.Corasick. [Efficient string matching: an aid to bibliographic search](https://doi.org/10.1145/360825.360855). *Communications of the ACM* 18(6), 1975 -- Aho-Korasikas algoritma oriģinālraksts.
 
 <!--
 Piezīmes par avotiem (no strings02-kmp-and-bm/figs/README.txt):

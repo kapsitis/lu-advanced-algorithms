@@ -710,3 +710,12 @@ Farahs-Koltons,Farach-Colton,name,Martin Farach-Colton
 Broders,Broder,name,Andrei Broder (MinHash)
 Uzdevums (bez numura),Problem,label,Unnumbered paragraph label
 Pielāgojums,Modification,label,"Suffix tree lecture: ""Pielāgojums 1 / 2"""
+polinomiālā hešošana ar nejaušu bāzi,polynomial hashing with a random base,course,"Rabin–Karp hash with a fixed prime q and a random base a; collision probability at most (k-1)/q"
+Aho-Korasikas algoritms,Aho–Corasick algorithm,name,"Alfred Aho, Margaret Corasick (1975)"
+atteices links,failure link,course,"Aho–Corasick; ""links"" is transliterated as in ""sufiksa links"""
+izvades kopa,output set,course,"Aho–Corasick: out(v), the patterns that are suffixes of str(v)"
+meklēšana plašumā,breadth-first search,standard,
+FM indekss,FM-index,name,"Ferragina–Manzini (2000)"
+meklēšana atpakaļgaitā,backward search,standard,FM-index
+saspiests indekss,compressed index,standard,
+garākais iepriekšējais faktors,longest previous factor (LPF),course,LZ77 with a suffix array

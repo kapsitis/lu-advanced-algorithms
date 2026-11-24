@@ -12,6 +12,8 @@ permalink: /lectures/strings_suffix_structures/lv/
 2. Sufiksu traji, sufiksu koki un sufiksu masīvi.
 3. Dokumentu meklēšana.
 4. Sufiksu koku iegūšana lineārā laikā.
+5. FM indekss: meklēšana Berouza-Vīlera transformācijā.
+6. LZ77 saspiešana ar sufiksu masīvu.
 
 ## Vienreizēja un atkārtota meklēšana
 
@@ -309,6 +311,114 @@ Sufiksu masīvam var pievienot arī LCP informāciju: LCP (*longest common prefi
 
 Sufiksu masīvi ir cieši saistīti ar Berouza-Vīlera transformāciju (sk. [4. Berouza-Vīlera transformācija]({{ '/lectures/lossless_burrows_wheeler/' | relative_url }})).
 
+### FM indekss
+
+Sufiksu masīvs teksta garumā $n$ aizņem $n$ veselus skaitļus, t.i. $4n$ vai $8n$ baitus -- daudzkārt vairāk nekā pats teksts. Cilvēka genomā ir ap $3 \cdot 10^9$ burtu $\mathtt{A}, \mathtt{C}, \mathtt{G}, \mathtt{T}$, un tā sufiksu masīvs neietilpst parasta datora atmiņā. P.Feraržina un Dž.Manzīni (*Paolo Ferragina, Giovanni Manzini*, 2000) atklāja, ka paraugu meklēšanai pietiek ar Berouza-Vīlera transformāciju un dažām nelielām tabulām. Šo datu struktūru sauc par *FM indeksu* (*FM-index*).
+
+**BWT no sufiksu masīva:** Sakārtotās cikliskās permutācijas (4. lekcijā) atbilst sakārtotiem sufiksiem, jo $\mathtt{\\$}$ ir mazākais simbols. Tāpēc BWT pēdējā kolonna ir burti, kas atrodas tieši *pirms* katra sufiksa:
+
+$$
+L[r] = T[SA[r] - 1] \quad (\text{ja } SA[r] = 0, \text{ tad } L[r] = \mathtt{\$}).
+$$
+
+Tekstam $\mathtt{banana\\$}$:
+
+| $r$ | $SA[r]$ | Sufikss ($F$ kolonna ir tā pirmais burts) | $L[r]$ |
+| --- | --- | --- | --- |
+| $0$ | $6$ | $\mathtt{\\$}$ | $\mathtt{a}$ |
+| $1$ | $5$ | $\mathtt{a\\$}$ | $\mathtt{n}$ |
+| $2$ | $3$ | $\mathtt{ana\\$}$ | $\mathtt{n}$ |
+| $3$ | $1$ | $\mathtt{anana\\$}$ | $\mathtt{b}$ |
+| $4$ | $0$ | $\mathtt{banana\\$}$ | $\mathtt{\\$}$ |
+| $5$ | $4$ | $\mathtt{na\\$}$ | $\mathtt{a}$ |
+| $6$ | $2$ | $\mathtt{nana\\$}$ | $\mathtt{a}$ |
+
+Tātad $L = \mathtt{annb\\$aa}$ (tas pats, kas BWT($\mathtt{BANANA\\$}$) = $\mathtt{ANNB\\$AA}$ 4. lekcijā).
+
+**Divas palīgtabulas:**
+
+* $C[c]$ -- to teksta burtu skaits, kas alfabētiski ir mazāki par $c$. Rindas, kuru sufiksi sākas ar burtu $c$, aizņem sufiksu masīvā intervālu no $C[c]$ (ieskaitot) līdz $C[c] + (\text{burta } c \text{ biežums})$ (neieskaitot). Piemērā $C[\mathtt{\\$}] = 0$, $C[\mathtt{a}] = 1$, $C[\mathtt{b}] = 4$, $C[\mathtt{n}] = 5$.
+* $\textit{Occ}(c, i)$ -- burta $c$ parādījumu skaits virknes $L$ prefiksā $L[0]\ldots{}L[i-1]$ (pirmajos $i$ burtos).
+
+Ar šīm tabulām izsaka 4. lekcijas LF attēlojumu: $\textit{LF}(r) = C[L[r]] + \textit{Occ}(L[r], r)$. Tas balstās uz to pašu faktu, ko apgrieztā BWT: vienādi burti kolonnā $L$ un kolonnā $F$ ir sakārtoti vienā un tajā pašā secībā.
+
+**Meklēšana atpakaļgaitā (*backward search*):** Visi sufiksi, kas sākas ar paraugu $P$, sufiksu masīvā aizņem vienu nepārtrauktu intervālu $[sp, ep)$. Šo intervālu atrod, lasot paraugu *no beigām*: ja zināms intervāls sufiksiem, kas sākas ar $P[j+1]\ldots{}P[m-1]$, tad tajā esošās rindas, kuru $L$ burts ir $c = P[j]$, ar LF attēlojumu pāriet tieši uz sufiksiem, kas sākas ar $cP[j+1]\ldots{}P[m-1]$. Turklāt tās pāriet uz nepārtrauktu intervālu, ko nosaka tikai tā galapunkti.
+
+$\textsf{BackwardSearch}(P)$
+1. $sp = 0$; $\;ep = n$ $\quad$ *// sākumā -- visas rindas*
+2. **for** $j = m-1$ **downto** $0$:
+3. $\quad c = P[j]$
+4. $\quad sp = C[c] + \textit{Occ}(c, sp)$
+5. $\quad ep = C[c] + \textit{Occ}(c, ep)$
+6. $\quad$ **if** $sp \geq ep$: **return** "nav atrasts"
+7. **return** $[sp, ep)$ $\quad$ *// parādījumu skaits ir $ep - sp$*
+
+**Piemērs:** Meklējam $P = \mathtt{ana}$ tekstā $\mathtt{banana\\$}$ ($L = \mathtt{annb\\$aa}$).
+
+| Solis | Burts $c$ | $sp = C[c] + \textit{Occ}(c, sp)$ | $ep = C[c] + \textit{Occ}(c, ep)$ | Sufiksi intervālā |
+| --- | --- | --- | --- | --- |
+| sākums | | $0$ | $7$ | visi |
+| $j = 2$ | $\mathtt{a}$ | $1 + 0 = 1$ | $1 + 3 = 4$ | $\mathtt{a\\$}, \mathtt{ana\\$}, \mathtt{anana\\$}$ |
+| $j = 1$ | $\mathtt{n}$ | $5 + 0 = 5$ | $5 + 2 = 7$ | $\mathtt{na\\$}, \mathtt{nana\\$}$ |
+| $j = 0$ | $\mathtt{a}$ | $1 + 1 = 2$ | $1 + 3 = 4$ | $\mathtt{ana\\$}, \mathtt{anana\\$}$ |
+
+Paraugs $\mathtt{ana}$ parādās $ep - sp = 2$ reizes; pozīcijas ir $SA[2] = 3$ un $SA[3] = 1$.
+
+**Laiks un atmiņa:**
+
+* Parādījumu skaitīšana prasa $m$ soļus, katrā -- divus $\textit{Occ}$ vaicājumus. Ja $\textit{Occ}$ vērtības glabā tikai ik pēc $b$ pozīcijām (kontrolpunktos), bet pārējo saskaita no $L$, tad vaicājums prasa $O(b)$ laiku; ar bitu operācijām to panāk konstantā laikā.
+* Lai atrastu parādījumu *pozīcijas*, glabā tikai katru $s$-to sufiksu masīva elementu; trūkstošo $SA[r]$ atrod, ejot ar LF soļiem atpakaļ, līdz sastop saglabātu elementu ($\leq s$ soļi).
+* Pati virkne $L$ labi saspiežas (sk. 4. lekcijā -- pārvietošana uz priekšu un entropijas kodi), tāpēc FM indekss var aizņemt *mazāk* vietas nekā oriģinālais teksts un tomēr ļauj meklēt jebkuru paraugu. Šādas datu struktūras sauc par *saspiestiem indeksiem*.
+
+FM indeksu izmanto DNS lasījumu salīdzināšanas programmas (*read aligners*) Bowtie un BWA: miljoniem īsu DNS fragmentu jāatrod cilvēka genomā, un viss genoma indekss ietilpst dažos gigabaitos atmiņas.
+
+### LZ77 ar sufiksu masīvu
+
+LZ77 kodētājs (sk. [3. Lempela-Ziva algoritmi]({{ '/lectures/lossless_lempel_ziv/' | relative_url }})) katrā kursora pozīcijā $i$ risina stringu meklēšanas uzdevumu: atrast garāko virkni, kas sākas pozīcijā $i$ un kas jau ir parādījusies tekstā agrāk (sākas kādā pozīcijā $j < i$; sakritība drīkst pārklāties ar kodējamo daļu). Praktiskie kodētāji to dara ar heštabulām un ierobežotu logu. Sufiksu masīvs ļauj šo uzdevumu atrisināt *visām* pozīcijām kopā lineārā laikā un bez loga ierobežojuma.
+
+**Definīcija:** *Garākā iepriekšējā faktora* masīvs (*longest previous factor*, LPF) ir
+
+$$
+\textit{LPF}[i] = \max \left\lbrace \mathrm{lcp}(T[i:], T[j:]) \,:\, 0 \leq j < i \right\rbrace,
+$$
+
+kur $\mathrm{lcp}$ ir divu sufiksu garākā kopīgā prefiksa garums (ja $i = 0$, tad $\textit{LPF}[0] = 0$).
+
+**Galvenā ideja:** Sufiksu masīvā divu sufiksu $\mathrm{lcp}$ ir minimums no LCP vērtībām starp to rindām. Tāpēc, attālinoties no sufiksa $T[i:]$ rindas sufiksu masīvā, $\mathrm{lcp}$ var tikai samazināties. No visiem agrākajiem sufiksiem ($j < i$) garākais kopīgais prefikss ir vienam no diviem *tuvākajiem* -- tuvākajam augstāk sufiksu masīvā un tuvākajam zemāk:
+
+* $\textit{PSV}(i)$ (*previous smaller value*) -- tuvākā rinda virs sufiksa $T[i:]$ rindas, kurā $SA[r] < i$;
+* $\textit{NSV}(i)$ (*next smaller value*) -- tuvākā rinda zem sufiksa $T[i:]$ rindas, kurā $SA[r] < i$.
+
+Tad $\textit{LPF}[i] = \max\left(\mathrm{lcp}(T[i:], T[SA[\textit{PSV}(i)]:]),\; \mathrm{lcp}(T[i:], T[SA[\textit{NSV}(i)]:])\right)$, un avota pozīcija ir tas no abiem, kas dod lielāko vērtību. Visas $\textit{PSV}$ un $\textit{NSV}$ vērtības var atrast vienā gājienā pa sufiksu masīvu ar steku (līdzīgi kā veidojot Dekarta koku), un arī $\textit{LPF}$ masīvu var aprēķināt $O(n)$ laikā (M.Krošmors, L.Ilie -- *Maxime Crochemore, Lucian Ilie*, 2008).
+
+**LZ77 kodēšana ar LPF:** Kodētājs izvada tos pašus trijniekus $(d, \ell, x)$ kā 3. lekcijā:
+
+$\textsf{LZ77-SA}(T)$ $\quad$ *// $T[0:n-1]$ beidzas ar $\mathtt{\\$}$*
+1. Izveido $SA$, $LCP$ un $\textit{LPF}$ (kopā ar avota pozīcijām $\textit{src}[i]$)
+2. $i = 0$
+3. **while** $i < n-1$:
+4. $\quad \ell = \min(\textit{LPF}[i],\; n-2-i)$ $\quad$ *// atstāj vismaz vienu burtu $x$*
+5. $\quad$ **if** $\ell = 0$: izvada $(0, 0, T[i])$
+6. $\quad$ **else** izvada $(i - \textit{src}[i], \ell, T[i+\ell])$
+7. $\quad i = i + \ell + 1$
+
+**Piemērs:** $T = \mathtt{abcabcabd\\$}$ ($n = 10$). Sufiksu masīvs ir $[9, 0, 3, 6, 1, 4, 7, 2, 5, 8]$.
+
+| $i$ | Sufikss | $\textit{PSV}$ avots | $\textit{NSV}$ avots | $\textit{LPF}[i]$ | $\textit{src}[i]$ |
+| --- | --- | --- | --- | --- | --- |
+| $0$ | $\mathtt{abcabcabd\\$}$ | -- | -- | $0$ | -- |
+| $1$ | $\mathtt{bcabcabd\\$}$ | $0$ | -- | $0$ | -- |
+| $2$ | $\mathtt{cabcabd\\$}$ | $1$ | -- | $0$ | -- |
+| $3$ | $\mathtt{abcabd\\$}$ | $0$ | $1$ | $5$ | $0$ |
+| $4$ | $\mathtt{bcabd\\$}$ | $1$ | $2$ | $4$ | $1$ |
+| $5$ | $\mathtt{cabd\\$}$ | $2$ | -- | $3$ | $2$ |
+
+(Kolonnās "avots" ir pozīcija $SA[r]$ attiecīgajā rindā $r$; tabulā parādītas tikai tās pozīcijas, kas vajadzīgas kodēšanai.) Piemēram, sufiksam $T[3:] = \mathtt{abcabd\\$}$ sufiksu masīvā tieši virs tā ir $T[0:] = \mathtt{abcabcabd\\$}$ ($0 < 3$, LCP $= 5$), tāpēc $\textit{LPF}[3] = 5$.
+
+Kodētājs izvada $(0,0,\mathtt{a})$, $(0,0,\mathtt{b})$, $(0,0,\mathtt{c})$, un tad pozīcijā $i = 3$ -- $(3, 5, \mathtt{d})$: $5$ burtus $\mathtt{abcab}$ kopē no $3$ pozīcijas atpakaļ (sakritība pārklājas ar kodējamo daļu), un pievieno $\mathtt{d}$.
+
+**Kur to lieto:** Praktiskie kompresori (gzip, zstd) ierobežo logu un meklē ar heštabulām vai binārajiem kokiem, jo tas ir ātrāk un prasa mazāk atmiņas. Sufiksu masīvus izmanto, ja vajag *optimālu* faktorizāciju vai ļoti garu logu, piemēram, saspiežot lielas līdzīgu tekstu kolekcijas (daudzu cilvēku genomus, dokumentu versiju vēsturi). LZ77 frāžu skaits $z$ ir teksta atkārtotības mērs, un uz tā balstās arī saspiesti indeksi (LZ indekss, r-indekss), kas, līdzīgi FM indeksam, ļauj meklēt tieši saspiestā tekstā.
+
 ## Uzdevumi
 
 Rīks paraugu meklēšanai vārdnīcā: [Pattern Match](https://www.litscape.com/word_tools/pattern_match.php).
@@ -367,6 +477,39 @@ print(suf_array)
   style="width: 100%; max-width: 720px; border:none; background-color:#FFFFFF;"
 />
 
+**14.3. uzdevums (Meklēšana ar FM indeksu):** Aplūkot tekstu $T = \mathtt{abaaba\\$}$ alfabētā $\Sigma = \lbrace \mathtt{\\$}, \mathtt{a}, \mathtt{b} \rbrace$.
+
+* **(A)** Atrast sufiksu masīvu un BWT virkni $L$ (izmantot $L[r] = T[SA[r]-1]$).
+* **(B)** Atrast tabulu $C[c]$.
+* **(C)** Ar meklēšanu atpakaļgaitā noteikt, cik reižu tekstā parādās $\mathtt{aba}$ un kurās pozīcijās.
+* **(D)** Ar meklēšanu atpakaļgaitā pārliecināties, ka $\mathtt{bb}$ tekstā neparādās.
+
+**Risinājums:**
+
+* **(A)** Sakārtotie sufiksi: $\mathtt{\\$}$ (6), $\mathtt{a\\$}$ (5), $\mathtt{aaba\\$}$ (2), $\mathtt{aba\\$}$ (3), $\mathtt{abaaba\\$}$ (0), $\mathtt{ba\\$}$ (4), $\mathtt{baaba\\$}$ (1). Tātad $SA = [6, 5, 2, 3, 0, 4, 1]$ un $L = \mathtt{abba\\$aa}$.
+* **(B)** Tekstā ir viens $\mathtt{\\$}$, četri $\mathtt{a}$ un divi $\mathtt{b}$, tāpēc $C[\mathtt{\\$}] = 0$, $C[\mathtt{a}] = 1$, $C[\mathtt{b}] = 5$.
+* **(C)** Sākums $[0, 7)$. Burts $\mathtt{a}$: $sp = 1 + \textit{Occ}(\mathtt{a}, 0) = 1$, $ep = 1 + \textit{Occ}(\mathtt{a}, 7) = 1 + 4 = 5$. Burts $\mathtt{b}$: $sp = 5 + \textit{Occ}(\mathtt{b}, 1) = 5$, $ep = 5 + \textit{Occ}(\mathtt{b}, 5) = 5 + 2 = 7$. Burts $\mathtt{a}$: $sp = 1 + \textit{Occ}(\mathtt{a}, 5) = 1 + 2 = 3$, $ep = 1 + \textit{Occ}(\mathtt{a}, 7) = 5$. Intervāls $[3, 5)$: $\mathtt{aba}$ parādās $2$ reizes, pozīcijās $SA[3] = 3$ un $SA[4] = 0$.
+* **(D)** Burts $\mathtt{b}$: $[5, 7)$ (kā iepriekš). Nākamais burts $\mathtt{b}$: $sp = 5 + \textit{Occ}(\mathtt{b}, 5) = 7$, $ep = 5 + \textit{Occ}(\mathtt{b}, 7) = 7$. Tā kā $sp \geq ep$, paraugs neparādās. (Rindās $5$ un $6$, kuru sufiksi sākas ar $\mathtt{b}$, $L$ burti ir $\mathtt{a}$ -- nevienam $\mathtt{b}$ neiet pa priekšu $\mathtt{b}$.)
+
+**14.4. uzdevums (LZ77 ar garāko iepriekšējo faktoru):** Aplūkot tekstu $T = \mathtt{abababb\\$}$ ($n = 8$).
+
+* **(A)** Atrast sufiksu masīvu un LCP vērtības blakus esošiem sufiksiem.
+* **(B)** Ar $\textit{PSV}$ un $\textit{NSV}$ atrast $\textit{LPF}[2]$ un tā avota pozīciju.
+* **(C)** Atrast LZ77 trijniekus $(d, \ell, x)$, ko izvada $\textsf{LZ77-SA}$.
+
+**Risinājums:**
+
+* **(A)** Sakārtotie sufiksi un LCP ar iepriekšējo:
+
+  | $r$ | $0$ | $1$ | $2$ | $3$ | $4$ | $5$ | $6$ | $7$ |
+  | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+  | $SA[r]$ | $7$ | $0$ | $2$ | $4$ | $6$ | $1$ | $3$ | $5$ |
+  | Sufikss | $\mathtt{\\$}$ | $\mathtt{abababb\\$}$ | $\mathtt{ababb\\$}$ | $\mathtt{abb\\$}$ | $\mathtt{b\\$}$ | $\mathtt{bababb\\$}$ | $\mathtt{babb\\$}$ | $\mathtt{bb\\$}$ |
+  | $LCP[r]$ | -- | $0$ | $4$ | $2$ | $0$ | $1$ | $3$ | $1$ |
+
+* **(B)** Sufikss $T[2:] = \mathtt{ababb\\$}$ ir rindā $2$. Tuvākā rinda virs tās ar $SA[r] < 2$ ir rinda $1$ ($SA[1] = 0$), $\mathrm{lcp} = LCP[2] = 4$. Tuvākā rinda zem tās ar $SA[r] < 2$ ir rinda $5$ ($SA[5] = 1$), $\mathrm{lcp} = \min(LCP[3], LCP[4], LCP[5]) = 0$. Tātad $\textit{LPF}[2] = 4$ ar avotu $0$.
+* **(C)** Pozīcijās $0$ un $1$ burti $\mathtt{a}$ un $\mathtt{b}$ parādās pirmo reizi: $(0, 0, \mathtt{a})$, $(0, 0, \mathtt{b})$. Pozīcijā $2$: $\ell = \min(4, n-2-2) = 4$, $d = 2 - 0 = 2$, $x = T[6] = \mathtt{b}$, tātad $(2, 4, \mathtt{b})$. Tad $i = 7 = n-1$, un kodēšana beidzas. Atkodējot: $\mathtt{a}$, $\mathtt{b}$, tad $4$ burtus kopē no $2$ pozīcijām atpakaļ (pa vienam: $\mathtt{a}, \mathtt{b}, \mathtt{a}, \mathtt{b}$) un pievieno $\mathtt{b}$ -- iegūst $\mathtt{abababb}$.
+
 ## Atsauces
 
 * [MIT 6.851 Advanced Data Structures: Session 16 -- Strings](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-851-advanced-data-structures-spring-2012/lecture-videos/session-16-strings/)
@@ -374,4 +517,6 @@ print(suf_array)
 * [CMU: Suffix Trees (prezentācija)](https://www.cs.cmu.edu/~ckingsf/bioinfo-lectures/suffixtrees.pdf)
 * [Suffix Arrays (Yale, J.Aspnes)](https://www.cs.yale.edu/homes/aspnes/pinewiki/SuffixArrays.html) -- par sufiksu masīviem un Berouza-Vīlera transformāciju.
 * [Suffix arrays: papildu paskaidrojumi (arXiv:1311.1762)](https://arxiv.org/pdf/1311.1762.pdf)
+* P.Ferragina, G.Manzini. [Opportunistic data structures with applications](https://doi.org/10.1109/SFCS.2000.892127). *FOCS 2000* -- FM indeksa oriģinālraksts.
+* M.Crochemore, L.Ilie. [Computing Longest Previous Factor in linear time and applications](https://doi.org/10.1016/j.ipl.2007.10.006). *Information Processing Letters* 106(2), 2008.
 * [MIT 6.854J Advanced Algorithms (1999)](https://dspace.mit.edu/bitstream/handle/1721.1/36897/6-854JFall-1999/OcwWeb/Electrical-Engineering-and-Computer-Science/6-854JAdvanced-AlgorithmsFall1999/CourseHome/index.htm)

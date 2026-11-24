@@ -12,7 +12,9 @@ In this chapter we define the string searching problem and its variants (finding
 * An algorithm to compute the Levenshtein distance
 * Rolling hash functions
 * The Rabin–Karp substring search algorithm
+* Polynomial hashing with a random base over a finite field
 * The Knuth–Morris–Pratt (KMP) algorithm
+* The Aho–Corasick algorithm for searching many patterns
 * The Boyer–Moore (BM) algorithm
 
 ## Introduction to String Searching
@@ -348,7 +350,7 @@ $\textsf{RabinKarpStringMatching}(T,P,a,q)$
 10. $\quad rT.\textsf{skip}(T[i - len(P)])$
 11. $\quad rT.\textsf{append}(T[i])$
 
-**Worst-case time complexity:** Can we guarantee that, even in the worst case, false positives (equal hash values although the pattern has not been found) occur with probability at most $1/len(P)$?
+**Worst-case time complexity:** Can we guarantee that, even in the worst case, false positives (equal hash values although the pattern has not been found) occur with probability at most $1/len(P)$? (For the answer, see the section "Polynomial Hashing with a Random Base".)
 
 **The Rabin–Karp algorithm for multiple strings P:** Problem: We have a text $T$ of length $n$. Now we have $k$ strings to search for, $\mathcal{P} = \lbrace P_0, P_1, \ldots, P_{k-1} \rbrace$; all of them have the same length $m$.
 
@@ -369,6 +371,42 @@ $\textsf{RabinKarpMultiString}(T, \mathcal{P}, m)$
 14. $\quad rT.\textsf{append}(T[j+m])$
 
 This algorithm has time complexity $O(n + km)$. Naive string searching would have time complexity $O(nmk)$ if we checked the strings one by one.
+
+### Polynomial Hashing with a Random Base
+
+So far the base $a$ of the polynomial hash function was the size of the alphabet (for example, $a = 256$), and $q$ was some fixed prime. If $a$ and $q$ are known in advance, nothing guarantees that spurious hits are rare: the input data may be such that the hash values coincide very often. A simple change fixes this: the prime $q$ is fixed, but the base $a$ is chosen *at random* from the set $\lbrace 0, 1, \ldots, q-1 \rbrace$ every time the algorithm is run.
+
+The remainders modulo a prime $q$ form a finite field $\text{GF}(q)$ (see [8. Reed–Solomon Codes]({{ '/lectures/lossy_reed_solomon/' | relative_url }})). If the symbol codes $c_i$ are smaller than $q$, the string $X = c_1c_2\ldots{}c_k$ corresponds to a polynomial with coefficients in $\text{GF}(q)$:
+
+$$
+X(z) = c_1 z^{k-1} + c_2 z^{k-2} + \ldots + c_{k-1} z + c_k,
+$$
+
+and the hash value is the value of this polynomial at the point $z = a$, i.e. $H_a(X) = X(a)\;\text{mod}\;q$. The rolling formula stays the same as before.
+
+**Claim:** If $X \neq Y$ are two different strings of length $k$, and the base $a$ is chosen uniformly at random from $\text{GF}(q)$, then
+
+$$
+\Pr\left[ H_a(X) = H_a(Y) \right] \leq \frac{k-1}{q}.
+$$
+
+**Proof:** Consider the difference polynomial $D(z) = X(z) - Y(z) = \sum_{i=1}^{k} (x_i - y_i)\,z^{k-i}$. Since $X \neq Y$ and all codes are smaller than $q$, at least one coefficient $x_i - y_i$ is not $0$ in the field $\text{GF}(q)$, so $D(z)$ is not identically zero, and its degree is at most $k-1$. The hash values coincide if and only if $D(a) = 0$, i.e. if $a$ is a root of the polynomial $D$. A nonzero polynomial of degree $d$ over a field has at most $d$ roots (the same fact that Reed–Solomon codes rely on). So out of $q$ possible bases at most $k-1$ cause a collision. $\blacksquare$
+
+**Consequences for the Rabin–Karp algorithm:** At each of the $n-m+1$ shifts the probability of a spurious hit is at most $(m-1)/q$, so the expected number of spurious hits is at most $(n-m+1)(m-1)/q$.
+
+* If we choose $q \geq m(m-1)$, then at each shift the probability of a spurious hit is at most $1/m$ -- exactly what the question about the worst-case time complexity asked for. The expected cost of checking spurious hits ($m$ comparisons each) is then at most $O(n)$, and the expected total time is $O(n + m)$ plus $O(m)$ for each real match.
+* In practice one chooses a large prime, for example, the Mersenne prime $q = 2^{61}-1$. For a text of $n = 10^9$ symbols and a pattern of $m = 1000$ symbols the expected number of spurious hits in the whole text is less than $10^{9} \cdot 999 / 2^{61} \approx 4 \cdot 10^{-7}$.
+* The probability is taken over the random choice made by the *algorithm* (the base $a$), not over the input data. So the estimate holds for every text and pattern, including those chosen by a malicious user (as long as they do not know $a$).
+
+**Why a fixed base is dangerous:** Suppose $a = 256$ and $q = 251$ are known. Since $256 \equiv 5 \pmod{251}$, for a two-letter string $H(c_1c_2) = (5c_1 + c_2)\;\text{mod}\;251$. The ASCII codes are $\mathtt{A} = 65$, $\mathtt{B} = 66$, $\mathtt{F} = 70$, so
+
+$$
+H(\mathtt{AF}) = (5 \cdot 65 + 70)\;\text{mod}\;251 = 144 = (5 \cdot 66 + 65)\;\text{mod}\;251 = H(\mathtt{BA}).
+$$
+
+Since $H(UV) = (H(U) \cdot a^{\lvert V\rvert } + H(V))\;\text{mod}\;q$, any block $\mathtt{AF}$ in a longer string can be replaced with $\mathtt{BA}$ without changing the hash value -- from $t$ blocks one gets $2^t$ strings with the same hash value. An attacker who submits the text $\mathtt{AFAF}\ldots\mathtt{AF}$ and searches for the pattern $\mathtt{BABA}\ldots\mathtt{BA}$ causes a spurious hit at every second shift, and the Rabin–Karp algorithm runs in $O(nm)$ time. The same attack on hash tables (*hash flooding*) can slow down a web server; this is why programming languages (Python, Rust, etc.) use hash functions with a secret random key, such as SipHash, in their hash tables.
+
+**Connection to cryptography:** GHASH, the authentication code of the AES-GCM mode, is exactly the same kind of polynomial hash function, only over the field $\text{GF}(2^{128})$ and with a secret base $H$ (see [11. AES and Hash Functions]({{ '/lectures/cryptography_aes_and_hashing/' | relative_url }})). Its security estimate is based on the same root-counting argument.
 
 ### MinHash Algorithms
 
@@ -524,7 +562,7 @@ $$
 1. The input text is read only once: $O(n)$, rather than $O(n \cdot m)$ as in the naive algorithm.
 2. The pattern $P$ is preprocessed in $O(m)$ time, rather than $O(m\cdot\lvert S\rvert )$ as for a fully built automaton.
 
-A variant of the Knuth–Morris–Pratt algorithm, the Aho–Corasick string matching algorithm, is used in intrusion detection systems to scan packet payloads for many patterns simultaneously.
+A variant of the Knuth–Morris–Pratt algorithm, the Aho–Corasick string matching algorithm, is used in intrusion detection systems to scan packet payloads for many patterns simultaneously. We look at it at the end of this section.
 
 ### The Prefix Function
 
@@ -678,6 +716,73 @@ $\textsf{ComputePrefixFunction}(P)$
 2. Each iteration of the inner loop decreases the value of $\pi[i+1]$.
 3. Since this value increases only by $1$ in each iteration of the outer loop, it can reach at most $m$. Since it cannot be negative, it can decrease at most $m$ times, so in total the inner loop runs at most $m$ times.
 
+### The Aho–Corasick Algorithm
+
+**Problem:** We are given a text $T$ of length $n$ and a set of patterns $\mathcal{P} = \lbrace P_1, \ldots, P_k \rbrace$ whose lengths may be *different*. Let $M = \lvert P_1\rvert  + \ldots + \lvert P_k\rvert $ denote the total length of the patterns. We must find all occurrences of all patterns in the text $T$.
+
+This is the "many patterns, one document" case from the introduction (data leak prevention, intrusion detection, antivirus signatures). The Rabin–Karp algorithm for multiple patterns requires all patterns to have the same length, and running the KMP algorithm $k$ times would take $O(kn + M)$ time. Alfred Aho and Margaret Corasick (1975) combined the idea of KMP with a trie (a letter tree, see [14. Suffix Trees and Suffix Arrays]({{ '/lectures/strings_suffix_structures/' | relative_url }})), so the text has to be read only once.
+
+**Building the automaton:**
+
+1. **Trie (the *goto* function):** All patterns are inserted into a trie. Each node $v$ corresponds to a prefix $\textit{str}(v)$ of some pattern; the root corresponds to the empty string $\varepsilon$. Let $\textit{child}(v, c)$ denote the child of the node $v$ along the letter $c$ (if it exists).
+2. **Failure link:** $\textit{fail}(v)$ is the node that corresponds to the *longest* proper suffix of the string $\textit{str}(v)$ that is also in the trie (i.e. is a prefix of some pattern). It generalizes the KMP prefix function $\pi$: if there is only one pattern, the trie is a chain and $\textit{fail}$ coincides with $\pi$.
+3. **Output:** $\textit{out}(v)$ is the set of patterns that are suffixes of the string $\textit{str}(v)$. It contains the pattern that ends exactly at the node $v$ (if there is one), and also the whole set $\textit{out}(\textit{fail}(v))$ -- for example, if the pattern $\mathtt{she}$ is found at the node $\mathtt{she}$, then the pattern $\mathtt{he}$ is found at the same time.
+
+The failure links are computed by visiting the trie nodes level by level (breadth-first search): the failure link of a node $u = \textit{child}(v, c)$ depends only on shallower nodes.
+
+$\textsf{BuildAhoCorasick}(\mathcal{P})$
+1. Build a trie of all patterns $P \in \mathcal{P}$; add $P$ to the set $\textit{out}$ of the node where $P$ ends
+2. $Q = $ an empty queue
+3. **for** each child $u$ of the root:
+4. $\quad \textit{fail}(u) = \textit{root}$; $\;Q.\textsf{enqueue}(u)$
+5. **while** $Q$ is not empty:
+6. $\quad v = Q.\textsf{dequeue}()$
+7. $\quad$ **for** each child $u = \textit{child}(v, c)$:
+8. $\quad\quad Q.\textsf{enqueue}(u)$
+9. $\quad\quad f = \textit{fail}(v)$
+10. $\quad\quad$ **while** $f \neq \textit{root}$ **and** $\textit{child}(f, c)$ does not exist:
+11. $\quad\quad\quad f = \textit{fail}(f)$
+12. $\quad\quad$ **if** $\textit{child}(f, c)$ exists **then** $\textit{fail}(u) = \textit{child}(f, c)$ **else** $\textit{fail}(u) = \textit{root}$
+13. $\quad\quad \textit{out}(u) = \textit{out}(u) \cup \textit{out}(\textit{fail}(u))$
+
+The search is the same as $\textsf{KMPmatcher}$, only with $\textit{fail}$ instead of $\pi$:
+
+$\textsf{AhoCorasickMatcher}(T)$
+1. $v = \textit{root}$
+2. **for** $i = 0$ **to** $n-1$:
+3. $\quad$ **while** $v \neq \textit{root}$ **and** $\textit{child}(v, T[i])$ does not exist:
+4. $\quad\quad v = \textit{fail}(v)$ $\quad$ *// the hypothesis was wrong; move to a shorter suffix*
+5. $\quad$ **if** $\textit{child}(v, T[i])$ exists:
+6. $\quad\quad v = \textit{child}(v, T[i])$
+7. $\quad$ **for** $P \in \textit{out}(v)$:
+8. $\quad\quad$ print "Pattern" $P$ "occurs with shift" $i - \lvert P\rvert  + 1$
+
+**Example:** The set of patterns is $\mathcal{P} = \lbrace \mathtt{he}, \mathtt{she}, \mathtt{his}, \mathtt{hers} \rbrace$. The trie has $9$ nodes (not counting the root); here they are with their failure links:
+
+| Node $v$ | $\mathtt{h}$ | $\mathtt{he}$ | $\mathtt{her}$ | $\mathtt{hers}$ | $\mathtt{hi}$ | $\mathtt{his}$ | $\mathtt{s}$ | $\mathtt{sh}$ | $\mathtt{she}$ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| $\textit{fail}(v)$ | $\varepsilon$ | $\varepsilon$ | $\varepsilon$ | $\mathtt{s}$ | $\varepsilon$ | $\mathtt{s}$ | $\varepsilon$ | $\mathtt{h}$ | $\mathtt{he}$ |
+| $\textit{out}(v)$ | | $\mathtt{he}$ | | $\mathtt{hers}$ | | $\mathtt{his}$ | | | $\mathtt{she}, \mathtt{he}$ |
+
+For example, $\textit{fail}(\mathtt{she}) = \mathtt{he}$, since $\mathtt{he}$ is the longest proper suffix of $\mathtt{she}$ that is in the trie. But $\textit{fail}(\mathtt{her}) = \varepsilon$, since neither $\mathtt{er}$ nor $\mathtt{r}$ is a prefix of any pattern.
+
+We search in the text $T = \mathtt{ushers}$:
+
+| $i$ | $0$ | $1$ | $2$ | $3$ | $4$ | $5$ |
+| --- | --- | --- | --- | --- | --- | --- |
+| $T[i]$ | $\mathtt{u}$ | $\mathtt{s}$ | $\mathtt{h}$ | $\mathtt{e}$ | $\mathtt{r}$ | $\mathtt{s}$ |
+| State $v$ | $\varepsilon$ | $\mathtt{s}$ | $\mathtt{sh}$ | $\mathtt{she}$ | $\mathtt{her}$ | $\mathtt{hers}$ |
+| Output | | | | $\mathtt{she}$ (shift $1$), $\mathtt{he}$ (shift $2$) | | $\mathtt{hers}$ (shift $2$) |
+
+At $i = 4$ the node $\mathtt{she}$ has no child $\mathtt{r}$, so we follow the failure link to $\mathtt{he}$, which does have the child $\mathtt{r}$.
+
+**Time complexity:**
+
+* Building the trie and the failure links takes $O(M)$ time (if the children are stored in a hash table; with an array of length $\lvert \Sigma\rvert $ in each node -- $O(M \cdot \lvert \Sigma\rvert )$). The number of steps of the inner loop is estimated in the same way as for the prefix function: for each pattern the depth of the failure link increases by at most $1$ per letter.
+* The search takes $O(n + z)$ time, where $z$ is the number of occurrences found. The number of moves along failure links does not exceed $n$, since each move decreases the depth of the current node, while the depth increases by at most $1$ per letter of the text. (So that the output also costs $O(1)$ per occurrence, the sets $\textit{out}(v)$ are not copied; instead each node stores a link to the nearest node along the chain of failure links where some pattern ends.)
+
+The Aho–Corasick algorithm is used by the UNIX tool `fgrep` (`grep -F`), by the intrusion detection systems Snort and Suricata, by antivirus programs (for example, ClamAV), and by DLP products that check documents against a long list of forbidden words.
+
 ## The Boyer–Moore Algorithm
 
 **Main idea:** The Boyer–Moore algorithm starts comparing from the last symbol ($P[m-1]$ and $T[i+m-1]$). On a mismatch it may be possible to shift the compared string forward by more than $1$ symbol. For example, if $T[i+m-1]$ is a symbol that matches none of $P[0],\ldots,P[m-1]$, we can shift the string forward by $m$ symbols.
@@ -821,12 +926,52 @@ $$
 
 **Problem 13.4 (Average complexity of naive text searching):** Suppose the pattern $P$ and the text $T$ are random strings of lengths $m$ and $n$ over an alphabet of $a$ letters ($a \geq 2$). What is the expected number of letter comparisons in the naive algorithm if each comparison succeeds with probability $1/a$?
 
+**Problem 13.5 (Polynomial hashing over GF(7)):** We work in the field $\text{GF}(7)$, i.e. $q = 7$. The symbol codes are numbers from $0$ to $6$. The hash function of a string $c_1c_2c_3$ is $H_a(c_1c_2c_3) = (c_1a^2 + c_2a + c_3)\;\text{mod}\;7$. Consider the strings $X = (1, 2, 3)$ and $Y = (3, 2, 1)$.
+
+* **(A)** Compute $H_3(X)$ and $H_3(Y)$ (base $a = 3$).
+* **(B)** Using the rolling formula, obtain $H_3((2, 3, 4))$ from $H_3(X)$ when the symbol $4$ enters the window and the symbol $1$ leaves it. Check the result by direct computation.
+* **(C)** Find all bases $a \in \lbrace 0, 1, \ldots, 6 \rbrace$ for which $H_a(X) = H_a(Y)$. Compare the collision probability found with the estimate $(k-1)/q$.
+
+**Solution:**
+
+* **(A)** $H_3(X) = (1 \cdot 9 + 2 \cdot 3 + 3)\;\text{mod}\;7 = 18\;\text{mod}\;7 = 4$ and $H_3(Y) = (3 \cdot 9 + 2 \cdot 3 + 1)\;\text{mod}\;7 = 34\;\text{mod}\;7 = 6$. The values differ.
+* **(B)** $H_3((2,3,4)) = \left( (H_3(X) - 1 \cdot 3^2) \cdot 3 + 4 \right)\;\text{mod}\;7 = \left( (4 - 9) \cdot 3 + 4 \right)\;\text{mod}\;7 = (-11)\;\text{mod}\;7 = 3$. Direct computation: $(2 \cdot 9 + 3 \cdot 3 + 4)\;\text{mod}\;7 = 31\;\text{mod}\;7 = 3$.
+* **(C)** The difference polynomial is $D(z) = (1-3)z^2 + (2-2)z + (3-1) = -2z^2 + 2 = -2(z-1)(z+1)$. In the field $\text{GF}(7)$ its roots are $z = 1$ and $z = -1 = 6$. Check: $H_1(X) = H_1(Y) = 6$; $H_6(X) = 51\;\text{mod}\;7 = 2$ and $H_6(Y) = 121\;\text{mod}\;7 = 2$. So the collision probability is $2/7$ -- exactly the estimate $(k-1)/q = 2/7$ (the polynomial of degree $2$ has both possible roots).
+
+**Problem 13.6 (Aho–Corasick automaton):** The set of patterns is $\mathcal{P} = \lbrace \mathtt{ab}, \mathtt{bab}, \mathtt{bc} \rbrace$.
+
+* **(A)** Draw the trie of these patterns and find the failure link $\textit{fail}(v)$ of each node.
+* **(B)** Find the output set $\textit{out}(v)$ of each node.
+* **(C)** Use the Aho–Corasick algorithm to find all occurrences of the patterns in the text $T = \mathtt{babcab}$; give the state after each letter.
+
+**Solution:**
+
+* **(A), (B)** The trie has the nodes $\mathtt{a}, \mathtt{ab}, \mathtt{b}, \mathtt{ba}, \mathtt{bab}, \mathtt{bc}$:
+
+  | Node $v$ | $\mathtt{a}$ | $\mathtt{ab}$ | $\mathtt{b}$ | $\mathtt{ba}$ | $\mathtt{bab}$ | $\mathtt{bc}$ |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | $\textit{fail}(v)$ | $\varepsilon$ | $\mathtt{b}$ | $\varepsilon$ | $\mathtt{a}$ | $\mathtt{ab}$ | $\varepsilon$ |
+  | $\textit{out}(v)$ | | $\mathtt{ab}$ | | | $\mathtt{bab}, \mathtt{ab}$ | $\mathtt{bc}$ |
+
+  For example, $\textit{fail}(\mathtt{bab}) = \mathtt{ab}$, since $\mathtt{ab}$ is the longest proper suffix of $\mathtt{bab}$ that is in the trie; therefore $\textit{out}(\mathtt{bab})$ also contains $\mathtt{ab}$. On the other hand, $\textit{fail}(\mathtt{bc}) = \varepsilon$, since the root has no child $\mathtt{c}$.
+
+* **(C)**
+
+  | $i$ | $0$ | $1$ | $2$ | $3$ | $4$ | $5$ |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | $T[i]$ | $\mathtt{b}$ | $\mathtt{a}$ | $\mathtt{b}$ | $\mathtt{c}$ | $\mathtt{a}$ | $\mathtt{b}$ |
+  | State $v$ | $\mathtt{b}$ | $\mathtt{ba}$ | $\mathtt{bab}$ | $\mathtt{bc}$ | $\mathtt{a}$ | $\mathtt{ab}$ |
+  | Output | | | $\mathtt{bab}$ (shift $0$), $\mathtt{ab}$ (shift $1$) | $\mathtt{bc}$ (shift $2$) | | $\mathtt{ab}$ (shift $4$) |
+
+  At $i = 3$ the node $\mathtt{bab}$ has no child $\mathtt{c}$: we move to $\textit{fail}(\mathtt{bab}) = \mathtt{ab}$ (no child $\mathtt{c}$ either), then to $\textit{fail}(\mathtt{ab}) = \mathtt{b}$, which has the child $\mathtt{c}$. At $i = 4$ we move from $\mathtt{bc}$ to the root and then to $\mathtt{a}$.
+
 ## References
 
 An example of computations for the BM algorithm.
 
 * [Good Suffix Heuristic](https://www.geeksforgeeks.org/boyer-moore-algorithm-good-suffix-heuristic/)
 * [Visualizing String Matching](http://whocouldthat.be/visualizing-string-matching/)
+* A.V. Aho, M.J. Corasick. [Efficient string matching: an aid to bibliographic search](https://doi.org/10.1145/360825.360855). *Communications of the ACM* 18(6), 1975 -- the original paper of the Aho–Corasick algorithm.
 
 <!--
 Notes on sources (from strings02-kmp-and-bm/figs/README.txt):

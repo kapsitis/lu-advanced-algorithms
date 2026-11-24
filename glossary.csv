@@ -655,3 +655,58 @@ algebriskais slēgums,algebraic closure,standard,
 lauka paplašinājums,field extension,standard,
 kvadrātisks atlikums,quadratic residue,standard,
 grupas homomorfisms,group homomorphism,standard,
+paraugs (stringu meklēšanā),pattern,standard,"In string searching; not ""sample"" as in signal processing"
+nobīde (stringu meklēšanā),shift,course,"The string lectures give *shift* explicitly; elsewhere nobīde = offset"
+apakšstrings,substring,standard,
+apakšvirkne,subsequence,standard,"Contrasted with apakšstrings (substring) in the string lectures"
+naivais algoritms,naive algorithm,standard,
+labošanas attālums,edit distance,standard,
+labojums,edit,standard,Insertion / deletion / replacement of one symbol
+Levenšteina attālums,Levenshtein distance,name,
+aptuvenā salīdzināšana,sequence alignment,standard,
+dinamiskā programmēšana,dynamic programming,standard,
+ripojošā hešfunkcija,rolling hash function; rolling hash,standard,
+Rabina-Karpa algoritms,Rabin–Karp algorithm,name,
+viltus trāpījums,spurious hit,standard,Rabin–Karp: hash values match but strings do not
+polinomiālā hešfunkcija,polynomial hash function,standard,
+cikliskais polinoms (hešfunkcija),cyclic polynomial,standard,Rolling hash with bit rotations and XOR (buzhash)
+abstrakts datu tips,abstract data type,standard,
+sadalīšana n-grammās,shingling,standard,
+n-gramma,shingle; n-gram,standard,
+atstarpju normalizēšana,space normalization,course,Lowercasing and collapsing whitespace before shingling
+Žakāra indekss,Jaccard coefficient,name,Also: Jaccard index
+Blūma filtrs,Bloom filter,name,
+ciparnospiedums (teksta),fingerprint,standard,
+dokumentu atrašana; dokumentu izgūšana,document retrieval,standard,Both Latvian variants occur in the string lectures
+plaģiāta meklēšana,plagiarism detection,standard,
+galīgs automāts-akceptors,finite automaton (acceptor),standard,The Latvian text gives this English term explicitly
+prefiksu īpašība,prefix property,course,KMP: state q_i means the last i symbols of T match the first i symbols of P
+prefiksu funkcija,prefix function,standard,KMP
+Knuta-Morisa-Prata algoritms,Knuth–Morris–Pratt algorithm,name,
+Bojera-Mūra algoritms,Boyer–Moore algorithm,name,
+sliktā simbola tabula,bad character table,standard,Boyer–Moore
+labā sufiksa tabula,good suffix table,standard,Boyer–Moore
+Aho-Korasikas algoritms,Aho–Corasick algorithm,name,
+ielaušanās atklāšanas sistēma,intrusion detection system,standard,
+trajs; burtu koks,trie,course,"Latvian transliteration of ""trie"" used in the slides; ""burtu koks"" in the lecture notes"
+saspiestais trajs,compressed trie,course,
+sufiksu trajs,suffix trie,course,
+sufiksa links,suffix link,course,Transliterated; no established Latvian term
+robežceļš,boundary path,course,Suffix trie construction
+priekšteča problēma,predecessor problem,standard,
+priekštecis / pēctecis (alfabētiskais),predecessor / successor,standard,
+zemākais kopīgais priekštecis,lowest common ancestor (LCA),standard,
+līmeņa priekšteča vaicājums,level ancestor query,standard,
+lēkšanas rādītāji,jump pointers,course,
+kāpņu dekompozīcija,ladder decomposition,course,
+treji,trays,course,"Transliteration of ""trays""; no Latvian term"
+burtu dziļums,letter depth,course,Length of the string spelled from the root to a suffix tree node
+vispārinātais sufiksu koks,generalized suffix tree,standard,
+garākais kopīgais apakšstrings,longest common substring,standard,
+garākais kopīgais prefikss,longest common prefix (LCP),standard,
+Dekarta koks,Cartesian tree,standard,
+Ukonena algoritms,Ukkonen's algorithm,name,
+Farahs-Koltons,Farach-Colton,name,Martin Farach-Colton
+Broders,Broder,name,Andrei Broder (MinHash)
+Uzdevums (bez numura),Problem,label,Unnumbered paragraph label
+Pielāgojums,Modification,label,"Suffix tree lecture: ""Pielāgojums 1 / 2"""

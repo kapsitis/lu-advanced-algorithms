@@ -27,8 +27,8 @@ Visi sasniedz lineāru laiku no teksta garuma. (Tie veic *parauga* priekšapstr�
 
 **Atkārtotā meklēšana (datu struktūru uzdevums):** Uzdevums ir identisks, bet apgriezts: teksta dokuments $T$ nemainās, un tajā jāmeklē visādi paraugi $P$. Tāpēc veic *teksta* $T$ priekšapstrādi, un pēc tam atbild uz vaicājumiem ar dažādiem paraugiem $P$.
 
-* Vienai meklēšanai gribam tērēt $O(|P|)$ laiku (meklējamo paraugu vienreiz jāizlasa), nevis $O(|T|)$ laiku (katrreiz no jauna skriet cauri tekstam).
-* Gribam $O(|T|)$ vietu, lai nav jāglabā daudz lielāka datu struktūra nekā pats teksts.
+* Vienai meklēšanai gribam tērēt $O(\lvert P\rvert )$ laiku (meklējamo paraugu vienreiz jāizlasa), nevis $O(\lvert T\rvert )$ laiku (katrreiz no jauna skriet cauri tekstam).
+* Gribam $O(\lvert T\rvert )$ vietu, lai nav jāglabā daudz lielāka datu struktūra nekā pats teksts.
 
 ## Traji
 
@@ -50,7 +50,7 @@ Vai to atrisina binārie meklēšanas koki? Virknes var sakārtot vai uzbūvēt 
 
 Tāpēc virknes $T_i$ attēlo kā ceļus trajā no saknes līdz lapai. Saknei pievieno bērnus, kas apzīmēti ar alfabēta burtiem (teiksim, $26$ alfabēta burtiem). Katras virknes beigās pievieno jaunu simbolu (dolāru $\mathtt{\$}$), kas nepieder alfabētam.
 
-**Piemērs:** Trajs virknēm $\lbrace \mathtt{ANA}, \mathtt{ANN}, \mathtt{ANNA}, \mathtt{ANNE} \rbrace$ ir veidots 4 burtu alfabētā (burtiem $\mathtt{A}, \mathtt{E}, \mathtt{N}$ pievienojam $\mathtt{\$}$ simbolu). Izveidotajā trajā ar $O(|P|)$ soļiem var atrast alfabētisko priekšteci un alfabētisko pēcteci: nonāk līdz vietai, kur $P$ "nokrīt" no traja, un tur atrod maksimālo lapu vienā apakškokā un minimālo lapu otrā apakškokā. Minimumu un maksimumu var uzglabāt katrā mezglā.
+**Piemērs:** Trajs virknēm $\lbrace \mathtt{ANA}, \mathtt{ANN}, \mathtt{ANNA}, \mathtt{ANNE} \rbrace$ ir veidots 4 burtu alfabētā (burtiem $\mathtt{A}, \mathtt{E}, \mathtt{N}$ pievienojam $\mathtt{\$}$ simbolu). Izveidotajā trajā ar $O(vert Pvert )$ soļiem var atrast alfabētisko priekšteci un alfabētisko pēcteci: nonāk līdz vietai, kur $P$ "nokrīt" no traja, un tur atrod maksimālo lapu vienā apakškokā un minimālo lapu otrā apakškokā. Minimumu un maksimumu var uzglabāt katrā mezglā.
 
 ### Kā attēlot traja mezglus
 
@@ -64,9 +64,9 @@ Ja alfabēts $\Sigma$ ir liels, svarīgi, kā glabāt viena traja mezgla bērnus
 | Van Emde Boasa koks (vEB koks) | $O(\lvert P\rvert \cdot \log \log \lvert\Sigma\rvert)$ | $O(\lvert T\rvert)$ |
 | "Treji" (*trays*) | $O(\lvert P\rvert + \log \lvert\Sigma\rvert)$ | $O(\lvert T\rvert)$ |
 
-Heštabula ir labākā no abām pasaulēm (vaicājums $O(|P|)$ un vieta $O(|T|)$), tomēr tā neatrisina priekšteča sameklēšanas problēmu, jo sajauc burtu kārtību.
+Heštabula ir labākā no abām pasaulēm (vaicājums $O(\lvert P\rvert )$ un vieta $O(\lvert T\rvert )$), tomēr tā neatrisina priekšteča sameklēšanas problēmu, jo sajauc burtu kārtību.
 
-M.Farahs-Koltons (*Martin Farach-Colton*) izmantoja LCA (zemāko kopīgo priekšteci) un svara līdzsvarotu bināro meklēšanas koku (katra mezgla svars ir visu tā pēcnācēju lapu skaits). Tas sasniedz $O(|P| + \log_2 k)$ laiku, kur $k$ ir tekstu skaits.
+M.Farahs-Koltons (*Martin Farach-Colton*) izmantoja LCA (zemāko kopīgo priekšteci) un svara līdzsvarotu bināro meklēšanas koku (katra mezgla svars ir visu tā pēcnācēju lapu skaits). Tas sasniedz $O(\lvert P\rvert  + \log_2 k)$ laiku, kur $k$ ir tekstu skaits.
 
 ### Saspiestais trajs
 
@@ -134,7 +134,7 @@ Sufiksu traju var veidot, pievienojot teksta burtus pa vienam: no $\textsf{SufTr
 
 **Apakšstringa pārbaude:** Pārbaudīt, vai strings $Q$ ir teksta $T$ apakšstrings. Sāk traja saknē, seko parauga $Q$ burtiem. Ja to visu var trajā nolasīt, "neizkrītot" no tā, tad $Q$ ir $T$ apakšstrings.
 
-**Piemērs:** Vai $\mathtt{baa}$ ir $\mathtt{abaaba}$ apakšstrings? Sekojam burtiem paraugā $\mathtt{baa}$. Pēc sufiksu traja izveides vaicājuma ilgums ir vienāds ar paša vaicājuma garumu $O(|Q|)$, pat ja teksts ir ļoti garš.
+**Piemērs:** Vai $\mathtt{baa}$ ir $\mathtt{abaaba}$ apakšstrings? Sekojam burtiem paraugā $\mathtt{baa}$. Pēc sufiksu traja izveides vaicājuma ilgums ir vienāds ar paša vaicājuma garumu $O(\lvert Q\rvert )$, pat ja teksts ir ļoti garš.
 
 <img
   alt="Apakšstringa baa meklēšana sufiksu trajā"
@@ -183,10 +183,10 @@ Sufiksu traju var veidot, pievienojot teksta burtus pa vienam: no $\textsf{SufTr
 **Sufiksu koki:** Tie ir saspiesti sufiksu traji.
 
 * Saspiež ceļus, kuros nav izvēles.
-* Lapu arvien ir $|T|$, bet katrā iekšējā mezglā notiek zarošanās.
-* Tāpēc iekšējo mezglu skaits nepārsniedz lapu skaitu, un kopējais mezglu skaits ir $O(|T|)$.
-* Šķautņu virknes neizraksta, bet glabā kā indeksu pāri tekstā $T$, tāpēc aizņemtā vieta ir $O(|T|)$.
-* Efektīvs Ukonena (*Ukkonen*) algoritms sufiksu koku uzbūvē $O(|T|)$ laikā.
+* Lapu arvien ir $\lvert T\rvert $, bet katrā iekšējā mezglā notiek zarošanās.
+* Tāpēc iekšējo mezglu skaits nepārsniedz lapu skaitu, un kopējais mezglu skaits ir $O(\lvert T\rvert )$.
+* Šķautņu virknes neizraksta, bet glabā kā indeksu pāri tekstā $T$, tāpēc aizņemtā vieta ir $O(\lvert T\rvert )$.
+* Efektīvs Ukonena (*Ukkonen*) algoritms sufiksu koku uzbūvē $O(\lvert T\rvert )$ laikā.
 
 <img
   alt="Sufiksu koks vārdam abaaba$"
@@ -214,7 +214,7 @@ Tukšā virkne nav jāuzglabā (tikai dolāra zīme). Lapās ierakstīti sufiksu
 ### Sufiksu koku lietojumi
 
 * Parauga $P$ meklēšana dod apakškoku, kura lapas atbilst visiem $P$ parādījumiem tekstā $T$. Tās var saskaitīt, sekot saistītajam lapu sarakstam, atrast pirmos $10$ parādījumus. No apakškoka saknes var "teleportēties" uz tā lapām.
-* Cik liela ir struktūra? Lapu skaits ir $|T|$; tā kā visi iekšējie mezgli ir zarojošie mezgli, arī kopējais mezglu skaits ir $O(|T|)$. Ar "trejiem" (*trays*) meklēšanas laiks ir $O(|P| + \log_2 |\Sigma|)$.
+* Cik liela ir struktūra? Lapu skaits ir $\lvert T\rvert $; tā kā visi iekšējie mezgli ir zarojošie mezgli, arī kopējais mezglu skaits ir $O(\lvert T\rvert )$. Ar "trejiem" (*trays*) meklēšanas laiks ir $O(\lvert P\rvert  + \log_2 \lvert \Sigma\rvert )$.
 * Atrast pirmos $k$ parauga parādījumus.
 * Saskaitīt, cik reizes $P$ parādās tekstā $T$.
 * Ja $T$ ir ļoti garš dokuments (piemēram, Merriam-Webster vārdnīca), atrast garāko apakšstringu, kas tajā parādās vismaz divas reizes. (Jāatrod mezgls ar lielāko "burtu dziļumu", zem kura ir vismaz divas lapas.)
@@ -256,7 +256,7 @@ Dažādus dolārus izmanto, lai katrs sufikss beigtos ar unikālu simbolu un no 
 
 Kā atrast visus dokumentus, kas satur vienu vārdu? Var izmantot sufiksu koku kā iepriekš un veikt ātru meklēšanu. Bet kas notiek, ja ir divi dokumenti, kas atbilst paraugam, un vienā dokumentā tas parādās miljardu reižu, bet otrajā -- tikai vienu reizi?
 
-**Dokumentu izgūšanas problēma:** Uzskaitīt visus dokumentus, kas satur paraugu $P$, laikā $O(|P| + k')$, kur $k' \leq k$ ir to dokumentu skaits, kas satur paraugu.
+**Dokumentu izgūšanas problēma:** Uzskaitīt visus dokumentus, kas satur paraugu $P$, laikā $O(\lvert P\rvert  + k')$, kur $k' \leq k$ ir to dokumentu skaits, kas satur paraugu.
 
 **Pielāgojums 1:** Vairākus dokumentus glabā sufiksu kokā tā, lai aiz jebkuras dolāra zīmes $\mathtt{\$}_i$ neko nepievienotu. Katra dolāra zīme ir sufiksu koka lapas mezgls.
 
@@ -272,7 +272,7 @@ Kā atrast visus dokumentus, kas satur vienu vārdu? Var izmantot sufiksu koku k
 
 Sufiksu koka lapas, izrakstītas sufiksu alfabētiskā secībā, veido *sufiksu masīvu*.
 
-**Definīcija:** *Sufiksu masīvs* (*suffix array*) ir visu teksta $T$ sufiksu sākuma indeksu saraksts, sakārtots sufiksu alfabētiskā secībā. Pašus sufiksus nav jāizraksta (jo tas aizņemtu $O(|T|^2)$ vietu) -- pietiek uzrakstīt indeksus.
+**Definīcija:** *Sufiksu masīvs* (*suffix array*) ir visu teksta $T$ sufiksu sākuma indeksu saraksts, sakārtots sufiksu alfabētiskā secībā. Pašus sufiksus nav jāizraksta (jo tas aizņemtu $O(\lvert T\rvert ^2)$ vietu) -- pietiek uzrakstīt indeksus.
 
 **Piemērs:** Tekstam `banana$` sufiksu masīvs ir $[6, 5, 3, 1, 0, 4, 2]$:
 
@@ -312,7 +312,7 @@ Sufiksu masīvi ir cieši saistīti ar Berouza-Vīlera transformāciju (sk. [4. 
 
 Rīks paraugu meklēšanai vārdnīcā: [Pattern Match](https://www.litscape.com/word_tools/pattern_match.php).
 
-**14.1. uzdevums (Garākie kopīgie apakšstringi):** Garākais kopīgais apakšstrings tekstiem $T_1$ un $T_2$ ir garākais strings, kas ietilpst abos tekstos. Dinamiskā programmēšana dod $O(n_1 \cdot n_2)$ laika algoritmu, kur $|T_1| = n_1$ un $|T_2| = n_2$. (Sk. [tabulas veidošanas piemēru](https://bit.ly/3rcGUev).)
+**14.1. uzdevums (Garākie kopīgie apakšstringi):** Garākais kopīgais apakšstrings tekstiem $T_1$ un $T_2$ ir garākais strings, kas ietilpst abos tekstos. Dinamiskā programmēšana dod $O(n_1 \cdot n_2)$ laika algoritmu, kur $\lvert T_1\rvert  = n_1$ un $\lvert T_2\rvert  = n_2$. (Sk. [tabulas veidošanas piemēru](https://bit.ly/3rcGUev).)
 
 <img
   alt="Garākā kopīgā apakšstringa dinamiskās programmēšanas tabula"

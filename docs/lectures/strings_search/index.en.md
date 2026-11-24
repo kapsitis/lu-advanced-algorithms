@@ -383,7 +383,7 @@ To detect plagiarism or other copying of text one can use, for example, a slidin
 **Definition:** The *Jaccard coefficient* of two sets $A$ and $B$ is the ratio of their intersection to their union:
 
 $$
-J(A,B) = \frac{|A \cap B|}{|A \cup B|} = \frac{|A \cap B|}{|A| + |B| - |A \cap B|}.
+J(A,B) = \frac{\lvert A \cap B\rvert }{\lvert A \cup B\rvert } = \frac{\lvert A \cap B\rvert }{\lvert A\rvert  + \lvert B\rvert  - \lvert A \cap B\rvert }.
 $$
 
 Similar sets (or the shingle sets of similar documents) have $J(A,B)$ close to $1$.
@@ -406,10 +406,10 @@ $\textsf{MinHash}(S_1, S_2, \mathcal{H})$
 11. $\quad\quad\quad \mathrm{minHash}_2 = \mathrm{hValue}$
 12. $\quad \mathrm{sig}_1.append(\mathrm{minHash}_1)$, $\mathrm{sig}_2.append(\mathrm{minHash}_2)$ $\quad$ *// append to the MinHash lists*
 13. $intersection = 0$
-14. **for** $i = 0$ **to** $|\mathcal{H}| - 1$:
+14. **for** $i = 0$ **to** $\lvert \mathcal{H}\rvert  - 1$:
 15. $\quad$ **if** $\mathrm{sig}_1[i] == \mathrm{sig}_2[i]$:
 16. $\quad\quad \mathrm{intersection} = \mathrm{intersection} + 1$
-17. **return** $\frac{\mathrm{intersection}}{|\mathcal{H}|}$ $\quad$ *// return the estimate of the Jaccard coefficient*
+17. **return** $\frac{\mathrm{intersection}}{\lvert \mathcal{H}\rvert }$ $\quad$ *// return the estimate of the Jaccard coefficient*
 
 ### Bloom Filters
 
@@ -512,17 +512,17 @@ $$
 **Time for searching with an automaton:**
 
 1. Time to read the text: Running a ready automaton takes $O(n)$ time: one operation for each letter of the text.
-2. Time to preprocess the pattern: To build the automaton, the next state $q'$ must be determined for every combination of the current state $q$ and the current letter. There are $m$ states in total. Let $|\mathcal{A}|$ denote the number of letters in the alphabet $\mathcal{A}$. This gives a table with $m \cdot |\mathcal{A}|$ entries, which takes at least $O(m \cdot |\mathcal{A}|)$ operations.
-3. The total time is $O(n + m \cdot |\mathcal{A}|)$.
+2. Time to preprocess the pattern: To build the automaton, the next state $q'$ must be determined for every combination of the current state $q$ and the current letter. There are $m$ states in total. Let $\lvert \mathcal{A}\rvert $ denote the number of letters in the alphabet $\mathcal{A}$. This gives a table with $m \cdot \lvert \mathcal{A}\rvert $ entries, which takes at least $O(m \cdot \lvert \mathcal{A}\rvert )$ operations.
+3. The total time is $O(n + m \cdot \lvert \mathcal{A}\rvert )$.
 
-*Note:* The preprocessing time is too large; in practice one tries to avoid it -- this is what the KMP algorithm is for. Even assuming $n \gg m$, $m \cdot |\mathcal{A}|$ can be large too.
+*Note:* The preprocessing time is too large; in practice one tries to avoid it -- this is what the KMP algorithm is for. Even assuming $n \gg m$, $m \cdot \lvert \mathcal{A}\rvert $ can be large too.
 
 ## The Knuth–Morris–Pratt (KMP) Algorithm
 
 **The main idea of the KMP algorithm:** We build a small table with the *prefix function* $\pi$. The function $\pi$ is built for the *pattern* being searched for. It captures how the pattern $P$ matches shifted copies of itself. This avoids unnecessary shifts in the naive search algorithm, and no separate state transition has to be built for each input symbol $s \in S$.
 
 1. The input text is read only once: $O(n)$, rather than $O(n \cdot m)$ as in the naive algorithm.
-2. The pattern $P$ is preprocessed in $O(m)$ time, rather than $O(m\cdot|S|)$ as for a fully built automaton.
+2. The pattern $P$ is preprocessed in $O(m)$ time, rather than $O(m\cdot\lvert S\rvert )$ as for a fully built automaton.
 
 A variant of the Knuth–Morris–Pratt algorithm, the Aho–Corasick string matching algorithm, is used in intrusion detection systems to scan packet payloads for many patterns simultaneously.
 

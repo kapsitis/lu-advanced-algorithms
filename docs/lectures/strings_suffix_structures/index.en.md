@@ -27,8 +27,8 @@ All of them run in time linear in the length of the text. (They preprocess the *
 
 **Repeated searching (a data structure problem):** The problem is the same, but reversed: the text document $T$ does not change, and all kinds of patterns $P$ must be searched for in it. So we preprocess the *text* $T$, and after that we answer queries with different patterns $P$.
 
-* For one search we want to spend $O(|P|)$ time (the pattern has to be read once), rather than $O(|T|)$ time (running through the whole text again each time).
-* We want $O(|T|)$ space, so that we do not need to store a data structure much larger than the text itself.
+* For one search we want to spend $O(\lvert P\rvert )$ time (the pattern has to be read once), rather than $O(\lvert T\rvert )$ time (running through the whole text again each time).
+* We want $O(\lvert T\rvert )$ space, so that we do not need to store a data structure much larger than the text itself.
 
 ## Tries
 
@@ -50,7 +50,7 @@ Do binary search trees solve it? The strings can be sorted, or a binary search t
 
 So the strings $T_i$ are represented as paths in a trie from the root to a leaf. The root gets children labeled with the letters of the alphabet (say, the $26$ letters of the alphabet). At the end of each string we add a new symbol (a dollar $\mathtt{\$}$) that does not belong to the alphabet.
 
-**Example:** The trie for the strings $\lbrace \mathtt{ANA}, \mathtt{ANN}, \mathtt{ANNA}, \mathtt{ANNE} \rbrace$ is built over a 4-letter alphabet (we add the $\mathtt{\$}$ symbol to the letters $\mathtt{A}, \mathtt{E}, \mathtt{N}$). In the trie, the alphabetical predecessor and the alphabetical successor can be found in $O(|P|)$ steps: we go down to the place where $P$ "falls off" the trie, and there we find the maximal leaf in one subtree and the minimal leaf in the other subtree. The minimum and the maximum can be stored in each node.
+**Example:** The trie for the strings $\lbrace \mathtt{ANA}, \mathtt{ANN}, \mathtt{ANNA}, \mathtt{ANNE} \rbrace$ is built over a 4-letter alphabet (we add the $\mathtt{\$}$ symbol to the letters $\mathtt{A}, \mathtt{E}, \mathtt{N}$). In the trie, the alphabetical predecessor and the alphabetical successor can be found in $O(vert Pvert )$ steps: we go down to the place where $P$ "falls off" the trie, and there we find the maximal leaf in one subtree and the minimal leaf in the other subtree. The minimum and the maximum can be stored in each node.
 
 ### How to Represent Trie Nodes
 
@@ -64,9 +64,9 @@ If the alphabet $\Sigma$ is large, it matters how the children of one trie node 
 | Van Emde Boas tree (vEB tree) | $O(\lvert P\rvert \cdot \log \log \lvert\Sigma\rvert)$ | $O(\lvert T\rvert)$ |
 | Trays | $O(\lvert P\rvert + \log \lvert\Sigma\rvert)$ | $O(\lvert T\rvert)$ |
 
-A hash table is the best of both worlds (query $O(|P|)$ and space $O(|T|)$), but it does not solve the predecessor problem, because it mixes up the order of the letters.
+A hash table is the best of both worlds (query $O(\lvert P\rvert )$ and space $O(\lvert T\rvert )$), but it does not solve the predecessor problem, because it mixes up the order of the letters.
 
-Martin Farach-Colton used the LCA (lowest common ancestor) and a weight-balanced binary search tree (the weight of each node is the number of leaves below it). This achieves $O(|P| + \log_2 k)$ time, where $k$ is the number of texts.
+Martin Farach-Colton used the LCA (lowest common ancestor) and a weight-balanced binary search tree (the weight of each node is the number of leaves below it). This achieves $O(\lvert P\rvert  + \log_2 k)$ time, where $k$ is the number of texts.
 
 ### Compressed Tries
 
@@ -134,7 +134,7 @@ A suffix trie can be built by adding the letters of the text one by one: $\texts
 
 **Substring check:** Check whether a string $Q$ is a substring of the text $T$. Start at the root of the trie and follow the letters of the pattern $Q$. If all of it can be read in the trie without "falling off", then $Q$ is a substring of $T$.
 
-**Example:** Is $\mathtt{baa}$ a substring of $\mathtt{abaaba}$? We follow the letters of the pattern $\mathtt{baa}$. Once the suffix trie has been built, a query takes time equal to the length of the query itself, $O(|Q|)$, even if the text is very long.
+**Example:** Is $\mathtt{baa}$ a substring of $\mathtt{abaaba}$? We follow the letters of the pattern $\mathtt{baa}$. Once the suffix trie has been built, a query takes time equal to the length of the query itself, $O(\lvert Q\rvert )$, even if the text is very long.
 
 <img
   alt="Searching for the substring baa in a suffix trie"
@@ -183,10 +183,10 @@ A suffix trie can be built by adding the letters of the text one by one: $\texts
 **Suffix trees:** These are compressed suffix tries.
 
 * Paths without choices are compressed.
-* There are still $|T|$ leaves, but every inner node branches.
-* So the number of inner nodes does not exceed the number of leaves, and the total number of nodes is $O(|T|)$.
-* Edge labels are not written out, but stored as pairs of indices into the text $T$, so the space used is $O(|T|)$.
-* The efficient Ukkonen's algorithm builds a suffix tree in $O(|T|)$ time.
+* There are still $\lvert T\rvert $ leaves, but every inner node branches.
+* So the number of inner nodes does not exceed the number of leaves, and the total number of nodes is $O(\lvert T\rvert )$.
+* Edge labels are not written out, but stored as pairs of indices into the text $T$, so the space used is $O(\lvert T\rvert )$.
+* The efficient Ukkonen's algorithm builds a suffix tree in $O(\lvert T\rvert )$ time.
 
 <img
   alt="Suffix tree of the word abaaba$"
@@ -214,7 +214,7 @@ In this tree one can search for $\mathtt{nan}$, $\mathtt{an}$ or even $\mathtt{a
 ### Applications of Suffix Trees
 
 * Searching for a pattern $P$ gives a subtree whose leaves correspond to all occurrences of $P$ in the text $T$. They can be counted, one can follow the linked list of leaves, or find the first $10$ occurrences. From the root of the subtree one can "teleport" to its leaves.
-* How large is the structure? There are $|T|$ leaves; since all inner nodes are branching nodes, the total number of nodes is also $O(|T|)$. With trays, the search time is $O(|P| + \log_2 |\Sigma|)$.
+* How large is the structure? There are $\lvert T\rvert $ leaves; since all inner nodes are branching nodes, the total number of nodes is also $O(\lvert T\rvert )$. With trays, the search time is $O(\lvert P\rvert  + \log_2 \lvert \Sigma\rvert )$.
 * Find the first $k$ occurrences of a pattern.
 * Count how many times $P$ occurs in the text $T$.
 * If $T$ is a very long document (for example, the Merriam-Webster dictionary), find the longest substring that occurs in it at least twice. (Find the node with the largest "letter depth" that has at least two leaves below it.)
@@ -256,7 +256,7 @@ Different dollars are used so that each suffix ends with a unique symbol and the
 
 How do we find all documents that contain a word? We can use a suffix tree as before and search quickly. But what happens if two documents match the pattern, and in one of them it occurs a billion times, but in the other only once?
 
-**The document retrieval problem:** List all documents that contain the pattern $P$ in $O(|P| + k')$ time, where $k' \leq k$ is the number of documents that contain the pattern.
+**The document retrieval problem:** List all documents that contain the pattern $P$ in $O(\lvert P\rvert  + k')$ time, where $k' \leq k$ is the number of documents that contain the pattern.
 
 **Modification 1:** Several documents are stored in a suffix tree so that nothing is appended after any dollar sign $\mathtt{\$}_i$. Each dollar sign is a leaf node of the suffix tree.
 
@@ -272,7 +272,7 @@ How do we find all documents that contain a word? We can use a suffix tree as be
 
 The leaves of a suffix tree, listed in alphabetical order of the suffixes, form a *suffix array*.
 
-**Definition:** A *suffix array* is the list of the start indices of all suffixes of the text $T$, sorted in alphabetical order of the suffixes. The suffixes themselves need not be written out (that would take $O(|T|^2)$ space) -- it is enough to write the indices.
+**Definition:** A *suffix array* is the list of the start indices of all suffixes of the text $T$, sorted in alphabetical order of the suffixes. The suffixes themselves need not be written out (that would take $O(\lvert T\rvert ^2)$ space) -- it is enough to write the indices.
 
 **Example:** For the text `banana$` the suffix array is $[6, 5, 3, 1, 0, 4, 2]$:
 
@@ -312,7 +312,7 @@ Suffix arrays are closely related to the Burrows–Wheeler transform (see [4. Bu
 
 A tool for searching patterns in a dictionary: [Pattern Match](https://www.litscape.com/word_tools/pattern_match.php).
 
-**Problem 14.1 (Longest common substrings):** The longest common substring of the texts $T_1$ and $T_2$ is the longest string contained in both texts. Dynamic programming gives an $O(n_1 \cdot n_2)$ time algorithm, where $|T_1| = n_1$ and $|T_2| = n_2$. (See an [example of building the table](https://bit.ly/3rcGUev).)
+**Problem 14.1 (Longest common substrings):** The longest common substring of the texts $T_1$ and $T_2$ is the longest string contained in both texts. Dynamic programming gives an $O(n_1 \cdot n_2)$ time algorithm, where $\lvert T_1\rvert  = n_1$ and $\lvert T_2\rvert  = n_2$. (See an [example of building the table](https://bit.ly/3rcGUev).)
 
 <img
   alt="Dynamic programming table for the longest common substring"

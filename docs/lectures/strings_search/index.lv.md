@@ -383,7 +383,7 @@ Plaģiāta vai citas teksta kopēšanas atpazīšanai var izmantot, piemēram, $
 **Definīcija:** Par divu kopu $A$ un $B$ Žakāra indeksu (*Jaccard coefficient*) sauc abu kopu šķēluma attiecību pret to apvienojumu:
 
 $$
-J(A,B) = \frac{|A \cap B|}{|A \cup B|} = \frac{|A \cap B|}{|A| + |B| - |A \cap B|}.
+J(A,B) = \frac{\lvert A \cap B\rvert }{\lvert A \cup B\rvert } = \frac{\lvert A \cap B\rvert }{\lvert A\rvert  + \lvert B\rvert  - \lvert A \cap B\rvert }.
 $$
 
 Līdzīgām kopām (vai dokumentu n-grammu sadalījumiem) atbilst $J(A,B)$, kas ir tuvu skaitlim $1$.
@@ -406,10 +406,10 @@ $\textsf{MinHash}(S_1, S_2, \mathcal{H})$
 11. $\quad\quad\quad \mathrm{minHash}_2 = \mathrm{hValue}$
 12. $\quad \mathrm{sig}_1.append(\mathrm{minHash}_1)$, $\mathrm{sig}_2.append(\mathrm{minHash}_2)$ $\quad$ *// pievieno MinHash sarakstiem*
 13. $intersection = 0$
-14. **for** $i = 0$ **to** $|\mathcal{H}| - 1$:
+14. **for** $i = 0$ **to** $\lvert \mathcal{H}\rvert  - 1$:
 15. $\quad$ **if** $\mathrm{sig}_1[i] == \mathrm{sig}_2[i]$:
 16. $\quad\quad \mathrm{intersection} = \mathrm{intersection} + 1$
-17. **return** $\frac{\mathrm{intersection}}{|\mathcal{H}|}$ $\quad$ *// atgriež Žakāra indeksa novērtējumu*
+17. **return** $\frac{\mathrm{intersection}}{\lvert \mathcal{H}\rvert }$ $\quad$ *// atgriež Žakāra indeksa novērtējumu*
 
 ### Blūma filtri
 
@@ -512,17 +512,17 @@ $$
 **Laiks meklēšanai ar automātu:**
 
 1. Teksta lasīšanas laiks: Gatava automāta darbināšanai vajag $O(n)$ laiku: katram teksta burtam viena operācija.
-2. Parauga priekšapstrādes laiks: Lai izveidotu automātu, jānosaka nākošais stāvoklis $q'$ jebkurai pašreizējā stāvokļa $q$ un pašreizējā burta kombinācijai. Pavisam ir $m$ stāvokļi. Ar $|\mathcal{A}|$ apzīmējam alfabēta $\mathcal{A}$ burtu skaitu. Veidojas tabula ar $m \cdot |\mathcal{A}|$ elementiem. Tam vajadzīgas vismaz $O(m \cdot |\mathcal{A}|)$ operācijas.
-3. Pilnais laiks ir $O(n + m \cdot |\mathcal{A}|)$.
+2. Parauga priekšapstrādes laiks: Lai izveidotu automātu, jānosaka nākošais stāvoklis $q'$ jebkurai pašreizējā stāvokļa $q$ un pašreizējā burta kombinācijai. Pavisam ir $m$ stāvokļi. Ar $\lvert \mathcal{A}\rvert $ apzīmējam alfabēta $\mathcal{A}$ burtu skaitu. Veidojas tabula ar $m \cdot \lvert \mathcal{A}\rvert $ elementiem. Tam vajadzīgas vismaz $O(m \cdot \lvert \mathcal{A}\rvert )$ operācijas.
+3. Pilnais laiks ir $O(n + m \cdot \lvert \mathcal{A}\rvert )$.
 
-*Piezīme:* Priekšapstrādes laiks ir pārāk liels; praksē tā cenšas nedarīt - par to ir KMP algoritms. Pat pieņemot, ka $n \gg m$, arī $m \cdot |\mathcal{A}|$ var būt liels.
+*Piezīme:* Priekšapstrādes laiks ir pārāk liels; praksē tā cenšas nedarīt - par to ir KMP algoritms. Pat pieņemot, ka $n \gg m$, arī $m \cdot \lvert \mathcal{A}\rvert $ var būt liels.
 
 ## Knuta-Morisa-Prata (KMP) algoritms
 
 **KMP algoritma pamatideja:** Izveidojam tabuliņu ar *prefiksu funkciju* (*prefix function*) $\pi$. Funkcija $\pi$ veidojama meklējamam *paraugam* (*pattern*). Šī funkcija ietver zināšanas par to, kā paraugs $P$ sakrīt pats ar savām nobīdēm. Tā var izvairīties no nevajadzīgām nobīdēm naivajā meklēšanas algoritmā un nav jāveido atsevišķa stāvokļu pāreja katram ievades simbolam $s \in S$.
 
 1. Ievades tekstu lasa tikai vienreiz: $O(n)$, nevis $O(n \cdot m)$, kā naivajam algoritmam.
-2. Parauga $P$ priekšapstrāde notiks laikā $O(m)$, nevis $O(m\cdot|S|)$, kā pilnīgi izveidotam automātam.
+2. Parauga $P$ priekšapstrāde notiks laikā $O(m)$, nevis $O(m\cdot\lvert S\rvert )$, kā pilnīgi izveidotam automātam.
 
 Knuta-Morisa-Prata algoritma variantu -- Aho-Korasikas (*Aho-Corasick*) stringu meklēšanas algoritmu -- izmanto ielaušanās atklāšanas sistēmās (*intrusion detection systems*), lai pakešu saturā vienlaikus meklētu daudzus paraugus.
 

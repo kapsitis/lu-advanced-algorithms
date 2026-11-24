@@ -584,7 +584,7 @@ $$
 $\textsf{KMPmatcher}(T, P)$
 1. $n = T.\mathit{length}$
 2. $m = P.\mathit{length}$
-3. $\pi = \textsf{Compute\_Prefix\_Function}(P)$
+3. $\pi = \textsf{Compute\\_Prefix\\_Function}(P)$
 4. $k = 0$
 5. **for** $i = 0$ **to** $n-1$ $\quad$ *// read T from left to right*
 6. $\quad$ **while** $k > 0$ **and** $P[k] \neq T[i]$

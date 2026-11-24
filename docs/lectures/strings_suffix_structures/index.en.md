@@ -48,9 +48,10 @@ The predecessor problem is useful in practice: we type in some prefix of a strin
 
 Do binary search trees solve it? The strings can be sorted, or a binary search tree can be built, but this is inefficient, since comparing two strings can take a long time.
 
-So the strings $T_i$ are represented as paths in a trie from the root to a leaf. The root gets children labeled with the letters of the alphabet (say, the $26$ letters of the alphabet). At the end of each string we add a new symbol (a dollar $\mathtt{\$}$) that does not belong to the alphabet.
+So the strings $T_i$ are represented as paths in a trie from the root to a leaf. The root gets children labeled with the letters of the alphabet (say, the $26$ letters of the alphabet). At the end of each string we add a new symbol (a dollar $\mathtt{\\$}$) that does not belong to the alphabet.
 
-**Example:** The trie for the strings $\lbrace \mathtt{ANA}, \mathtt{ANN}, \mathtt{ANNA}, \mathtt{ANNE} \rbrace$ is built over a 4-letter alphabet (we add the $\mathtt{\$}$ symbol to the letters $\mathtt{A}, \mathtt{E}, \mathtt{N}$). In the trie, the alphabetical predecessor and the alphabetical successor can be found in $O(vert Pvert )$ steps: we go down to the place where $P$ "falls off" the trie, and there we find the maximal leaf in one subtree and the minimal leaf in the other subtree. The minimum and the maximum can be stored in each node.
+**Example:** The trie for the strings $\lbrace \mathtt{ANA}, \mathtt{ANN}, \mathtt{ANNA}, \mathtt{ANNE} \rbrace$ is built over a 4-letter alphabet (we add the $\mathtt{\\$}$ symbol to the letters $\mathtt{A}, \mathtt{E}, \mathtt{N}$). In the trie, the alphabetical predecessor and the alphabetical successor can be found in $O(vert P
+vert )$ steps: we go down to the place where $P$ "falls off" the trie, and there we find the maximal leaf in one subtree and the minimal leaf in the other subtree. The minimum and the maximum can be stored in each node.
 
 ### How to Represent Trie Nodes
 
@@ -74,7 +75,7 @@ In a compressed trie, paths without branching are replaced with a single edge la
 
 ## Suffix Tries
 
-**Definition:** The *suffix trie* of a text $T$ is a trie that contains all suffixes $T[i:]$ of $T$, each of them terminated with a special symbol -- a dollar $\mathtt{\$}$ that does not belong to the alphabet.
+**Definition:** The *suffix trie* of a text $T$ is a trie that contains all suffixes $T[i:]$ of $T$, each of them terminated with a special symbol -- a dollar $\mathtt{\\$}$ that does not belong to the alphabet.
 
 <img
   alt="Suffix trie of the word abaaba"
@@ -82,7 +83,7 @@ In a compressed trie, paths without branching are replaced with a single edge la
   style="width: 100%; max-width: 280px; border:none; background-color:#FFFFFF;"
 />
 
-**Marking the end of a suffix:** Without the dollars at the ends of the suffixes, there would no longer be a 1:1 correspondence between the leaves of the tree and the suffixes, and some applications would become impossible (one could not tell whether a string is a suffix or an inner substring). This property is essential; $\mathtt{\$}$ will be used everywhere (sometimes they are marked by coloring the leaves of the tree).
+**Marking the end of a suffix:** Without the dollars at the ends of the suffixes, there would no longer be a 1:1 correspondence between the leaves of the tree and the suffixes, and some applications would become impossible (one could not tell whether a string is a suffix or an inner substring). This property is essential; $\mathtt{\\$}$ will be used everywhere (sometimes they are marked by coloring the leaves of the tree).
 
 <img
   alt="Suffix trie of the word abaaba without dollars"
@@ -122,7 +123,7 @@ A suffix trie can be built by adding the letters of the text one by one: $\texts
   style="width: 100%; max-width: 700px; border:none; background-color:#FFFFFF;"
 />
 
-**One complete example:** Building the suffix trie of the word $\mathtt{abaaba\$}$ by adding letters one by one.
+**One complete example:** Building the suffix trie of the word $\mathtt{abaaba\\$}$ by adding letters one by one.
 
 <img
   alt="Building the suffix trie of the word abaaba$"
@@ -142,9 +143,9 @@ A suffix trie can be built by adding the letters of the text one by one: $\texts
   style="width: 100%; max-width: 280px; border:none; background-color:#FFFFFF;"
 />
 
-**Suffix check:** Check whether a string $Q$ is a suffix of the text $T$. Start at the root of the trie and follow the letters of the pattern $Q$. If all of it can be read in the trie and then a leaf can be reached along a $\mathtt{\$}$ edge, it is a suffix.
+**Suffix check:** Check whether a string $Q$ is a suffix of the text $T$. Start at the root of the trie and follow the letters of the pattern $Q$. If all of it can be read in the trie and then a leaf can be reached along a $\mathtt{\\$}$ edge, it is a suffix.
 
-**Example:** Is $\mathtt{baa}$ a suffix of $\mathtt{abaaba}$? We search downward from the root (until we "fall off" the trie or reach the end of the pattern). If a $\mathtt{\$}$ edge leads from the node reached to a leaf, it was a suffix.
+**Example:** Is $\mathtt{baa}$ a suffix of $\mathtt{abaaba}$? We search downward from the root (until we "fall off" the trie or reach the end of the pattern). If a $\mathtt{\\$}$ edge leads from the node reached to a leaf, it was a suffix.
 
 <img
   alt="Suffix check in a suffix trie"
@@ -238,7 +239,7 @@ $$
 
 Different dollars are used so that each suffix ends with a unique symbol and the leaf tells which document it belongs to.
 
-**Example:** The words $\mathtt{at}$, $\mathtt{tag}$, $\mathtt{gat}$. Build the concatenation $\mathtt{at\#_1tag\#_2gat\#_3}$ and its suffix tree (left in the figure). For each leaf, drop the text after the first $\#$ symbol (right in the figure).
+**Example:** The words $\mathtt{at}$, $\mathtt{tag}$, $\mathtt{gat}$. Build the concatenation $\mathtt{at\\#_1tag\\#_2gat\\#_3}$ and its suffix tree (left in the figure). For each leaf, drop the text after the first $\\#$ symbol (right in the figure).
 
 <img
   alt="Generalized suffix tree of the words at, tag, gat"
@@ -249,7 +250,7 @@ Different dollars are used so that each suffix ends with a unique symbol and the
 **Longest common substring:** Find the longest common substring of the texts $S$ and $T$ (of lengths $n_1$ and $n_2$).
 
 * Build the generalized suffix tree in $O(n_1 + n_2)$ time.
-* Find the deepest node below which there are both leaves ending with $\#_1$ and leaves ending with $\#_2$.
+* Find the deepest node below which there are both leaves ending with $\\#_1$ and leaves ending with $\\#_2$.
 * This is more efficient than the naive algorithm $O(n_1^2 \cdot n_2^2)$ and also than dynamic programming $O(n_1 \cdot n_2)$.
 
 ### Document Retrieval
@@ -258,14 +259,14 @@ How do we find all documents that contain a word? We can use a suffix tree as be
 
 **The document retrieval problem:** List all documents that contain the pattern $P$ in $O(\lvert P\rvert  + k')$ time, where $k' \leq k$ is the number of documents that contain the pattern.
 
-**Modification 1:** Several documents are stored in a suffix tree so that nothing is appended after any dollar sign $\mathtt{\$}_i$. Each dollar sign is a leaf node of the suffix tree.
+**Modification 1:** Several documents are stored in a suffix tree so that nothing is appended after any dollar sign $\mathtt{\\$}_i$. Each dollar sign is a leaf node of the suffix tree.
 
-**Modification 2:** Leaves labeled with the same dollar sign $\mathtt{\$}_i$ point to each other -- they form a linked list.
+**Modification 2:** Leaves labeled with the same dollar sign $\mathtt{\\$}_i$ point to each other -- they form a linked list.
 
 **Overview of the document retrieval algorithm:**
 
 1. Find the pattern $P$ in the large suffix tree. It is some inner node. Suppose all leaves below it are numbered consecutively; their numbers lie in the interval $[\ell, n]$.
-2. The goal is to find the first occurrence of $\mathtt{\$}_i$ for each $i$. We want to pay only for the number of different documents, but the interval $[\ell, n]$ may contain very many $\mathtt{\$}_i$ leaves.
+2. The goal is to find the first occurrence of $\mathtt{\\$}_i$ for each $i$. We want to pay only for the number of different documents, but the interval $[\ell, n]$ may contain very many $\mathtt{\\$}_i$ leaves.
 3. The solution is to store in each leaf the number of the previous leaf of the same document (as in "Modification 2").
 
 ## Suffix Arrays
@@ -322,7 +323,7 @@ A tool for searching patterns in a dictionary: [Pattern Match](https://www.litsc
 
 *Dynamic programming table for the strings $\mathtt{ABCXYZAY}$ and $\mathtt{XYZABCB}$: each cell contains the length of the longest common suffix of the two prefixes. The largest value $4$ corresponds to the longest common substring $\mathtt{XYZA}$.*
 
-Consider the strings $T_1 = \mathtt{banana\$}_1$ and $T_2 = \mathtt{guanabana\$}_2$. They are written over this alphabet:
+Consider the strings $T_1 = \mathtt{banana\\$}_1$ and $T_2 = \mathtt{guanabana\\$}_2$. They are written over this alphabet:
 
 $$
 \Sigma = \lbrace \mathtt{\$}_1, \mathtt{\$}_2, \mathtt{a}, \mathtt{b}, \mathtt{g}, \mathtt{n}, \mathtt{u} \rbrace.
@@ -330,14 +331,14 @@ $$
 
 An algorithm with time $O(n_1+n_2)$ can find the longest common substring.
 
-* **(A)** Draw the suffix tree of the text $\mathtt{banana\$}_1$.
-* **(B)** Add to the existing tree the suffixes of the text $\mathtt{guanabana\$}_2$ as well. (One can also build the suffix tree of the text $\mathtt{banana\$}_1\mathtt{guanabana\$}_2$ at once.)
+* **(A)** Draw the suffix tree of the text $\mathtt{banana\\$}_1$.
+* **(B)** Add to the existing tree the suffixes of the text $\mathtt{guanabana\\$}_2$ as well. (One can also build the suffix tree of the text $\mathtt{banana\\$}_1\mathtt{guanabana\\$}_2$ at once.)
 * **(C)** Find visually the longest common substring of $\mathtt{banana}$ and $\mathtt{guanabana}$. Mark the corresponding nodes in the suffix tree. What is the property of the root of the subtree?
 * **(D)** Find an $O(n_1+n_2)$ algorithm to determine the longest common substring of texts of lengths $n_1$ and $n_2$ respectively.
 
 *Note:* Draw the suffix trees in compressed form.
 
-**Problem 14.2 (Building a suffix array):** Consider the text $\mathtt{acabcabaabaabca\$}$. It is written over a 4-letter alphabet with this order: $\Sigma = \lbrace \mathtt{\$}, \mathtt{a}, \mathtt{b}, \mathtt{c} \rbrace$.
+**Problem 14.2 (Building a suffix array):** Consider the text $\mathtt{acabcabaabaabca\\$}$. It is written over a 4-letter alphabet with this order: $\Sigma = \lbrace \mathtt{\\$}, \mathtt{a}, \mathtt{b}, \mathtt{c} \rbrace$.
 
 * **(A)** Build the suffix array of this text.
 * **(B)** Add LCP (longest common prefix) information to the suffix array -- find the longest common prefixes of any two alphabetically adjacent suffixes.

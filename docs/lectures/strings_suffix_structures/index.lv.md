@@ -48,9 +48,10 @@ Priekšteča meklēšanas uzdevums ir praktiski noderīgs: ievadām kādu virkne
 
 Vai to atrisina binārie meklēšanas koki? Virknes var sakārtot vai uzbūvēt bināro meklēšanas koku, bet tas ir neefektīvi, jo divu virkņu salīdzināšana var aizņemt ilgu laiku.
 
-Tāpēc virknes $T_i$ attēlo kā ceļus trajā no saknes līdz lapai. Saknei pievieno bērnus, kas apzīmēti ar alfabēta burtiem (teiksim, $26$ alfabēta burtiem). Katras virknes beigās pievieno jaunu simbolu (dolāru $\mathtt{\$}$), kas nepieder alfabētam.
+Tāpēc virknes $T_i$ attēlo kā ceļus trajā no saknes līdz lapai. Saknei pievieno bērnus, kas apzīmēti ar alfabēta burtiem (teiksim, $26$ alfabēta burtiem). Katras virknes beigās pievieno jaunu simbolu (dolāru $\mathtt{\\$}$), kas nepieder alfabētam.
 
-**Piemērs:** Trajs virknēm $\lbrace \mathtt{ANA}, \mathtt{ANN}, \mathtt{ANNA}, \mathtt{ANNE} \rbrace$ ir veidots 4 burtu alfabētā (burtiem $\mathtt{A}, \mathtt{E}, \mathtt{N}$ pievienojam $\mathtt{\$}$ simbolu). Izveidotajā trajā ar $O(vert Pvert )$ soļiem var atrast alfabētisko priekšteci un alfabētisko pēcteci: nonāk līdz vietai, kur $P$ "nokrīt" no traja, un tur atrod maksimālo lapu vienā apakškokā un minimālo lapu otrā apakškokā. Minimumu un maksimumu var uzglabāt katrā mezglā.
+**Piemērs:** Trajs virknēm $\lbrace \mathtt{ANA}, \mathtt{ANN}, \mathtt{ANNA}, \mathtt{ANNE} \rbrace$ ir veidots 4 burtu alfabētā (burtiem $\mathtt{A}, \mathtt{E}, \mathtt{N}$ pievienojam $\mathtt{\\$}$ simbolu). Izveidotajā trajā ar $O(vert P
+vert )$ soļiem var atrast alfabētisko priekšteci un alfabētisko pēcteci: nonāk līdz vietai, kur $P$ "nokrīt" no traja, un tur atrod maksimālo lapu vienā apakškokā un minimālo lapu otrā apakškokā. Minimumu un maksimumu var uzglabāt katrā mezglā.
 
 ### Kā attēlot traja mezglus
 
@@ -74,7 +75,7 @@ Saspiestajā trajā ceļus bez sazarošanās aizstāj ar vienu šķautni, uz kur
 
 ## Sufiksu traji
 
-**Definīcija:** Teksta $T$ *sufiksu trajs* ir trajs, kurā ievietoti visi $T$ sufiksi $T[i:]$, katru no tiem noslēdzot ar īpašu simbolu -- dolāru $\mathtt{\$}$, kas nepieder alfabētam.
+**Definīcija:** Teksta $T$ *sufiksu trajs* ir trajs, kurā ievietoti visi $T$ sufiksi $T[i:]$, katru no tiem noslēdzot ar īpašu simbolu -- dolāru $\mathtt{\\$}$, kas nepieder alfabētam.
 
 <img
   alt="Sufiksu trajs vārdam abaaba"
@@ -82,7 +83,7 @@ Saspiestajā trajā ceļus bez sazarošanās aizstāj ar vienu šķautni, uz kur
   style="width: 100%; max-width: 280px; border:none; background-color:#FFFFFF;"
 />
 
-**Sufiksa beigu apzīmējums:** Ja dolārus sufiksu beigās nelietotu, vairs neeksistētu 1:1 atbilstība starp koka lapām un sufiksiem, un daži lietojumi kļūtu neiespējami (nevarētu atšķirt, vai virkne ir sufikss vai arī iekšējs apakšstrings). Šī īpašība ir būtiska; $\mathtt{\$}$ tiks lietoti visur (reizēm tos atzīmē, iekrāsojot koka lapas).
+**Sufiksa beigu apzīmējums:** Ja dolārus sufiksu beigās nelietotu, vairs neeksistētu 1:1 atbilstība starp koka lapām un sufiksiem, un daži lietojumi kļūtu neiespējami (nevarētu atšķirt, vai virkne ir sufikss vai arī iekšējs apakšstrings). Šī īpašība ir būtiska; $\mathtt{\\$}$ tiks lietoti visur (reizēm tos atzīmē, iekrāsojot koka lapas).
 
 <img
   alt="Sufiksu trajs vārdam abaaba bez dolāriem"
@@ -122,7 +123,7 @@ Sufiksu traju var veidot, pievienojot teksta burtus pa vienam: no $\textsf{SufTr
   style="width: 100%; max-width: 700px; border:none; background-color:#FFFFFF;"
 />
 
-**Viens pilns piemērs:** Sufiksu traja veidošana vārdam $\mathtt{abaaba\$}$, pievienojot burtus pa vienam.
+**Viens pilns piemērs:** Sufiksu traja veidošana vārdam $\mathtt{abaaba\\$}$, pievienojot burtus pa vienam.
 
 <img
   alt="Sufiksu traja veidošana vārdam abaaba$"
@@ -142,9 +143,9 @@ Sufiksu traju var veidot, pievienojot teksta burtus pa vienam: no $\textsf{SufTr
   style="width: 100%; max-width: 280px; border:none; background-color:#FFFFFF;"
 />
 
-**Sufiksa pārbaude:** Pārbaudīt, vai strings $Q$ ir teksta $T$ sufikss. Sāk traja saknē, seko parauga $Q$ burtiem. Ja to visu var trajā nolasīt un pēc tam pa $\mathtt{\$}$ šķautni nonākt lapā, tad tas ir sufikss.
+**Sufiksa pārbaude:** Pārbaudīt, vai strings $Q$ ir teksta $T$ sufikss. Sāk traja saknē, seko parauga $Q$ burtiem. Ja to visu var trajā nolasīt un pēc tam pa $\mathtt{\\$}$ šķautni nonākt lapā, tad tas ir sufikss.
 
-**Piemērs:** Vai $\mathtt{baa}$ ir $\mathtt{abaaba}$ sufikss? No saknes meklējam uz leju (kamēr "nokrītam" no traja vai sasniedzam parauga beigas). Ja no sasniegtā mezgla iziet $\mathtt{\$}$ šķautne uz lapu, tad tas bija sufikss.
+**Piemērs:** Vai $\mathtt{baa}$ ir $\mathtt{abaaba}$ sufikss? No saknes meklējam uz leju (kamēr "nokrītam" no traja vai sasniedzam parauga beigas). Ja no sasniegtā mezgla iziet $\mathtt{\\$}$ šķautne uz lapu, tad tas bija sufikss.
 
 <img
   alt="Sufiksa pārbaude sufiksu trajā"
@@ -238,7 +239,7 @@ $$
 
 Dažādus dolārus izmanto, lai katrs sufikss beigtos ar unikālu simbolu un no lapas varētu noteikt, kuram dokumentam tā pieder.
 
-**Piemērs:** Vārdi $\mathtt{at}$, $\mathtt{tag}$, $\mathtt{gat}$. Izveido konkatenāciju $\mathtt{at\#_1tag\#_2gat\#_3}$ un būvē tai sufiksu koku (attēlā pa kreisi). Katrai lapai nomet tekstu aiz pirmā $\#$ simbola (attēlā pa labi).
+**Piemērs:** Vārdi $\mathtt{at}$, $\mathtt{tag}$, $\mathtt{gat}$. Izveido konkatenāciju $\mathtt{at\\#_1tag\\#_2gat\\#_3}$ un būvē tai sufiksu koku (attēlā pa kreisi). Katrai lapai nomet tekstu aiz pirmā $\\#$ simbola (attēlā pa labi).
 
 <img
   alt="Vispārinātais sufiksu koks vārdiem at, tag, gat"
@@ -249,7 +250,7 @@ Dažādus dolārus izmanto, lai katrs sufikss beigtos ar unikālu simbolu un no 
 **Garākais kopīgais apakšstrings:** Atrast garāko kopīgo apakšstringu tekstiem $S$ un $T$ (garumi $n_1$ un $n_2$).
 
 * Uzbūvē vispārināto sufiksu koku $O(n_1 + n_2)$ laikā.
-* Atrod dziļāko mezglu, zem kura ir gan tādas lapas, kas beidzas ar $\#_1$, gan arī tādas, kas beidzas ar $\#_2$.
+* Atrod dziļāko mezglu, zem kura ir gan tādas lapas, kas beidzas ar $\\#_1$, gan arī tādas, kas beidzas ar $\\#_2$.
 * Tas ir efektīvāk nekā naivais algoritms $O(n_1^2 \cdot n_2^2)$ un arī nekā dinamiskā programmēšana $O(n_1 \cdot n_2)$.
 
 ### Dokumentu izgūšana
@@ -258,14 +259,14 @@ Kā atrast visus dokumentus, kas satur vienu vārdu? Var izmantot sufiksu koku k
 
 **Dokumentu izgūšanas problēma:** Uzskaitīt visus dokumentus, kas satur paraugu $P$, laikā $O(\lvert P\rvert  + k')$, kur $k' \leq k$ ir to dokumentu skaits, kas satur paraugu.
 
-**Pielāgojums 1:** Vairākus dokumentus glabā sufiksu kokā tā, lai aiz jebkuras dolāra zīmes $\mathtt{\$}_i$ neko nepievienotu. Katra dolāra zīme ir sufiksu koka lapas mezgls.
+**Pielāgojums 1:** Vairākus dokumentus glabā sufiksu kokā tā, lai aiz jebkuras dolāra zīmes $\mathtt{\\$}_i$ neko nepievienotu. Katra dolāra zīme ir sufiksu koka lapas mezgls.
 
-**Pielāgojums 2:** Lapas, kas marķētas ar vienu un to pašu dolāra zīmi $\mathtt{\$}_i$, norāda viena uz otru -- tās veido saistīto sarakstu.
+**Pielāgojums 2:** Lapas, kas marķētas ar vienu un to pašu dolāra zīmi $\mathtt{\\$}_i$, norāda viena uz otru -- tās veido saistīto sarakstu.
 
 **Dokumentu izgūšanas algoritma pārskats:**
 
 1. Atrod paraugu $P$ lielajā sufiksu kokā. Tas ir kāds iekšējs mezgls. Pieņemsim, ka visas lapas zem tā ir numurētas pēc kārtas; to numuri ir intervālā $[\ell, n]$.
-2. Mērķis ir atrast pirmo $\mathtt{\$}_i$ parādījumu katram $i$. Vēlamies maksāt tikai par dažādu dokumentu skaitu, bet intervālā $[\ell, n]$ var būt ļoti daudz $\mathtt{\$}_i$ lapu.
+2. Mērķis ir atrast pirmo $\mathtt{\\$}_i$ parādījumu katram $i$. Vēlamies maksāt tikai par dažādu dokumentu skaitu, bet intervālā $[\ell, n]$ var būt ļoti daudz $\mathtt{\\$}_i$ lapu.
 3. Risinājums ir katrai lapai saglabāt numuru, kas ved uz iepriekšējo tā paša dokumenta lapu (kā "Pielāgojumā 2").
 
 ## Sufiksu masīvi
@@ -322,7 +323,7 @@ Rīks paraugu meklēšanai vārdnīcā: [Pattern Match](https://www.litscape.com
 
 *Dinamiskās programmēšanas tabula virknēm $\mathtt{ABCXYZAY}$ un $\mathtt{XYZABCB}$: šūnā ir garākā kopīgā sufiksa garums abu virkņu prefiksiem. Lielākā vērtība $4$ atbilst garākajam kopīgajam apakšstringam $\mathtt{XYZA}$.*
 
-Aplūkot virknes $T_1 = \mathtt{banana\$}_1$ un $T_2 = \mathtt{guanabana\$}_2$. Tās ir uzrakstītas šādā alfabētā:
+Aplūkot virknes $T_1 = \mathtt{banana\\$}_1$ un $T_2 = \mathtt{guanabana\\$}_2$. Tās ir uzrakstītas šādā alfabētā:
 
 $$
 \Sigma = \lbrace \mathtt{\$}_1, \mathtt{\$}_2, \mathtt{a}, \mathtt{b}, \mathtt{g}, \mathtt{n}, \mathtt{u} \rbrace.
@@ -330,14 +331,14 @@ $$
 
 Algoritms ar laiku $O(n_1+n_2)$ var noteikt garāko kopīgo apakšstringu.
 
-* **(A)** Uzzīmēt sufiksu koku tekstam $\mathtt{banana\$}_1$.
-* **(B)** Pievienot esošajam kokam sufiksus arī no teksta $\mathtt{guanabana\$}_2$. (Var arī izveidot sufiksu koku uzreiz tekstam $\mathtt{banana\$}_1\mathtt{guanabana\$}_2$.)
+* **(A)** Uzzīmēt sufiksu koku tekstam $\mathtt{banana\\$}_1$.
+* **(B)** Pievienot esošajam kokam sufiksus arī no teksta $\mathtt{guanabana\\$}_2$. (Var arī izveidot sufiksu koku uzreiz tekstam $\mathtt{banana\\$}_1\mathtt{guanabana\\$}_2$.)
 * **(C)** Vizuāli noteikt garāko kopīgo apakšvirkni $\mathtt{banana}$ un $\mathtt{guanabana}$. Atzīmējiet atbilstošos mezglus sufiksu kokā. Kāda ir apakškoka saknes īpašība?
 * **(D)** Atrast $O(n_1+n_2)$ algoritmu, lai noteiktu garāko kopīgo apakšstringu tekstiem attiecīgi garumā $n_1$ un $n_2$.
 
 *Piezīme:* Attēlot sufiksu kokus saspiestā formā.
 
-**14.2. uzdevums (Sufiksu masīva izveidošana):** Aplūkot šādu tekstu: $\mathtt{acabcabaabaabca\$}$. Tas pierakstīts 4 burtu alfabētā ar šādu secību: $\Sigma = \lbrace \mathtt{\$}, \mathtt{a}, \mathtt{b}, \mathtt{c} \rbrace$.
+**14.2. uzdevums (Sufiksu masīva izveidošana):** Aplūkot šādu tekstu: $\mathtt{acabcabaabaabca\\$}$. Tas pierakstīts 4 burtu alfabētā ar šādu secību: $\Sigma = \lbrace \mathtt{\\$}, \mathtt{a}, \mathtt{b}, \mathtt{c} \rbrace$.
 
 * **(A)** Izveidot sufiksu masīvu šim tekstam.
 * **(B)** Pievienot LCP (garākā kopīgā prefiksa) informāciju sufiksu masīvam -- atrast garākos kopīgos prefiksus jebkuriem diviem alfabētiski blakus esošiem sufiksiem.
